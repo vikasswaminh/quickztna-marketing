@@ -1,0 +1,36 @@
+---
+import "@/styles/globals.css";
+import Header from "@/components/site/Header.astro";
+import Footer from "@/components/site/Footer.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = "QuickZTNA — 100 devices connected in 2 minutes · Post-quantum Zero Trust",
+  description = "Post-quantum-encrypted Zero Trust mesh VPN. One install command, ML-KEM-768 hybrid tunnels, identity-based ACLs. Free forever for 100 devices.",
+} = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://quickztna.com" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <div class="flex min-h-screen flex-col bg-background">
+      <Header />
+      <main class="flex-1"><slot /></main>
+      <Footer />
+    </div>
+  </body>
+</html>

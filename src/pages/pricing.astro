@@ -1,0 +1,427 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import Button from "@/components/ui/Button.astro";
+import { ArrowRight, Check, Minus, Zap } from "lucide-astro";
+
+const AUTH_URL = "https://login.quickztna.com/auth";
+const SALES_URL = "mailto:sales@quickztna.com?subject=Workforce%20plan%20inquiry";
+
+const plans = [
+  {
+    name: "Free",
+    tagline: "For homelabs, founders, small teams.",
+    price: "$0",
+    per: "/mo forever",
+    cta: "Start free",
+    ctaHref: AUTH_URL,
+    highlight: false,
+    limits: ["100 machines", "3 users", "Community support"],
+    features: [
+      "PQC-encrypted ZTNA (ML-KEM-768)",
+      "MagicDNS + WireGuard mesh",
+      "ACL policies + device posture",
+      "DNS filtering + cloud firewall",
+      "AI Assistant (chat, ACL builder, digest)",
+      "JIT access + access reviews",
+      "SSO · GitHub · Google · TOTP MFA",
+      "4 global DERP relays",
+    ],
+  },
+  {
+    name: "Business",
+    tagline: "For growing teams · 60-day free trial.",
+    price: "$10",
+    per: "/mo",
+    cta: "Start 60-day trial",
+    ctaHref: AUTH_URL,
+    highlight: true,
+    limits: ["100 machines", "Unlimited users", "Priority email support"],
+    features: [
+      "Everything in Free",
+      "Remote management + remote shell",
+      "Session recording",
+      "Compliance reports (SOC 2, ISO, HIPAA)",
+      "Continuous compliance scanning",
+      "Secrets vault (AES-256-GCM)",
+      "Honeypot / deception",
+      "SCIM 2.0 provisioning",
+      "AI actions + incident response",
+      "JIT recommendations",
+    ],
+  },
+  {
+    name: "Workforce",
+    tagline: "For regulated orgs & distributed workforces.",
+    price: "Contact",
+    per: "sales",
+    cta: "Contact sales",
+    ctaHref: SALES_URL,
+    highlight: false,
+    limits: ["100 machines", "Unlimited users", "Dedicated support + SLA"],
+    features: [
+      "Everything in Business",
+      "Workforce analytics + DEM",
+      "DLP + CASB + anomaly detection",
+      "User risk scoring",
+      "Remote desktop (WebRTC)",
+      "Software inventory + patch overview",
+      "App connector (reverse proxy)",
+      "Database access broker",
+      "Kubernetes access",
+      "Cloud firewall sync (AWS/Azure/GCP)",
+      "Terraform provider",
+      "Org groups (departments)",
+    ],
+  },
+];
+
+type Row = { feature: string; free: boolean | string; business: boolean | string; workforce: boolean | string };
+type Group = { title: string; rows: Row[] };
+
+const groups: Group[] = [
+  {
+    title: "Core networking",
+    rows: [
+      { feature: "Machines per org", free: "100", business: "100", workforce: "100" },
+      { feature: "Users per org", free: "3", business: "Unlimited", workforce: "Unlimited" },
+      { feature: "Post-quantum WireGuard (ML-KEM-768)", free: true, business: true, workforce: true },
+      { feature: "MagicDNS", free: true, business: true, workforce: true },
+      { feature: "DERP relays (4 global regions)", free: true, business: true, workforce: true },
+      { feature: "ABAC policies + device posture", free: true, business: true, workforce: true },
+      { feature: "Subnet routes + exit nodes", free: true, business: true, workforce: true },
+      { feature: "Auto-quarantine on posture fail", free: true, business: true, workforce: true },
+    ],
+  },
+  {
+    title: "Identity",
+    rows: [
+      { feature: "Email + password", free: true, business: true, workforce: true },
+      { feature: "GitHub / Google OAuth", free: true, business: true, workforce: true },
+      { feature: "SAML / OIDC SSO", free: true, business: true, workforce: true },
+      { feature: "TOTP MFA + backup codes", free: true, business: true, workforce: true },
+      { feature: "SCIM 2.0 provisioning", free: false, business: true, workforce: true },
+      { feature: "Org groups (departments)", free: false, business: false, workforce: true },
+    ],
+  },
+  {
+    title: "AI assistant",
+    rows: [
+      { feature: "AI chat", free: true, business: true, workforce: true },
+      { feature: "Natural-language ACL builder", free: true, business: true, workforce: true },
+      { feature: "Security digest (24h)", free: true, business: true, workforce: true },
+      { feature: "Event summarizer", free: true, business: true, workforce: true },
+      { feature: "Policy drift detection", free: true, business: true, workforce: true },
+      { feature: "Access heatmap", free: true, business: true, workforce: true },
+      { feature: "AI auto-remediation actions", free: false, business: true, workforce: true },
+      { feature: "Incident response playbooks", free: false, business: true, workforce: true },
+      { feature: "JIT access recommendations", free: false, business: true, workforce: true },
+    ],
+  },
+  {
+    title: "Security & threat",
+    rows: [
+      { feature: "DNS filtering", free: true, business: true, workforce: true },
+      { feature: "Cloud firewall (FaaS)", free: true, business: true, workforce: true },
+      { feature: "Deception / honeypot", free: false, business: true, workforce: true },
+      { feature: "Anomaly detection (UEBA)", free: false, business: false, workforce: true },
+      { feature: "Data Loss Prevention (DLP)", free: false, business: false, workforce: true },
+      { feature: "CASB + shadow-IT", free: false, business: false, workforce: true },
+      { feature: "User risk scoring", free: false, business: false, workforce: true },
+    ],
+  },
+  {
+    title: "Governance & compliance",
+    rows: [
+      { feature: "JIT access workflow", free: true, business: true, workforce: true },
+      { feature: "Access review campaigns", free: true, business: true, workforce: true },
+      { feature: "Policy versioning + rollback", free: true, business: true, workforce: true },
+      { feature: "Compliance reports (SOC 2, ISO, HIPAA)", free: false, business: true, workforce: true },
+      { feature: "Continuous compliance scanning", free: false, business: true, workforce: true },
+      { feature: "Session recording", free: false, business: true, workforce: true },
+      { feature: "Audit log retention", free: "90 days", business: "90 days", workforce: "90 days" },
+    ],
+  },
+  {
+    title: "Endpoint management",
+    rows: [
+      { feature: "Device wipe / lock", free: true, business: true, workforce: true },
+      { feature: "OTA agent updates", free: true, business: true, workforce: true },
+      { feature: "Remote management + shell", free: false, business: true, workforce: true },
+      { feature: "Remote desktop (WebRTC)", free: false, business: false, workforce: true },
+      { feature: "Software inventory + patch overview", free: false, business: false, workforce: true },
+    ],
+  },
+  {
+    title: "Data & access",
+    rows: [
+      { feature: "Secrets vault (AES-256-GCM)", free: false, business: true, workforce: true },
+      { feature: "Database access broker", free: false, business: false, workforce: true },
+      { feature: "Kubernetes access proxy", free: false, business: false, workforce: true },
+      { feature: "Cloud firewall sync (AWS/Azure/GCP)", free: false, business: false, workforce: true },
+      { feature: "App connector (reverse proxy)", free: false, business: false, workforce: true },
+      { feature: "Webhook forwarder", free: false, business: false, workforce: true },
+      { feature: "Terraform provider", free: false, business: false, workforce: true },
+    ],
+  },
+  {
+    title: "Workforce analytics",
+    rows: [
+      { feature: "Session tracking", free: false, business: false, workforce: true },
+      { feature: "App / domain usage", free: false, business: false, workforce: true },
+      { feature: "Productivity scoring", free: false, business: false, workforce: true },
+      { feature: "Schedule compliance", free: false, business: false, workforce: true },
+      { feature: "Digital Experience Monitoring (DEM)", free: false, business: false, workforce: true },
+      { feature: "GDPR monitoring consent", free: false, business: false, workforce: true },
+    ],
+  },
+  {
+    title: "Support & ops",
+    rows: [
+      { feature: "Support channel", free: "Community", business: "Priority email", workforce: "Dedicated + SLA" },
+      { feature: "Trial", free: "—", business: "60 days", workforce: "Pilot on request" },
+      { feature: "Custom invoicing", free: false, business: false, workforce: true },
+      { feature: "DPA + SOC 2 report on request", free: false, business: true, workforce: true },
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: "Is post-quantum crypto really on the Free plan?",
+    a: "Yes. Every WireGuard tunnel, on every plan, uses X25519 + ML-KEM-768 hybrid key exchange. It's not a paid feature — it's the default. The PSK is derived via HKDF-SHA256 from both classical and post-quantum shared secrets.",
+  },
+  {
+    q: "Why only Razorpay? What about Stripe / wire / invoice?",
+    a: "We launched in India first, so Razorpay is the self-serve default (supports 100+ countries via Razorpay International). For non-Razorpay regions or invoice/wire/cheque payment, contact sales@quickztna.com. Stripe is on the 2026-Q2 roadmap.",
+  },
+  {
+    q: "What happens when I hit the 100-machine limit on Free?",
+    a: "A background job (runs every 5 min) flags excess machines as over-quota — they stop heartbeating until you either delete old machines or upgrade. Nothing is deleted. Upgrade → features unlock immediately, quota cleared.",
+  },
+  {
+    q: "Can I downgrade? What happens to my data?",
+    a: "Yes, any time from the Billing page. Paid features gate down immediately. No data is deleted — if you downgrade then re-upgrade, everything resumes where it left off.",
+  },
+  {
+    q: "What does the 60-day Business trial include?",
+    a: "All Business-tier features. No credit card required. On day 61 the org auto-downgrades to Free via the expire-trials cron. You can extend via sales if you need more runway for a pilot.",
+  },
+  {
+    q: "Is there a self-hosted / on-prem option?",
+    a: "The architecture supports it (Docker Compose + PostgreSQL + Valkey + S3-compatible object storage), but we haven't productized it yet. Contact sales if you need air-gapped deployment — we do custom for regulated industries.",
+  },
+  {
+    q: "Are superadmins bypassing plan gates?",
+    a: "No. Platform superadmins have cross-org read/write for support, but plan gates are enforced at handler level. A superadmin helping a Free-tier org still hits FEATURE_GATED on paid endpoints. This is intentional.",
+  },
+  {
+    q: "What are the real enforced limits?",
+    a: "Feature gates are strict (every paid handler calls requireFeature). Machine limits are enforced post-hoc by a background cron job (every 5 min), not at registration time — we're migrating to hard gates in Q3 2026. User limits are policy, not hard-gated in invite flow.",
+  },
+];
+
+function renderCell(v: boolean | string) {
+  if (v === true) return { icon: "check", text: "" };
+  if (v === false) return { icon: "minus", text: "" };
+  return { icon: null, text: v };
+}
+---
+<SiteLayout
+  title="Pricing — QuickZTNA"
+  description="Free forever for 100 devices. Business $10/mo with 60-day trial. Workforce on request. Honest per-feature comparison, real limits, no hidden gotchas."
+>
+  <!-- HERO -->
+  <section class="relative overflow-hidden bg-hero border-b border-border">
+    <div class="absolute inset-0 bg-grid opacity-50" aria-hidden="true"></div>
+    <div class="relative mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-24">
+      <p class="font-mono text-xs uppercase tracking-wider text-primary">Pricing</p>
+      <h1 class="mt-4 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+        Start on <span class="text-gradient">Free forever</span>.
+        <br class="hidden sm:block" /> Upgrade when you need it.
+      </h1>
+      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+        Post-quantum crypto on every plan. 100 devices on Free. 60-day Business trial.
+        No credit card to start. Honest limits, fully documented.
+      </p>
+    </div>
+  </section>
+
+  <!-- PLAN CARDS -->
+  <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+    <div class="grid gap-5 lg:grid-cols-3">
+      {plans.map((p) => (
+        <div class={`group relative flex flex-col overflow-hidden rounded-2xl border p-8 shadow-soft transition-all ${
+          p.highlight
+            ? "border-primary bg-gradient-to-br from-primary/[0.04] via-surface-elevated to-surface-elevated ring-1 ring-primary/20"
+            : "border-border bg-surface-elevated"
+        }`}>
+          {p.highlight && (
+            <span class="mb-4 inline-flex w-fit items-center gap-1.5 rounded-full bg-primary px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">
+              <Zap class="h-3 w-3" />Most popular
+            </span>
+          )}
+          <h3 class="text-2xl font-semibold tracking-tight">{p.name}</h3>
+          <p class="mt-1 text-sm text-muted-foreground">{p.tagline}</p>
+
+          <div class="mt-6 flex items-baseline gap-1.5">
+            <span class="text-5xl font-semibold tracking-tight">{p.price}</span>
+            <span class="text-sm text-muted-foreground">{p.per}</span>
+          </div>
+
+          <ul class="mt-6 space-y-1.5 font-mono text-xs text-muted-foreground">
+            {p.limits.map((l) => (
+              <li class="flex items-center gap-2">
+                <span class="h-1 w-1 rounded-full bg-primary/60"></span>
+                {l}
+              </li>
+            ))}
+          </ul>
+
+          <div class="my-7 border-t border-border"></div>
+
+          <ul class="flex-1 space-y-2.5 text-sm">
+            {p.features.map((f) => (
+              <li class="flex items-start gap-2.5 text-muted-foreground">
+                <Check class="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={2.5} />
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+
+          <Button
+            size="lg"
+            href={p.ctaHref}
+            variant={p.highlight ? "default" : "outline"}
+            class="mt-8 h-11 font-medium"
+          >
+            {p.cta}
+            <ArrowRight class="ml-1.5 h-4 w-4" />
+          </Button>
+          <p class="mt-3 text-center text-[11px] text-muted-foreground">No credit card required</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- COMPARISON TABLE -->
+  <section class="border-t border-border bg-surface">
+    <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="font-mono text-xs uppercase tracking-wider text-primary">Compare every feature</p>
+        <h2 class="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+          What's on each plan, row by row.
+        </h2>
+        <p class="mt-3 text-muted-foreground">
+          Derived directly from the feature-gate code. If it's here, it ships.
+        </p>
+      </div>
+
+      <div class="mt-12 overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-soft">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="sticky top-0 z-10 bg-surface-elevated/95 backdrop-blur-md">
+              <tr class="border-b border-border text-left">
+                <th class="px-5 py-4 font-semibold text-foreground">Feature</th>
+                <th class="w-28 px-3 py-4 text-center font-semibold text-foreground">Free</th>
+                <th class="w-32 px-3 py-4 text-center font-semibold text-primary">Business</th>
+                <th class="w-32 px-3 py-4 text-center font-semibold text-foreground">Workforce</th>
+              </tr>
+            </thead>
+            <tbody>
+              {groups.map((g) => (
+                <>
+                  <tr class="border-t border-border bg-muted/40">
+                    <td colSpan={4} class="px-5 py-2.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      {g.title}
+                    </td>
+                  </tr>
+                  {g.rows.map((r) => {
+                    const f = renderCell(r.free);
+                    const b = renderCell(r.business);
+                    const w = renderCell(r.workforce);
+                    return (
+                      <tr class="border-t border-border/60 transition-colors hover:bg-muted/20">
+                        <td class="px-5 py-3.5 text-foreground">{r.feature}</td>
+                        <td class="px-3 py-3.5 text-center text-sm text-muted-foreground">
+                          {f.icon === "check" && <Check class="mx-auto h-4 w-4 text-success" strokeWidth={2.5} />}
+                          {f.icon === "minus" && <Minus class="mx-auto h-4 w-4 text-border" />}
+                          {f.text && <span class="font-mono text-xs">{f.text}</span>}
+                        </td>
+                        <td class="px-3 py-3.5 text-center text-sm text-muted-foreground">
+                          {b.icon === "check" && <Check class="mx-auto h-4 w-4 text-primary" strokeWidth={2.5} />}
+                          {b.icon === "minus" && <Minus class="mx-auto h-4 w-4 text-border" />}
+                          {b.text && <span class="font-mono text-xs font-semibold text-foreground">{b.text}</span>}
+                        </td>
+                        <td class="px-3 py-3.5 text-center text-sm text-muted-foreground">
+                          {w.icon === "check" && <Check class="mx-auto h-4 w-4 text-chart-5" strokeWidth={2.5} />}
+                          {w.icon === "minus" && <Minus class="mx-auto h-4 w-4 text-border" />}
+                          {w.text && <span class="font-mono text-xs">{w.text}</span>}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <p class="font-mono text-xs uppercase tracking-wider text-primary">FAQ</p>
+      <h2 class="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Questions, answered honestly.</h2>
+    </div>
+    <div class="mt-10 grid gap-3">
+      {faqs.map((f) => (
+        <details class="group rounded-xl border border-border bg-surface-elevated shadow-soft transition-all open:shadow-elevated">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 px-5 py-4 text-sm font-semibold text-foreground list-none [&::-webkit-details-marker]:hidden">
+            <span>{f.q}</span>
+            <svg class="h-4 w-4 shrink-0 transition-transform group-open:rotate-45 text-muted-foreground" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="10" y1="4" x2="10" y2="16"></line>
+              <line x1="4" y1="10" x2="16" y2="10"></line>
+            </svg>
+          </summary>
+          <div class="px-5 pb-5 text-sm leading-relaxed text-muted-foreground">
+            {f.a}
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- BOTTOM CTA -->
+  <section class="relative overflow-hidden border-t border-border bg-surface">
+    <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <div class="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary to-chart-2 p-12 text-primary-foreground shadow-elevated lg:p-16">
+        <div class="absolute inset-0 bg-grid opacity-10"></div>
+        <div class="relative grid items-center gap-8 lg:grid-cols-[1.5fr_1fr]">
+          <div>
+            <Zap class="h-8 w-8" />
+            <h2 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
+              Ship 100 devices today. Quantum-safe forever.
+            </h2>
+            <p class="mt-3 max-w-xl text-primary-foreground/85">
+              Issue one auth key. Pipe one install command. Your whole workforce is on the tailnet.
+            </p>
+          </div>
+          <div class="flex flex-col gap-3">
+            <Button size="lg" variant="secondary" href={AUTH_URL} class="h-11 font-medium">
+              Start free — no card
+              <ArrowRight class="ml-1.5 h-4 w-4" />
+            </Button>
+            <a
+              href={SALES_URL}
+              class="inline-flex h-11 items-center justify-center rounded-md border border-primary-foreground/30 px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-foreground/10"
+            >
+              Talk to sales
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</SiteLayout>

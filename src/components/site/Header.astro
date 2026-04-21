@@ -1,0 +1,42 @@
+---
+import Logo from "./Logo.astro";
+import Button from "@/components/ui/Button.astro";
+
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/features", label: "Features" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "https://docs.quickztna.com", label: "Docs", external: true },
+];
+
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const AUTH_URL = "https://login.quickztna.com/auth";
+---
+<header class="sticky top-0 z-40 w-full border-b border-border/60 bg-background/80 backdrop-blur-md">
+  <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <a href="/" class="flex items-center">
+      <Logo />
+    </a>
+    <nav class="hidden items-center gap-1 md:flex">
+      {links.map((l) => {
+        const active = !l.external && (l.href === "/" ? path === "/" : path === l.href || path.startsWith(l.href + "/"));
+        return (
+          <a
+            href={l.href}
+            target={l.external ? "_blank" : undefined}
+            rel={l.external ? "noopener noreferrer" : undefined}
+            class={`rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
+              active ? "text-foreground bg-muted" : "text-muted-foreground"
+            }`}
+          >
+            {l.label}
+          </a>
+        );
+      })}
+    </nav>
+    <div class="flex items-center gap-2">
+      <Button variant="ghost" size="sm" href={AUTH_URL} class="hidden sm:inline-flex">Sign in</Button>
+      <Button size="sm" href={AUTH_URL} class="font-medium">Get started free</Button>
+    </div>
+  </div>
+</header>

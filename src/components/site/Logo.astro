@@ -1,0 +1,16 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className = "" } = Astro.props;
+---
+<div class={`flex items-center gap-2 ${className}`}>
+  <div class="relative h-7 w-7">
+    <div class="absolute inset-0 rounded-md bg-gradient-to-br from-primary to-chart-2"></div>
+    <div class="absolute inset-[3px] rounded-[5px] bg-background"></div>
+    <div class="absolute inset-[6px] rounded-[3px] bg-gradient-to-br from-primary to-chart-2"></div>
+  </div>
+  <span class="font-mono text-base font-semibold tracking-tight">
+    Quick<span class="text-primary">ZTNA</span>
+  </span>
+</div>

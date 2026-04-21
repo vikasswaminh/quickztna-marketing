@@ -1,0 +1,52 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./src/**/*.{astro,html,js,jsx,ts,tsx,md,mdx}'],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['"Work Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+      },
+      borderRadius: {
+        DEFAULT: 'var(--radius)',
+        sm: 'calc(var(--radius) - 4px)',
+        md: 'calc(var(--radius) - 2px)',
+        lg: 'var(--radius)',
+        xl: 'calc(var(--radius) + 4px)',
+        '2xl': 'calc(var(--radius) + 8px)',
+        '3xl': 'calc(var(--radius) + 12px)',
+        '4xl': 'calc(var(--radius) + 16px)',
+      },
+      colors: {
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
+        card: { DEFAULT: 'var(--card)', foreground: 'var(--card-foreground)' },
+        popover: { DEFAULT: 'var(--popover)', foreground: 'var(--popover-foreground)' },
+        primary: { DEFAULT: 'var(--primary)', foreground: 'var(--primary-foreground)' },
+        secondary: { DEFAULT: 'var(--secondary)', foreground: 'var(--secondary-foreground)' },
+        muted: { DEFAULT: 'var(--muted)', foreground: 'var(--muted-foreground)' },
+        accent: { DEFAULT: 'var(--accent)', foreground: 'var(--accent-foreground)' },
+        destructive: { DEFAULT: 'var(--destructive)', foreground: 'var(--destructive-foreground)' },
+        success: { DEFAULT: 'var(--success)', foreground: 'var(--success-foreground)' },
+        warning: { DEFAULT: 'var(--warning)', foreground: 'var(--warning-foreground)' },
+        border: 'var(--border)',
+        input: 'var(--input)',
+        ring: 'var(--ring)',
+        surface: { DEFAULT: 'var(--surface)', elevated: 'var(--surface-elevated)' },
+        'grid-line': 'var(--grid-line)',
+        'chart-1': 'var(--chart-1)',
+        'chart-2': 'var(--chart-2)',
+        'chart-3': 'var(--chart-3)',
+        'chart-4': 'var(--chart-4)',
+        'chart-5': 'var(--chart-5)',
+      },
+      boxShadow: {
+        soft: '0 1px 2px oklch(0.2 0.04 260 / 0.04), 0 4px 12px oklch(0.2 0.04 260 / 0.04)',
+        elevated: '0 2px 4px oklch(0.2 0.04 260 / 0.06), 0 12px 32px oklch(0.2 0.04 260 / 0.08)',
+        glow: '0 0 0 1px oklch(0.62 0.19 258 / 0.18), 0 12px 40px oklch(0.62 0.19 258 / 0.24)',
+      },
+    },
+  },
+  plugins: [],
+};

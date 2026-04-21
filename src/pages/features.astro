@@ -1,0 +1,270 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import Button from "@/components/ui/Button.astro";
+import {
+  ArrowRight,
+  Network,
+  Sparkles,
+  ShieldCheck,
+  Gavel,
+  Fingerprint,
+  Monitor,
+  Database,
+  BarChart3,
+  Check,
+} from "lucide-astro";
+
+const AUTH_URL = "https://login.quickztna.com/auth";
+
+type Feature = {
+  name: string;
+  desc: string;
+  plans: ("free" | "business" | "workforce")[];
+};
+
+type Section = {
+  n: string;
+  title: string;
+  blurb: string;
+  icon: any;
+  features: Feature[];
+};
+
+const sections: Section[] = [
+  {
+    n: "01",
+    title: "Networking & Connectivity",
+    blurb: "The ZTNA primitives. Ship with every plan, no gate, no trial. This is the foundation.",
+    icon: Network,
+    features: [
+      { name: "Post-Quantum WireGuard", desc: "X25519 + ML-KEM-768 hybrid key exchange on every tunnel. FIPS 203 compliant. No config — quantum-safe by default.", plans: ["free", "business", "workforce"] },
+      { name: "MagicDNS", desc: "Every device reachable at <hostname>.<org>.zt.net. Zero DNS config.", plans: ["free", "business", "workforce"] },
+      { name: "DERP relays", desc: "4 global regions (BLR, NYC, LON, SFO) relay when P2P is blocked by symmetric NAT or CGNAT.", plans: ["free", "business", "workforce"] },
+      { name: "STUN NAT discovery", desc: "Automatic public endpoint discovery. Peers find each other without central coordination.", plans: ["free", "business", "workforce"] },
+      { name: "ABAC ACLs", desc: "Rules on user, tag, posture, time of day, country, protocol, port. Evaluated per connection.", plans: ["free", "business", "workforce"] },
+      { name: "Subnet routes", desc: "Advertise + accept CIDR routes. Bridge home labs, cloud VPCs, legacy networks.", plans: ["free", "business", "workforce"] },
+      { name: "Exit nodes", desc: "Route outbound traffic through a chosen peer. Geofence compliance, egress control.", plans: ["free", "business", "workforce"] },
+      { name: "Device posture", desc: "OS version, disk encryption, firewall, antivirus checks. Block non-compliant devices.", plans: ["free", "business", "workforce"] },
+      { name: "Auto-quarantine", desc: "Failed posture → machine isolated automatically. Admin notified.", plans: ["free", "business", "workforce"] },
+      { name: "Tailnet IP allocation", desc: "Atomic 100.64.x.x allocation. Guaranteed no collisions, even under concurrent registration.", plans: ["free", "business", "workforce"] },
+    ],
+  },
+  {
+    n: "02",
+    title: "AI & Assistant",
+    blurb: "Claude-powered. Answers questions about your tenant, drafts policies, explains events, takes action.",
+    icon: Sparkles,
+    features: [
+      { name: "AI chat", desc: "Conversational Q&A about your network, policies, users, and recent events.", plans: ["free", "business", "workforce"] },
+      { name: "Natural-language ACLs", desc: "Type \"Laptops can SSH to prod between 9–6 IST\" — get a ready-to-apply ACL rule.", plans: ["free", "business", "workforce"] },
+      { name: "Event summarizer", desc: "24-hour security digest. Anomalies surfaced, noise suppressed.", plans: ["free", "business", "workforce"] },
+      { name: "Security digest", desc: "Daily report: machines, threats blocked, compliance rate, JIT requests.", plans: ["free", "business", "workforce"] },
+      { name: "Policy drift detection", desc: "AI reviews your ACLs vs industry baselines. Flags overly permissive rules.", plans: ["free", "business", "workforce"] },
+      { name: "Access heatmap", desc: "Visualize which users touch which resources, when, how often.", plans: ["free", "business", "workforce"] },
+      { name: "AI actions", desc: "Approved auto-remediation. AI proposes, admin confirms, system executes with rollback.", plans: ["business", "workforce"] },
+      { name: "Incident response playbooks", desc: "Generate context-aware response steps for a specific incident.", plans: ["business", "workforce"] },
+      { name: "JIT recommendations", desc: "Suggests time-bounded grants based on historical access patterns.", plans: ["business", "workforce"] },
+    ],
+  },
+  {
+    n: "03",
+    title: "Security & Threat Detection",
+    blurb: "Defense in depth. Shipped as a single agent, not five separate tools to deploy.",
+    icon: ShieldCheck,
+    features: [
+      { name: "DNS filtering", desc: "Block malicious domains. Per-org allow/deny lists. Threat-intel feed sync.", plans: ["free", "business", "workforce"] },
+      { name: "Cloud firewall (FaaS)", desc: "Stateful firewall rules at the edge. Per-app, per-user, per-tag.", plans: ["free", "business", "workforce"] },
+      { name: "Honeypot / deception", desc: "Decoy machines. Any interaction alerts. Zero false positives.", plans: ["business", "workforce"] },
+      { name: "Anomaly detection", desc: "UEBA baselines. Flags unusual access patterns, data movement, login geography.", plans: ["workforce"] },
+      { name: "Data Loss Prevention (DLP)", desc: "Scans agent-captured text for credit cards, SSNs, API keys. Report or block.", plans: ["workforce"] },
+      { name: "CASB", desc: "SaaS app discovery, shadow-IT visibility, approval workflow.", plans: ["workforce"] },
+      { name: "User risk scoring", desc: "Per-user risk timeline. Combines posture, behavior, threat intel.", plans: ["workforce"] },
+    ],
+  },
+  {
+    n: "04",
+    title: "Governance & Compliance",
+    blurb: "Audit-ready by default. SOC 2 / ISO 27001 / HIPAA artifacts generated, not assembled.",
+    icon: Gavel,
+    features: [
+      { name: "Compliance reports", desc: "One-click SOC 2 / ISO 27001 / HIPAA evidence bundles. Signed, timestamped.", plans: ["business", "workforce"] },
+      { name: "Continuous compliance", desc: "Background rules run daily. Drift flagged before audit time.", plans: ["business", "workforce"] },
+      { name: "Session recording", desc: "Capture admin sessions (shell, SSH jump). Replay for audit.", plans: ["business", "workforce"] },
+      { name: "JIT access workflow", desc: "Request → approve → time-bounded grant → auto-revoke. Full audit trail.", plans: ["free", "business", "workforce"] },
+      { name: "Access review campaigns", desc: "Periodic campaigns. Approvers confirm / revoke. Everything logged.", plans: ["free", "business", "workforce"] },
+      { name: "Policy version rollback", desc: "Every ACL change versioned. Roll back to any prior version instantly.", plans: ["free", "business", "workforce"] },
+    ],
+  },
+  {
+    n: "05",
+    title: "Identity & Provisioning",
+    blurb: "Bring your identity provider. SSO, SCIM, OAuth — all free. MFA-ready, device-bound.",
+    icon: Fingerprint,
+    features: [
+      { name: "Email + password", desc: "PBKDF2-SHA256 100K iterations. Timing-safe. Per-email rate-limited.", plans: ["free", "business", "workforce"] },
+      { name: "GitHub / Google OAuth", desc: "One-click sign-in for dev teams. Respects org domains.", plans: ["free", "business", "workforce"] },
+      { name: "SAML / OIDC SSO", desc: "Okta, Azure AD, Google Workspace, Auth0, any IdP.", plans: ["free", "business", "workforce"] },
+      { name: "TOTP MFA", desc: "RFC 6238. Replay-protected (used codes cached 90s). 10 backup codes per user.", plans: ["free", "business", "workforce"] },
+      { name: "SCIM 2.0 provisioning", desc: "Automated user lifecycle from Okta, Azure AD. Groups sync.", plans: ["business", "workforce"] },
+      { name: "Org groups (departments)", desc: "Sub-tenants within an org. Scoped ACLs, isolated users.", plans: ["workforce"] },
+    ],
+  },
+  {
+    n: "06",
+    title: "Endpoint Management",
+    blurb: "One agent — remote commands, secure shell, WebRTC desktop, OTA updates.",
+    icon: Monitor,
+    features: [
+      { name: "Remote management", desc: "Run safe diagnostic commands across the fleet. Whitelisted verbs only.", plans: ["business", "workforce"] },
+      { name: "Remote desktop (WebRTC)", desc: "Browser-based remote control. Consent-gated, session-recorded.", plans: ["workforce"] },
+      { name: "Software inventory", desc: "Patch overview per device. Approved software policy. Outdated versions flagged.", plans: ["workforce"] },
+      { name: "Device wipe / lock", desc: "Admin can lock or wipe stolen/lost devices with signed commands.", plans: ["free", "business", "workforce"] },
+      { name: "OTA agent updates", desc: "Self-update via signed releases. Controlled by client_versions table.", plans: ["free", "business", "workforce"] },
+    ],
+  },
+  {
+    n: "07",
+    title: "Data & Access Layer",
+    blurb: "Protect internal apps, databases, Kubernetes, cloud VPCs — through the same tailnet.",
+    icon: Database,
+    features: [
+      { name: "Secrets vault", desc: "AES-256-GCM encrypted secrets. Envelope encryption with per-org DEKs. Rotation policies.", plans: ["business", "workforce"] },
+      { name: "Database access broker", desc: "Register PG/MySQL/Mongo/Redis. JIT credentials, scoped queries, audit.", plans: ["workforce"] },
+      { name: "Kubernetes access", desc: "Identity-scoped kubeconfig. RBAC inherited from your org roles.", plans: ["workforce"] },
+      { name: "Cloud firewall sync", desc: "AWS SG / Azure NSG / GCP firewall auto-sync with tailnet membership.", plans: ["workforce"] },
+      { name: "App connector", desc: "Protect internal web apps (Jira, Jenkins, Grafana) with reverse proxy + ZTNA auth.", plans: ["workforce"] },
+      { name: "Webhook forwarder", desc: "Inbound webhooks delivered through the mesh to private targets.", plans: ["workforce"] },
+      { name: "Terraform provider", desc: "Full IaC for machines, ACLs, DNS, users, settings. GitOps-friendly.", plans: ["workforce"] },
+    ],
+  },
+  {
+    n: "08",
+    title: "Workforce & Productivity",
+    blurb: "Built for distributed teams. Consent-first, GDPR-aware, compliance-ready.",
+    icon: BarChart3,
+    features: [
+      { name: "Session tracking", desc: "Login/logout, active time, idle windows, machine activity.", plans: ["workforce"] },
+      { name: "App & domain usage", desc: "Top domains per user, per machine. Productive vs unproductive categorization.", plans: ["workforce"] },
+      { name: "Productivity scoring", desc: "Rule-based scoring. Custom rules per team. Weekly reports.", plans: ["workforce"] },
+      { name: "Schedule compliance", desc: "Work-hour adherence. Flag excessive overtime, weekend work.", plans: ["workforce"] },
+      { name: "Digital Experience Monitoring", desc: "Per-device network health: latency, packet loss, jitter. Health score.", plans: ["workforce"] },
+      { name: "Monitoring consent (GDPR)", desc: "Required user acknowledgment before analytics start. Audit-logged.", plans: ["workforce"] },
+    ],
+  },
+];
+
+const planLabels: Record<string, { label: string; style: string }> = {
+  free: { label: "Free", style: "border-success/30 bg-success/5 text-success" },
+  business: { label: "Business+", style: "border-primary/30 bg-primary/5 text-primary" },
+  workforce: { label: "Workforce", style: "border-chart-5/30 bg-chart-5/5 text-chart-5" },
+};
+
+function lowestPlan(plans: Feature["plans"]): "free" | "business" | "workforce" {
+  if (plans.includes("free")) return "free";
+  if (plans.includes("business")) return "business";
+  return "workforce";
+}
+---
+<SiteLayout
+  title="Features — QuickZTNA"
+  description="Complete feature matrix: post-quantum networking, AI assistant, threat detection, governance, identity, endpoint management, data access, workforce analytics. What's on Free, Business, and Workforce plans."
+>
+  <!-- HERO -->
+  <section class="relative overflow-hidden bg-hero border-b border-border">
+    <div class="absolute inset-0 bg-grid opacity-50" aria-hidden="true"></div>
+    <div class="relative mx-auto max-w-7xl px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-28">
+      <p class="font-mono text-xs uppercase tracking-wider text-primary">The platform</p>
+      <h1 class="mx-auto mt-4 max-w-4xl text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+        One agent. <span class="text-gradient">Every layer</span> of access.
+      </h1>
+      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+        QuickZTNA consolidates your VPN, SSO gateway, secrets manager, SIEM, DLP, session recorder,
+        and Terraform workflow into one tailnet. Every feature below is shipped, tested, and gated
+        by plan — no coming-soon shelf.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <Button size="lg" href={AUTH_URL} class="h-11 px-6 font-medium">
+          Start free
+          <ArrowRight class="ml-1.5 h-4 w-4" />
+        </Button>
+        <Button size="lg" variant="outline" href="/pricing" class="h-11 px-6 font-medium">
+          Compare plans
+        </Button>
+      </div>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs">
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-success/30 bg-success/5 px-2.5 py-1 font-mono font-medium text-success">
+          <span class="h-1.5 w-1.5 rounded-full bg-success"></span>Free — 100 devices, 3 users
+        </span>
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/5 px-2.5 py-1 font-mono font-medium text-primary">
+          <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>Business — $10/mo · 60-day trial
+        </span>
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-chart-5/30 bg-chart-5/5 px-2.5 py-1 font-mono font-medium text-chart-5">
+          <span class="h-1.5 w-1.5 rounded-full bg-chart-5"></span>Workforce — Contact sales
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE SECTIONS -->
+  {sections.map((s, i) => (
+    <section class={`border-b border-border ${i % 2 === 0 ? "" : "bg-surface"}`}>
+      <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div class="grid gap-10 lg:grid-cols-[1fr_2fr] lg:gap-16">
+          <div>
+            <div class="inline-flex items-center gap-2 rounded-md border border-border bg-surface-elevated px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+              <s.icon class="h-3.5 w-3.5 text-primary" />
+              Category {s.n}
+            </div>
+            <h2 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">{s.title}</h2>
+            <p class="mt-3 text-muted-foreground">{s.blurb}</p>
+            <p class="mt-4 font-mono text-xs text-muted-foreground">{s.features.length} features</p>
+          </div>
+          <div class="grid gap-3 sm:grid-cols-2">
+            {s.features.map((f) => {
+              const lp = lowestPlan(f.plans);
+              return (
+                <div class="group relative overflow-hidden rounded-xl border border-border bg-surface-elevated p-5 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated">
+                  <div class="flex items-start justify-between gap-3">
+                    <h3 class="text-sm font-semibold leading-snug">{f.name}</h3>
+                    <span class={`shrink-0 rounded-full border px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider ${planLabels[lp].style}`}>
+                      {planLabels[lp].label}
+                    </span>
+                  </div>
+                  <p class="mt-2 text-xs leading-relaxed text-muted-foreground" set:html={f.desc}></p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <!-- BOTTOM CTA -->
+  <section class="relative overflow-hidden">
+    <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <div class="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary to-chart-2 p-12 text-primary-foreground shadow-elevated lg:p-16">
+        <div class="absolute inset-0 bg-grid opacity-10"></div>
+        <div class="relative grid items-center gap-8 lg:grid-cols-[1.5fr_1fr]">
+          <div>
+            <h2 class="text-3xl font-semibold tracking-tight sm:text-4xl">
+              See exactly what's on each plan.
+            </h2>
+            <p class="mt-3 max-w-xl text-primary-foreground/85">
+              Full per-feature comparison. Honest limits. No surprise upsells.
+            </p>
+          </div>
+          <div class="flex flex-col gap-3">
+            <Button size="lg" variant="secondary" href="/pricing" class="h-11 font-medium">
+              Compare plans
+              <ArrowRight class="ml-1.5 h-4 w-4" />
+            </Button>
+            <Button size="lg" href={AUTH_URL} class="h-11 font-medium bg-primary-foreground/10 border border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/20">
+              Start free · 100 devices
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</SiteLayout>

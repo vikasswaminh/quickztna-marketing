@@ -1,0 +1,343 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import Button from "@/components/ui/Button.astro";
+import {
+  ShieldCheck,
+  Network,
+  KeyRound,
+  Sparkles,
+  Globe2,
+  Lock,
+  Activity,
+  Zap,
+  ArrowRight,
+  Check,
+  Terminal,
+  Fingerprint,
+} from "lucide-astro";
+
+const AUTH_URL = "https://login.quickztna.com/auth";
+const DOCS_URL = "https://docs.quickztna.com";
+const INSTALL_CMD = "curl -fsSL https://login.quickztna.com/install.sh | ZTNA_AUTH_KEY=tskey-auth-xxx sh";
+
+const steps = [
+  {
+    n: "01",
+    title: "Issue one auth key",
+    desc: "In the dashboard, create a reusable auth key that covers every device you want to enrol. Set an expiry, optional tags, and that's it.",
+    code: "ztna auth-key create --reusable",
+  },
+  {
+    n: "02",
+    title: "Pipe the installer everywhere",
+    desc: "One command on Linux, macOS, and Windows. Works from shell, Ansible, Intune, Jamf, cloud-init. Detects OS, installs service, auto-connects.",
+    code: "curl ... | ZTNA_AUTH_KEY=tskey-auth-xxx sh",
+  },
+  {
+    n: "03",
+    title: "You're on the mesh",
+    desc: "Every device joins your tailnet with a hybrid ML-KEM-768 + X25519 tunnel. Reachable by MagicDNS name, quantum-safe from day one.",
+    code: "ssh prod-db.acme.zt.net",
+  },
+];
+
+const proofPoints = [
+  "SOC 2 Type II",
+  "NIST PQC FIPS 203",
+  "GDPR · DPA available",
+  "4 global DERP regions",
+  "Razorpay · custom invoicing",
+  "Open-source Go client",
+];
+---
+<SiteLayout
+  title="QuickZTNA — 100 devices connected in 2 minutes · Post-quantum Zero Trust"
+  description="Post-quantum-encrypted Zero Trust mesh VPN. One install command, ML-KEM-768 hybrid tunnels, identity-based ACLs. Free forever for 100 devices."
+>
+  <!-- HERO -->
+  <section class="relative overflow-hidden bg-hero">
+    <div class="absolute inset-0 bg-grid opacity-60" aria-hidden="true"></div>
+    <div class="relative mx-auto max-w-7xl px-4 pt-20 pb-24 sm:px-6 lg:px-8 lg:pt-28 lg:pb-32">
+      <div class="mx-auto max-w-3xl text-center">
+        <div class="inline-flex items-center gap-2 rounded-full border border-border bg-surface-elevated px-3 py-1 text-xs font-medium text-muted-foreground shadow-soft">
+          <span class="flex h-1.5 w-1.5 rounded-full bg-success"></span>
+          Post-quantum ML-KEM-768 · live on every tunnel
+          <span class="text-border">·</span>
+          <a href={`${DOCS_URL}/security`} class="text-primary hover:underline">FIPS 203</a>
+        </div>
+        <h1 class="mt-6 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+          <span class="text-gradient">100 devices</span> on an encrypted mesh
+          <br class="hidden sm:block" /> in 2 minutes. Quantum-safe.
+        </h1>
+        <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+          QuickZTNA replaces your VPN, SSO gateway, and secrets manager with a single
+          post-quantum-encrypted agent. Issue one auth key, run one install command, and your
+          entire workforce is on the tailnet. Free forever for 100 devices.
+        </p>
+        <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Button size="lg" href={AUTH_URL} class="h-11 px-6 font-medium">
+            Start free — no card required
+            <ArrowRight class="ml-1.5 h-4 w-4" />
+          </Button>
+          <Button size="lg" variant="outline" href={`${DOCS_URL}/quickstart`} class="h-11 px-6 font-medium">
+            <Terminal class="mr-1.5 h-4 w-4" />
+            Read the 2-minute quickstart
+          </Button>
+        </div>
+        <p class="mt-4 font-mono text-xs text-muted-foreground break-all">
+          {INSTALL_CMD}
+        </p>
+      </div>
+
+      <!-- Terminal preview -->
+      <div class="relative mx-auto mt-16 max-w-4xl">
+        <div class="absolute -inset-4 rounded-3xl bg-gradient-to-r from-primary/20 via-chart-2/20 to-primary/20 opacity-60 blur-2xl"></div>
+        <div class="relative overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-elevated">
+          <div class="flex items-center justify-between border-b border-border bg-muted/40 px-4 py-2.5">
+            <div class="flex items-center gap-1.5">
+              <span class="h-2.5 w-2.5 rounded-full bg-destructive/70"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-warning/70"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-success/70"></span>
+            </div>
+            <span class="font-mono text-xs text-muted-foreground">acme.zt.net · fleet rollout</span>
+            <span class="font-mono text-xs text-success">● 100 connected</span>
+          </div>
+          <div class="bg-foreground/[0.02] p-5 font-mono text-[13px] leading-relaxed">
+            <div><span class="text-primary">$</span> <span class="text-foreground">ansible all -m shell -a "curl -fsSL .../install.sh | ZTNA_AUTH_KEY=$KEY sh"</span></div>
+            <div class="text-muted-foreground">→ 100 hosts · detecting OS/arch...</div>
+            <div class="text-muted-foreground">→ Downloading ztna v3.2.0 (linux-amd64, darwin-arm64, windows-amd64)</div>
+            <div class="text-muted-foreground">→ Installing service · starting daemon · ztna up</div>
+            <div class="text-muted-foreground">→ ML-KEM-768 + X25519 hybrid keypair generated per host</div>
+            <div class="text-muted-foreground">→ Tailnet IPs allocated · MagicDNS registered</div>
+            <div class="text-success">✓ 100/100 devices online in 1m 47s — quantum-safe</div>
+            <div>&nbsp;</div>
+            <div><span class="text-primary">$</span> <span class="text-foreground">ztna status</span></div>
+            <div class="mt-1 grid gap-1 text-muted-foreground">
+              <div><span class="text-success">●</span> laptop-prod-01 100.64.1.7 · tag:laptop · direct</div>
+              <div><span class="text-success">●</span> db-primary 100.64.1.12 · tag:prod-server · 4.2ms</div>
+              <div><span class="text-success">●</span> ci-runner-03 100.64.1.18 · tag:ci · 38ms direct</div>
+              <div><span class="text-warning">●</span> eu-edge-07 100.64.1.31 · tag:edge · derp-lon</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF STRIP -->
+  <section class="border-y border-border bg-surface">
+    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <p class="text-center font-mono text-xs uppercase tracking-wider text-muted-foreground">
+        Built on open standards · Verifiable crypto · No harvest-now-decrypt-later
+      </p>
+      <div class="mt-6 grid grid-cols-2 items-center justify-items-center gap-6 sm:grid-cols-3 lg:grid-cols-6">
+        {proofPoints.map((p) => (
+          <div class="text-center font-mono text-xs font-semibold tracking-wide text-muted-foreground">{p}</div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- BENTO FEATURES -->
+  <section class="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="font-mono text-xs uppercase tracking-wider text-primary">The platform</p>
+      <h2 class="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+        One control plane. Every layer of access.
+      </h2>
+      <p class="mt-3 text-muted-foreground">
+        Mesh networking, identity, ZTNA policy, AI assistance, and workforce analytics — unified in a single agent.
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-4 lg:grid-cols-6 lg:grid-rows-2">
+      <!-- PQC card - large accent -->
+      <div class="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated bg-gradient-to-br from-surface-elevated via-surface-elevated to-accent/40 lg:col-span-3 lg:row-span-2">
+        <div class="absolute -right-20 -top-20 h-60 w-60 rounded-full bg-primary/10 blur-3xl"></div>
+        <div class="relative flex h-full flex-col">
+          <span class="inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-wider text-primary">
+            <Lock class="h-3.5 w-3.5" />Post-Quantum by default
+          </span>
+          <h3 class="mt-4 text-2xl font-semibold tracking-tight">Hybrid ML-KEM-768 + X25519 on every tunnel</h3>
+          <p class="mt-2 text-sm text-muted-foreground">
+            Every WireGuard peer-to-peer tunnel uses a NIST FIPS 203 key exchange. The PSK is derived
+            via HKDF-SHA256 from both classical and post-quantum shared secrets — so stored traffic
+            can't be decrypted even if X25519 breaks tomorrow.
+          </p>
+          <div class="mt-6 grid flex-1 grid-cols-2 gap-3">
+            <div class="rounded-xl border border-border bg-surface p-4">
+              <div class="font-mono text-2xl font-semibold tracking-tight text-foreground">&lt; 2 min</div>
+              <div class="mt-0.5 text-xs text-muted-foreground">100-device fleet rollout</div>
+            </div>
+            <div class="rounded-xl border border-border bg-surface p-4">
+              <div class="font-mono text-2xl font-semibold tracking-tight text-foreground">0 ms</div>
+              <div class="mt-0.5 text-xs text-muted-foreground">user-facing handshake overhead</div>
+            </div>
+            <div class="rounded-xl border border-border bg-surface p-4">
+              <div class="font-mono text-2xl font-semibold tracking-tight text-foreground">FIPS 203</div>
+              <div class="mt-0.5 text-xs text-muted-foreground">ML-KEM-768 compliant</div>
+            </div>
+            <div class="rounded-xl border border-border bg-surface p-4">
+              <div class="font-mono text-2xl font-semibold tracking-tight text-foreground">Hybrid</div>
+              <div class="mt-0.5 text-xs text-muted-foreground">classical fallback per-peer</div>
+            </div>
+          </div>
+          <div class="mt-6 flex flex-wrap items-center gap-2 font-mono text-xs text-muted-foreground">
+            <span class="rounded bg-muted px-2 py-1">ML-KEM-768</span>
+            <span class="rounded bg-muted px-2 py-1">X25519</span>
+            <span class="rounded bg-muted px-2 py-1">ChaCha20-Poly1305</span>
+            <span class="rounded bg-muted px-2 py-1">HKDF-SHA256</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated lg:col-span-3">
+        <span class="inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-wider text-primary">
+          <Network class="h-3.5 w-3.5" />Mesh networking
+        </span>
+        <h3 class="mt-3 text-lg font-semibold">WireGuard P2P with DERP fallback</h3>
+        <p class="mt-1.5 text-sm text-muted-foreground">
+          Direct peer-to-peer tunnels wherever NAT allows. Four global DERP relays (India, US East, Europe, US West) cover CGNAT and symmetric-NAT peers automatically.
+        </p>
+      </div>
+
+      <div class="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated lg:col-span-2">
+        <span class="inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-wider text-primary">
+          <Sparkles class="h-3.5 w-3.5" />AI policy
+        </span>
+        <h3 class="mt-3 text-lg font-semibold">Natural-language ACLs</h3>
+        <p class="mt-1.5 text-sm text-muted-foreground">
+          "Laptops can SSH to prod 9–6 IST." Done. Powered by Claude.
+        </p>
+      </div>
+
+      <div class="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated lg:col-span-1">
+        <KeyRound class="h-5 w-5 text-primary" />
+        <h3 class="mt-3 text-base font-semibold">JIT access</h3>
+        <p class="mt-1 text-sm text-muted-foreground">Request · approve · auto-revoke.</p>
+      </div>
+    </div>
+
+    <div class="mt-4 grid gap-4 md:grid-cols-3">
+      <div class="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated">
+        <ShieldCheck class="h-5 w-5 text-primary" />
+        <h3 class="mt-3 text-base font-semibold">ABAC policies</h3>
+        <p class="mt-1 text-sm text-muted-foreground">
+          Rules keyed on user, tag, device posture, time of day, country, protocol, and port. Evaluated per connection.
+        </p>
+      </div>
+      <div class="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated">
+        <Globe2 class="h-5 w-5 text-primary" />
+        <h3 class="mt-3 text-base font-semibold">MagicDNS & subnet routes</h3>
+        <p class="mt-1 text-sm text-muted-foreground">
+          Every device reachable at <code class="font-mono text-xs">&lt;name&gt;.&lt;org&gt;.zt.net</code>. Advertise subnet routes · exit nodes · AWS / GCP / Azure firewall sync.
+        </p>
+      </div>
+      <div class="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated">
+        <Activity class="h-5 w-5 text-primary" />
+        <h3 class="mt-3 text-base font-semibold">Workforce analytics</h3>
+        <p class="mt-1 text-sm text-muted-foreground">
+          Session tracking, DEM, DLP, CASB, anomaly detection, session recording, remote desktop — all from the same agent.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-4 grid gap-4 md:grid-cols-3">
+      <div class="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated">
+        <Fingerprint class="h-5 w-5 text-primary" />
+        <h3 class="mt-3 text-base font-semibold">SSO + SCIM 2.0</h3>
+        <p class="mt-1 text-sm text-muted-foreground">
+          Google, GitHub, OIDC, SAML. SCIM provisioning for Okta, Azure AD. TOTP MFA. Device-bound refresh tokens.
+        </p>
+      </div>
+      <div class="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated">
+        <Lock class="h-5 w-5 text-primary" />
+        <h3 class="mt-3 text-base font-semibold">Secrets vault</h3>
+        <p class="mt-1 text-sm text-muted-foreground">
+          AES-256-GCM encrypted secrets with rotation policies. Integrated with the agent — no second tool to deploy.
+        </p>
+      </div>
+      <div class="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated">
+        <Zap class="h-5 w-5 text-primary" />
+        <h3 class="mt-3 text-base font-semibold">Terraform + API</h3>
+        <p class="mt-1 text-sm text-muted-foreground">
+          57 REST endpoints. Full Terraform provider for machines, ACLs, DNS, users. GitOps your network state.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SETUP STEPS -->
+  <section class="border-t border-border bg-surface">
+    <div class="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+      <div class="grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-16">
+        <div>
+          <p class="font-mono text-xs uppercase tracking-wider text-primary">Setup</p>
+          <h2 class="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+            Two minutes, not two quarters.
+          </h2>
+          <p class="mt-4 text-muted-foreground">
+            No bastion hosts. No certificates to rotate. No firewall-change requests. No public IPs
+            exposed. Bring your identity provider, run one command, ship.
+          </p>
+          <Button class="mt-6" variant="outline" href={`${DOCS_URL}/quickstart`}>
+            Read quickstart
+            <ArrowRight class="ml-1.5 h-4 w-4" />
+          </Button>
+        </div>
+        <div class="grid gap-3">
+          {steps.map((s) => (
+            <div class="grid grid-cols-[auto_1fr] gap-5 rounded-xl border border-border bg-surface-elevated p-5 shadow-soft">
+              <div class="font-mono text-2xl font-semibold text-primary">{s.n}</div>
+              <div>
+                <h3 class="text-base font-semibold">{s.title}</h3>
+                <p class="mt-1 text-sm text-muted-foreground">{s.desc}</p>
+                <code class="mt-3 inline-block rounded-md bg-muted px-2.5 py-1 font-mono text-xs text-foreground break-all">
+                  {s.code}
+                </code>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="relative overflow-hidden">
+    <div class="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+      <div class="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary to-chart-2 p-12 text-primary-foreground shadow-elevated lg:p-16">
+        <div class="absolute inset-0 bg-grid opacity-10"></div>
+        <div class="relative grid items-center gap-8 lg:grid-cols-[1.5fr_1fr]">
+          <div>
+            <Zap class="h-8 w-8" />
+            <h2 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
+              Quantum-safe access. Free forever for 100 devices.
+            </h2>
+            <p class="mt-3 max-w-xl text-primary-foreground/85">
+              Built for the founder, the indie ops team, the YC batch, the Fortune 500 pilot.
+              Upgrade to Business ($10/mo) or Workforce when you're ready — never before.
+            </p>
+          </div>
+          <div class="flex flex-col gap-3">
+            <Button size="lg" variant="secondary" href={AUTH_URL} class="h-11 font-medium">
+              Start free
+              <ArrowRight class="ml-1.5 h-4 w-4" />
+            </Button>
+            <a
+              href="/pricing"
+              class="inline-flex h-11 items-center justify-center rounded-md border border-primary-foreground/30 px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-foreground/10"
+            >
+              Compare plans
+            </a>
+            <ul class="mt-2 space-y-1.5 text-sm text-primary-foreground/85">
+              {["No credit card · no time limit", "Self-serve SSO + SCIM", "ML-KEM-768 on every tunnel"].map((t) => (
+                <li class="flex items-center gap-2"><Check class="h-4 w-4" /> {t}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</SiteLayout>
