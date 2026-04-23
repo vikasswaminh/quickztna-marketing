@@ -31,11 +31,11 @@ const plans = [
     name: "Business",
     tagline: "For growing teams · 60-day free trial.",
     price: "$10",
-    per: "/mo",
+    per: "per user /mo",
     cta: "Start 60-day trial",
     ctaHref: AUTH_URL,
     highlight: true,
-    limits: ["100 machines", "Unlimited users", "Priority email support"],
+    limits: ["Unlimited machines", "Billed per active user", "Priority email support"],
     features: [
       "Everything in Free",
       "Remote management + remote shell",
@@ -57,7 +57,7 @@ const plans = [
     cta: "Contact sales",
     ctaHref: SALES_URL,
     highlight: false,
-    limits: ["100 machines", "Unlimited users", "Dedicated support + SLA"],
+    limits: ["Unlimited machines", "Custom per-user pricing", "Dedicated support + SLA"],
     features: [
       "Everything in Business",
       "Workforce analytics + DEM",
@@ -82,8 +82,8 @@ const groups: Group[] = [
   {
     title: "Core networking",
     rows: [
-      { feature: "Machines per org", free: "100", business: "100", workforce: "100" },
-      { feature: "Users per org", free: "3", business: "Unlimited", workforce: "Unlimited" },
+      { feature: "Machines per org", free: "100", business: "Unlimited", workforce: "Unlimited" },
+      { feature: "Users per org", free: "3", business: "Billed / user", workforce: "Billed / user" },
       { feature: "Post-quantum WireGuard (ML-KEM-768)", free: true, business: true, workforce: true },
       { feature: "MagicDNS", free: true, business: true, workforce: true },
       { feature: "DERP relays (4 global regions)", free: true, business: true, workforce: true },
@@ -228,7 +228,7 @@ function renderCell(v: boolean | string) {
 ---
 <SiteLayout
   title="Pricing — QuickZTNA"
-  description="Free forever for 100 devices. Business $10/mo with 60-day trial. Workforce on request. Honest per-feature comparison, real limits, no hidden gotchas."
+  description="Free forever for 100 devices and 3 users. Business $10 per user / month — unlimited machines, 60-day trial. Workforce on request. Honest per-feature comparison, real limits, no hidden gotchas."
 >
   <!-- HERO -->
   <section class="relative overflow-hidden bg-hero border-b border-border">
