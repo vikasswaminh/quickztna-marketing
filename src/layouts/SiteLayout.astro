@@ -6,10 +6,14 @@ import Footer from "@/components/site/Footer.astro";
 interface Props {
   title?: string;
   description?: string;
+  canonical?: string;
+  ogImage?: string;
 }
 const {
   title = "QuickZTNA — 100 devices connected in 2 minutes · Post-quantum Zero Trust",
   description = "Post-quantum-encrypted Zero Trust mesh VPN. One install command, ML-KEM-768 hybrid tunnels, identity-based ACLs. Free forever for 100 devices.",
+  canonical,
+  ogImage,
 } = Astro.props;
 ---
 <!doctype html>
@@ -22,9 +26,20 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://quickztna.com" />
+    <meta property="og:url" content={canonical ?? "https://quickztna.com"} />
     <meta name="twitter:card" content="summary_large_image" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title="QuickZTNA Blog" href="/rss.xml" />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+
+    <!-- Plausible Analytics (self-hosted at analytics.networkershome.com).
+         No cookies, no PII, GDPR-friendly. Tracks the marketing funnel
+         only; the authenticated login app has no analytics. -->
+    <script defer data-domain="quickztna.com" src="https://analytics.networkershome.com/js/script.js"></script>
+
+    <slot name="head" />
   </head>
   <body>
     <div class="flex min-h-screen flex-col bg-background">
