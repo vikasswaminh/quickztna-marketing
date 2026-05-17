@@ -1,0 +1,158 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+
+const EFFECTIVE_DATE = "April 13, 2026";
+---
+<SiteLayout
+  title="Refund & Cancellation Policy — QuickZTNA"
+  description="QuickZTNA refund and cancellation policy. 7-day no-questions-asked refund, pro-rated refunds, how to cancel, and Consumer Protection Act 2019 compliance."
+>
+  <div class="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-extrabold tracking-tight text-foreground">Refund &amp; Cancellation Policy</h1>
+    <p class="mt-2 text-sm text-muted-foreground">
+      Effective: {EFFECTIVE_DATE} · Consumer Protection Act, 2019 compliant
+    </p>
+
+    <div class="mt-10 space-y-10 text-sm text-muted-foreground leading-relaxed">
+      <p>
+        This policy describes how cancellations and refunds work for QUICK ZTNA paid subscriptions.
+        We aim to be transparent and fair. If you have any questions, contact us at
+        <a href="mailto:support@quickztna.com" class="text-primary underline underline-offset-2">support@quickztna.com</a>.
+      </p>
+
+      <section>
+        <h2 class="text-lg font-bold text-foreground mb-3">1. Free Plan</h2>
+        <p>
+          The Free plan has no charges and requires no payment information. You can use the Free plan
+          indefinitely. No refund applies as no payment is collected.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-foreground mb-3">2. How to Cancel</h2>
+        <ul class="list-disc pl-5 space-y-1.5">
+          <li>Log in to your account at <a href="https://login.quickztna.com/auth" class="text-primary underline underline-offset-2">login.quickztna.com</a></li>
+          <li>Navigate to <strong class="text-foreground">Admin Settings → Billing</strong></li>
+          <li>Click <strong class="text-foreground">“Cancel Subscription”</strong></li>
+          <li>Your subscription remains active until the end of the current billing cycle</li>
+          <li>After cancellation, your organisation automatically downgrades to the Free plan</li>
+        </ul>
+        <p class="mt-3">
+          You can also cancel by emailing <a href="mailto:support@quickztna.com" class="text-primary underline underline-offset-2">support@quickztna.com</a> with
+          your organisation ID and registered email address.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-foreground mb-3">3. Refund Eligibility</h2>
+        <table class="w-full text-xs border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4 font-semibold text-foreground">Scenario</th>
+              <th class="text-left py-2 pr-4 font-semibold text-foreground">Refund</th>
+              <th class="text-left py-2 font-semibold text-foreground">Details</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border/50">
+            <tr>
+              <td class="py-2 pr-4 font-medium text-foreground">Within 7 days of first payment</td>
+              <td class="py-2 pr-4">Full refund</td>
+              <td class="py-2">No questions asked. Email us within 7 days of your first charge.</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-4 font-medium text-foreground">After 7 days (monthly plan)</td>
+              <td class="py-2 pr-4">Pro-rated, at discretion</td>
+              <td class="py-2">Refund for remaining unused days in the current billing cycle, assessed case by case.</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-4 font-medium text-foreground">Annual plan (within 30 days)</td>
+              <td class="py-2 pr-4">Pro-rated refund</td>
+              <td class="py-2">Refund for remaining unused months, minus one month’s usage.</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-4 font-medium text-foreground">Annual plan (after 30 days)</td>
+              <td class="py-2 pr-4">No refund</td>
+              <td class="py-2">Service remains active until end of annual term.</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-4 font-medium text-foreground">Service outage (&gt;24h)</td>
+              <td class="py-2 pr-4">Service credit</td>
+              <td class="py-2">Pro-rated credit for the downtime period, applied to next billing cycle.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-foreground mb-3">4. How to Request a Refund</h2>
+        <ol class="list-decimal pl-5 space-y-1.5">
+          <li>Email <a href="mailto:support@quickztna.com" class="text-primary underline underline-offset-2">support@quickztna.com</a> with the subject line “Refund Request”</li>
+          <li>Include your organisation ID, registered email, and reason for the refund</li>
+          <li>We will acknowledge your request within <strong class="text-foreground">2 business days</strong></li>
+          <li>Refund decision will be communicated within <strong class="text-foreground">5 business days</strong></li>
+        </ol>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-foreground mb-3">5. Refund Method &amp; Timeline</h2>
+        <ul class="list-disc pl-5 space-y-1.5">
+          <li>Refunds are processed to the <strong class="text-foreground">original payment method</strong> via Razorpay</li>
+          <li>Processing time: <strong class="text-foreground">5–10 business days</strong> after approval</li>
+          <li>Bank processing times may vary — please allow up to 2 additional billing cycles for the refund to appear</li>
+          <li>Refunds are issued in the same currency as the original payment</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-foreground mb-3">6. Non-Refundable Items</h2>
+        <ul class="list-disc pl-5 space-y-1.5">
+          <li>Workforce plans with custom agreements (refund terms are governed by the individual contract)</li>
+          <li>Service usage that has already been consumed</li>
+          <li>Accounts terminated for violation of our <a href="/terms" class="text-primary underline underline-offset-2">Terms of Service</a> or Acceptable Use Policy</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-foreground mb-3">7. Plan Downgrade</h2>
+        <ul class="list-disc pl-5 space-y-1.5">
+          <li>You can downgrade from any paid plan to the Free plan at any time</li>
+          <li>Paid features are removed at the end of the current billing cycle</li>
+          <li>Your data is retained for <strong class="text-foreground">30 days</strong> after downgrade to allow re-upgrade</li>
+          <li>After 30 days, data exceeding Free plan limits may be archived</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-foreground mb-3">8. Dormant Accounts</h2>
+        <p>
+          Accounts with no active machines and no login activity for <strong class="text-foreground">12 consecutive months</strong> may
+          be marked as dormant. We will send an email notification 30 days before archiving a dormant
+          account. You can reactivate at any time by logging in.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-foreground mb-3">9. Grievance Redressal</h2>
+        <p>If you are not satisfied with our refund decision, you may escalate to our Grievance Officer:</p>
+        <div class="mt-3 border border-border rounded-lg p-4 bg-muted/30 text-xs space-y-1">
+          <p class="font-semibold text-foreground">Grievance Officer — Victor Chasex Pvt Ltd (QUICK ZTNA)</p>
+          <p>L-149, Sector 6, HSR Layout, Bengaluru 560102</p>
+          <p>Email: grievance@quickztna.com</p>
+          <p>Phone: +91-9611027980</p>
+          <p>Response time: within 30 days</p>
+        </div>
+        <p class="mt-3">
+          You may also file a complaint with the appropriate Consumer Disputes Redressal Commission
+          under the Consumer Protection Act, 2019.
+        </p>
+      </section>
+
+      <div class="border-t border-border pt-6 mt-10">
+        <p class="text-xs text-muted-foreground">
+          Last updated: {EFFECTIVE_DATE}. Questions? Contact us at
+          <a href="mailto:support@quickztna.com" class="text-primary underline underline-offset-2">support@quickztna.com</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</SiteLayout>

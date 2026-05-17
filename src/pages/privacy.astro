@@ -1,0 +1,415 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+
+const EFFECTIVE_DATE = "April 13, 2026";
+
+const sections = [
+  { id: "fiduciary", label: "1. Data Fiduciary" },
+  { id: "data-collected", label: "2. Data We Collect" },
+  { id: "purpose", label: "3. Purpose of Processing" },
+  { id: "workforce-monitoring", label: "4. Workforce Monitoring" },
+  { id: "lawful-basis", label: "5. Lawful Basis" },
+  { id: "retention", label: "6. Data Retention" },
+  { id: "rights", label: "7. Your Rights" },
+  { id: "sub-processors", label: "8. Sub-Processors" },
+  { id: "cross-border", label: "9. Cross-Border Transfer" },
+  { id: "children", label: "10. Children" },
+  { id: "cookies", label: "11. Cookies & Storage" },
+  { id: "security", label: "12. Security Measures" },
+  { id: "grievance", label: "13. Grievance Officer" },
+  { id: "changes", label: "14. Changes to Policy" },
+];
+---
+<SiteLayout
+  title="Privacy Policy — QuickZTNA"
+  description="QuickZTNA Privacy Policy. DPDP Act 2023 compliant. What data we collect, how we process it, your rights as a data principal, and our grievance officer."
+>
+  <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-extrabold tracking-tight text-foreground">Privacy Policy</h1>
+    <p class="mt-2 text-sm text-muted-foreground">
+      Effective: {EFFECTIVE_DATE} · Compliant with the Digital Personal Data Protection Act, 2023
+    </p>
+
+    <div class="mt-10 grid gap-10 lg:grid-cols-[220px_1fr]">
+      <nav class="hidden lg:block sticky top-20 self-start space-y-1">
+        {sections.map((s) => (
+          <a href={`#${s.id}`} class="block text-xs text-muted-foreground hover:text-foreground transition-colors py-1">
+            {s.label}
+          </a>
+        ))}
+      </nav>
+
+      <div class="space-y-10 text-sm text-muted-foreground leading-relaxed">
+        <p>
+          This Privacy Policy explains how Victor Chasex Pvt Ltd, operating as QUICK ZTNA (“we”, “us”, “our”)
+          collects, uses, stores, and protects your personal data when you use our Zero Trust Network Access
+          platform at <strong>quickztna.com</strong> and <strong>login.quickztna.com</strong> (the “Service”).
+        </p>
+
+        <section id="fiduciary">
+          <h2 class="text-lg font-bold text-foreground mb-3">1. Data Fiduciary Information</h2>
+          <p>Under the Digital Personal Data Protection Act, 2023 (DPDP Act), the Data Fiduciary is:</p>
+          <div class="mt-3 border border-border rounded-lg p-4 bg-muted/30 text-xs space-y-1">
+            <p class="font-semibold text-foreground">Victor Chasex Pvt Ltd</p>
+            <p>(operating as QUICK ZTNA)</p>
+            <p>L-149, Sector 6, HSR Layout, Bengaluru 560102, Karnataka, India</p>
+            <p>Phone: +91-9611027980</p>
+            <p>Email: support@quickztna.com</p>
+            <p>Hours: Mon–Sat, 10:00 AM – 6:00 PM IST</p>
+          </div>
+        </section>
+
+        <section id="data-collected">
+          <h2 class="text-lg font-bold text-foreground mb-3">2. Data We Collect</h2>
+          <table class="w-full text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-2 pr-4 font-semibold text-foreground">Category</th>
+                <th class="text-left py-2 pr-4 font-semibold text-foreground">Data Points</th>
+                <th class="text-left py-2 font-semibold text-foreground">Collection Method</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border/50">
+              <tr>
+                <td class="py-2 pr-4 font-medium text-foreground">Account</td>
+                <td class="py-2 pr-4">Full name, email address, password (PBKDF2 hash only)</td>
+                <td class="py-2">Registration form</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-4 font-medium text-foreground">Device</td>
+                <td class="py-2 pr-4">Hostname, operating system, IP address, WireGuard public key</td>
+                <td class="py-2">Client agent</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-4 font-medium text-foreground">Network</td>
+                <td class="py-2 pr-4">Connection timestamps, peer relationships, bandwidth usage, NAT type</td>
+                <td class="py-2">Service operation</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-4 font-medium text-foreground">Billing</td>
+                <td class="py-2 pr-4">Plan type, subscription status, payment timestamps. Card details are processed by Razorpay — we never store card numbers.</td>
+                <td class="py-2">Razorpay integration</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-4 font-medium text-foreground">Security</td>
+                <td class="py-2 pr-4">Audit logs, threat intelligence results (IP reputation), risk scores, login attempts</td>
+                <td class="py-2">Automated monitoring</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="purpose">
+          <h2 class="text-lg font-bold text-foreground mb-3">3. Purpose of Processing</h2>
+          <ul class="list-disc pl-5 space-y-1.5">
+            <li><strong class="text-foreground">Service delivery</strong> — provisioning WireGuard tunnels, DNS resolution, key exchange, device management</li>
+            <li><strong class="text-foreground">Security</strong> — threat intelligence lookups, risk scoring, anomaly detection, DLP scanning, auto-quarantine</li>
+            <li><strong class="text-foreground">Billing</strong> — subscription management, invoicing, payment processing via Razorpay</li>
+            <li><strong class="text-foreground">Support</strong> — responding to support requests, troubleshooting connectivity issues</li>
+            <li><strong class="text-foreground">Compliance</strong> — maintaining immutable audit trail, generating compliance reports (SOC 2, ISO 27001, HIPAA)</li>
+            <li><strong class="text-foreground">AI features (opt-in)</strong> — natural language ACL builder, AI security digest, AI chat assistant. When enabled, prompts are sent to our AI inference provider. No personally identifiable information is included in AI prompts.</li>
+          </ul>
+        </section>
+
+        <section id="workforce-monitoring">
+          <h2 class="text-lg font-bold text-foreground mb-3">4. Workforce Monitoring</h2>
+          <p class="mb-3">
+            If your Organisation administrator enables workforce management features, the QUICK ZTNA
+            client and dashboard may collect additional data about device activity. This section
+            discloses exactly what is collected, how often, who can see it, and how long it is retained.
+          </p>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs border-collapse mb-4">
+              <thead>
+                <tr class="border-b border-border">
+                  <th class="text-left py-2 pr-3 font-semibold text-foreground">Capability</th>
+                  <th class="text-left py-2 pr-3 font-semibold text-foreground">Data Collected</th>
+                  <th class="text-left py-2 pr-3 font-semibold text-foreground">Frequency</th>
+                  <th class="text-left py-2 pr-3 font-semibold text-foreground">Visible To</th>
+                  <th class="text-left py-2 font-semibold text-foreground">Default Retention</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-border/50">
+                <tr>
+                  <td class="py-2 pr-3 font-medium text-foreground">Activity Level Tracking</td>
+                  <td class="py-2 pr-3">Activity level (active / low / idle), estimated keyboard &amp; mouse activity counts, window switch count. <em>Not</em> raw keystrokes.</td>
+                  <td class="py-2 pr-3">Every 5 seconds</td>
+                  <td class="py-2 pr-3">Org Admin</td>
+                  <td class="py-2">90 days</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3 font-medium text-foreground">DNS Query Analytics</td>
+                  <td class="py-2 pr-3">Domain names queried, query timestamps, category classification</td>
+                  <td class="py-2 pr-3">Per DNS query</td>
+                  <td class="py-2 pr-3">Org Admin, Member (own data)</td>
+                  <td class="py-2">90 days</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3 font-medium text-foreground">Session Recording</td>
+                  <td class="py-2 pr-3">Full terminal output for SSH and RDP sessions (command text, not video)</td>
+                  <td class="py-2 pr-3">Continuous during session</td>
+                  <td class="py-2 pr-3">Org Admin</td>
+                  <td class="py-2">90 days</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3 font-medium text-foreground">Remote Desktop</td>
+                  <td class="py-2 pr-3">Screen capture stream (only while session is active). Peer sessions require a consent dialog on the user’s machine.</td>
+                  <td class="py-2 pr-3">On-demand</td>
+                  <td class="py-2 pr-3">Org Admin, requesting peer</td>
+                  <td class="py-2">Not stored</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3 font-medium text-foreground">Software Inventory</td>
+                  <td class="py-2 pr-3">Installed application names, versions, publishers</td>
+                  <td class="py-2 pr-3">Periodic scan</td>
+                  <td class="py-2 pr-3">Org Admin, Member (overview)</td>
+                  <td class="py-2">90 days</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3 font-medium text-foreground">Productivity Scoring</td>
+                  <td class="py-2 pr-3">Aggregated active vs. idle time ratio, domain category breakdown</td>
+                  <td class="py-2 pr-3">Computed from activity data</td>
+                  <td class="py-2 pr-3">Org Admin</td>
+                  <td class="py-2">90 days</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3 font-medium text-foreground">User Risk Scoring</td>
+                  <td class="py-2 pr-3">Behavioural risk score based on 6 factors (login anomalies, device posture, network behaviour, access patterns, compliance, threat intel)</td>
+                  <td class="py-2 pr-3">Computed periodically</td>
+                  <td class="py-2 pr-3">Org Admin, Member (own score only)</td>
+                  <td class="py-2">90 days</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3 font-medium text-foreground">Schedule Compliance</td>
+                  <td class="py-2 pr-3">Machine online/offline times compared to configured work schedule</td>
+                  <td class="py-2 pr-3">Derived from session data</td>
+                  <td class="py-2 pr-3">Org Admin only</td>
+                  <td class="py-2">90 days</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3 font-medium text-foreground">DLP Monitoring</td>
+                  <td class="py-2 pr-3">File access events flagged by data loss prevention rules</td>
+                  <td class="py-2 pr-3">Per file event</td>
+                  <td class="py-2 pr-3">Org Admin</td>
+                  <td class="py-2">90 days</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="text-sm font-bold text-foreground mb-2">Privacy Safeguards</h3>
+          <ul class="list-disc pl-5 space-y-1.5 mb-3">
+            <li><strong class="text-foreground">No keystroke logging</strong> — keyboard activity counts are estimated from idle-time analysis, not intercepted from a keystroke hook</li>
+            <li><strong class="text-foreground">Window titles OFF by default</strong> — application window title tracking is disabled by default and can only be enabled by an Org Admin</li>
+            <li><strong class="text-foreground">Remote desktop consent</strong> — peer-to-peer remote desktop sessions display a consent dialog on the target user’s machine before screen sharing begins</li>
+            <li><strong class="text-foreground">Monitoring indicator</strong> — when workforce monitoring is active, the VPN client displays a visible indicator and the dashboard shows a monitoring notice</li>
+            <li><strong class="text-foreground">Admin-controlled</strong> — all monitoring capabilities are disabled by default and must be explicitly enabled by an Organisation administrator</li>
+          </ul>
+
+          <h3 class="text-sm font-bold text-foreground mb-2">Your Rights as a Monitored Employee</h3>
+          <ul class="list-disc pl-5 space-y-1.5">
+            <li>You will be notified when monitoring features are active for your Organisation</li>
+            <li>You may view your own activity summary and risk score via the dashboard</li>
+            <li>You may raise concerns about monitoring practices with your Organisation administrator or our Grievance Officer (Section 13)</li>
+            <li>You may exercise your DPDP Act rights (Section 7) with respect to monitoring data</li>
+          </ul>
+        </section>
+
+        <section id="lawful-basis">
+          <h2 class="text-lg font-bold text-foreground mb-3">5. Lawful Basis for Processing</h2>
+          <ul class="list-disc pl-5 space-y-1.5">
+            <li><strong class="text-foreground">Consent</strong> — provided when you create an account and agree to these terms</li>
+            <li><strong class="text-foreground">Contract performance</strong> — necessary to deliver the Service you subscribed to</li>
+            <li><strong class="text-foreground">Legitimate interest</strong> — security monitoring, threat detection, abuse prevention</li>
+            <li><strong class="text-foreground">Legal obligation</strong> — audit logs retained for regulatory compliance</li>
+          </ul>
+        </section>
+
+        <section id="retention">
+          <h2 class="text-lg font-bold text-foreground mb-3">6. Data Retention</h2>
+          <table class="w-full text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-2 pr-4 font-semibold text-foreground">Data Type</th>
+                <th class="text-left py-2 font-semibold text-foreground">Retention Period</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border/50">
+              <tr><td class="py-2 pr-4">Account data</td><td class="py-2">Duration of account + 30 days after deletion</td></tr>
+              <tr><td class="py-2 pr-4">Audit logs</td><td class="py-2">7 years (regulatory compliance)</td></tr>
+              <tr><td class="py-2 pr-4">Billing records</td><td class="py-2">7 years (tax/accounting requirements)</td></tr>
+              <tr><td class="py-2 pr-4">Session recordings</td><td class="py-2">90 days</td></tr>
+              <tr><td class="py-2 pr-4">Security logs</td><td class="py-2">1 year</td></tr>
+              <tr><td class="py-2 pr-4">Database backups</td><td class="py-2">7 days (local), 30 days (cloud)</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="rights">
+          <h2 class="text-lg font-bold text-foreground mb-3">7. Your Rights (DPDP Act, Sections 11–14)</h2>
+          <p class="mb-3">As a Data Principal, you have the right to:</p>
+          <ul class="list-disc pl-5 space-y-1.5">
+            <li><strong class="text-foreground">Access</strong> — request a summary of your personal data and processing activities</li>
+            <li><strong class="text-foreground">Correction</strong> — update or correct inaccurate personal data</li>
+            <li><strong class="text-foreground">Erasure</strong> — request deletion of your personal data (subject to legal retention obligations)</li>
+            <li><strong class="text-foreground">Grievance redressal</strong> — file a complaint with our Grievance Officer (see Section 13)</li>
+            <li><strong class="text-foreground">Nomination</strong> — nominate another person to exercise your rights in case of death or incapacity</li>
+            <li><strong class="text-foreground">Withdraw consent</strong> — withdraw consent at any time by deleting your account. Note: withdrawal does not affect processing done prior to withdrawal.</li>
+          </ul>
+          <p class="mt-3">
+            To exercise any of these rights, email <strong class="text-foreground">support@quickztna.com</strong> with
+            the subject line “Data Rights Request”. We will respond within 30 days.
+          </p>
+        </section>
+
+        <section id="sub-processors">
+          <h2 class="text-lg font-bold text-foreground mb-3">8. Sub-Processors</h2>
+          <table class="w-full text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-2 pr-4 font-semibold text-foreground">Provider</th>
+                <th class="text-left py-2 pr-4 font-semibold text-foreground">Purpose</th>
+                <th class="text-left py-2 font-semibold text-foreground">Data Shared</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border/50">
+              <tr>
+                <td class="py-2 pr-4 font-medium text-foreground">Razorpay</td>
+                <td class="py-2 pr-4">Payment processing</td>
+                <td class="py-2">Email, subscription plan (card details handled by Razorpay directly)</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-4 font-medium text-foreground">Cloudflare</td>
+                <td class="py-2 pr-4">CDN, DNS, R2 object storage, Pages hosting</td>
+                <td class="py-2">HTTP requests, encrypted backups</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-4 font-medium text-foreground">Groq Cloud</td>
+                <td class="py-2 pr-4">AI inference (opt-in only)</td>
+                <td class="py-2">Anonymised prompts — no PII, no network data</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-4 font-medium text-foreground">AbuseIPDB / VirusTotal</td>
+                <td class="py-2 pr-4">Threat intelligence</td>
+                <td class="py-2">IP address hashes for reputation lookup</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="cross-border">
+          <h2 class="text-lg font-bold text-foreground mb-3">9. Cross-Border Data Transfer</h2>
+          <p>
+            Your data is primarily stored on servers located in <strong class="text-foreground">Bengaluru, India</strong>.
+            Certain sub-processors (Cloudflare, Groq) may process data outside India. Where this occurs:
+          </p>
+          <ul class="list-disc pl-5 space-y-1.5 mt-2">
+            <li>Cloudflare R2 may replicate encrypted backups globally for redundancy</li>
+            <li>AI inference via Groq (US-based) is opt-in only and receives no personally identifiable information</li>
+            <li>DERP relay servers (India, US, Europe) relay encrypted WireGuard traffic only — no plaintext data</li>
+          </ul>
+          <p class="mt-2">
+            We will comply with any data localisation requirements notified by the Central Government under the DPDP Act.
+          </p>
+        </section>
+
+        <section id="children">
+          <h2 class="text-lg font-bold text-foreground mb-3">10. Children’s Data</h2>
+          <p>
+            The Service is not intended for individuals under 18 years of age. We do not knowingly
+            collect personal data from children. If you believe a child has provided us with personal
+            data, please contact us and we will delete it promptly.
+          </p>
+        </section>
+
+        <section id="cookies">
+          <h2 class="text-lg font-bold text-foreground mb-3">11. Cookies &amp; Local Storage</h2>
+          <p class="mb-3">We use minimal browser storage, limited to what is essential for the Service to function:</p>
+          <table class="w-full text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-2 pr-4 font-semibold text-foreground">Name</th>
+                <th class="text-left py-2 pr-4 font-semibold text-foreground">Type</th>
+                <th class="text-left py-2 pr-4 font-semibold text-foreground">Purpose</th>
+                <th class="text-left py-2 font-semibold text-foreground">Essential?</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border/50">
+              <tr>
+                <td class="py-2 pr-4 font-mono">refresh_token</td>
+                <td class="py-2 pr-4">httpOnly cookie</td>
+                <td class="py-2 pr-4">Silent token refresh</td>
+                <td class="py-2">Yes</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-4 font-mono">quickztna_session</td>
+                <td class="py-2 pr-4">localStorage</td>
+                <td class="py-2 pr-4">Session metadata (user info, org)</td>
+                <td class="py-2">Yes</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-4 font-mono">theme</td>
+                <td class="py-2 pr-4">localStorage</td>
+                <td class="py-2 pr-4">Light/dark mode preference</td>
+                <td class="py-2">No</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="mt-3">
+            We do not use any third-party tracking cookies, analytics scripts, or advertising pixels.
+          </p>
+        </section>
+
+        <section id="security">
+          <h2 class="text-lg font-bold text-foreground mb-3">12. Security Measures</h2>
+          <ul class="list-disc pl-5 space-y-1.5">
+            <li>AES-256-GCM encryption for all stored secrets and private keys</li>
+            <li>Post-quantum hybrid key exchange (X25519 + ML-KEM-768, FIPS 203) for all WireGuard tunnels</li>
+            <li>TLS 1.3 minimum for all HTTPS and DERP relay connections</li>
+            <li>PBKDF2 password hashing with per-user salt</li>
+            <li>Immutable, append-only audit trail</li>
+            <li>Rate limiting on authentication endpoints (10 attempts per 5 minutes)</li>
+            <li>ES256 (P-256 ECDSA) signed JWT tokens with 24-hour expiry</li>
+            <li>Daily encrypted database backups to Cloudflare R2</li>
+          </ul>
+        </section>
+
+        <section id="grievance">
+          <h2 class="text-lg font-bold text-foreground mb-3">13. Grievance Officer</h2>
+          <p class="mb-3">
+            In accordance with the DPDP Act, 2023 and the Information Technology Act, 2000, we have appointed a Grievance Officer:
+          </p>
+          <div class="border border-border rounded-lg p-4 bg-muted/30 text-xs space-y-1">
+            <p class="font-semibold text-foreground">Grievance Officer</p>
+            <p>Victor Chasex Pvt Ltd (QUICK ZTNA)</p>
+            <p>L-149, Sector 6, HSR Layout, Bengaluru 560102</p>
+            <p>Email: grievance@quickztna.com</p>
+            <p>Phone: +91-9611027980</p>
+          </div>
+          <p class="mt-3">
+            Grievances will be acknowledged within <strong class="text-foreground">48 hours</strong> and
+            resolved within <strong class="text-foreground">30 days</strong> of receipt. If you are not
+            satisfied with our resolution, you may file a complaint with the Data Protection Board of India.
+          </p>
+        </section>
+
+        <section id="changes">
+          <h2 class="text-lg font-bold text-foreground mb-3">14. Changes to This Policy</h2>
+          <p>
+            We may update this Privacy Policy from time to time. Material changes will be notified via
+            email to your registered address and a prominent notice on the dashboard. Continued use of
+            the Service after notification constitutes acceptance of the updated policy.
+          </p>
+        </section>
+
+        <div class="border-t border-border pt-6 mt-10">
+          <p class="text-xs text-muted-foreground">
+            Last updated: {EFFECTIVE_DATE}. Questions? Contact us at
+            <a href="mailto:support@quickztna.com" class="text-primary underline underline-offset-2">support@quickztna.com</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</SiteLayout>

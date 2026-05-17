@@ -1,0 +1,310 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+
+const EFFECTIVE_DATE = "April 13, 2026";
+
+const sections = [
+  { id: "acceptance", label: "1. Acceptance" },
+  { id: "definitions", label: "2. Definitions" },
+  { id: "account", label: "3. Account" },
+  { id: "service", label: "4. Service Description" },
+  { id: "employee-monitoring", label: "5. Employee Monitoring" },
+  { id: "plans", label: "6. Plans & Pricing" },
+  { id: "trial", label: "7. Free Trial" },
+  { id: "acceptable-use", label: "8. Acceptable Use" },
+  { id: "ip", label: "9. Intellectual Property" },
+  { id: "data-ownership", label: "10. Data Ownership" },
+  { id: "availability", label: "11. Service Availability" },
+  { id: "liability", label: "12. Limitation of Liability" },
+  { id: "indemnification", label: "13. Indemnification" },
+  { id: "termination", label: "14. Termination" },
+  { id: "governing-law", label: "15. Governing Law" },
+  { id: "dispute", label: "16. Dispute Resolution" },
+  { id: "general", label: "17. General Provisions" },
+  { id: "contact", label: "18. Contact" },
+];
+---
+<SiteLayout
+  title="Terms of Service — QuickZTNA"
+  description="QuickZTNA Terms of Service. Governing law: India. Subscription, acceptable use, liability, and dispute resolution terms for the QuickZTNA platform."
+>
+  <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-extrabold tracking-tight text-foreground">Terms of Service</h1>
+    <p class="mt-2 text-sm text-muted-foreground">Effective: {EFFECTIVE_DATE}</p>
+
+    <div class="mt-10 grid gap-10 lg:grid-cols-[220px_1fr]">
+      <nav class="hidden lg:block sticky top-20 self-start space-y-1">
+        {sections.map((s) => (
+          <a
+            href={`#${s.id}`}
+            class="block text-xs text-muted-foreground hover:text-foreground transition-colors py-1"
+          >
+            {s.label}
+          </a>
+        ))}
+      </nav>
+
+      <div class="space-y-10 text-sm text-muted-foreground leading-relaxed">
+        <p>
+          These Terms of Service (“Terms”) govern your use of the QUICK ZTNA platform (“Service”)
+          provided by Victor Chasex Pvt Ltd, operating as QUICK ZTNA (“we”, “us”, “our”). By creating
+          an account or using the Service, you agree to be bound by these Terms. If you do not agree,
+          do not use the Service.
+        </p>
+
+        <section id="acceptance">
+          <h2 class="text-lg font-bold text-foreground mb-3">1. Acceptance of Terms</h2>
+          <p>
+            By accessing or using the Service, creating an account, or clicking “I agree”, you
+            acknowledge that you have read, understood, and agree to be bound by these Terms, our
+            <a href="/privacy" class="text-primary underline underline-offset-2">Privacy Policy</a>, and our
+            <a href="/refund-policy" class="text-primary underline underline-offset-2">Refund &amp; Cancellation Policy</a>.
+            If you are using the Service on behalf of an organisation, you represent that you have
+            authority to bind that organisation to these Terms.
+          </p>
+        </section>
+
+        <section id="definitions">
+          <h2 class="text-lg font-bold text-foreground mb-3">2. Definitions</h2>
+          <ul class="list-disc pl-5 space-y-1.5">
+            <li><strong class="text-foreground">“Service”</strong> — the QUICK ZTNA Zero Trust Network Access platform, including the web dashboard, API, VPN client software, and all related services</li>
+            <li><strong class="text-foreground">“User”</strong> — any individual who creates an account on the Service</li>
+            <li><strong class="text-foreground">“Organisation”</strong> — a group account created by a User that may contain multiple Users and Machines</li>
+            <li><strong class="text-foreground">“Machine”</strong> — a device (computer, server, container) registered with the Service</li>
+            <li><strong class="text-foreground">“Data”</strong> — any information uploaded, transmitted, or generated through the Service by a User or Machine</li>
+          </ul>
+        </section>
+
+        <section id="account">
+          <h2 class="text-lg font-bold text-foreground mb-3">3. Account Registration &amp; Security</h2>
+          <ul class="list-disc pl-5 space-y-1.5">
+            <li>You must provide accurate and complete information during registration</li>
+            <li>You are responsible for maintaining the confidentiality of your account credentials</li>
+            <li>One natural person per account — automated account creation is prohibited unless using auth keys</li>
+            <li>You must notify us immediately of any unauthorised access to your account</li>
+            <li>We reserve the right to suspend accounts that violate these Terms</li>
+          </ul>
+        </section>
+
+        <section id="service">
+          <h2 class="text-lg font-bold text-foreground mb-3">4. Service Description</h2>
+          <p>QUICK ZTNA provides a Zero Trust Network Access platform featuring:</p>
+          <ul class="list-disc pl-5 space-y-1.5 mt-2">
+            <li>WireGuard-based mesh VPN with post-quantum cryptographic key exchange (X25519 + ML-KEM-768)</li>
+            <li>Identity-based access control with ABAC policies, SSO (OIDC/SAML), and device posture verification</li>
+            <li>Remote workforce management including workforce analytics, session recording, and remote desktop</li>
+            <li>Security features including threat intelligence, DLP, DNS filtering, and AI-assisted operations</li>
+            <li>Compliance tools including immutable audit trail and report generation</li>
+          </ul>
+        </section>
+
+        <section id="employee-monitoring">
+          <h2 class="text-lg font-bold text-foreground mb-3">5. Employee Monitoring</h2>
+          <p>
+            By using the Service within an Organisation, you acknowledge that the Organisation
+            administrator may enable workforce monitoring features. When enabled, the following
+            capabilities may be active:
+          </p>
+          <ul class="list-disc pl-5 space-y-1.5 mt-2">
+            <li><strong class="text-foreground">Activity level tracking</strong> — active/idle status, estimated keyboard and mouse activity (not raw keystrokes)</li>
+            <li><strong class="text-foreground">DNS query analytics</strong> — domain access patterns and productivity categorisation</li>
+            <li><strong class="text-foreground">Session recording</strong> — terminal output capture for SSH and RDP sessions</li>
+            <li><strong class="text-foreground">Remote desktop access</strong> — screen viewing (peer sessions require consent dialog on your machine)</li>
+            <li><strong class="text-foreground">Software inventory scanning</strong> — installed application names, versions, and publishers</li>
+            <li><strong class="text-foreground">Productivity scoring</strong> — aggregated active vs. idle time ratios</li>
+            <li><strong class="text-foreground">User risk scoring</strong> — behavioural risk assessment based on login patterns, device posture, and access behaviour</li>
+            <li><strong class="text-foreground">Schedule compliance</strong> — machine online times compared to configured work hours</li>
+            <li><strong class="text-foreground">DLP monitoring</strong> — file access events flagged by data loss prevention rules</li>
+          </ul>
+          <p class="mt-3">When monitoring features are active:</p>
+          <ul class="list-disc pl-5 space-y-1.5 mt-2">
+            <li>The VPN client will display a visible monitoring indicator</li>
+            <li>The dashboard will show a monitoring notice identifying which features are enabled</li>
+            <li>You may view your own monitoring data (activity summary, risk score) via the dashboard</li>
+            <li>You may raise concerns with your Organisation administrator or our Grievance Officer at <a href="mailto:grievance@quickztna.com" class="text-primary underline underline-offset-2">grievance@quickztna.com</a></li>
+          </ul>
+          <p class="mt-3">
+            For full details on what data is collected, how often, and retention periods, see Section 4 of our
+            <a href="/privacy#workforce-monitoring" class="text-primary underline underline-offset-2">Privacy Policy</a>.
+          </p>
+        </section>
+
+        <section id="plans">
+          <h2 class="text-lg font-bold text-foreground mb-3">6. Plans &amp; Pricing</h2>
+          <table class="w-full text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-2 pr-4 font-semibold text-foreground">Plan</th>
+                <th class="text-left py-2 pr-4 font-semibold text-foreground">Price</th>
+                <th class="text-left py-2 font-semibold text-foreground">Limits</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border/50">
+              <tr>
+                <td class="py-2 pr-4 font-medium text-foreground">Free</td>
+                <td class="py-2 pr-4">$0 / month</td>
+                <td class="py-2">Up to 100 machines, 3 users</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-4 font-medium text-foreground">Business</td>
+                <td class="py-2 pr-4">$10 / user / month</td>
+                <td class="py-2">Unlimited machines, billed per active user, 60-day trial</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-4 font-medium text-foreground">Workforce</td>
+                <td class="py-2 pr-4">Custom pricing</td>
+                <td class="py-2">Unlimited (custom agreement)</td>
+              </tr>
+            </tbody>
+          </table>
+          <ul class="list-disc pl-5 space-y-1.5 mt-3">
+            <li>Prices are in US Dollars (USD) unless otherwise stated</li>
+            <li>All paid plans are billed monthly via Razorpay</li>
+            <li>Applicable taxes (including GST where required) will be added at checkout</li>
+            <li>We reserve the right to change pricing with 30 days’ advance notice via email</li>
+          </ul>
+        </section>
+
+        <section id="trial">
+          <h2 class="text-lg font-bold text-foreground mb-3">7. Free Trial</h2>
+          <p>
+            New organisations may receive a 60-day free trial of paid features. During the trial,
+            all Business-tier features are available. At the end of the trial period:
+          </p>
+          <ul class="list-disc pl-5 space-y-1.5 mt-2">
+            <li>If you subscribe to a paid plan, your service continues uninterrupted</li>
+            <li>If you do not subscribe, your organisation automatically downgrades to the Free plan</li>
+            <li>No payment information is required to start the trial</li>
+            <li>Data created during the trial is retained subject to Free plan limits</li>
+          </ul>
+        </section>
+
+        <section id="acceptable-use">
+          <h2 class="text-lg font-bold text-foreground mb-3">8. Acceptable Use Policy</h2>
+          <p>You agree NOT to use the Service to:</p>
+          <ul class="list-disc pl-5 space-y-1.5 mt-2">
+            <li>Violate any applicable law, regulation, or third-party rights</li>
+            <li>Transmit malware, viruses, or any malicious code through the VPN tunnels</li>
+            <li>Attempt to circumvent security controls, access controls, or rate limits</li>
+            <li>Reverse-engineer, decompile, or disassemble any proprietary component of the Service</li>
+            <li>Resell, sublicense, or commercially redistribute the Service without written permission</li>
+            <li>Abuse API rate limits or conduct denial-of-service attacks</li>
+            <li>Use the Service for mass surveillance, unauthorised interception, or data exfiltration</li>
+            <li>Impersonate another person or entity</li>
+          </ul>
+          <p class="mt-2">Violation of this policy may result in immediate suspension or termination of your account.</p>
+        </section>
+
+        <section id="ip">
+          <h2 class="text-lg font-bold text-foreground mb-3">9. Intellectual Property</h2>
+          <ul class="list-disc pl-5 space-y-1.5">
+            <li>The Service, its design, logos, and proprietary code are owned by QUICK ZTNA and protected by applicable intellectual property laws</li>
+            <li>The VPN client includes open-source components (WireGuard, Go standard library) licensed under their respective licences</li>
+            <li>You retain all rights to your data — see Section 10</li>
+            <li>You grant us a limited licence to process your data solely to provide the Service</li>
+          </ul>
+        </section>
+
+        <section id="data-ownership">
+          <h2 class="text-lg font-bold text-foreground mb-3">10. Data Ownership</h2>
+          <p>
+            You retain full ownership of all data you upload, transmit, or generate through the Service.
+            We process your data only as described in our
+            <a href="/privacy" class="text-primary underline underline-offset-2">Privacy Policy</a>.
+            Upon termination, you may export your data for 30 days before it is permanently deleted.
+          </p>
+        </section>
+
+        <section id="availability">
+          <h2 class="text-lg font-bold text-foreground mb-3">11. Service Availability</h2>
+          <ul class="list-disc pl-5 space-y-1.5">
+            <li>We aim for high availability but do not guarantee uninterrupted service for Free and Business plans</li>
+            <li>Workforce plans include a custom Service Level Agreement (SLA) with defined uptime guarantees</li>
+            <li>Scheduled maintenance will be notified at least 24 hours in advance via email and dashboard</li>
+            <li>We are not liable for downtime caused by factors outside our reasonable control (force majeure)</li>
+          </ul>
+        </section>
+
+        <section id="liability">
+          <h2 class="text-lg font-bold text-foreground mb-3">12. Limitation of Liability</h2>
+          <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE INDIAN LAW:</p>
+          <ul class="list-disc pl-5 space-y-1.5 mt-2">
+            <li>The Service is provided “as is” and “as available” without warranties of any kind</li>
+            <li>We disclaim all implied warranties, including merchantability, fitness for a particular purpose, and non-infringement</li>
+            <li>Our total liability for any claim arising from or related to the Service shall not exceed the fees you paid in the 12 months preceding the claim</li>
+            <li>We shall not be liable for any indirect, incidental, special, consequential, or punitive damages</li>
+            <li>For Free plan users, our maximum liability is limited to INR 1,000 (one thousand rupees)</li>
+          </ul>
+        </section>
+
+        <section id="indemnification">
+          <h2 class="text-lg font-bold text-foreground mb-3">13. Indemnification</h2>
+          <p>
+            You agree to indemnify and hold harmless QUICK ZTNA, its officers, employees, and agents
+            from any claims, losses, or damages (including legal fees) arising from your use of the
+            Service, violation of these Terms, or infringement of any third-party rights.
+          </p>
+        </section>
+
+        <section id="termination">
+          <h2 class="text-lg font-bold text-foreground mb-3">14. Termination</h2>
+          <ul class="list-disc pl-5 space-y-1.5">
+            <li><strong class="text-foreground">By you:</strong> You may cancel your account at any time from Admin Settings. See our <a href="/refund-policy" class="text-primary underline underline-offset-2">Refund &amp; Cancellation Policy</a> for details</li>
+            <li><strong class="text-foreground">By us (with notice):</strong> We may terminate your account with 30 days’ notice for any reason</li>
+            <li><strong class="text-foreground">By us (immediate):</strong> We may terminate immediately for violation of the Acceptable Use Policy or these Terms</li>
+            <li><strong class="text-foreground">Data export:</strong> Upon termination, you have 30 days to export your data. After 30 days, data is permanently deleted (except where retention is legally required)</li>
+            <li><strong class="text-foreground">Survival:</strong> Sections on Limitation of Liability, Indemnification, Governing Law, and Dispute Resolution survive termination</li>
+          </ul>
+        </section>
+
+        <section id="governing-law">
+          <h2 class="text-lg font-bold text-foreground mb-3">15. Governing Law</h2>
+          <p>
+            These Terms shall be governed by and construed in accordance with the laws of India.
+            The courts of Bengaluru, Karnataka shall have exclusive jurisdiction over any disputes
+            arising from or related to these Terms or the Service.
+          </p>
+        </section>
+
+        <section id="dispute">
+          <h2 class="text-lg font-bold text-foreground mb-3">16. Dispute Resolution</h2>
+          <p>In the event of a dispute, the following process applies:</p>
+          <ol class="list-decimal pl-5 space-y-1.5 mt-2">
+            <li><strong class="text-foreground">Grievance Officer:</strong> First, submit your complaint to our Grievance Officer at grievance@quickztna.com. We will respond within 30 days.</li>
+            <li><strong class="text-foreground">Mediation:</strong> If not resolved, both parties agree to attempt mediation in Bengaluru before initiating litigation.</li>
+            <li><strong class="text-foreground">Litigation:</strong> If mediation fails, the dispute shall be resolved by the courts of Bengaluru, Karnataka, India.</li>
+          </ol>
+        </section>
+
+        <section id="general">
+          <h2 class="text-lg font-bold text-foreground mb-3">17. General Provisions</h2>
+          <ul class="list-disc pl-5 space-y-1.5">
+            <li><strong class="text-foreground">Severability:</strong> If any provision is held invalid, the remaining provisions continue in full force</li>
+            <li><strong class="text-foreground">Entire Agreement:</strong> These Terms, together with the Privacy Policy and Refund Policy, constitute the entire agreement between you and QUICK ZTNA</li>
+            <li><strong class="text-foreground">Waiver:</strong> Failure to enforce any provision does not constitute a waiver of that provision</li>
+            <li><strong class="text-foreground">Assignment:</strong> You may not assign your rights under these Terms without our written consent. We may assign our rights in connection with a merger or acquisition</li>
+            <li><strong class="text-foreground">Amendments:</strong> We may update these Terms with 30 days’ notice via email. Continued use constitutes acceptance</li>
+          </ul>
+        </section>
+
+        <section id="contact">
+          <h2 class="text-lg font-bold text-foreground mb-3">18. Contact</h2>
+          <div class="border border-border rounded-lg p-4 bg-muted/30 text-xs space-y-1">
+            <p class="font-semibold text-foreground">Victor Chasex Pvt Ltd (QUICK ZTNA)</p>
+            <p>L-149, Sector 6, HSR Layout, Bengaluru 560102, Karnataka, India</p>
+            <p>Phone: +91-9611027980</p>
+            <p>Email: support@quickztna.com</p>
+            <p>Grievance Officer: grievance@quickztna.com</p>
+          </div>
+        </section>
+
+        <div class="border-t border-border pt-6 mt-10">
+          <p class="text-xs text-muted-foreground">
+            Last updated: {EFFECTIVE_DATE}. Questions? Contact us at
+            <a href="mailto:support@quickztna.com" class="text-primary underline underline-offset-2">support@quickztna.com</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</SiteLayout>
