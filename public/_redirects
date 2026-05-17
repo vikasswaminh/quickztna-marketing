@@ -1,0 +1,42 @@
+# Cloudflare Pages _redirects
+#
+# Goals (root cause of GSC "duplicate without user-selected canonical" on
+# 2026-05-10 was that every random URL returned HTTP 200 + the homepage HTML):
+#   1. Send the common "phantom" URLs to their correct destinations with 301s
+#      so any already-indexed bad URLs flow link equity to the right page.
+#   2. Everything else 404s via the catchall — Astro builds 404.html from
+#      src/pages/404.astro.
+#
+# CF Pages evaluates rules top-to-bottom; first match wins. Specific rules
+# MUST come before the /* catchall. No "!" suffix here because none of these
+# from-paths conflict with built static files, so default precedence is fine.
+
+# Phantom marketing URLs that were getting indexed as duplicate-homepage
+/download    https://login.quickztna.com/download    301
+/install     https://login.quickztna.com/install     301
+/signin      https://login.quickztna.com/auth        301
+/signup      https://login.quickztna.com/auth        301
+/login       https://login.quickztna.com/auth        301
+/auth        https://login.quickztna.com/auth        301
+/dashboard   https://login.quickztna.com/            301
+/admin       https://login.quickztna.com/            301
+
+# Section-level redirects (people guess these)
+/sso         /docs/integrations/                     301
+/api         /docs/api/                              301
+/cli         /docs/cli/                              301
+/security    /docs/security/                         301
+/quickstart  /guide/quickstart/                      301
+/install.sh  https://login.quickztna.com/install.sh  301
+/install.ps1 https://login.quickztna.com/install.ps1 301
+
+# Legacy old-docs paths if anyone tries the pre-2026-05-16 structure on apex
+/docs/quickstart        /guide/quickstart/   301
+/docs/getting-started   /guide/              301
+
+# Always serve /sitemap.xml — many crawlers default to this path before they
+# look at robots.txt for the actual sitemap reference. Mirror to sitemap-index.xml.
+/sitemap.xml /sitemap-index.xml                    200
+
+# Everything else (real 404, not duplicate-home 200)
+/*           /404.html                              404

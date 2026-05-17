@@ -1,0 +1,72 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+
+// Real 404 page (Astro builds this to /404.html and CF Pages serves it via
+// the catchall in public/_redirects). Critically, the response status is 404
+// — not the SPA-fallback 200 that previously made every unknown URL look like
+// duplicate content to Google.
+//
+// Self-canonical and noindex so Google doesn't dwell here even if it lands.
+---
+<SiteLayout
+  title="Page not found · QuickZTNA"
+  description="The page you were looking for doesn't exist. Try the docs, the user guide, the blog, or head home."
+  canonical="https://quickztna.com/404"
+>
+  <Fragment slot="head">
+    <meta name="robots" content="noindex, follow" />
+  </Fragment>
+
+  <main class="mx-auto max-w-3xl px-4 py-24 sm:px-6 lg:px-8 text-center">
+    <p class="font-mono text-xs font-semibold uppercase tracking-widest text-primary">404</p>
+    <h1 class="mt-3 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
+      That page isn't here.
+    </h1>
+    <p class="mt-4 text-lg text-muted-foreground">
+      You might be looking for one of these:
+    </p>
+
+    <ul class="mt-8 grid gap-3 text-left sm:grid-cols-2">
+      <li class="rounded-xl border border-border bg-card p-5 hover:border-primary/40 transition-colors">
+        <a href="/" class="block">
+          <p class="font-semibold text-foreground">Home</p>
+          <p class="mt-1 text-sm text-muted-foreground">100 devices in 2 minutes. Post-quantum Zero Trust.</p>
+        </a>
+      </li>
+      <li class="rounded-xl border border-border bg-card p-5 hover:border-primary/40 transition-colors">
+        <a href="/guide/quickstart/" class="block">
+          <p class="font-semibold text-foreground">Quickstart</p>
+          <p class="mt-1 text-sm text-muted-foreground">Get a device on the network in two minutes.</p>
+        </a>
+      </li>
+      <li class="rounded-xl border border-border bg-card p-5 hover:border-primary/40 transition-colors">
+        <a href="/docs/" class="block">
+          <p class="font-semibold text-foreground">Developer docs</p>
+          <p class="mt-1 text-sm text-muted-foreground">CLI, REST API, security model, SSO integrations.</p>
+        </a>
+      </li>
+      <li class="rounded-xl border border-border bg-card p-5 hover:border-primary/40 transition-colors">
+        <a href="/blog/" class="block">
+          <p class="font-semibold text-foreground">Blog</p>
+          <p class="mt-1 text-sm text-muted-foreground">Post-quantum cryptography, ZTNA, EU and US compliance.</p>
+        </a>
+      </li>
+      <li class="rounded-xl border border-border bg-card p-5 hover:border-primary/40 transition-colors">
+        <a href="/pricing/" class="block">
+          <p class="font-semibold text-foreground">Pricing</p>
+          <p class="mt-1 text-sm text-muted-foreground">Free for 100 devices. Business at $10 / user / month.</p>
+        </a>
+      </li>
+      <li class="rounded-xl border border-border bg-card p-5 hover:border-primary/40 transition-colors">
+        <a href="https://login.quickztna.com/auth" class="block">
+          <p class="font-semibold text-foreground">Sign in / Get started</p>
+          <p class="mt-1 text-sm text-muted-foreground">Create your account or sign in.</p>
+        </a>
+      </li>
+    </ul>
+
+    <p class="mt-12 font-mono text-xs text-muted-foreground">
+      Still stuck? <a href="mailto:support@quickztna.com" class="text-primary hover:underline">support@quickztna.com</a>
+    </p>
+  </main>
+</SiteLayout>

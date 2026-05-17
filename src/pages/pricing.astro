@@ -225,11 +225,86 @@ function renderCell(v: boolean | string) {
   if (v === false) return { icon: "minus", text: "" };
   return { icon: null, text: v };
 }
+
+// Schema.org Product with three Offers — critical for Google AI Overview eligibility.
+// Without this, the pricing page is invisible to AI search citation for queries like
+// "how much does post-quantum ZTNA cost" or "free ZTNA mesh VPN for 100 devices."
+const productSchema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "QuickZTNA",
+  description: "Post-quantum Zero Trust Network Access. Hybrid ML-KEM-768 + X25519 key exchange on every WireGuard tunnel, on every plan including Free.",
+  brand: { "@type": "Brand", name: "QuickZTNA" },
+  category: "Zero Trust Network Access",
+  url: "https://quickztna.com/pricing/",
+  image: "https://quickztna.com/favicon.svg",
+  offers: [
+    {
+      "@type": "Offer",
+      name: "Free",
+      description: "100 devices, 3 users, post-quantum ZTNA, community support. Free forever, no credit card.",
+      price: "0",
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+      url: "https://login.quickztna.com/auth",
+      eligibleCustomerType: "https://schema.org/Enduser",
+    },
+    {
+      "@type": "Offer",
+      name: "Business",
+      description: "Unlimited machines, billed per active user, priority email support, SCIM 2.0, compliance reports. 60-day free trial.",
+      price: "10",
+      priceCurrency: "USD",
+      priceSpecification: {
+        "@type": "UnitPriceSpecification",
+        price: "10",
+        priceCurrency: "USD",
+        unitText: "user/month",
+        billingIncrement: 1,
+      },
+      availability: "https://schema.org/InStock",
+      url: "https://login.quickztna.com/auth",
+    },
+    {
+      "@type": "Offer",
+      name: "Workforce",
+      description: "For regulated organizations and distributed workforces. Workforce analytics, DLP, CASB, dedicated support with SLA. Custom pricing.",
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+      url: "mailto:sales@quickztna.com",
+    },
+  ],
+  aggregateRating: undefined,
+};
+
+const pricingFaqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const pricingBreadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://quickztna.com" },
+    { "@type": "ListItem", position: 2, name: "Pricing", item: "https://quickztna.com/pricing/" },
+  ],
+};
 ---
 <SiteLayout
-  title="Pricing — QuickZTNA"
-  description="Free forever for 100 devices and 3 users. Business $10 per user / month — unlimited machines, 60-day trial. Workforce on request. Honest per-feature comparison, real limits, no hidden gotchas."
+  title="Pricing — QuickZTNA: free for 100 devices, Business at $10 per user"
+  description="Free forever for 100 devices, 3 users. Business at $10 per user / month — unlimited machines, 60-day trial. Workforce on request. Honest per-feature comparison."
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(productSchema)} is:inline />
+    <script type="application/ld+json" set:html={JSON.stringify(pricingFaqSchema)} is:inline />
+    <script type="application/ld+json" set:html={JSON.stringify(pricingBreadcrumbSchema)} is:inline />
+  </Fragment>
   <!-- HERO -->
   <section class="relative overflow-hidden bg-hero border-b border-border">
     <div class="absolute inset-0 bg-grid opacity-50" aria-hidden="true"></div>

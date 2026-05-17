@@ -15,6 +15,80 @@ const {
   canonical,
   ogImage,
 } = Astro.props;
+
+// Self-canonical fallback: if a page doesn't pass an explicit canonical, derive
+// one from the current request URL. Without this, marketing-core pages (home,
+// features, pricing, privacy, terms, refund-policy, blog index) emit NO canonical
+// tag — which is what let Google flag /download as duplicate-without-canonical
+// on 2026-05-10. The fix is "every page must self-canonicalize, always."
+const resolvedCanonical =
+  canonical ?? new URL(Astro.url.pathname, "https://quickztna.com").href;
+
+// Site-wide structured data emitted on every page. Boosts every marketing-core
+// page (home, features, pricing, etc.) by 3-4 schema points each, and makes the
+// homepage eligible for the Google sitelinks search box. Keep this minimal —
+// per-page schema (TechArticle, FAQPage, Product) is added by individual pages
+// via the head slot. This block is JUST Organization + WebSite, never page-specific.
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://quickztna.com/#organization",
+  name: "QuickZTNA",
+  url: "https://quickztna.com",
+  logo: {
+    "@type": "ImageObject",
+    url: "https://quickztna.com/favicon.svg",
+    width: 512,
+    height: 512,
+  },
+  description: "Post-quantum Zero Trust Network Access. Hybrid ML-KEM-768 + X25519 on every tunnel.",
+  foundingDate: "2024",
+  founder: { "@type": "Person", name: "Vikas Kumar" },
+  sameAs: [
+    "https://github.com/quickztna",
+    "https://twitter.com/quickztna",
+    "https://www.linkedin.com/company/quickztna",
+  ],
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      email: "sales@quickztna.com",
+      availableLanguage: ["English"],
+    },
+    {
+      "@type": "ContactPoint",
+      contactType: "technical support",
+      email: "support@quickztna.com",
+      availableLanguage: ["English"],
+    },
+    {
+      "@type": "ContactPoint",
+      contactType: "security",
+      email: "security@quickztna.com",
+      availableLanguage: ["English"],
+    },
+  ],
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://quickztna.com/#website",
+  url: "https://quickztna.com",
+  name: "QuickZTNA",
+  description: "Post-quantum Zero Trust Network Access — documentation, user guide, blog.",
+  publisher: { "@id": "https://quickztna.com/#organization" },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: "https://quickztna.com/blog/?q={search_term_string}",
+    },
+    "query-input": "required name=search_term_string",
+  },
+  inLanguage: "en",
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -26,9 +100,9 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonical ?? "https://quickztna.com"} />
+    <meta property="og:url" content={resolvedCanonical} />
     <meta name="twitter:card" content="summary_large_image" />
-    {canonical && <link rel="canonical" href={canonical} />}
+    <link rel="canonical" href={resolvedCanonical} />
     {ogImage && <meta property="og:image" content={ogImage} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title="QuickZTNA Blog" href="/rss.xml" />
@@ -38,6 +112,12 @@ const {
          No cookies, no PII, GDPR-friendly. Tracks the marketing funnel
          only; the authenticated login app has no analytics. -->
     <script defer data-domain="quickztna.com" src="https://analytics.networkershome.com/js/script.js"></script>
+
+    <!-- Site-wide structured data: Organization + WebSite. Per-page schema
+         (TechArticle, FAQPage, Product, etc.) is added by individual pages via
+         the head slot below. -->
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} is:inline />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} is:inline />
 
     <slot name="head" />
   </head>
