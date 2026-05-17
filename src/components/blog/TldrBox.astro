@@ -1,0 +1,13 @@
+---
+interface Props {
+  children?: any;
+}
+---
+<div class="tldr-box my-8 flex gap-4 rounded-xl border-l-4 border-primary bg-accent/40 px-5 py-4">
+  <div class="shrink-0">
+    <span class="font-mono text-[11px] font-bold uppercase tracking-widest text-primary">TL;DR</span>
+  </div>
+  <div class="text-sm leading-relaxed text-foreground/80">
+    <slot />
+  </div>
+</div>

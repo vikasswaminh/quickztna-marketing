@@ -1,0 +1,133 @@
+---
+// Shared sidebar for /docs/* and /guide/*.
+// Nav tree is a literal — easier to scan and rearrange than auto-generating
+// from frontmatter ordering, and gives us full control over the grouping that
+// actually ranks (Google rewards stable, readable IA over auto-magic).
+interface Props {
+  collection: "docs" | "guide";
+  currentPath: string;
+}
+const { collection, currentPath } = Astro.props;
+
+type Item = { label: string; href: string };
+type Group = { title: string; items: Item[] };
+
+const docsNav: Group[] = [
+  {
+    title: "Overview",
+    items: [
+      { label: "Introduction", href: "/docs/" },
+    ],
+  },
+  {
+    title: "Concepts",
+    items: [
+      { label: "Zero Trust & Post-Quantum", href: "/docs/concepts/" },
+    ],
+  },
+  {
+    title: "CLI",
+    items: [
+      { label: "Command reference", href: "/docs/cli/" },
+    ],
+  },
+  {
+    title: "API",
+    items: [
+      { label: "REST API overview", href: "/docs/api/" },
+    ],
+  },
+  {
+    title: "Security",
+    items: [
+      { label: "Encryption & posture", href: "/docs/security/" },
+    ],
+  },
+  {
+    title: "Integrations",
+    items: [
+      { label: "SSO: OIDC, Google, GitHub", href: "/docs/integrations/" },
+    ],
+  },
+];
+
+const guideNav: Group[] = [
+  {
+    title: "Getting started",
+    items: [
+      { label: "Welcome", href: "/guide/" },
+      { label: "Quickstart — 2 minute setup", href: "/guide/quickstart/" },
+    ],
+  },
+  {
+    title: "Install",
+    items: [
+      { label: "Linux, macOS, Windows, mobile", href: "/guide/installation/" },
+    ],
+  },
+  {
+    title: "Manage",
+    items: [
+      { label: "Devices, tags & expiry", href: "/guide/managing-devices/" },
+    ],
+  },
+  {
+    title: "Access control",
+    items: [
+      { label: "Identity-based policies", href: "/guide/access-policies/" },
+    ],
+  },
+  {
+    title: "Help",
+    items: [
+      { label: "Troubleshooting", href: "/guide/troubleshooting/" },
+    ],
+  },
+];
+
+const groups = collection === "docs" ? docsNav : guideNav;
+const otherCollection = collection === "docs" ? "guide" : "docs";
+const otherLabel = collection === "docs" ? "User guide" : "Developer docs";
+const otherHref = collection === "docs" ? "/guide/" : "/docs/";
+
+const norm = (s: string) => s.replace(/\/$/, "") || "/";
+const cur = norm(currentPath);
+---
+<nav aria-label={`${collection} navigation`} class="text-sm">
+  <!-- Cross-link to the other collection so people don't get stranded -->
+  <a
+    href={otherHref}
+    class="mb-6 flex items-center justify-between rounded-md border border-border bg-muted/40 px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+  >
+    <span>Looking for the {otherLabel.toLowerCase()}?</span>
+    <span aria-hidden="true">→</span>
+  </a>
+
+  {groups.map((g) => (
+    <div class="mb-5">
+      <h4 class="mb-2 font-mono text-[11px] font-semibold uppercase tracking-wider text-foreground">
+        {g.title}
+      </h4>
+      <ul class="space-y-1 border-l border-border/60 pl-3">
+        {g.items.map((it) => {
+          const active = norm(it.href) === cur;
+          return (
+            <li>
+              <a
+                href={it.href}
+                aria-current={active ? "page" : undefined}
+                class={`block rounded px-2 py-1 transition-colors ${
+                  active
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                }`}
+              >
+                {it.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  ))}
+</nav>

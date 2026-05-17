@@ -1,0 +1,49 @@
+---
+interface Props {
+  name: string;
+  role?: string;
+  url?: string;
+  bio?: string;
+}
+
+const { name, role, url, bio } = Astro.props;
+
+// Derive initials for avatar placeholder
+const initials = name
+  .split(" ")
+  .map((w: string) => w[0])
+  .slice(0, 2)
+  .join("")
+  .toUpperCase();
+---
+<div class="author-card not-prose flex items-start gap-4 rounded-xl border border-border bg-card p-4">
+  <!-- Avatar placeholder — swap for <img> when real photos exist -->
+  <div
+    class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 font-mono text-sm font-bold text-primary"
+    aria-hidden="true"
+  >
+    {initials}
+  </div>
+  <div class="min-w-0">
+    <div class="flex flex-wrap items-center gap-2">
+      {url ? (
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-semibold text-foreground hover:text-primary"
+        >
+          {name}
+        </a>
+      ) : (
+        <span class="font-semibold text-foreground">{name}</span>
+      )}
+      {role && (
+        <span class="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+          {role}
+        </span>
+      )}
+    </div>
+    {bio && <p class="mt-1 text-xs text-muted-foreground">{bio}</p>}
+  </div>
+</div>

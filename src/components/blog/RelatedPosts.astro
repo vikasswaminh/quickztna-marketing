@@ -1,0 +1,44 @@
+---
+import { getCollection } from "astro:content";
+
+interface Props {
+  slugs: string[];
+  currentSlug: string;
+}
+
+const { slugs, currentSlug } = Astro.props;
+const all = await getCollection("blog", ({ data }) => !data.draft);
+
+const related = slugs
+  .map((s) => all.find((p) => p.id.replace(/\.md$/, "") === s))
+  .filter(Boolean)
+  .slice(0, 3) as (typeof all)[number][];
+---
+
+{related.length > 0 && (
+  <aside class="mt-4">
+    <p class="mb-3 font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+      Related posts
+    </p>
+    <ul class="space-y-3">
+      {related.map((post) => {
+        const slug = post.id.replace(/\.md$/, "");
+        return (
+          <li>
+            <a
+              href={`/blog/${slug}/`}
+              class="group block rounded-lg border border-border bg-card p-3 text-sm hover:border-primary/40 hover:bg-muted/40 transition-colors"
+            >
+              <span class="font-mono text-[10px] uppercase tracking-wider text-primary">
+                {post.data.category.replace("-", " ")}
+              </span>
+              <p class="mt-1 font-medium leading-snug text-foreground group-hover:text-primary line-clamp-2">
+                {post.data.title}
+              </p>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </aside>
+)}

@@ -1,0 +1,332 @@
+---
+import SiteLayout from "./SiteLayout.astro";
+import type { CollectionEntry } from "astro:content";
+import { render } from "astro:content";
+import ReadingProgress from "@/components/blog/ReadingProgress.astro";
+import TableOfContents from "@/components/blog/TableOfContents.astro";
+import AuthorCard from "@/components/blog/AuthorCard.astro";
+import RelatedPosts from "@/components/blog/RelatedPosts.astro";
+import ShareButtons from "@/components/blog/ShareButtons.astro";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { data } = post;
+const { headings } = await render(post);
+
+const siteUrl = "https://quickztna.com";
+const slug = post.id.replace(/\.md$/, "");
+const canonical = `${siteUrl}/blog/${slug}/`;
+const ogImage = data.heroImage
+  ? `${siteUrl}${data.heroImage}`
+  : `${siteUrl}/og/${slug}.svg`;
+
+const published = data.publishedAt.toISOString();
+const updated = (data.updatedAt ?? data.publishedAt).toISOString();
+const readingTime = data.wordCount ? Math.ceil(data.wordCount / 230) : null;
+
+// ── Schema.org ────────────────────────────────────────────────────────────────
+const blogPostingSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: data.title,
+  description: data.description,
+  image: ogImage,
+  author: {
+    "@type": "Person",
+    name: data.author.name,
+    ...(data.author.url ? { url: data.author.url } : {}),
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "QuickZTNA",
+    logo: { "@type": "ImageObject", url: `${siteUrl}/logo.png` },
+  },
+  datePublished: published,
+  dateModified: updated,
+  mainEntityOfPage: canonical,
+  keywords: [data.primaryKeyword, ...data.tags].join(", "),
+  wordCount: data.wordCount ?? undefined,
+};
+
+const faqSchema =
+  data.faq.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: data.faq.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      }
+    : null;
+
+const howToSchema =
+  data.howToSteps && data.howToSteps.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        name: data.title,
+        step: data.howToSteps.map((s, i) => ({
+          "@type": "HowToStep",
+          position: i + 1,
+          name: s.name,
+          text: s.text,
+        })),
+      }
+    : null;
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+    { "@type": "ListItem", position: 2, name: "Blog", item: `${siteUrl}/blog/` },
+    { "@type": "ListItem", position: 3, name: data.title, item: canonical },
+  ],
+};
+
+const categoryLabel: Record<string, string> = {
+  "post-quantum": "Post-quantum",
+  compliance: "Compliance",
+  comparison: "Comparison",
+  fundamentals: "Fundamentals",
+  technical: "Technical",
+  industry: "Industry",
+};
+---
+<SiteLayout
+  title={data.title + " | QuickZTNA Blog"}
+  description={data.description}
+  canonical={canonical}
+  ogImage={ogImage}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(blogPostingSchema)} is:inline />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} is:inline />
+    {faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />}
+    {howToSchema && <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} is:inline />}
+  </Fragment>
+
+  <!-- Reading progress bar (CSS-only, fixed top) -->
+  <ReadingProgress />
+
+  <!-- Skip to content -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded focus:bg-primary focus:px-3 focus:py-1 focus:text-sm focus:text-primary-foreground">
+    Skip to content
+  </a>
+
+  <!-- Breadcrumb -->
+  <div class="border-b border-border/50 bg-muted/20">
+    <nav aria-label="Breadcrumb" class="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">
+      <ol class="flex flex-wrap items-center gap-1 font-mono text-xs text-muted-foreground">
+        <li><a href="/" class="hover:text-primary">Home</a></li>
+        <li aria-hidden="true" class="text-border">/</li>
+        <li><a href="/blog/" class="hover:text-primary">Blog</a></li>
+        <li aria-hidden="true" class="text-border">/</li>
+        <li class="text-foreground truncate max-w-xs">{data.title}</li>
+      </ol>
+    </nav>
+  </div>
+
+  <!--
+    Layout:
+    mobile  → single column (article full-width, ToC as <details>)
+    desktop → [article 2xl] [sticky sidebar 64]
+  -->
+  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <div class="lg:grid lg:grid-cols-[1fr_17rem] lg:gap-12 xl:gap-16">
+
+      <!-- ── MAIN ARTICLE ─────────────────────────────────────────── -->
+      <article id="main-content" class="min-w-0">
+
+        <!-- Article header -->
+        <header class="mb-8">
+          <!-- Category + reading time -->
+          <div class="mb-4 flex flex-wrap items-center gap-2">
+            <a
+              href={`/blog/?category=${data.category}`}
+              class="rounded-full border border-primary/30 bg-primary/10 px-3 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-primary hover:bg-primary/20 transition-colors"
+            >
+              {categoryLabel[data.category] ?? data.category}
+            </a>
+            {readingTime && (
+              <span class="font-mono text-xs text-muted-foreground">{readingTime} min read</span>
+            )}
+            {data.wordCount && (
+              <span class="font-mono text-xs text-muted-foreground">· {data.wordCount.toLocaleString()} words</span>
+            )}
+          </div>
+
+          <!-- Title -->
+          <h1 class="text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+            {data.title}
+          </h1>
+
+          <!-- Description -->
+          <p class="mt-4 text-lg leading-relaxed text-muted-foreground">{data.description}</p>
+
+          <!-- Author + dates -->
+          <div class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
+            <address class="not-italic">
+              By <span class="font-semibold text-foreground">{data.author.name}</span>
+              {data.author.role && <span class="ml-1 text-xs text-muted-foreground">· {data.author.role}</span>}
+            </address>
+            <span aria-hidden="true">·</span>
+            <time datetime={published}>
+              {data.publishedAt.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+            </time>
+            {data.updatedAt && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span class="text-xs">
+                  Updated {data.updatedAt.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                </span>
+              </>
+            )}
+          </div>
+
+          <!-- Trust badges -->
+          <div class="mt-4 flex flex-wrap gap-2">
+            {["SOC 2 Type II", "FIPS 203", "GDPR"].map((badge) => (
+              <span class="rounded border border-border bg-muted/50 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                {badge}
+              </span>
+            ))}
+          </div>
+
+          <!-- Hero image -->
+          {data.heroImage && (
+            <div class="mt-8 overflow-hidden rounded-2xl border border-border">
+              <img
+                src={data.heroImage}
+                alt={data.heroAlt ?? data.title}
+                width={1200}
+                height={630}
+                loading="eager"
+                decoding="async"
+                class="w-full object-cover"
+              />
+            </div>
+          )}
+        </header>
+
+        <!-- Mobile ToC (inside article, above prose) -->
+        {data.tocEnabled !== false && (
+          <TableOfContents headings={headings} />
+        )}
+
+        <!-- Prose content -->
+        <div
+          id="article-body"
+          class="prose prose-slate max-w-none
+            prose-headings:scroll-mt-28 prose-headings:font-bold
+            prose-h2:mt-12 prose-h2:text-2xl prose-h2:border-b prose-h2:border-border/50 prose-h2:pb-2
+            prose-h3:mt-8 prose-h3:text-xl
+            prose-p:leading-relaxed prose-p:text-foreground/80
+            prose-a:text-primary prose-a:underline-offset-2 prose-a:font-medium
+            prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+            prose-pre:rounded-xl prose-pre:border prose-pre:border-border prose-pre:bg-muted
+            prose-blockquote:border-l-primary prose-blockquote:bg-accent/30 prose-blockquote:rounded-r-lg prose-blockquote:py-0.5
+            prose-table:text-sm prose-th:bg-muted prose-th:font-semibold
+            prose-img:rounded-xl prose-img:border prose-img:border-border
+            prose-strong:text-foreground"
+        >
+          <slot />
+        </div>
+
+        <!-- FAQ section -->
+        {data.faq.length > 0 && (
+          <section class="mt-16 border-t border-border pt-10" id="faq">
+            <h2 class="text-2xl font-bold text-foreground">Frequently asked questions</h2>
+            <dl class="mt-6 space-y-6">
+              {data.faq.map((item) => (
+                <div class="rounded-xl border border-border bg-card p-5">
+                  <dt class="text-base font-semibold text-foreground">{item.q}</dt>
+                  <dd class="mt-2 text-sm leading-relaxed text-muted-foreground">{item.a}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )}
+
+        <!-- Author card -->
+        <div class="mt-12 border-t border-border pt-8">
+          <AuthorCard
+            name={data.author.name}
+            role={data.author.role}
+            url={data.author.url}
+          />
+        </div>
+
+        <!-- Share + tags row -->
+        <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-wrap gap-1.5">
+            {data.tags.map((tag) => (
+              <span class="rounded-full border border-border px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground hover:border-primary/40 hover:text-primary transition-colors cursor-default">
+                #{tag}
+              </span>
+            ))}
+          </div>
+          <ShareButtons title={data.title} url={canonical} />
+        </div>
+
+        <!-- Bottom CTA banner -->
+        <aside class="mt-12 rounded-2xl border border-primary/20 bg-gradient-to-br from-accent/50 to-background p-6" aria-label="Try QuickZTNA">
+          <p class="font-mono text-[11px] font-bold uppercase tracking-widest text-primary">Try QuickZTNA</p>
+          <h3 class="mt-2 text-xl font-semibold text-foreground">
+            Post-quantum ZTNA — free for 100 devices, forever
+          </h3>
+          <p class="mt-2 text-sm text-muted-foreground">
+            Every tunnel gets X25519 + ML-KEM-768 hybrid key exchange by default.
+            No credit card, no trial expiry on the free plan.
+          </p>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <a href="https://login.quickztna.com/auth" class="rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity">
+              Start free
+            </a>
+            <a href="/pricing/" class="rounded-md border border-border bg-background px-5 py-2.5 text-sm font-medium hover:bg-muted transition-colors">
+              Compare plans
+            </a>
+          </div>
+        </aside>
+      </article>
+
+      <!-- ── RIGHT SIDEBAR ────────────────────────────────────────── -->
+      <aside class="hidden lg:block">
+        <div class="sticky top-24 space-y-6">
+
+          <!-- Desktop ToC -->
+          {data.tocEnabled !== false && (
+            <TableOfContents headings={headings} />
+          )}
+
+          <!-- Sidebar CTA -->
+          <div class="rounded-xl border border-primary/20 bg-gradient-to-b from-accent/40 to-background p-5">
+            <p class="font-mono text-[10px] font-bold uppercase tracking-widest text-primary">Free plan</p>
+            <p class="mt-2 text-sm font-semibold text-foreground leading-snug">
+              PQC ZTNA — free for 100 devices
+            </p>
+            <p class="mt-1.5 text-xs text-muted-foreground">ML-KEM-768 on every tunnel. No card required.</p>
+            <a
+              href="https://login.quickztna.com/auth"
+              class="mt-4 block w-full rounded-md bg-primary py-2 text-center text-xs font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
+            >
+              Start free →
+            </a>
+          </div>
+
+          <!-- Related posts -->
+          {data.relatedSlugs && data.relatedSlugs.length > 0 && (
+            <RelatedPosts slugs={data.relatedSlugs} currentSlug={slug} />
+          )}
+
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</SiteLayout>

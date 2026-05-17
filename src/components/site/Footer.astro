@@ -10,10 +10,12 @@ const product: Item[] = [
   { label: "Download", href: "https://login.quickztna.com/download", external: true },
 ];
 const resources: Item[] = [
-  { label: "Documentation", href: "https://docs.quickztna.com", external: true },
-  { label: "Quickstart", href: "https://docs.quickztna.com/quickstart", external: true },
-  { label: "API reference", href: "https://docs.quickztna.com/api", external: true },
-  { label: "Security", href: "https://docs.quickztna.com/security", external: true },
+  { label: "User guide", href: "/guide/" },
+  { label: "Quickstart", href: "/guide/quickstart/" },
+  { label: "Developer docs", href: "/docs/" },
+  { label: "API reference", href: "/docs/api/" },
+  { label: "Security model", href: "/docs/security/" },
+  { label: "Blog", href: "/blog/" },
 ];
 const company: Item[] = [
   { label: "Sign in", href: "https://login.quickztna.com/auth", external: true },
@@ -64,7 +66,8 @@ const year = new Date().getFullYear();
       <div class="flex gap-4">
         <a href="/privacy" class="hover:text-foreground">Privacy</a>
         <a href="/terms" class="hover:text-foreground">Terms</a>
-        <a href="https://docs.quickztna.com/security" target="_blank" rel="noopener noreferrer" class="hover:text-foreground">Security</a>
+        <a href="/refund-policy" class="hover:text-foreground">Refund</a>
+        <a href="/docs/security/" class="hover:text-foreground">Security</a>
       </div>
     </div>
   </div>

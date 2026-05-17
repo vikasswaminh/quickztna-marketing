@@ -1,0 +1,36 @@
+---
+// CSS-only scroll-driven reading progress bar — no JS
+---
+<div
+  class="reading-bar"
+  role="progressbar"
+  aria-label="Reading progress"
+  aria-valuenow={0}
+  aria-valuemin={0}
+  aria-valuemax={100}
+></div>
+
+<style>
+  .reading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    height: 3px;
+    width: 0%;
+    background-color: var(--primary);
+    border-radius: 0 2px 2px 0;
+    animation: reading-progress linear both;
+    animation-timeline: scroll(root block);
+  }
+
+  @keyframes reading-progress {
+    from { width: 0% }
+    to   { width: 100% }
+  }
+
+  /* Fallback for browsers without scroll-timeline support */
+  @supports not (animation-timeline: scroll()) {
+    .reading-bar { display: none; }
+  }
+</style>
