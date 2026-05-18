@@ -196,7 +196,7 @@ const faqs = [
   },
   {
     q: "What happens when I hit the 100-machine limit on Free?",
-    a: "A background job (runs every 5 min) flags excess machines as over-quota — they stop heartbeating until you either delete old machines or upgrade. Nothing is deleted. Upgrade → features unlock immediately, quota cleared.",
+    a: "Device registration is hard-blocked at the limit — the 101st device gets a clear 'QUOTA_EXCEEDED' response and isn't added. A safety-net background job also runs every 5 minutes to quarantine any excess machines that got in through a plan downgrade. Nothing already-registered is deleted. Upgrade → quota raises immediately and previously-quarantined devices come back online.",
   },
   {
     q: "Can I downgrade? What happens to my data?",
@@ -216,7 +216,7 @@ const faqs = [
   },
   {
     q: "What are the real enforced limits?",
-    a: "Feature gates are strict (every paid handler calls requireFeature). Machine limits are enforced post-hoc by a background cron job (every 5 min), not at registration time — we're migrating to hard gates in Q3 2026. User limits are policy, not hard-gated in invite flow.",
+    a: "All three are hard-gated in code. (1) Feature gates: every paid handler calls requireFeature() and returns FEATURE_GATED to free-tier callers. (2) Machine limit: enforced at device registration time AND by a 5-minute safety-net cron. (3) User limit: enforced at invite-time, programmatic invite, and on auto-join-by-domain — all three paths refuse to add a user past the cap. No 'policy-only' limits; everything in the matrix is backed by code.",
   },
 ];
 
