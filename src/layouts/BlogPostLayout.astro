@@ -1,9 +1,7 @@
 ---
 import SiteLayout from "./SiteLayout.astro";
 import type { CollectionEntry } from "astro:content";
-import { render } from "astro:content";
 import ReadingProgress from "@/components/blog/ReadingProgress.astro";
-import TableOfContents from "@/components/blog/TableOfContents.astro";
 import AuthorCard from "@/components/blog/AuthorCard.astro";
 import RelatedPosts from "@/components/blog/RelatedPosts.astro";
 import ShareButtons from "@/components/blog/ShareButtons.astro";
@@ -14,7 +12,6 @@ interface Props {
 
 const { post } = Astro.props;
 const { data } = post;
-const { headings } = await render(post);
 
 const siteUrl = "https://quickztna.com";
 const slug = post.id.replace(/\.md$/, "");
@@ -214,11 +211,6 @@ const categoryLabel: Record<string, string> = {
           )}
         </header>
 
-        <!-- Mobile ToC (inside article, above prose) -->
-        {data.tocEnabled !== false && (
-          <TableOfContents headings={headings} />
-        )}
-
         <!-- Prose content -->
         <div
           id="article-body"
@@ -298,11 +290,6 @@ const categoryLabel: Record<string, string> = {
       <!-- ── RIGHT SIDEBAR ────────────────────────────────────────── -->
       <aside class="hidden lg:block">
         <div class="sticky top-24 space-y-6">
-
-          <!-- Desktop ToC -->
-          {data.tocEnabled !== false && (
-            <TableOfContents headings={headings} />
-          )}
 
           <!-- Sidebar CTA -->
           <div class="rounded-xl border border-primary/20 bg-gradient-to-b from-accent/40 to-background p-5">
