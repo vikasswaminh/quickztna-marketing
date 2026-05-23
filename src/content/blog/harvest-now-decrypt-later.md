@@ -38,20 +38,6 @@ faq:
 
 Chief information security officers, risk leads, and architects who need to translate "quantum" from a buzzword into a line in a risk register. Also engineers who want a clear framing for why they should care about post-quantum today, even though no quantum attacker exists. Readers should be comfortable with TLS or WireGuard basics.
 
-## Table of contents
-
-1. The thirty-second version
-2. Who is actually capturing traffic, and where
-3. What exactly gets decrypted — and what is safe
-4. Shor's algorithm, briefly and honestly
-5. The timeline question no one can answer precisely
-6. Risk framing: Mosca's inequality
-7. How to measure your exposure
-8. Five mitigations that work today
-9. What QuickZTNA does by default
-10. What you should not do
-11. Further reading
-
 ## 1. The thirty-second version
 
 Every modern transport-layer protocol that is not explicitly post-quantum agrees on a session key using either finite-field Diffie-Hellman, Elliptic-Curve Diffie-Hellman, or an RSA key transport. All three fall to Shor's algorithm on a quantum computer of sufficient size. No such computer exists in 2026, and no credible public roadmap claims to have one this decade. The catch is that nobody has to wait. Record the encrypted traffic today, sit on the storage, run Shor's against the captured key-exchange transcript when you have the hardware, decrypt the session keys, and then decrypt the payload. This is a capture-today, decrypt-later capability. That is the threat model.

@@ -38,19 +38,6 @@ The HIPAA Security Rule (45 CFR Part 164, Subpart C) governs the technical safeg
 
 Compliance officers, privacy officers, and security leads at US healthcare providers, health plans, healthcare clearinghouses, and their business associates. Vendors selling VPN or ZTNA into the healthcare market. Readers should be familiar with the basic healthcare-compliance vocabulary (covered entity, business associate, PHI, ePHI).
 
-## Table of contents
-
-1. The HIPAA framework in one paragraph
-2. Covered entities, business associates, and BAAs
-3. The Security Rule's three categories of safeguards
-4. Technical safeguards that apply to remote access
-5. "Addressable" vs "required" — what each means in practice
-6. Encryption standards and Safe Harbor
-7. The Breach Notification Rule timeline
-8. The December 2024 NPRM — proposed changes
-9. A HIPAA-aligned remote-access architecture
-10. Further reading
-
 ## 1. The HIPAA framework in one paragraph
 
 HIPAA — the Health Insurance Portability and Accountability Act of 1996 — is the US federal law governing protected health information (PHI). The regulations most relevant to network and remote access are the Privacy Rule (45 CFR Part 164, Subparts A and E), the Security Rule (45 CFR Part 164, Subparts A and C), and the Breach Notification Rule (45 CFR Part 164, Subparts A and D). The HITECH Act of 2009 expanded HIPAA and extended direct liability to business associates. The 2013 Omnibus Final Rule implemented HITECH. The December 2024 NPRM proposed significant updates to the Security Rule. Enforcement is by the HHS Office for Civil Rights (OCR). Read the underlying regulations at the [HHS HIPAA home page](https://www.hhs.gov/hipaa/).

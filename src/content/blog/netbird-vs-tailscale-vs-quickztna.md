@@ -38,19 +38,6 @@ NetBird, Tailscale, and QuickZTNA all build on WireGuard as the data-plane proto
 
 Developers, platform engineers, and small security teams evaluating the three products for a team mesh or internal remote-access deployment. The comparison assumes familiarity with WireGuard basics and with typical ZTNA concepts.
 
-## Table of contents
-
-1. Shared baseline — what all three have in common
-2. Architecture differences
-3. Licensing and self-host
-4. Client platform support
-5. Policy and ACL model
-6. Post-quantum key exchange
-7. Compliance and audit features
-8. Developer experience
-9. Pricing shape
-10. Decision guide
-
 ## 1. Shared baseline — what all three have in common
 
 All three products provide:

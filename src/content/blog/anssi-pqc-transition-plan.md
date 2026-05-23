@@ -38,19 +38,6 @@ ANSSI — the Agence nationale de la sécurité des systèmes d'information — 
 
 CISOs, compliance leads, and architects at French public administration, OIV-designated operators, OSE entities under NIS2, and private-sector French firms whose customers or contracts reference ANSSI qualification. Also non-French vendors selling into the French market who need to pursue ANSSI qualification or express alignment with ANSSI PQC guidance. A reading knowledge of French is helpful for the primary sources but not required; ANSSI publishes most material in both French and English.
 
-## Table of contents
-
-1. What ANSSI is and what it does
-2. ANSSI's post-quantum position papers, in order
-3. The three-phase PQC transition plan
-4. Algorithm recommendations in the current ANSSI position
-5. ANSSI qualification and how it relates to PQC
-6. Interaction with NIS2 transposition in France
-7. OIV obligations and the Loi de Programmation Militaire
-8. A concrete ANSSI-aligned remote-access deployment
-9. Common implementation mistakes
-10. Further reading
-
 ## 1. What ANSSI is and what it does
 
 ANSSI was created in 2009 as part of the Secrétariat général de la défense et de la sécurité nationale (SGDSN), within the services of the French Prime Minister. Its responsibilities include:

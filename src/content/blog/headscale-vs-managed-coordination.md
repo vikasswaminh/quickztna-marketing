@@ -38,19 +38,6 @@ Headscale is an open-source, Tailscale-compatible coordination server. It is a r
 
 Platform engineers deciding whether to self-host a mesh-VPN coordination server. Infrastructure leads doing a build-vs-buy analysis. CISOs with self-host constraints from regulators. This post assumes you already know the basics of mesh VPN and have identified the coordination-server-choice as the open question.
 
-## Table of contents
-
-1. What Headscale actually does
-2. The case for managed (Tailscale, QuickZTNA, NetBird Cloud)
-3. The case for self-host (Headscale, NetBird self-host, QuickZTNA Workforce)
-4. Hidden cost categories in self-host
-5. A fully loaded cost model
-6. When self-host wins
-7. When managed wins
-8. Hybrid patterns
-9. Operational playbook for Headscale
-10. Decision framework
-
 ## 1. What Headscale actually does
 
 Headscale is a Go program that implements the Tailscale control-plane protocol. It runs as a single binary plus a database (SQLite, PostgreSQL). You point official Tailscale clients at its URL via configuration, and the clients authenticate, register, and receive peer lists from Headscale instead of from Tailscale's managed service.

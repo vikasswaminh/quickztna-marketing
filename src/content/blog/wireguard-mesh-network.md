@@ -37,19 +37,6 @@ A WireGuard mesh is a network where any peer can establish a direct, encrypted t
 
 Engineers running WireGuard deployments who are hitting the config-file scaling wall. Homelab builders wondering whether to roll their own or buy a product. Platform teams evaluating the WireGuard-based mesh VPN category.
 
-## Table of contents
-
-1. What a WireGuard mesh actually is
-2. The O(N²) config problem
-3. The NAT traversal problem
-4. What a coordination server does
-5. DERP-style relay fallback
-6. Policy distribution
-7. Identity binding
-8. Subnet routes and exit nodes
-9. The four-peer example, fully worked
-10. When to graduate to a product
-
 ## 1. What a WireGuard mesh actually is
 
 Vanilla WireGuard is a point-to-point protocol. Two peers have public keys, exchange them out-of-band, configure each other as peers, and a tunnel comes up.

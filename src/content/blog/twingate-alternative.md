@@ -38,19 +38,6 @@ Twingate is an agent-based Zero Trust Network Access product with a Client-Conne
 
 Security leads running Twingate today and considering a switch. Teams evaluating Twingate side-by-side with alternatives in an active procurement. Engineers comparing ZTNA products for a greenfield deployment where Twingate is on the shortlist.
 
-## Table of contents
-
-1. Why teams switch away from Twingate
-2. What Twingate does well — the comparison baseline
-3. Alternative 1 — Tailscale
-4. Alternative 2 — NetBird
-5. Alternative 3 — QuickZTNA
-6. Alternative 4 — Cloudflare Access
-7. Alternative 5 — OpenZiti / NetFoundry
-8. Decision framework
-9. Side-by-side table
-10. Migration playbook
-
 ## 1. Why teams switch away from Twingate
 
 Talking with teams evaluating a Twingate exit, five concerns come up repeatedly.

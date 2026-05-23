@@ -37,21 +37,6 @@ The open-source-vs-managed decision for Zero Trust Network Access is not ideolog
 
 Security leads, platform engineers, and CTOs making a build-vs-buy decision for Zero Trust Network Access. This post assumes familiarity with the ZTNA product category and with at least one of the named open-source or managed products; see our [ZTNA fundamentals coverage](/blog/ml-kem-768-explained) if you want a product-level primer.
 
-## Table of contents
-
-1. The frame — it is not an ideology question
-2. What "open-source ZTNA" actually means
-3. Serious open-source options in 2026
-4. Serious managed options in 2026
-5. The five decision axes
-6. Axis 1 — Engineering capacity
-7. Axis 2 — Compliance scope
-8. Axis 3 — Data sovereignty
-9. Axis 4 — Scale
-10. Axis 5 — Feature velocity
-11. Hybrid patterns that work
-12. Anti-patterns that do not
-
 ## 1. The frame — it is not an ideology question
 
 Teams sometimes pick open source because they believe it is inherently better, or managed because they believe open source is inherently risky. Neither framing helps.

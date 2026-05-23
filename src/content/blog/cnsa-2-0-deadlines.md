@@ -39,19 +39,6 @@ CNSA 2.0 is the United States National Security Agency's Commercial National Sec
 
 Security architects and compliance leads at companies selling into the US defence, intelligence, or federal civilian market. Programme managers with contracts that reference National Security Systems controls. Engineering leads whose roadmap has to include post-quantum milestones. If you do not sell into the US federal market, the NIS2 and DORA posts will be more directly relevant; this one is United States-specific.
 
-## Table of contents
-
-1. What CNSA 2.0 actually is
-2. Algorithm suite, line by line
-3. Per-class deadlines from the 2022 advisory
-4. How CNSA 2.0 differs from general NIST guidance
-5. How it maps to CMMC, FedRAMP, and FIPS 140-3
-6. A concrete migration checklist
-7. Where ZTNA fits in the scope
-8. Vendor questions that matter for CNSA 2.0
-9. What QuickZTNA does today and what is on the roadmap
-10. Further reading
-
 ## 1. What CNSA 2.0 actually is
 
 CNSA stands for Commercial National Security Algorithm Suite. It is the list of cryptographic algorithms and parameter sets that the NSA specifies for protecting US National Security Systems at all classification levels up to TOP SECRET. "Commercial" in the name means the algorithms are published commercial standards — the suite is not a separate closed catalogue.

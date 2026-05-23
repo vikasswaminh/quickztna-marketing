@@ -46,20 +46,6 @@ faq:
 
 Security architects, CISOs, and platform engineers evaluating ZTNA vendors for organisations that handle data with a confidentiality horizon beyond 5 years. If your organisation is subject to NSA CNSA 2.0, NIS2, DORA, or BSI TR-02102-1, this post is directly relevant. If you're a developer who wants to understand what ML-KEM-768 actually does inside a WireGuard tunnel, the technical sections cover that too.
 
-## Table of contents
-
-1. What "PQC-ready" actually means
-2. The harvest-now-decrypt-later threat, briefly
-3. What live PQC looks like in a ZTNA product
-4. How QuickZTNA implements ML-KEM-768 + X25519
-5. The vendor landscape: who has shipped and who hasn't
-6. How to verify any vendor's PQC claim
-7. Regulatory pressure: CNSA 2.0, NIS2, DORA, BSI, ANSSI
-8. Free tier: why we ship PQC to every customer
-9. What to ask before you sign a contract
-
----
-
 ## 1. What "PQC-ready" actually means
 
 The phrase "post-quantum ready" is used by vendors in at least four different ways, only one of which protects your data today:

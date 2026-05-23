@@ -38,21 +38,6 @@ faq:
 
 Engineering leads and architects evaluating whether to replace a legacy VPN with a ZTNA product, or reviewing the design of an existing VPN deployment to add Zero Trust principles on top. Assumes familiarity with basic networking and with the concept of encrypted tunnels.
 
-## Table of contents
-
-1. The framing, clarified
-2. Difference 1 — Trust model
-3. Difference 2 — Authorisation granularity
-4. Difference 3 — Device posture as a first-class input
-5. Difference 4 — Continuous re-evaluation
-6. Difference 5 — Micro-segmentation
-7. Difference 6 — Policy language richness
-8. Difference 7 — Audit telemetry
-9. Difference 8 — Post-quantum posture
-10. The diagram: VPN topology vs ZTNA topology
-11. When VPN is enough, when ZTNA is needed
-12. A practical migration path
-
 ## 1. The framing, clarified
 
 A VPN is an encrypted tunnel. Nothing more. WireGuard, IKEv2, OpenVPN — all of these are VPN protocols. They authenticate the endpoints and encrypt the traffic.

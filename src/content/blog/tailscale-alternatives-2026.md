@@ -38,19 +38,6 @@ Tailscale is a strong WireGuard-based mesh VPN with broad platform support and a
 
 Engineering leads and architects evaluating mesh VPN and ZTNA products in 2026. Teams running Tailscale today who are revisiting the decision because of a specific new requirement. Vendors producing competitive analyses who want a template for honest comparison that names real strengths.
 
-## Table of contents
-
-1. How to think about the decision
-2. Tailscale in one paragraph
-3. Headscale — self-host with Tailscale clients
-4. NetBird — open-source managed and self-host
-5. QuickZTNA — post-quantum default, full ZTNA
-6. Cloudflare Zero Trust — edge-native identity proxy
-7. Twingate — agent-based ZTNA
-8. NetFoundry / OpenZiti — application-embedded zero trust
-9. Side-by-side table
-10. Migration notes
-
 ## 1. How to think about the decision
 
 The mesh VPN and ZTNA space has converged on a shared technical baseline: WireGuard or an equivalent modern encrypted tunnel as the data plane, a centralised coordination service for peer discovery and policy, and client agents on endpoints. Where vendors differ is in six axes.

@@ -38,19 +38,6 @@ Kubernetes Zero Trust is the pattern of brokering developer, operator, and CI/CD
 
 Platform engineers, DevOps leads, and security architects running Kubernetes at scale who are hitting the limits of VPN-plus-kubeconfig access control. Teams deploying multi-environment, multi-cluster infrastructure (dev/staging/prod separation, per-team clusters, regional clusters). Assumes working knowledge of Kubernetes, kubectl, and service mesh concepts.
 
-## Table of contents
-
-1. Why kubectl proxy stops scaling
-2. The four layers of Kubernetes Zero Trust
-3. Layer 1 — Human access: ZTNA for kubectl
-4. Layer 2 — Workload identity: SPIFFE and SPIRE
-5. Layer 3 — Service-to-service: service mesh with mTLS
-6. Layer 4 — API-level authorisation: Kubernetes RBAC
-7. Reference architecture: multi-cluster shop
-8. CI/CD pipeline access patterns
-9. Observability and audit
-10. Rollout sequence
-
 ## 1. Why kubectl proxy stops scaling
 
 For a single-team, single-cluster deployment, `kubectl` against a VPN-reachable API server works fine. Pain arrives with scale.

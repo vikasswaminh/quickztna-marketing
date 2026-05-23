@@ -38,19 +38,6 @@ Cloudflare Access is an edge-native identity-aware proxy. It is strong for user-
 
 Security leads running Cloudflare Access today and revisiting the decision, or evaluating for a new deployment with Cloudflare Access on the shortlist. Architects who want a clean framing of the model difference between edge-proxy ZTNA and agent-mesh ZTNA.
 
-## Table of contents
-
-1. Cloudflare Access in one paragraph
-2. What Cloudflare Access does well
-3. Four reasons teams look for alternatives
-4. Alternative 1 — Tailscale
-5. Alternative 2 — NetBird
-6. Alternative 3 — QuickZTNA
-7. Alternative 4 — Twingate
-8. Alternative 5 — Zscaler Private Access
-9. Alternative 6 — AWS Verified Access
-10. Side-by-side table and decision framework
-
 ## 1. Cloudflare Access in one paragraph
 
 [Cloudflare Access](https://www.cloudflare.com/zero-trust/products/access/) is part of Cloudflare Zero Trust (formerly Cloudflare One). Users authenticate through an identity provider (Cloudflare supports Google, Okta, Azure AD, and others via SAML/OIDC). Cloudflare's global network proxies the access request to internal applications. The resource side is connected via [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) using the cloudflared daemon, which establishes outbound connections to Cloudflare's edge without exposing any inbound ports. The WARP client, Cloudflare's device agent, is a complementary product that tunnels device traffic through Cloudflare's edge for network-layer access and security. Cloudflare has been public about rolling out post-quantum TLS 1.3 on its edge; verify current documented status at [Cloudflare's Zero Trust blog](https://blog.cloudflare.com/tag/zero-trust/).

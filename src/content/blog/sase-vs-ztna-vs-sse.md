@@ -37,19 +37,6 @@ SASE (Secure Access Service Edge) is a Gartner-coined architecture combining SD-
 
 CIOs, security leads, and engineering managers at mid-sized organisations (30–500 people) trying to figure out which acronym applies to them and whether they need a full SASE platform. Also analysts and buyers writing RFIs who need the taxonomy straight.
 
-## Table of contents
-
-1. Origins of each term
-2. SASE — the Gartner definition, unpacked
-3. SSE — the narrower subset
-4. ZTNA — the component both share
-5. How the three relate, visually
-6. What a full SASE platform includes
-7. What a 50-person team actually needs
-8. Buying decisions for each team size
-9. Common confusions to avoid
-10. Recommended sequence for 2026
-
 ## 1. Origins of each term
 
 ### SASE, 2019

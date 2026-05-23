@@ -38,19 +38,6 @@ The NIS2 Directive — [Directive (EU) 2022/2555](https://eur-lex.europa.eu/eli/
 
 Security architects, CISO teams, and compliance leads in EU organisations whose remote-access stack needs to be NIS2-aligned. Also ZTNA, VPN, and remote-desktop vendors who want a concrete technical framing of the directive's requirements rather than another executive summary. Familiarity with GDPR and with any prior NIS (2016/1148) implementation is helpful but not required.
 
-## Table of contents
-
-1. What NIS2 is and is not
-2. Who is in scope
-3. Article 21: ten categories of measures
-4. The remote-access subset of Article 21
-5. Article 23: incident reporting obligations
-6. How it interacts with GDPR and DORA
-7. A builder's implementation checklist
-8. Mapping to ZTNA features
-9. What auditors are going to look at
-10. Further reading
-
 ## 1. What NIS2 is and is not
 
 NIS2 is an EU directive on cybersecurity. It replaces the original NIS Directive from 2016, significantly expands the scope of entities covered, harmonises the baseline set of measures entities must implement, and adds a structured incident-reporting obligation. It also introduces enforcement mechanisms with substantive fines.

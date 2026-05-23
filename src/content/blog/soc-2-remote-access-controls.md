@@ -38,23 +38,6 @@ SOC 2 is the attestation report most commonly required by enterprise buyers. It 
 
 Compliance leads, CISOs, and engineering managers preparing for a first SOC 2 Type II audit or tightening controls for an existing report. Vendor security-review teams who get buyer questionnaires and need to map answers back to SOC 2. Technical readers comfortable with the AICPA TSC vocabulary; if you are new to it, the [AICPA Trust Services Criteria page](https://www.aicpa-cima.com/resources/download/trust-services-criteria) is the canonical reference.
 
-## Table of contents
-
-1. SOC 2 vocabulary in two paragraphs
-2. The Common Criteria that matter for remote access
-3. Control 1 — CC6.1 Logical access security
-4. Control 2 — CC6.2 Access authorisation at onboarding
-5. Control 3 — CC6.3 Access removal at offboarding
-6. Control 4 — CC6.6 Perimeter security controls
-7. Control 5 — CC6.7 Transmission security
-8. Control 6 — CC6.8 Unauthorised software detection
-9. Control 7 — CC7.1 Vulnerability identification
-10. Control 8 — CC7.2 Anomaly monitoring
-11. Control 9 — CC7.3 Incident evaluation
-12. Control 10 — CC7.4 Incident response
-13. Control 11 — CC8.1 Change management
-14. Evidence auditors typically request
-
 ## 1. SOC 2 vocabulary in two paragraphs
 
 **Trust Services Criteria.** AICPA-maintained framework with five categories: Security, Availability, Processing Integrity, Confidentiality, and Privacy. The Security category is the Common Criteria and is required in every SOC 2 report. The other four are optional — organisations choose which to include based on what they want to attest to and what their customers require.

@@ -37,19 +37,6 @@ Healthcare networks have unusual properties — hundreds of distributed clinics,
 
 CIOs and CISOs at health systems, hospitals, and distributed clinic networks. Compliance officers working through HIPAA and related state regulations. Architects designing or modernising healthcare network infrastructure. Assumes familiarity with basic healthcare IT and with HIPAA fundamentals.
 
-## Table of contents
-
-1. Why healthcare is unusual
-2. The 200-clinic architecture problem
-3. Mesh ZTNA instead of hub-and-spoke
-4. Legacy medical devices in an enclave
-5. Clinical workstation policy
-6. ePHI flow and audit logging
-7. EHR integration patterns
-8. HIPAA mapping
-9. High availability and clinical uptime
-10. Implementation sequence for a health system
-
 ## 1. Why healthcare is unusual
 
 Five properties distinguish healthcare networks from typical enterprise networks.

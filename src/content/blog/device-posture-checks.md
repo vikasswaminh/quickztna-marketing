@@ -38,19 +38,6 @@ Device posture is the verification that a device meets security expectations bef
 
 Security engineers and architects designing or reviewing a device-posture policy. IT administrators rolling out a ZTNA product that includes posture features. CISO-team members writing the policy document that the engineers will implement.
 
-## Table of contents
-
-1. Why most posture checks fail
-2. Twelve signals that work
-3. Gating posture vs continuous posture
-4. Signal sources: agent, MDM, EDR, OS-native
-5. Policy model — fail-open, fail-closed, or remediate
-6. Integrating MDM and EDR signals
-7. BYOD posture without full management
-8. The 15-minute implementation start
-9. Common anti-patterns to avoid
-10. What auditors ask about posture
-
 ## 1. Why most posture checks fail
 
 Three failure modes.

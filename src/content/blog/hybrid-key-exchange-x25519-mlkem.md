@@ -38,19 +38,6 @@ A hybrid post-quantum key exchange combines two key-agreement primitives — one
 
 Protocol designers, library authors, and platform engineers who have to implement post-quantum key exchange correctly. Also security architects who want enough technical detail to review a vendor's design. This post assumes familiarity with Diffie-Hellman and with the concept of a key encapsulation mechanism. If you want the concept without the implementation, start with [ML-KEM-768 Explained](/blog/ml-kem-768-explained) first.
 
-## Table of contents
-
-1. Why hybrid at all
-2. The four requirements
-3. The construction, step by step
-4. Transcript binding in detail
-5. Minimal Go implementation
-6. Common mistakes and how to avoid them
-7. How this lands in TLS 1.3
-8. How this lands in WireGuard and QuickZTNA
-9. Testing and interoperability
-10. Standards and references
-
 ## 1. Why hybrid at all
 
 A hybrid construction sidesteps two risks at once.

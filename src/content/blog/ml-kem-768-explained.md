@@ -38,22 +38,6 @@ ML-KEM-768 is the NIST-standardised post-quantum key encapsulation mechanism pub
 
 Security engineers, platform teams, and compliance leads who want a technical, non-handwavy explanation of what sits inside a modern post-quantum key exchange. We assume you are comfortable reading a bit of code and are familiar with TLS or WireGuard at a glance. Cryptographers writing security proofs should read the primary sources instead — this post is for builders and buyers.
 
-## Table of contents
-
-1. Why a new KEM at all
-2. What "ML-KEM-768" actually stands for
-3. The three things a KEM does
-4. Size budget: bytes on the wire
-5. Security levels and how to choose
-6. ML-KEM vs Kyber: what changed during standardisation
-7. Hybrid mode: X25519 + ML-KEM-768
-8. How ML-KEM-768 is wired into QuickZTNA
-9. Benchmarks: CPU and wire time
-10. Implementation choices and common pitfalls
-11. Compliance posture: CNSA 2.0, BSI, ANSSI
-12. What to ask your vendor
-13. Further reading
-
 ## 1. Why a new KEM at all
 
 Every transport-layer security protocol in wide use in 2026 — TLS 1.3, SSH, IPsec, WireGuard — relies on a Diffie-Hellman-style key exchange to agree on a symmetric session key. The two dominant variants are finite-field Diffie-Hellman, which you will see on the wire as RFC 7919 groups, and elliptic-curve Diffie-Hellman, which in practice means X25519 for modern protocols.

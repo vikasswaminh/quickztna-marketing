@@ -38,20 +38,6 @@ Zero Trust Network Access (ZTNA) replaces the assumption that "inside the corpor
 
 Engineering leads, CIOs, and CISOs who have been hearing "Zero Trust" for years and want a clear, technical, buzzword-free explanation. Also anyone writing a vendor RFI or a board-deck slide who needs the vocabulary and the primary-source references in one place. Assumes general familiarity with networking concepts but no specific ZTNA product experience.
 
-## Table of contents
-
-1. The one-sentence definition
-2. The perimeter model that ZTNA replaces
-3. Where Zero Trust came from — a short history
-4. NIST SP 800-207: the seven tenets
-5. CISA Zero Trust Maturity Model: the five pillars
-6. Three architectural patterns for ZTNA
-7. How a ZTNA request actually flows
-8. ZTNA vs VPN vs SASE — three terms, one landscape
-9. What a ZTNA product includes
-10. Practical implementation checklist
-11. Common misconceptions
-
 ## 1. The one-sentence definition
 
 Zero Trust Network Access is a security model in which every access request — from any user, any device, to any resource — is individually authenticated, authorised, and continuously re-evaluated, regardless of whether the request originates inside or outside the corporate network perimeter.

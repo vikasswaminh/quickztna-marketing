@@ -38,23 +38,6 @@ The Digital Operational Resilience Act — [Regulation (EU) 2022/2554](https://e
 
 CISOs, heads of ICT risk, and chief operating officers at EU financial entities — banks, payment institutions, investment firms, insurers, crypto-asset service providers — or vendors selling into those entities. Specific value for teams working on VPN, ZTNA, and remote-access architecture that must align with DORA evidence requirements. Familiarity with basic banking or insurance regulatory vocabulary is helpful.
 
-## Table of contents
-
-1. What DORA is and how it relates to other regulations
-2. In-scope entities and proportionality
-3. The five pillars of DORA, summarised
-4. Step 1 — Establish an ICT risk-management framework
-5. Step 2 — Build a complete ICT asset inventory
-6. Step 3 — Harden cryptographic controls
-7. Step 4 — Implement multi-factor and continuous authentication
-8. Step 5 — Run continuous detection and monitoring
-9. Step 6 — Stand up incident-classification and reporting capability
-10. Step 7 — Execute digital operational resilience testing
-11. Step 8 — Prepare for threat-led penetration testing
-12. Step 9 — Manage ICT third-party risk with contracts that meet Article 30
-13. Step 10 — Integrate with information-sharing arrangements
-14. Further reading
-
 ## 1. What DORA is and how it relates to other regulations
 
 DORA is an EU regulation on the digital operational resilience of financial entities. It was adopted alongside an amending directive (DORA Directive 2022/2556, which updates earlier financial-services directives to refer to DORA). The regulation is directly applicable from 17 January 2025 across the EU.

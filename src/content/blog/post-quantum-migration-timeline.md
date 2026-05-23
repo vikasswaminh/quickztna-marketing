@@ -38,20 +38,6 @@ The post-quantum cryptographic migration is driven by multiple independent timel
 
 Compliance officers, security architects, and executive teams planning the post-quantum migration. Programme managers building multi-year roadmaps. Anyone who needs to cite the authoritative deadlines in a planning document.
 
-## Table of contents
-
-1. Why there is no single timeline
-2. Standards body timeline (NIST)
-3. US National Security Systems (NSA CNSA 2.0)
-4. EU coordinated implementation roadmap
-5. Germany (BSI)
-6. France (ANSSI)
-7. United Kingdom (NCSC)
-8. Industry rollouts (browsers, CDNs, clouds)
-9. QuickZTNA roadmap
-10. A consolidated visual timeline
-11. What to do now
-
 ## 1. Why there is no single timeline
 
 Post-quantum migration is not one project. It is a set of parallel migrations across protocols, products, sectors, and jurisdictions, each with its own regulator and its own deadline.

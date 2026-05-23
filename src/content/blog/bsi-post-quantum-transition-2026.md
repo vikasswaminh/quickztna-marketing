@@ -38,19 +38,6 @@ The Bundesamt für Sicherheit in der Informationstechnik (BSI) — Germany's Fed
 
 Security and compliance leads at German federal administration, German critical infrastructure operators (KRITIS), and any private entity with German public-sector contracts. Also non-German teams selling into the German market whose customer contracts reference TR-02102 compliance. Familiarity with general cryptographic vocabulary is assumed; some German-language terms are used where the English translation is awkward.
 
-## Table of contents
-
-1. What the BSI is and what it does
-2. The TR-02102 family of documents
-3. Current TR-02102-1 cryptographic recommendations
-4. The BSI's post-quantum position, in order
-5. How TR-02102-1 treats hybrid key exchange
-6. How TR-02102-1 interacts with NIS2 in Germany
-7. KRITIS and the sector-specific layer
-8. Remote-access implementation aligned with TR-02102-1
-9. Common pitfalls and how to avoid them
-10. Further reading
-
 ## 1. What the BSI is and what it does
 
 The BSI is Germany's Federal Office for Information Security, part of the Federal Ministry of the Interior (BMI). Its statutory responsibilities include setting cybersecurity baselines for federal administration, operating CERT services, publishing technical guidelines, and certifying products and evaluators under the Common Criteria scheme.

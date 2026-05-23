@@ -38,19 +38,6 @@ Every major VPN and ZTNA vendor has at least a "post-quantum" press release in 2
 
 Security leads evaluating a VPN or Zero Trust Network Access product. Architects renewing a contract. Auditors testing the claims of a deployed product. If you already know what to ask, skip to the table in section 9.
 
-## Table of contents
-
-1. Why these six questions
-2. Question 1 — Which algorithm, at what parameter set
-3. Question 2 — Hybrid or PQ-only
-4. Question 3 — How often does the PQ key rotate
-5. Question 4 — Can you see the mode on the wire
-6. Question 5 — Is it on by default or opt-in
-7. Question 6 — What is the implementation source, and has it been audited
-8. Bonus questions that separate tiers
-9. Vendor snapshot table
-10. How to validate answers
-
 ## 1. Why these six questions
 
 In a year of talking to security teams, the failure mode we see is consistent: vendors say "we are quantum-safe" and customers say "great, sign here". The answer to "how" does not get asked. Six months later, an audit finds that the production configuration is still classical-only because "quantum-safe" in the vendor's marketing was a capability in a lab build, not a default in the shipped product.

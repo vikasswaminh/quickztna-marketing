@@ -38,20 +38,6 @@ Vendor slide decks quote ZTNA statistics from market research — adoption rates
 
 CISOs, security leads, and security-operations managers responsible for reporting on ZTNA programme health. Platform engineers who build the dashboards. Board members and audit committee members who read the output and need to know what to ask about. Assumes familiarity with basic security operations concepts.
 
-## Table of contents
-
-1. Why metrics from your environment beat industry statistics
-2. The three categories — coverage, health, effectiveness
-3. Coverage metrics (1-6)
-4. Health metrics (7-12)
-5. Effectiveness metrics (13-17)
-6. How to collect each without custom engineering
-7. Baseline and thresholds
-8. Dashboard layout
-9. Board reporting template
-10. Common pitfalls
-11. Recommended starting set
-
 ## 1. Why metrics from your environment beat industry statistics
 
 Industry statistics make for attention-grabbing slides. "Breaches cost an average of $4.88 million" (IBM's Cost of a Data Breach Report 2024). "81% of organisations have adopted at least partial Zero Trust" (various vendor surveys). These are fine for opening a keynote.

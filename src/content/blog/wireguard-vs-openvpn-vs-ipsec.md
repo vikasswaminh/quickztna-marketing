@@ -38,20 +38,6 @@ Three VPN protocols matter in 2026: WireGuard (modern, minimal, in-kernel on Lin
 
 Network engineers and security architects choosing a VPN protocol for a new deployment or evaluating migration from one to another. Assumes familiarity with basic cryptography (AEAD ciphers, Diffie-Hellman) and with VPN concepts.
 
-## Table of contents
-
-1. Snapshot comparison
-2. WireGuard: modern minimalism
-3. OpenVPN: mature flexibility
-4. IPsec: the enterprise standard
-5. Performance: CPU, latency, throughput
-6. Security: cryptography and code size
-7. Configurability and operational complexity
-8. Platform support in 2026
-9. Post-quantum readiness
-10. When to pick each
-11. Migration notes
-
 ## 1. Snapshot comparison
 
 Quick reference for the rest of the post.

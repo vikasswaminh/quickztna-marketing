@@ -38,19 +38,6 @@ Harvest-now-decrypt-later is a threat model that applies equally to a bootstrapp
 
 Readers who have noticed that most vendors gate post-quantum behind premium tiers. Security professionals deciding whether a vendor's free tier is meaningful or stripped of the features that matter. Engineering leads evaluating QuickZTNA and wondering if the post-quantum claim is real on the tier they plan to use. Founders thinking about how to position their own products.
 
-## Table of contents
-
-1. The threat is tier-agnostic
-2. The cost is tier-agnostic too
-3. Why this is not "loss-leader marketing"
-4. What security-on-the-paid-tier looks like, and why it is broken
-5. How the Free tier supports the business
-6. The public commitment
-7. What the Free tier actually includes
-8. Where paid tiers add value
-9. The contrarian argument we have heard
-10. How to evaluate whether a vendor's free tier is meaningful
-
 ## 1. The threat is tier-agnostic
 
 Post-quantum cryptography defends against [harvest-now-decrypt-later](/blog/harvest-now-decrypt-later). An adversary captures encrypted traffic today, stores it, decrypts it once a cryptographically relevant quantum computer exists.
