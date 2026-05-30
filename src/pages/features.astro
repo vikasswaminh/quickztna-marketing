@@ -72,9 +72,8 @@ const sections: Section[] = [
     blurb: "Defense in depth. Shipped as a single agent, not five separate tools to deploy.",
     icon: ShieldCheck,
     features: [
-      { name: "DNS filtering", desc: "Block malicious domains. Per-org allow/deny lists. Threat-intel feed sync.", plans: ["free", "business", "workforce"] },
+      { name: "DNS filtering", desc: "Per-org allow/deny lists. Domain-query analytics per device.", plans: ["free", "business", "workforce"] },
       { name: "Cloud firewall (FaaS)", desc: "Stateful firewall rules at the edge. Per-app, per-user, per-tag.", plans: ["free", "business", "workforce"] },
-      { name: "Honeypot / deception", desc: "Decoy machines. Any interaction alerts. Zero false positives.", plans: ["business", "workforce"] },
       { name: "Anomaly detection", desc: "UEBA baselines. Flags unusual access patterns, data movement, login geography.", plans: ["workforce"] },
       { name: "Data Loss Prevention (DLP)", desc: "Scans agent-captured text for credit cards, SSNs, API keys. Report or block.", plans: ["workforce"] },
       { name: "CASB", desc: "SaaS app discovery, shadow-IT visibility, approval workflow.", plans: ["workforce"] },
@@ -117,7 +116,7 @@ const sections: Section[] = [
     features: [
       { name: "Remote management", desc: "Run safe diagnostic commands across the fleet. Whitelisted verbs only.", plans: ["business", "workforce"] },
       { name: "Remote desktop (WebRTC)", desc: "Browser-based remote control. Consent-gated, session-recorded.", plans: ["workforce"] },
-      { name: "Software inventory", desc: "Patch overview per device. Approved software policy. Outdated versions flagged.", plans: ["workforce"] },
+      { name: "Software inventory", desc: "Installed-application list per device, with versions and publishers.", plans: ["workforce"] },
       { name: "Device wipe / lock", desc: "Admin can lock or wipe stolen/lost devices with signed commands.", plans: ["free", "business", "workforce"] },
       { name: "OTA agent updates", desc: "Self-update via signed releases. Controlled by client_versions table.", plans: ["free", "business", "workforce"] },
     ],
@@ -131,7 +130,6 @@ const sections: Section[] = [
       { name: "Secrets vault", desc: "AES-256-GCM encrypted secrets. Envelope encryption with per-org DEKs. Rotation policies.", plans: ["business", "workforce"] },
       { name: "Database access broker", desc: "Register PG/MySQL/Mongo/Redis. JIT credentials, scoped queries, audit.", plans: ["workforce"] },
       { name: "Kubernetes access", desc: "Identity-scoped kubeconfig. RBAC inherited from your org roles.", plans: ["workforce"] },
-      { name: "Cloud firewall sync", desc: "AWS SG / Azure NSG / GCP firewall auto-sync with tailnet membership.", plans: ["workforce"] },
       { name: "App connector", desc: "Protect internal web apps (Jira, Jenkins, Grafana) with reverse proxy + ZTNA auth.", plans: ["workforce"] },
       { name: "Webhook forwarder", desc: "Inbound webhooks delivered through the mesh to private targets.", plans: ["workforce"] },
       { name: "Terraform provider", desc: "Full IaC for machines, ACLs, DNS, users, settings. GitOps-friendly.", plans: ["workforce"] },
