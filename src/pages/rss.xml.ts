@@ -10,7 +10,7 @@ export async function GET(context: APIContext) {
   return rss({
     title: "QuickZTNA Blog",
     description:
-      "Post-quantum ZTNA, compliance, and mesh VPN engineering notes. Primary-sourced, technical, and honest.",
+      "ZTNA mesh, workforce security, compliance, and engineering notes. Primary-sourced, technical, and honest.",
     site: context.site ?? "https://quickztna.com",
     items: posts.map((post) => ({
       title: post.data.title,

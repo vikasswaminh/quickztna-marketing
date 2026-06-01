@@ -37,7 +37,7 @@ const sections: Section[] = [
     blurb: "The ZTNA primitives. Ship with every plan, no gate, no trial. This is the foundation.",
     icon: Network,
     features: [
-      { name: "Post-Quantum WireGuard", desc: "X25519 + ML-KEM-768 hybrid key exchange on every tunnel. FIPS 203 compliant. No config — quantum-safe by default.", plans: ["free", "business", "workforce"] },
+      { name: "WireGuard mesh data plane", desc: "Modern, audited X25519 + ChaCha20-Poly1305 + Poly1305 stack. Direct peer-to-peer where NAT allows; DERP relay fallback (Bangalore + Frankfurt) for CGNAT and symmetric NAT.", plans: ["free", "business", "workforce"] },
       { name: "MagicDNS", desc: "Every device reachable at <hostname>.<org>.zt.net. Zero DNS config.", plans: ["free", "business", "workforce"] },
       { name: "DERP relays", desc: "4 global regions (BLR, NYC, LON, SFO) relay when P2P is blocked by symmetric NAT or CGNAT.", plans: ["free", "business", "workforce"] },
       { name: "STUN NAT discovery", desc: "Automatic public endpoint discovery. Peers find each other without central coordination.", plans: ["free", "business", "workforce"] },
@@ -75,7 +75,7 @@ const sections: Section[] = [
       { name: "DNS filtering", desc: "Per-org allow/deny lists. Domain-query analytics per device.", plans: ["free", "business", "workforce"] },
       { name: "Cloud firewall (FaaS)", desc: "Stateful firewall rules at the edge. Per-app, per-user, per-tag.", plans: ["free", "business", "workforce"] },
       { name: "Anomaly detection", desc: "UEBA baselines. Flags unusual access patterns, data movement, login geography.", plans: ["workforce"] },
-      { name: "Data Loss Prevention (DLP)", desc: "Scans agent-captured text for credit cards, SSNs, API keys. Report or block.", plans: ["workforce"] },
+      { name: "Data Loss Prevention (DLP)", desc: "Scans Downloads / Documents / Desktop / /tmp filesystem, the system clipboard, and remote-shell stdin/stdout for credit cards, SSNs, API keys, private keys. Redacts matches; reports to dashboard.", plans: ["workforce"] },
       { name: "CASB", desc: "SaaS app discovery, shadow-IT visibility, approval workflow.", plans: ["workforce"] },
       { name: "User risk scoring", desc: "Per-user risk timeline. Combines posture, behavior, threat intel.", plans: ["workforce"] },
     ],
@@ -88,7 +88,6 @@ const sections: Section[] = [
     features: [
       { name: "Compliance reports", desc: "One-click SOC 2 / ISO 27001 / HIPAA evidence bundles. Signed, timestamped.", plans: ["business", "workforce"] },
       { name: "Continuous compliance", desc: "Background rules run daily. Drift flagged before audit time.", plans: ["business", "workforce"] },
-      { name: "Session recording", desc: "Capture admin sessions (shell, SSH jump). Replay for audit.", plans: ["business", "workforce"] },
       { name: "JIT access workflow", desc: "Request → approve → time-bounded grant → auto-revoke. Full audit trail.", plans: ["free", "business", "workforce"] },
       { name: "Access review campaigns", desc: "Periodic campaigns. Approvers confirm / revoke. Everything logged.", plans: ["free", "business", "workforce"] },
       { name: "Policy version rollback", desc: "Every ACL change versioned. Roll back to any prior version instantly.", plans: ["free", "business", "workforce"] },
@@ -168,12 +167,12 @@ function lowestPlan(plans: Feature["plans"]): "free" | "business" | "workforce" 
 // "People also ask" panel and for Perplexity / Claude / ChatGPT citation.
 const featuresFaq = [
   {
-    q: "Is the post-quantum encryption available on every plan?",
-    a: "Yes. Hybrid X25519 + ML-KEM-768 (FIPS 203) key exchange is enabled by default on every WireGuard tunnel, on every plan including Free. It is not a paid feature, not behind a flag, and cannot be disabled. The shared secret is derived via HKDF-SHA256 from both classical and post-quantum halves with transcript binding.",
+    q: "Is the WireGuard encryption available on every plan?",
+    a: "Yes. WireGuard's X25519 + ChaCha20-Poly1305 + Poly1305 cipher suite is used on every tunnel, on every plan including Free. It is not a paid feature, not behind a flag, and cannot be downgraded. Key rotation follows the WireGuard spec.",
   },
   {
     q: "What is the difference between Free, Business, and Workforce plans?",
-    a: "Free covers 100 devices and 3 users with post-quantum ZTNA, MagicDNS, ABAC policies, device posture, DNS filtering, AI assistant, and 4 global DERP relays. Business ($10 per user per month) adds unlimited machines, session recording, compliance reports, secrets vault, SCIM provisioning, and a 60-day trial. Workforce (custom pricing) adds workforce analytics, DLP, CASB, anomaly detection, database access broker, Kubernetes access, and Terraform provider.",
+    a: "Free covers 100 devices and 3 users with WireGuard ZTNA mesh, MagicDNS, ABAC policies, device posture, DNS filtering, AI assistant, remote shell, and the global DERP relay fleet (Bangalore + Frankfurt today). Business ($10 per user per month) adds unlimited machines, remote desktop, secrets vault, SCIM provisioning, and a 60-day trial. Workforce (custom pricing) adds workforce analytics, software inventory, user-risk scoring, DLP, CASB, anomaly detection, database access broker, Kubernetes access, and Terraform provider.",
   },
   {
     q: "Does QuickZTNA support SAML / OIDC SSO?",
@@ -181,7 +180,7 @@ const featuresFaq = [
   },
   {
     q: "Can QuickZTNA replace my existing VPN?",
-    a: "Yes, for most workloads. QuickZTNA is a mesh VPN with WireGuard data plane plus the full ZTNA feature set (identity-based ACLs, continuous device posture, session recording, audit log). Teams typically migrate user-VPN, site-to-site, and bastion-host access. Hardware VPN concentrators and IPsec-specific compliance scenarios may still need a separate solution.",
+    a: "Yes, for most workloads. QuickZTNA is a mesh VPN with WireGuard data plane plus the full ZTNA feature set (identity-based ACLs, continuous device posture, audit log retention, AI Operator for policy changes). Teams typically migrate user-VPN, site-to-site, and bastion-host access. Hardware VPN concentrators and IPsec-specific compliance scenarios may still need a separate solution.",
   },
   {
     q: "Does QuickZTNA work on Linux, macOS, Windows, iOS, and Android?",
@@ -189,7 +188,7 @@ const featuresFaq = [
   },
   {
     q: "What compliance certifications does QuickZTNA support?",
-    a: "We hold SOC 2 Type II (Security, Availability, Confidentiality), conform to FIPS 203 for ML-KEM-768, and offer a GDPR-aligned DPA. ISO 27001 certification is in progress with target completion in 2026 Q3. We sign HIPAA Business Associate Agreements on the Business plan and above. The Business plan also includes one-click compliance reports (SOC 2, ISO 27001, HIPAA) generated from your live policy and audit state.",
+    a: "We offer a GDPR-aligned DPA and sign HIPAA Business Associate Agreements on the Business plan and above. SOC 2 Type II and ISO 27001 certifications are in progress with target completion in 2026.",
   },
   {
     q: "Is there a self-hosted or air-gapped deployment option?",
@@ -216,7 +215,7 @@ const featuresWebPageSchema = {
   "@type": "WebPage",
   "@id": "https://quickztna.com/features/",
   url: "https://quickztna.com/features/",
-  name: "QuickZTNA features — post-quantum ZTNA, AI assistant, workforce analytics",
+  name: "QuickZTNA features — ZTNA mesh, AI assistant, workforce analytics",
   description: "Complete feature matrix across eight categories: networking, AI, security, governance, identity, endpoint management, data access, workforce analytics.",
   isPartOf: { "@id": "https://quickztna.com/#website" },
   about: { "@type": "Thing", name: "Zero Trust Network Access features" },
@@ -233,8 +232,8 @@ const featuresBreadcrumbSchema = {
 };
 ---
 <SiteLayout
-  title="Features — QuickZTNA: post-quantum ZTNA, AI assistant, analytics"
-  description="Complete QuickZTNA feature matrix: post-quantum WireGuard, ABAC policies, AI assistant, SOC 2 compliance, SSO + SCIM, DLP, CASB, workforce analytics."
+  title="Features — QuickZTNA: ZTNA mesh, AI assistant, workforce analytics"
+  description="Complete QuickZTNA feature matrix: WireGuard mesh, ABAC policies, AI Operator, SSO + SCIM, DLP (filesystem + clipboard + SSH), CASB, workforce analytics."
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(featuresWebPageSchema)} is:inline />

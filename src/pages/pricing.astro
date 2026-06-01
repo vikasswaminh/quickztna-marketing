@@ -17,14 +17,15 @@ const plans = [
     highlight: false,
     limits: ["100 machines", "3 users", "Community support"],
     features: [
-      "PQC-encrypted ZTNA (ML-KEM-768)",
+      "WireGuard-encrypted ZTNA mesh",
       "MagicDNS + WireGuard mesh",
       "ACL policies + device posture",
       "DNS filtering + cloud firewall",
       "AI Assistant (chat, ACL builder, digest)",
       "JIT access + access reviews",
       "SSO · GitHub · Google · TOTP MFA",
-      "4 global DERP relays",
+      "Remote shell (SSH) — free tier",
+      "Global DERP relays (BLR + FRA)",
     ],
   },
   {
@@ -38,14 +39,13 @@ const plans = [
     limits: ["Unlimited machines", "Billed per active user", "Priority email support"],
     features: [
       "Everything in Free",
-      "Remote management + remote shell",
-      "Session recording",
-      "Compliance reports (SOC 2, ISO, HIPAA)",
-      "Continuous compliance scanning",
+      "Remote desktop (WebRTC)",
+      "Compliance status dashboard (SOC 2 readiness)",
       "Secrets vault (AES-256-GCM)",
       "SCIM 2.0 provisioning",
       "AI actions + incident response",
       "JIT recommendations",
+      "60-day free trial",
     ],
   },
   {
@@ -82,9 +82,9 @@ const groups: Group[] = [
     rows: [
       { feature: "Machines per org", free: "100", business: "Unlimited", workforce: "Unlimited" },
       { feature: "Users per org", free: "3", business: "Billed / user", workforce: "Billed / user" },
-      { feature: "Post-quantum WireGuard (ML-KEM-768)", free: true, business: true, workforce: true },
+      { feature: "WireGuard mesh tunnels", free: true, business: true, workforce: true },
       { feature: "MagicDNS", free: true, business: true, workforce: true },
-      { feature: "DERP relays (4 global regions)", free: true, business: true, workforce: true },
+      { feature: "DERP relays (Bangalore + Frankfurt)", free: true, business: true, workforce: true },
       { feature: "ABAC policies + device posture", free: true, business: true, workforce: true },
       { feature: "Subnet routes + exit nodes", free: true, business: true, workforce: true },
       { feature: "Auto-quarantine on posture fail", free: true, business: true, workforce: true },
@@ -134,7 +134,6 @@ const groups: Group[] = [
       { feature: "Policy versioning + rollback", free: true, business: true, workforce: true },
       { feature: "Compliance reports (SOC 2, ISO, HIPAA)", free: false, business: true, workforce: true },
       { feature: "Continuous compliance scanning", free: false, business: true, workforce: true },
-      { feature: "Session recording", free: false, business: true, workforce: true },
       { feature: "Audit log retention", free: "90 days", business: "90 days", workforce: "90 days" },
     ],
   },
@@ -183,8 +182,8 @@ const groups: Group[] = [
 
 const faqs = [
   {
-    q: "Is post-quantum crypto really on the Free plan?",
-    a: "Yes. Every WireGuard tunnel, on every plan, uses X25519 + ML-KEM-768 hybrid key exchange. It's not a paid feature — it's the default. The PSK is derived via HKDF-SHA256 from both classical and post-quantum shared secrets.",
+    q: "What's the difference between Free, Business, and Workforce on encryption?",
+    a: "None — every tunnel on every plan uses the same WireGuard cipher suite (X25519 + ChaCha20-Poly1305 + Poly1305). Encryption is never the upsell. Paid plans add features like SCIM provisioning, secrets vault, workforce analytics, DLP, and the AI Operator — not better crypto.",
   },
   {
     q: "Why only Razorpay? What about Stripe / wire / invoice?",
@@ -224,12 +223,12 @@ function renderCell(v: boolean | string) {
 
 // Schema.org Product with three Offers — critical for Google AI Overview eligibility.
 // Without this, the pricing page is invisible to AI search citation for queries like
-// "how much does post-quantum ZTNA cost" or "free ZTNA mesh VPN for 100 devices."
+// "how much does ZTNA mesh VPN cost" or "free ZTNA mesh VPN for 100 devices."
 const productSchema = {
   "@context": "https://schema.org",
   "@type": "Product",
   name: "QuickZTNA",
-  description: "Post-quantum Zero Trust Network Access. Hybrid ML-KEM-768 + X25519 key exchange on every WireGuard tunnel, on every plan including Free.",
+  description: "Remote Workforce Security OS pricing. WireGuard ZTNA mesh + ABAC + AI Operator. Free for 100 devices forever.",
   brand: { "@type": "Brand", name: "QuickZTNA" },
   category: "Zero Trust Network Access",
   url: "https://quickztna.com/pricing/",
@@ -238,7 +237,7 @@ const productSchema = {
     {
       "@type": "Offer",
       name: "Free",
-      description: "100 devices, 3 users, post-quantum ZTNA, community support. Free forever, no credit card.",
+      description: "100 devices, 3 users, full ZTNA mesh, community support. Free forever, no credit card.",
       price: "0",
       priceCurrency: "USD",
       availability: "https://schema.org/InStock",
@@ -311,7 +310,7 @@ const pricingBreadcrumbSchema = {
         <br class="hidden sm:block" /> Upgrade when you need it.
       </h1>
       <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-        Post-quantum crypto on every plan. 100 devices on Free. 60-day Business trial.
+        Same WireGuard encryption on every plan. 100 devices on Free. 60-day Business trial.
         No credit card to start. Honest limits, fully documented.
       </p>
     </div>
@@ -473,7 +472,7 @@ const pricingBreadcrumbSchema = {
           <div>
             <Zap class="h-8 w-8" />
             <h2 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Ship 100 devices today. Quantum-safe forever.
+              Ship 100 devices today. Zero-trust from the first connection.
             </h2>
             <p class="mt-3 max-w-xl text-primary-foreground/85">
               Issue one auth key. Pipe one install command. Your whole workforce is on the tailnet.

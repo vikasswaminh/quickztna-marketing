@@ -19,7 +19,7 @@ const categoryColor: Record<string, string> = {
 };
 
 const categoryLabel: Record<string, string> = {
-  "post-quantum": "Post-quantum",
+  "post-quantum": "Architecture",
   compliance: "Compliance",
   comparison: "Comparison",
   fundamentals: "Fundamentals",
@@ -82,7 +82,7 @@ export const GET: APIRoute = ({ props }) => {
   <g transform="translate(72, 72)">
     <rect x="0" y="0" width="10" height="40" rx="2" fill="${color}"/>
     <text x="24" y="28" font-family="ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="700" fill="#ffffff">QuickZTNA</text>
-    <text x="24" y="52" font-family="ui-monospace, SFMono-Regular, monospace" font-size="12" font-weight="500" letter-spacing="2" fill="#9ca3af" text-transform="uppercase">POST-QUANTUM ZTNA</text>
+    <text x="24" y="52" font-family="ui-monospace, SFMono-Regular, monospace" font-size="12" font-weight="500" letter-spacing="2" fill="#9ca3af" text-transform="uppercase">REMOTE WORKFORCE SECURITY OS</text>
   </g>
 
   <!-- Category tag -->
@@ -109,7 +109,7 @@ ${lines
 
   <!-- Corner mark -->
   <g transform="translate(1060, 540)">
-    <text x="0" y="0" font-family="ui-monospace, SFMono-Regular, monospace" font-size="12" fill="#6b7280" text-anchor="end">${new Date(data.publishedAt).getFullYear()} &middot; Post-quantum by default</text>
+    <text x="0" y="0" font-family="ui-monospace, SFMono-Regular, monospace" font-size="12" fill="#6b7280" text-anchor="end">${new Date(data.publishedAt).getFullYear()} &middot; quickztna.com</text>
   </g>
 </svg>`;
 
