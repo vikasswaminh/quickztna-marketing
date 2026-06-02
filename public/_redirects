@@ -38,5 +38,13 @@
 # look at robots.txt for the actual sitemap reference. Mirror to sitemap-index.xml.
 /sitemap.xml /sitemap-index.xml                    200
 
+# Deleted 2026-06-02 — these two PQC posts made product claims the shipped
+# product cannot back. Redirect to the blog index so any inbound link,
+# bookmark, or SERP click lands somewhere coherent instead of a 404. CF
+# edge cache (s-maxage=604800) may continue serving the old HTML for up
+# to 7 days for cache-warm URLs.
+/blog/post-quantum-free-tier-manifesto/  /blog/    301
+/blog/only-pqc-ready-ztna-solution-2026/ /blog/    301
+
 # Everything else (real 404, not duplicate-home 200)
 /*           /404.html                              404
