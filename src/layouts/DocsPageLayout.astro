@@ -127,7 +127,7 @@ const howToSchema =
   </div>
 
   <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-    <div class="lg:grid lg:grid-cols-[16rem_1fr] lg:gap-10 xl:grid-cols-[16rem_1fr_15rem] xl:gap-12">
+    <div class="lg:grid lg:grid-cols-[16rem_1fr] lg:gap-10 xl:gap-12">
       <!-- Left sidebar — sticky nav -->
       <aside class="hidden lg:block">
         <div class="sticky top-24">
@@ -203,13 +203,6 @@ const howToSchema =
           </div>
         </aside>
       </article>
-
-      <!-- Right rail — desktop ToC -->
-      <aside class="hidden xl:block">
-        <div class="sticky top-24 space-y-6">
-          {data.tocEnabled !== false && <TableOfContents headings={headings} />}
-        </div>
-      </aside>
     </div>
   </div>
 </SiteLayout>

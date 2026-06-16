@@ -35,30 +35,6 @@ const filtered = headings.filter((h) => h.depth === 2 || h.depth === 3);
         </ol>
       </nav>
     </details>
-
-    <!-- Desktop: sticky sidebar -->
-    <nav
-      id="toc"
-      aria-label="Table of contents"
-      class="hidden lg:block sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto rounded-xl border border-border bg-card p-5 shadow-sm"
-    >
-      <p class="mb-4 font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-        On this page
-      </p>
-      <ol class="space-y-1.5" id="toc-list">
-        {filtered.map((h) => (
-          <li class={h.depth === 3 ? "pl-3" : ""}>
-            <a
-              href={`#${h.slug}`}
-              data-toc-link
-              class={`toc-link block rounded-md px-2 py-1 text-sm transition-colors text-muted-foreground hover:text-foreground hover:bg-muted ${h.depth === 3 ? "text-xs" : ""}`}
-            >
-              {h.text}
-            </a>
-          </li>
-        ))}
-      </ol>
-    </nav>
   </>
 )}
 
