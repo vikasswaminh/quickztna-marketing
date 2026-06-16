@@ -11,7 +11,7 @@ faq:
   - q: "What happens to a device's traffic when its key expires?"
     a: "Existing sessions complete normally; new sessions are rejected and the user is prompted to re-authenticate via SSO. No traffic is dropped mid-flight, and no in-flight connection is terminated."
   - q: "Can I bulk-tag devices instead of clicking each one?"
-    a: "Yes. The admin dashboard supports multi-select with bulk tag apply/remove. For very large fleets, use the REST API or the CLI's tag command — both accept a device filter and apply tags in one call."
+    a: "Yes. The admin dashboard supports multi-select with bulk tag apply/remove. For very large fleets, use the REST API — it accepts a device filter and applies tags in one call."
   - q: "What happens when I delete a device?"
     a: "The device is immediately removed from the network. Existing sessions are terminated. The device's public key is revoked centrally, so even if the binary still has the key on disk, it cannot reconnect. On-device, the client detects the revocation and clears its local state. The device's audit history is retained according to your plan's retention policy."
 ---
@@ -26,7 +26,7 @@ Open the admin dashboard. The Devices view is the operational heart of QuickZTNA
 
 - **Hostname** — the QuickZTNA name (short, predictable, often the OS hostname unless you've customized it).
 - **Owner** — the identity that authenticated the device. For human devices this is a person; for servers it's the pre-auth key's creator.
-- **OS** — Linux distribution, macOS version, Windows version, iOS/Android version.
+- **OS** — Linux distribution, macOS version, or Windows version.
 - **Tags** — strings you've attached to the device (more on these below).
 - **Last seen** — the most recent successful coordination check-in. A device that's been off for more than a few minutes shows a warning indicator.
 - **Key expiry** — when the device's current authentication expires and the user will be prompted to re-auth.
@@ -66,13 +66,13 @@ Once created, the key is shown to you exactly once. Copy it; we do not store it 
 To use the key, the device passes it to the CLI at first connect:
 
 ```bash
-sudo quickztna up --auth-key=<key>
+sudo ztna up --auth-key=<key>
 ```
 
 Or as an environment variable in containers:
 
 ```bash
-QUICKZTNA_AUTH_KEY=<key> quickztna up
+ZTNA_AUTH_KEY=<key> ztna up
 ```
 
 Pre-auth keys are scoped to your organization, audited like everything else, and revocable from the dashboard. If you suspect a key has leaked, click **Revoke** — existing devices that used the key keep their independent device identity (their keys aren't compromised), but no new device can use the leaked key to onboard.
@@ -108,15 +108,7 @@ Once your fleet is past a hundred devices, individual clicks stop scaling. Two p
 
 **The dashboard's multi-select.** Click the checkbox at the top of the device list to enter selection mode. Filter by tag, OS, or last-seen to narrow the set. Apply tags, remove tags, or remove devices in bulk. The action is atomic — either all of them succeed or you get a per-device error report.
 
-**The CLI and API.** Every dashboard action has a CLI equivalent and a REST API endpoint. For example, to apply a tag to every device that hasn't been seen in 30 days:
-
-```bash
-quickztna devices list --idle-for=30d --json \
-  | jq -r '.[].id' \
-  | xargs -I {} quickztna devices tag-add {} stale
-```
-
-(The CLI also has `quickztna devices prune --idle-for=...` for the common case of removing long-idle devices in one shot.)
+**The REST API.** Device administration at scale is done through the REST API — the same surface the dashboard uses. List machines, filter by tag / OS / last-seen, and apply tag or removal changes programmatically in bulk. (`ztna machines list` is the CLI's read-only view of the same data; bulk tagging and removal of other devices are admin operations exposed via the dashboard and the API, not the local CLI.)
 
 For programmatic management at scale, the [REST API](/docs/api/) is the same surface the dashboard uses. The API is rate-limited per organization but the limits are designed to support routine bulk operations.
 
@@ -124,7 +116,7 @@ For programmatic management at scale, the [REST API](/docs/api/) is the same sur
 
 In a healthy deployment, the device list is mostly "currently active" plus a small tail of "haven't been seen in a few days" (laptops on vacation, servers turned off for maintenance). A long tail of "haven't been seen in months" is a sign of operator drift — old devices that should have been retired but weren't.
 
-We recommend a small routine: monthly, list devices not seen in 60+ days, audit them with the owner if needed, and prune the genuinely retired ones. The CLI command above is the one-liner for this; the dashboard has a "Stale devices" filter under Devices → Filters.
+We recommend a small routine: monthly, list devices not seen in 60+ days, audit them with the owner if needed, and remove the genuinely retired ones. The dashboard has a "Stale devices" filter under Devices → Filters, and the REST API supports the same query for automation.
 
 For Business plans and above, the dashboard also offers **automatic pruning** — devices idle for a configurable period are removed automatically, with the owner notified by email a few days before so they can re-onboard if needed.
 
@@ -140,7 +132,7 @@ Posture is not a substitute for access policy — a healthy laptop owned by a co
 
 By default, a device's QuickZTNA hostname is derived from its OS hostname (e.g. `janes-mbp` from a Mac whose system name is "Jane's MBP," sanitized to lowercase-with-hyphens). For most teams this is the right default.
 
-If you want stricter naming — `prod-db-01`, `build-agent-12` — there are two paths. For new devices, pass `--hostname=<name>` to the install command (or set `QUICKZTNA_HOSTNAME` in containers). For existing devices, the operator can rename via the admin dashboard or the CLI; the network picks up the rename within a coordination round (under a minute). DNS resolves the new name immediately; the old one stops resolving.
+If you want stricter naming — `prod-db-01`, `build-agent-12` — there are two paths. For new devices, pass `--hostname=<name>` to `ztna up` (or `ztna login`). For existing devices, the operator can rename via the admin dashboard or the CLI; the network picks up the rename within a coordination round (under a minute). DNS resolves the new name immediately; the old one stops resolving.
 
 Hostnames must be unique within your organization. The system enforces this on creation — duplicate names are rejected with a clear error.
 

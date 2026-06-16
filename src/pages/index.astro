@@ -55,11 +55,11 @@ const proofPoints = [
 const homepageFaq = [
   {
     q: "What is QuickZTNA?",
-    a: "QuickZTNA is the Remote Workforce Security OS — a Zero Trust Network Access platform that connects laptops, servers, containers, and mobile devices into a single encrypted private mesh network. Every connection is authenticated against your identity provider, authorized against ABAC policies + continuous device posture, and encrypted by WireGuard. An AI Operator previews, applies, and reverts ACL + firewall + policy changes. Free for 100 devices and 3 users, forever.",
+    a: "QuickZTNA is the Remote Workforce Security OS — a Zero Trust Network Access platform that connects laptops, servers, and containers into a single encrypted private mesh network. Every connection is authenticated against your identity provider, authorized against ABAC policies + continuous device posture, and encrypted by WireGuard. An AI Operator previews, applies, and reverts ACL + firewall + policy changes. Free for 100 devices and 3 users, forever.",
   },
   {
     q: "How is QuickZTNA different from Tailscale?",
-    a: "Both are mesh VPN products built on WireGuard. Tailscale focuses on the mesh-VPN primitive; QuickZTNA ships a fuller workforce-security suite in-product: DLP (filesystem + clipboard + SSH text), CASB with approval workflow, workforce analytics, software inventory, user-risk scoring, continuous device posture, and an AI Operator that previews/applies/reverts ACL + firewall + policy changes. Tailscale has greater client ecosystem maturity; QuickZTNA has broader ZTNA + workforce-security depth and free-tier SSH.",
+    a: "Both are mesh VPN products built on WireGuard. Tailscale focuses on the mesh-VPN primitive; QuickZTNA ships a fuller workforce-security suite in-product: DLP (filesystem file scanning), CASB with approval workflow, workforce analytics, software inventory, user-risk scoring, continuous device posture, and an AI Operator that previews/applies/reverts ACL + firewall + policy changes. Tailscale has greater client ecosystem maturity; QuickZTNA has broader ZTNA + workforce-security depth and free-tier SSH.",
   },
   {
     q: "Is QuickZTNA free for 100 devices, really forever?",
@@ -67,7 +67,7 @@ const homepageFaq = [
   },
   {
     q: "How fast can I deploy QuickZTNA across my team?",
-    a: "Roughly two minutes per device for an interactive install, or seconds per device for fleet rollouts with pre-authentication keys. The install is one command (curl or PowerShell on desktop, App Store or Play Store on mobile). The client auto-registers with your organization and joins the mesh. For 100 devices via Ansible, Intune, or cloud-init, end-to-end fleet rollout is typically under 2 minutes.",
+    a: "Roughly two minutes per device for an interactive install, or seconds per device for fleet rollouts with pre-authentication keys. The install is one command (curl on Linux/macOS, PowerShell on Windows). The client auto-registers with your organization and joins the mesh. For 100 devices via Ansible, Intune, or cloud-init, end-to-end fleet rollout is typically under 2 minutes.",
   },
   {
     q: "Does QuickZTNA work behind NAT, CGNAT, and corporate firewalls?",
@@ -83,7 +83,7 @@ const homepageFaq = [
   },
   {
     q: "Can QuickZTNA be self-hosted?",
-    a: "Yes, on the Workforce plan. The control plane runs as a small set of services on your infrastructure with documented requirements (Docker Compose with PostgreSQL, Valkey, and S3-compatible object storage). Client binaries are unchanged between managed and self-hosted deployments. Air-gapped deployments for regulated industries are supported; contact sales@quickztna.com.",
+    a: "Not today — QuickZTNA is a fully managed cloud service. If self-hosting is a requirement for your organization, contact sales@quickztna.com to discuss your needs and our roadmap.",
   },
 ];
 
@@ -104,7 +104,7 @@ const softwareApplicationSchema = {
   description: "Remote Workforce Security OS. WireGuard mesh + ABAC policies + continuous device posture + DLP + AI Operator. Free for 100 devices forever.",
   applicationCategory: "SecurityApplication",
   applicationSubCategory: "Zero Trust Network Access",
-  operatingSystem: "Linux, macOS, Windows, iOS, Android",
+  operatingSystem: "Linux, macOS, Windows",
   url: "https://quickztna.com",
   image: "https://quickztna.com/favicon.svg",
   offers: [

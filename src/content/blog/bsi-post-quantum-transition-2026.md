@@ -228,7 +228,7 @@ Primary sources. All links verified on the publish date.
 
 ## Try QuickZTNA
 
-QuickZTNA ships hybrid X25519 + ML-KEM-768 on every tunnel, using FIPS 203 ML-KEM via the Go 1.24 standard library with HKDF-SHA256 derivation and transcript binding — a construction aligned with TR-02102-1's hybrid-preference guidance. For German federal or KRITIS deployments, contact sales for a TR-02102 alignment brief. [Start free](https://login.quickztna.com/auth) to evaluate.
+QuickZTNA has hybrid X25519 + ML-KEM-768 key exchange on its roadmap (classical WireGuard today). The planned construction uses FIPS 203 ML-KEM via the Go 1.24 standard library with HKDF-SHA256 derivation and transcript binding — aligned with TR-02102-1's hybrid-preference guidance. For German federal or KRITIS deployments, contact sales for a TR-02102 alignment brief. [Start free](https://login.quickztna.com/auth) to evaluate.
 
 <!--
 scorecard:

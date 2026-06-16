@@ -254,29 +254,21 @@ A few quick reference patterns for common automation.
 
 1. Create a multi-use pre-auth key with the desired tags and a short expiry.
 2. Pass the key to each server's user-data via your IaC tool.
-3. The server's first-boot script runs `quickztna up --auth-key=<key>`.
+3. The server's first-boot script runs `ztna up --auth-key=<key>` (or sets `ZTNA_AUTH_KEY` and runs the installer).
 4. After fleet rollout, revoke the key.
 
 **Bulk audit-log export to your SIEM:**
 
 ```bash
-quickztna audit-log export \
-  --since=2026-01-01T00:00:00Z \
-  --format=json \
-  --output=audit-2026-q1.json.gz
+# Ad-hoc, from the CLI:
+ztna audit list
 ```
 
-Or use the API directly with the cursor-pagination pattern. Stream events past 30 days via Workforce-plan real-time streaming.
+For automation, query the audit-log API endpoint with the cursor-pagination pattern and stream the JSON to your SIEM. On paid plans the audit log is exportable via the API.
 
 **Cleaning up stale devices in CI:**
 
-```bash
-quickztna devices list --idle-for=90d --json \
-  | jq -r '.[].id' \
-  | xargs -n1 quickztna devices remove
-```
-
-Run on a weekly schedule.
+Use the machine-management API endpoints (the same surface the dashboard uses): list machines, filter by `last_seen`, and remove the stale ones. `ztna machines list` is the CLI's read-only view of the same data. Run on a weekly schedule.
 
 ## What's next
 

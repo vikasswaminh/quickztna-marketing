@@ -25,7 +25,7 @@ faq:
   - q: "What is the main architectural difference between Tailscale and most alternatives?"
     a: "Two axes matter. First, where the coordination server is hosted (Tailscale managed, Headscale self-host, NetBird both, QuickZTNA managed). Second, what additional features the product layers on top — ACL model, identity integration, device posture, workforce analytics, session recording. The data-plane engine (WireGuard) is similar across all of them."
   - q: "Which alternative has the best post-quantum posture?"
-    a: "As of April 2026, QuickZTNA ships hybrid X25519 + ML-KEM-768 on every tunnel by default, on every tier, and exposes the key-exchange mode per tunnel. Several other vendors have announced or are rolling out post-quantum; verify the current status on each vendor's documentation page. Our ML-KEM-768 post covers what to verify."
+    a: "As of April 2026, QuickZTNA has hybrid X25519 + ML-KEM-768 key exchange on its roadmap (classical WireGuard today), on every tier, and exposes the key-exchange mode per tunnel. Several other vendors have announced or are rolling out post-quantum; verify the current status on each vendor's documentation page. Our ML-KEM-768 post covers what to verify."
   - q: "Is Headscale a real alternative to Tailscale?"
     a: "Headscale is a third-party open-source implementation of the Tailscale coordination server that works with official Tailscale clients. It is mature and widely used by self-hosters. It is not affiliated with Tailscale the company. It is a good fit for teams that want the Tailscale client experience without depending on Tailscale's managed control plane."
 ---
@@ -92,22 +92,22 @@ We cover Headscale in more depth in [Self-Hosting Headscale vs a Managed Coordin
 
 **Who it fits.** Teams that prioritise open source and want the flexibility to move between managed and self-host. Teams comfortable with a smaller ecosystem.
 
-## 5. QuickZTNA — post-quantum default, full ZTNA
+## 5. QuickZTNA — full ZTNA + workforce security
 
-**What it is.** QuickZTNA is a full ZTNA product built on WireGuard. It adds a hybrid X25519 + [ML-KEM-768](/blog/ml-kem-768-explained) post-quantum key exchange on every tunnel by default, on every tier including Free. Beyond the mesh VPN, it includes ABAC ACLs, device posture, workforce analytics (opt-in), session recording, SSO with FIDO2, and SCIM provisioning.
+**What it is.** QuickZTNA is a full ZTNA product built on WireGuard. Beyond the mesh VPN, it adds ABAC ACLs, device posture, file-scan DLP, a CASB approval workflow, workforce analytics (opt-in), software inventory, user-risk scoring, an AI Operator for policy changes, SSO with FIDO2, and SCIM provisioning. The data plane is classical WireGuard today; hybrid post-quantum key exchange is on the roadmap (see [ML-KEM-768 Explained](/blog/ml-kem-768-explained)).
 
 **Strengths.**
-- **Post-quantum on by default, on every tier.** Every tunnel is hybrid PQ from the start; no opt-in, no premium gate.
-- **Full ZTNA feature set.** Beyond basic mesh — ACLs, posture, session recording, audit logs, compliance reports.
-- **Honest tier boundaries.** Free tier includes post-quantum, ACLs, SSO, FIDO2, JIT access. Business adds session recording and workforce features.
+- **Deepest workforce-security layer.** ACLs, device posture, DLP, CASB, audit logs, compliance reports — beyond a basic mesh.
+- **Free SSH on every tier.** Remote shell over the mesh is on the Free plan.
+- **Honest tier boundaries.** Free includes ACLs, SSO, FIDO2, device posture, and remote SSH; Business adds DLP, CASB, continuous posture, remote desktop, and workforce analytics.
 - **EU + US infrastructure options.** For teams with data-residency requirements.
 
 **Trade-offs.**
 - **Younger ecosystem.** Compared to Tailscale's multi-year community, QuickZTNA's ecosystem is newer.
 - **Pricing model is per-user on Business, not per-device.** This may or may not match your usage shape.
-- **Self-host option is Workforce tier only.** Not available on Free or Business.
+- **Managed cloud only.** No self-host or air-gapped option today.
 
-**Who it fits.** Teams with long-term confidentiality requirements where post-quantum matters. Teams in regulated sectors that need ZTNA features (session recording, device posture, audit logs) beyond basic mesh. Teams that find Tailscale's per-user pricing either too high or too limiting for their specific workload.
+**Who it fits.** Teams that need a full ZTNA + workforce-security feature set (ACLs, device posture, DLP, CASB, audit logs) beyond a basic mesh. Teams that find Tailscale's per-user pricing either too high or too limiting for their specific workload.
 
 ## 6. Cloudflare Zero Trust — edge-native identity proxy
 
@@ -165,15 +165,15 @@ Snapshot as of April 2026 from each product's own documentation. Always confirm 
 
 | Dimension | Tailscale | Headscale | NetBird | QuickZTNA | Cloudflare Access | Twingate | OpenZiti |
 |---|---|---|---|---|---|---|---|
-| Data plane | WireGuard | WireGuard (Tailscale clients) | WireGuard | WireGuard + PQ PSK | Cloudflare edge | Proprietary | Ziti overlay |
-| Coordination | Managed | Self-host | Both | Managed (Workforce: both) | Managed | Managed | Both |
+| Data plane | WireGuard | WireGuard (Tailscale clients) | WireGuard | WireGuard | Cloudflare edge | Proprietary | Ziti overlay |
+| Coordination | Managed | Self-host | Both | Managed | Managed | Managed | Both |
 | Licence | Proprietary | BSD-3-Clause | BSD-3-Clause | Proprietary | Proprietary | Proprietary | Apache 2.0 |
 | Free tier | Yes | N/A (DIY) | Yes | Yes (100 devices, 3 users) | Yes (up to 50 users historically — verify) | Yes (limited) | Open source |
-| Post-quantum default | Verify current | N/A (depends on clients) | Verify current | Yes, hybrid ML-KEM-768 | Partial, TLS 1.3 hybrid on edge | Verify current | Verify current |
-| Session recording | Enterprise-tier | No | Verify current | Business tier | Via other CF products | Verify current | Via integrations |
+| Post-quantum default | Verify current | N/A (depends on clients) | Verify current | Roadmap | Partial, TLS 1.3 hybrid on edge | Verify current | Verify current |
+| Session recording | Enterprise-tier | No | Verify current | No | Via other CF products | Verify current | Via integrations |
 | Device posture | Yes | No | Yes | Yes | Yes | Yes | Policy-based |
 | SSO + SCIM | Yes | Limited | Yes | Yes | Yes | Yes | Depends on deployment |
-| Typical fit | General-purpose mesh | Self-host Tailscale | Open-source mesh | Post-quantum ZTNA | Edge identity proxy | Agent-based ZTNA | App-embedded ZT |
+| Typical fit | General-purpose mesh | Self-host Tailscale | Open-source mesh | Full ZTNA + workforce | Edge identity proxy | Agent-based ZTNA | App-embedded ZT |
 
 ## 10. Migration notes
 
@@ -206,7 +206,7 @@ For a Tailscale-to-Headscale migration specifically, the migration can be close 
 
 ## Try QuickZTNA
 
-If post-quantum on by default, a full ZTNA feature set, and honest tier boundaries match your evaluation criteria, QuickZTNA is worth 10 minutes. [Start on the Free tier](https://login.quickztna.com/auth) — 100 devices, 3 users, hybrid ML-KEM-768 on every tunnel.
+If a full ZTNA + workforce-security feature set and honest tier boundaries match your evaluation criteria, QuickZTNA is worth 10 minutes. [Start on the Free tier](https://login.quickztna.com/auth) — 100 devices, 3 users, free remote SSH, no credit card.
 
 <!--
 scorecard:

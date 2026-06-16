@@ -24,7 +24,7 @@ faq:
   - q: "What is the difference between CNSA 1.0 and CNSA 2.0?"
     a: "CNSA 1.0 specified classical algorithms — AES, SHA-2, RSA, ECDSA with specific parameter sets for National Security Systems. CNSA 2.0 replaces the asymmetric components (key establishment and signatures) with post-quantum algorithms: ML-KEM-1024 for key establishment and ML-DSA-87 for signatures, plus specialised hash-based signatures for software and firmware. Symmetric algorithms are unchanged."
   - q: "Does QuickZTNA meet CNSA 2.0 today?"
-    a: "QuickZTNA ships hybrid X25519 + ML-KEM-768 on every tunnel. That is aligned with CNSA 2.0's lattice-based key establishment intent but uses parameter set 768 rather than the CNSA-specified 1024. ML-KEM-1024 support is on our 2026-Q3 roadmap for customers who require it. We will not label the product CNSA 2.0 compliant until the full suite (1024 key establishment, ML-DSA-87 signatures, FIPS-validated modules) ships and is tested."
+    a: "QuickZTNA has hybrid X25519 + ML-KEM-768 key exchange on its roadmap (classical WireGuard today). That is aligned with CNSA 2.0's lattice-based key establishment intent but uses parameter set 768 rather than the CNSA-specified 1024. ML-KEM-1024 support is on our 2026-Q3 roadmap for customers who require it. We will not label the product CNSA 2.0 compliant until the full suite (1024 key establishment, ML-DSA-87 signatures, FIPS-validated modules) ships and is tested."
   - q: "When does the first CNSA 2.0 deadline actually hit?"
     a: "The earliest deadline in the 2022 NSA advisory is for software and firmware signing: begin using quantum-resistant algorithms by 2025, use exclusively by 2030. Other classes — web browsers, cloud services, networking equipment, operating systems — have later dates, with the final NSS-wide deadline in 2035. The exact per-class schedule is in the advisory, summarised below."
   - q: "How do I keep evidence of compliance for my DoD contract?"
@@ -205,12 +205,15 @@ Ten specific questions to put to any ZTNA, VPN, or remote-access vendor selling 
 
 ## 9. What QuickZTNA does today and what is on the roadmap
 
-**Shipping in April 2026:**
+**Today:**
 
-- Every tunnel uses hybrid X25519 + ML-KEM-768 (FIPS 203, NIST category 3).
-- Every session is logged with `kex=hybrid-x25519-mlkem768` or `kex=classical-only`.
-- Software is signed with classical ECDSA today; LMS signing is in active development for 2026-Q3.
-- Implementation uses the Go 1.24 standard library's `crypto/mlkem`, which is not separately FIPS-validated. CMVP submission is planned.
+- The data plane is classical WireGuard (Curve25519 + ChaCha20-Poly1305) — secure against current adversaries.
+- Releases are published with SHA-256 checksums the installer verifies before install.
+
+**Near-term roadmap (hybrid post-quantum):**
+
+- Hybrid X25519 + ML-KEM-768 (FIPS 203, NIST category 3) key exchange on every tunnel.
+- The construction targets the Go standard library's `crypto/mlkem`; FIPS validation (CMVP) is a separate, later step.
 
 **2026-Q3 roadmap:**
 
@@ -223,7 +226,7 @@ Ten specific questions to put to any ZTNA, VPN, or remote-access vendor selling 
 - ML-DSA-87 signature support on internal control-plane paths.
 - FIPS 140-3 CMVP submission of the crypto module.
 
-We will not describe QuickZTNA as "CNSA 2.0 compliant" until the full suite — 1024 key establishment, ML-DSA-87 signatures where applicable, FIPS-validated modules — is shipping and tested. Aligned-with-CNSA-2.0-intent is the current honest framing.
+We will not describe QuickZTNA as "CNSA 2.0 compliant," or as shipping post-quantum, until it's actually in the client and tested. The honest framing today: classical WireGuard now, hybrid post-quantum (ML-KEM) on the roadmap.
 
 ## 10. Further reading
 

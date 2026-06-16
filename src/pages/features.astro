@@ -183,8 +183,8 @@ const featuresFaq = [
     a: "Yes, for most workloads. QuickZTNA is a mesh VPN with WireGuard data plane plus the full ZTNA feature set (identity-based ACLs, continuous device posture, audit log retention, AI Operator for policy changes). Teams typically migrate user-VPN, site-to-site, and bastion-host access. Hardware VPN concentrators and IPsec-specific compliance scenarios may still need a separate solution.",
   },
   {
-    q: "Does QuickZTNA work on Linux, macOS, Windows, iOS, and Android?",
-    a: "Yes, all five. Native binaries for x86_64 and arm64 on Linux, macOS (Intel and Apple silicon), and Windows. App Store and Play Store apps on iOS and Android. Headless installs with pre-authentication keys are supported for servers and containers. ARMv7 is supported on Linux for legacy single-board computers.",
+    q: "Which platforms does QuickZTNA support?",
+    a: "Linux, macOS, and Windows. Native binaries for x86_64 (amd64) and arm64, plus armv7 on Linux. Headless installs with pre-authentication keys are supported for servers and containers. There are no mobile (iOS/Android) clients today.",
   },
   {
     q: "What compliance certifications does QuickZTNA support?",
@@ -192,7 +192,7 @@ const featuresFaq = [
   },
   {
     q: "Is there a self-hosted or air-gapped deployment option?",
-    a: "Yes, on the Workforce plan. The control plane can run on your own infrastructure (Docker Compose with PostgreSQL, Valkey, and S3-compatible object storage). Client binaries are unchanged between managed and self-hosted deployments. Air-gapped deployments are supported for regulated industries; contact sales@quickztna.com for the brief.",
+    a: "Not today — QuickZTNA is a fully managed cloud service. If self-hosted or air-gapped deployment is a requirement for your organization, contact sales@quickztna.com to discuss your needs and our roadmap.",
   },
   {
     q: "Does the AI assistant share data with third parties?",

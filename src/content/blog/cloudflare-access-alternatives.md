@@ -100,16 +100,16 @@ Cloudflare has shipped post-quantum TLS 1.3 hybrid on its edge. For a team that 
 
 ## 6. Alternative 3 — QuickZTNA
 
-**Model.** Full ZTNA with WireGuard data plane + hybrid post-quantum PSK. Managed coordination; Workforce tier supports self-host.
+**Model.** Full ZTNA with a WireGuard data plane and a managed coordination plane, plus a workforce-security layer (DLP, device posture, CASB, AI Operator).
 
 **Fit against Cloudflare Access motivations.**
 - **Device-to-device mesh:** yes.
 - **Open data-plane protocol:** yes — WireGuard.
-- **Self-host coordination:** yes on Workforce tier.
-- **Tunnel-level post-quantum:** yes — hybrid X25519 + ML-KEM-768 on every tunnel, on every tier including Free. See [our ML-KEM-768 post](/blog/ml-kem-768-explained).
+- **Self-host coordination:** no — managed cloud service today.
+- **Tunnel-level post-quantum:** not in the shipped client today (classical WireGuard); on the roadmap. See [our ML-KEM-768 post](/blog/ml-kem-768-explained) for the background.
 - **Data sovereignty:** EU and US infrastructure regions.
 
-**Where it fits.** Teams whose Cloudflare-Access exit is driven by post-quantum requirements, by wanting a full ZTNA feature set on a mesh backbone, or by data-sovereignty constraints that Cloudflare's edge cannot meet.
+**Where it fits.** Teams whose Cloudflare-Access exit is driven by wanting a full ZTNA feature set on a mesh backbone, or by data-sovereignty constraints that Cloudflare's edge cannot meet.
 
 ## 7. Alternative 4 — Twingate
 
@@ -157,19 +157,19 @@ Snapshot as of April 2026. Always verify against each vendor's current documenta
 | Dimension | Cloudflare Access | Tailscale | NetBird | QuickZTNA | Twingate | Zscaler PA | AWS Verified Access |
 |---|---|---|---|---|---|---|---|
 | Architecture | Edge proxy | Mesh | Mesh | Mesh + ZTNA | ZTNA proxy | ZTNA proxy | Web-app proxy |
-| Data plane | CF proprietary | WireGuard | WireGuard | WireGuard + PQ PSK | Proprietary | Proprietary | AWS-managed |
-| Self-host | No | No (Headscale exists) | Yes | Workforce only | Partial | No | No |
+| Data plane | CF proprietary | WireGuard | WireGuard | WireGuard | Proprietary | Proprietary | AWS-managed |
+| Self-host | No | No (Headscale exists) | Yes | No | Partial | No | No |
 | Free tier | Yes (verify current) | Yes | Yes | Yes (100 dev, 3 users) | Yes (limited) | No | Check AWS pricing |
-| Tunnel-level PQ | Edge TLS 1.3 hybrid | Verify | Verify | Yes, default | Verify | Verify | Verify |
+| Tunnel-level PQ | Edge TLS 1.3 hybrid | Verify | Verify | Roadmap | Verify | Verify | Verify |
 | Mesh P2P | No | Yes | Yes | Yes | No | No | No |
 | Clientless browser | Yes | No | No | Partial (admin UI) | No | Yes | Yes |
-| Best fit | User-to-web-app w/ CF | Developer mesh | OSS mesh + self-host | PQ + full ZTNA | Proxy ZTNA | Enterprise ZTNA | AWS-native web |
+| Best fit | User-to-web-app w/ CF | Developer mesh | OSS mesh + self-host | Full ZTNA + workforce | Proxy ZTNA | Enterprise ZTNA | AWS-native web |
 
 **Decision framework.**
 
 1. **Mesh or proxy?** Mesh: Tailscale, NetBird, QuickZTNA. Proxy: Cloudflare Access, Twingate, Zscaler, AWS Verified Access.
-2. **Self-host required?** Yes: NetBird, QuickZTNA (Workforce), Headscale (with Tailscale clients). No: any.
-3. **Post-quantum on the tunnel?** QuickZTNA shipping today; Cloudflare has edge TLS 1.3 hybrid; verify others.
+2. **Self-host required?** Yes: NetBird, Headscale (with Tailscale clients). No (managed): Cloudflare, QuickZTNA, Twingate, Zscaler, AWS.
+3. **Post-quantum on the tunnel?** Cloudflare has edge TLS 1.3 hybrid; QuickZTNA has it on the roadmap (classical WireGuard today); verify others.
 4. **Data sovereignty?** Self-host: as above. Regional managed: QuickZTNA (EU/US), Zscaler (multiple regions), AWS Verified Access (regions).
 
 ## Further reading
@@ -190,7 +190,7 @@ Snapshot as of April 2026. Always verify against each vendor's current documenta
 
 ## Try QuickZTNA
 
-If your Cloudflare Access exit motivation is tunnel-level post-quantum, device-to-device mesh, or self-host capability, QuickZTNA is worth 10 minutes. [Start on Free](https://login.quickztna.com/auth) — no credit card, hybrid ML-KEM-768 on every tunnel.
+If your Cloudflare Access exit motivation is a device-to-device WireGuard mesh with a full ZTNA + workforce-security feature set, QuickZTNA is worth 10 minutes. [Start on Free](https://login.quickztna.com/auth) — no credit card, 100 devices free forever.
 
 <!--
 scorecard:

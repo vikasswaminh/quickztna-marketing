@@ -103,9 +103,9 @@ Useful for homelabs and small permanent fleets. Not appropriate for a business b
 
 ### 4.2 QuickZTNA
 
-QuickZTNA is a post-quantum-first full ZTNA built on WireGuard. Hybrid X25519 + [ML-KEM-768](/blog/ml-kem-768-explained) on every tunnel. EU + US regions.
+QuickZTNA is a full ZTNA built on WireGuard with a workforce-security layer. The data plane is classical WireGuard today; hybrid X25519 + [ML-KEM-768](/blog/ml-kem-768-explained) key exchange is on the roadmap. EU + US regions.
 
-**Strengths.** Post-quantum default. Full ZTNA feature set (session recording, workforce analytics opt-in, device posture, ABAC). Self-host option on Workforce tier.
+**Strengths.** Full ZTNA + workforce-security set (file-scan DLP, CASB, workforce analytics opt-in, device posture, ABAC, AI Operator). Free remote SSH on every tier.
 
 **Trade-offs.** Newer than Tailscale; smaller community.
 
@@ -228,7 +228,7 @@ Managed in jurisdictions where compliance allows. Self-host in sovereign jurisdi
 
 ### 11.4 Managed with open-source client
 
-QuickZTNA Workforce tier self-host + standard WireGuard clients; NetBird managed with custom-fork client for specific platforms. Less common but increasingly available.
+QuickZTNA: managed coordination with an open-source Go client; NetBird managed with custom-fork client for specific platforms. Less common but increasingly available.
 
 ## 12. Anti-patterns that do not
 
@@ -280,7 +280,7 @@ Running managed and self-host simultaneously, across the same user base, without
 
 ## Try QuickZTNA
 
-QuickZTNA is managed primarily with self-host available on the Workforce tier — sized to hit the middle of the decision space for teams that want post-quantum default, SOC 2-bundled compliance, and the option to move to self-host later. [Start on Free](https://login.quickztna.com/auth).
+QuickZTNA is a managed cloud service (no self-host today) — sized to hit the middle of the decision space for teams that want a full ZTNA + workforce-security feature set without running the control plane themselves. [Start on Free](https://login.quickztna.com/auth).
 
 <!--
 scorecard:

@@ -1,13 +1,13 @@
 ---
 title: "Security model"
-description: "QuickZTNA's cryptographic primitives, trust roots, posture engine, audit log, compliance posture (SOC 2, FIPS 203, GDPR), and coordinated-disclosure policy."
+description: "QuickZTNA's cryptographic primitives, trust roots, posture engine, audit log, compliance posture, and coordinated-disclosure policy for technical evaluators."
 section: "security"
 order: 5
 updatedAt: 2026-05-16
 primaryKeyword: "ZTNA security model"
 faq:
   - q: "Is QuickZTNA SOC 2 certified?"
-    a: "Yes. We hold a SOC 2 Type II report covering Security, Availability, and Confidentiality. The report is available under NDA — request via security@quickztna.com. ISO 27001 certification is in progress with target completion in 2026 Q3."
+    a: "SOC 2 Type II and ISO 27001 are in progress, targeting 2026. Today we provide a GDPR-aligned Data Protection Addendum and sign HIPAA Business Associate Agreements on the Business plan and above. Request current status via security@quickztna.com."
   - q: "Does QuickZTNA hold customer encryption keys?"
     a: "No. Every device generates its own long-term Ed25519 identity key locally; the private key never leaves the device's OS-protected key storage. Session keys for tunnels are derived ephemerally on both peers and never sent over the wire. We have no key-escrow mechanism and could not decrypt customer traffic even under court order."
   - q: "How do you handle security vulnerabilities reported by researchers?"
@@ -24,11 +24,11 @@ QuickZTNA's threat model assumes:
 
 - **A network attacker** who can observe and modify traffic between any pair of devices on any network the devices traverse. This includes ISPs, cellular carriers, public Wi-Fi, transit providers, and on-path nation-state actors. The product's encryption and authentication are designed to be secure under this assumption.
 
-- **An eventual quantum-capable attacker.** Network traffic captured today is assumed to be retrievable by a quantum adversary in the future. The hybrid post-quantum key exchange (X25519 + ML-KEM-768) is the defence against this "harvest-now-decrypt-later" model.
+- **A future quantum-capable attacker.** Traffic captured today could be retrievable by a quantum adversary years from now ("harvest now, decrypt later"). The shipped client uses classical WireGuard today; hybrid post-quantum key exchange is on our roadmap — see our [blog](/blog/) for the standards background.
 
 - **Compromised endpoints.** A device that's been compromised at the OS level can act as that device until detected. The product cannot prevent this — no software can — but the posture engine, the audit log, and the fast revocation path are designed to bound the blast radius and the time-to-detection.
 
-- **Malicious insiders with admin access.** Admins can change policy, remove users, and revoke devices. The audit log captures every admin action with cryptographic integrity (chained signing on Business and Workforce plans). The product cannot prevent a malicious admin, but it ensures their actions are recoverable and provable.
+- **Malicious insiders with admin access.** Admins can change policy, remove users, and revoke devices. The audit log records every admin action. The product cannot prevent a malicious admin, but it ensures their actions are recorded for review.
 
 The model explicitly does not assume:
 
@@ -40,15 +40,11 @@ The model explicitly does not assume:
 
 Every primitive in use, with rationale.
 
-### Key exchange — Hybrid X25519 + ML-KEM-768
+### Key exchange — Curve25519 (X25519)
 
-Every tunnel handshake performs both an X25519 key exchange and an ML-KEM-768 key encapsulation. Both shared secrets are combined via HKDF-SHA256 with a domain-separation tag and the transcript of the handshake.
+Every tunnel handshake performs a Curve25519 (X25519) elliptic-curve Diffie-Hellman exchange (RFC 7748) as part of WireGuard's Noise-based handshake. The resulting shared secret is run through WireGuard's HKDF-based key derivation, bound to the session transcript to defeat downgrade and re-binding attacks.
 
-**X25519** is Curve25519 in elliptic-curve Diffie-Hellman form, specified in RFC 7748. We use the standard reference implementation from the BoringSSL project (audited; constant-time; resistant to invalid-curve attacks). Output: 32-byte shared secret.
-
-**ML-KEM-768** is the NIST-standardized Module-Lattice-Based Key-Encapsulation Mechanism, specified in FIPS 203 (August 2024). Parameter set 768 targets NIST security category 3 (roughly comparable to AES-192). Public key: 1184 bytes. Ciphertext: 1088 bytes. Output: 32-byte shared secret. Our implementation passes the NIST Known Answer Tests and is reviewed against the reference implementation.
-
-**HKDF-SHA256** is the key derivation function (RFC 5869). The transcript binding includes the protocol version, both peers' identity public keys, and both halves of the key exchange — this defeats downgrade and re-binding attacks.
+> **Post-quantum:** hybrid X25519 + ML-KEM key exchange is on our roadmap, not in the shipped client today. The current data plane is classical WireGuard. We'll document post-quantum here as a product feature when it ships.
 
 ### Data-plane symmetric cryptography — ChaCha20-Poly1305
 
@@ -60,14 +56,13 @@ Session keys rotate every 120 seconds or after a configurable amount of data, wh
 
 ### Device identity — Ed25519
 
-Each device generates a long-term Ed25519 keypair on first install. The private key is stored in OS-protected key storage:
+Each device generates a long-term Ed25519 keypair on first install. The private key is held in the OS-protected credential store:
 
-- macOS / iOS: **Secure Enclave** where available; system keychain otherwise.
-- Windows: **TPM** where available; DPAPI otherwise.
-- Linux: **TPM 2.0** where available; otherwise root-only file in `/var/lib/quickztna/`.
-- Android: **hardware-backed Keystore**.
+- macOS: the system **Keychain**.
+- Windows: **DPAPI** (Data Protection API).
+- Linux: the OS **keyring**, or a root-only file under the service state directory where no keyring is present.
 
-The private key never leaves the device. Compromise of the device's OS allows access to it; compromise of our infrastructure does not.
+The private key never leaves the device. Compromise of the device's OS allows access to it; compromise of our infrastructure does not. (QuickZTNA ships clients for Linux, macOS, and Windows.)
 
 ### Hashing — SHA-256
 
@@ -77,13 +72,13 @@ Content hashing, transcript binding in key derivation, and integrity verificatio
 
 The complete set of trust roots in QuickZTNA. If you trust these and nothing else, you can verify the rest of the system.
 
-1. **The control plane's signing key.** The coordination service signs the policy state and the per-device key distribution to clients. Clients verify these signatures with a pinned public key, embedded in every client release. The key is rotated annually with a 6-month overlap window. The public key fingerprint is published in our release notes and is verifiable independently.
+1. **The control plane's signing key.** The coordination service signs the state it distributes to clients (policy and per-device key distribution); a compromised coordination service cannot inject a malicious policy without it.
 
 2. **Each device's Ed25519 identity key.** Generated on the device, never transmitted, used to sign every authenticated action by that device.
 
 3. **Your identity provider.** OIDC tokens or SAML assertions from your IdP are the gating credential for user-level operations. We rely on the IdP's MFA, session policies, and group membership.
 
-4. **The NIST-standardized post-quantum and classical primitives** themselves. We do not roll our own cryptography; we use well-reviewed implementations of standardized algorithms.
+4. **The standardized cryptographic primitives** themselves — Curve25519, ChaCha20-Poly1305, Ed25519, SHA-256. We do not roll our own cryptography; we use well-reviewed implementations of standardized algorithms.
 
 There is no implicit fourth trust root. We do not have a master decryption key, a government back door, or a key-escrow mechanism. If you grant us a court order tomorrow for a customer's traffic, the technically honest response is "we do not have the keys and could not produce the plaintext if we wanted to."
 
@@ -121,13 +116,11 @@ Retention is plan-dependent:
 - **Business**: 1 year, queryable via API, exportable to SIEM (JSON Lines format).
 - **Workforce**: configurable retention from 1 year to permanent, real-time streaming via SSE or webhook.
 
-On Business and Workforce plans, audit log entries are signed in a hash chain — each entry references the cryptographic hash of the prior entry, with periodic anchor points signed by the control plane. This means a malicious admin (or a successful attacker who gains admin access) cannot tamper with historical log entries without the tampering being detectable. We publish weekly anchor digests to a public transparency log for independent verification.
+Audit data is retained per the schedule above and is queryable from the dashboard and (on paid plans) the API for review and export to your SIEM.
 
 ## Compliance posture
 
-**SOC 2 Type II.** We hold a current Type II report covering Security, Availability, and Confidentiality trust principles. The report is available under NDA; request via [security@quickztna.com](mailto:security@quickztna.com). Audit firm details are in the report.
-
-**FIPS 203 conformance.** Our ML-KEM-768 implementation passes the NIST Known Answer Tests for FIPS 203. We are not currently FIPS 140-3 certified as a cryptographic module — that's a separate, much heavier certification — but the algorithmic conformance is documented and verifiable. FIPS 140-3 module certification is on the roadmap for 2027.
+**SOC 2 Type II & ISO 27001.** In progress, targeting 2026. Request current status via [security@quickztna.com](mailto:security@quickztna.com).
 
 **GDPR.** Our data flows are documented in our Data Protection Addendum, available to all customers. We are a controller for limited operational data (organization administrator contact info) and a processor for the bulk of customer data (devices, users, policies, audit logs). The DPA includes EU-standard contractual clauses for any data transferred outside the EEA.
 
@@ -135,19 +128,17 @@ On Business and Workforce plans, audit log entries are signed in a hash chain �
 
 **ISO 27001.** In progress, target completion 2026 Q3.
 
-**FedRAMP.** Not currently in scope. If you operate a US federal workload requiring FedRAMP, contact us — we can discuss self-hosted deployments that align with FedRAMP Moderate baseline controls.
+**FedRAMP.** Not currently in scope.
 
 ## Operational security
 
 A few things we do that don't fit cleanly into a primitive section but are worth knowing.
 
-**Reproducible builds.** Client binaries are built from public source in a hermetic CI environment. The same source produces the same byte-identical binary on every reproducer. We publish the build manifest with each release so independent third parties can verify the binary they downloaded matches what we built.
+**Checksum-verified releases.** Every client release is published with a SHA-256 checksum; the installer verifies the downloaded archive against it and aborts the install on any mismatch.
 
-**Signed releases.** Every client release is signed with our release key. The signing key is rotated annually; the public key is embedded in every previous client release, allowing detection of any signing-key compromise.
+**Open-source client.** The Go client is open source, so the code that runs on your devices can be reviewed independently.
 
-**Least-privilege internal access.** Engineers do not have routine access to customer data. Production access is audited, time-bound, and requires a documented reason. We use the same Zero Trust principles internally that we sell externally.
-
-**Vulnerability scanning.** Continuous SCA against our dependencies; quarterly third-party penetration tests; an internal red team exercise twice per year. Findings are tracked publicly via our security page once disclosed responsibly.
+**Least-privilege internal access.** Engineers do not have routine access to customer data; production access is limited and requires a documented reason.
 
 ## Coordinated disclosure policy
 
@@ -178,4 +169,4 @@ For non-incident security questions (e.g. clarifications on this page, audit-fir
 
 ## What's next
 
-For the operator-facing view of posture and policy, the [user guide](/guide/) is the right complement. For the integration-specific setup details for SSO providers, see [integrations](/docs/integrations/). For the conceptual background on Zero Trust and post-quantum, [concepts](/docs/concepts/) is the briefing.
+For the operator-facing view of posture and policy, the [user guide](/guide/) is the right complement. For the integration-specific setup details for SSO providers, see [integrations](/docs/integrations/). For the conceptual background on Zero Trust, [concepts](/docs/concepts/) is the briefing.

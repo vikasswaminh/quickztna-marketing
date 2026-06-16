@@ -82,6 +82,7 @@ const guide = defineCollection({
       "install",
       "manage",
       "policies",
+      "admin",
       "billing",
       "troubleshooting",
     ]),

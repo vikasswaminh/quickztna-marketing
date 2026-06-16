@@ -171,17 +171,11 @@ Some data is better not sent over a network at all. Air-gapped key material, tok
 
 Every key exchange you still use should be ephemeral. Static Diffie-Hellman and static-RSA TLS ciphers should be off. Ephemeral keys mean a single broken exchange compromises one session, not all past sessions with the same server. This is table-stakes hygiene and is already default in TLS 1.3, but legacy protocols and systems sometimes lag.
 
-## 9. What QuickZTNA does by default
+## 9. Where QuickZTNA stands
 
-We describe this in detail in [ML-KEM-768 Explained](/blog/ml-kem-768-explained). Summary here:
+QuickZTNA's tunnels today use classical WireGuard (Curve25519 + ChaCha20-Poly1305) — secure against today's adversaries. Hybrid post-quantum key exchange (X25519 + ML-KEM-768) is on our roadmap; we describe the construction we're targeting in [ML-KEM-768 Explained](/blog/ml-kem-768-explained).
 
-- Every tunnel uses hybrid X25519 + ML-KEM-768. Not opt-in, not a paid add-on.
-- Ephemeral key pairs on both sides, per handshake.
-- Derived PSK piped into WireGuard, rotated every two-minute WireGuard rekey.
-- Hard-visible per-tunnel status in the dashboard. An operator can see "kex=hybrid" or "kex=classical-only" at any time.
-- Classical-only fallback happens only if the peer does not support post-quantum (for example, a stock WireGuard kernel module without QuickZTNA in front). Fallback is logged as an audit event.
-
-The deliberate design choice: post-quantum on the Free tier. Our customer base includes homelabs, student projects, and early-stage startups whose data has decade-plus confidentiality requirements. We do not believe harvest-now is a premium feature.
+The design intent when it ships: hybrid on every tunnel rather than a paid add-on, ephemeral keys per handshake, and an auditable per-tunnel key-exchange mode — because we don't believe harvest-now protection should be a premium feature. Until then, the data plane is classical WireGuard, and we say so plainly rather than imply otherwise.
 
 ## 10. What you should not do
 
@@ -206,13 +200,13 @@ Primary sources first, as always. All links verified on the publish date.
 
 ## Related reading on this blog
 
-- [ML-KEM-768 Explained: The Quantum-Safe Algorithm in Every QuickZTNA Tunnel](/blog/ml-kem-768-explained)
+- [ML-KEM-768 Explained: The Quantum-Safe Key Exchange on Our Roadmap](/blog/ml-kem-768-explained)
 - [Hybrid Key Exchange: X25519 + ML-KEM-768 in 800 Words](/blog/hybrid-key-exchange-x25519-mlkem)
 - [NSA CNSA 2.0: Every Deadline Every DoD Contractor Needs to Know](/blog/cnsa-2-0-deadlines)
 
 ## Try QuickZTNA
 
-Post-quantum is not a feature flag and not a premium tier. Every QuickZTNA tunnel, on every plan including the Free tier, uses hybrid X25519 + ML-KEM-768 by default. If a harvest-now attacker is on the path today, they get two problems to solve — one classical, one post-quantum — rather than just one. Start a [free account](https://login.quickztna.com/auth) and inspect `ztna status` to see per-tunnel key exchange mode.
+Harvest-now-decrypt-later is a real planning concern, and hybrid post-quantum key exchange is on the QuickZTNA roadmap (the data plane today is classical WireGuard). If you're mapping your own PQ transition, [start a free account](https://login.quickztna.com/auth) and read [ML-KEM-768 Explained](/blog/ml-kem-768-explained) for the construction we're targeting.
 
 <!--
 scorecard:

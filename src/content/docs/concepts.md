@@ -1,26 +1,26 @@
 ---
-title: "Concepts: Zero Trust and post-quantum cryptography"
-description: "The mental model behind QuickZTNA. How Zero Trust replaces VPN, why mesh beats hub-and-spoke, and why hybrid post-quantum key exchange matters today."
+title: "Concepts: Zero Trust networking with QuickZTNA"
+description: "The mental model behind QuickZTNA: how Zero Trust replaces the VPN perimeter, why a WireGuard mesh beats hub-and-spoke, and how identity-based access works."
 section: "concepts"
 order: 2
-updatedAt: 2026-05-16
-primaryKeyword: "Zero Trust post-quantum"
+updatedAt: 2026-06-15
+primaryKeyword: "Zero Trust network access concepts"
 faq:
   - q: "Is QuickZTNA a VPN?"
     a: "Technically yes — it tunnels IP traffic over an encrypted overlay — but the product model is Zero Trust Network Access, not VPN. The difference matters: a VPN grants subnet-level access once you're connected; QuickZTNA authenticates and authorizes every connection between every pair of devices, every time. Same underlying technology, fundamentally different security posture."
-  - q: "Why hybrid post-quantum instead of pure post-quantum?"
-    a: "Hybrid is the conservative engineering choice. Classical X25519 is well-understood and well-audited; ML-KEM-768 is the NIST standard but newer. Combining the two means the attacker must break both to recover the shared secret. If a flaw is found in ML-KEM later, our tunnels remain at least as secure as classical WireGuard. If quantum computers break X25519, ML-KEM still protects us. Defence in depth at the cryptographic primitive layer."
-  - q: "Does the post-quantum encryption slow things down?"
-    a: "Per-tunnel handshake is a few milliseconds slower because ML-KEM ciphertexts are larger than classical ones. Per-packet data-plane overhead is unchanged — encryption after the handshake is ChaCha20-Poly1305, identical to classical WireGuard. In practice, you cannot measure the difference outside of microbenchmarks. The throughput numbers on our pricing page are real-world."
+  - q: "What encryption does QuickZTNA use?"
+    a: "The data plane is WireGuard: Curve25519 (X25519) key exchange, ChaCha20-Poly1305 authenticated encryption, and BLAKE2s hashing, using WireGuard's Noise-based handshake. Device identity uses an on-device Ed25519 keypair held in the OS credential store. The coordination plane never holds data-plane keys and cannot decrypt your traffic."
+  - q: "Does QuickZTNA support post-quantum cryptography?"
+    a: "Not in the shipped client today — the data plane is classical WireGuard (Curve25519 + ChaCha20-Poly1305). Post-quantum (hybrid X25519 + ML-KEM) key exchange is on our roadmap; our blog covers the background and the standards timeline. We'll document it as a product feature here only when it ships."
 ---
 
-This page is the conceptual briefing for QuickZTNA. It assumes you're familiar with networking and security at the level of "I know what TLS does" but doesn't assume you've thought hard about Zero Trust or post-quantum cryptography specifically. By the end, you'll know what QuickZTNA does, what mental model it operates under, and why the technical choices are the choices.
+This page is the conceptual briefing for QuickZTNA. It assumes you're familiar with networking and security at the level of "I know what TLS does" but doesn't assume you've thought hard about Zero Trust specifically. By the end, you'll know what QuickZTNA does, what mental model it operates under, and why the technical choices are the choices.
 
 ## What QuickZTNA is, in one paragraph
 
-QuickZTNA is a Zero Trust Network Access platform. It connects devices — laptops, servers, containers, phones — into a single encrypted private network that you can grow from one device to ten thousand. Every connection between every pair of devices is authenticated against your identity provider, authorized against your access policy, and encrypted with hybrid post-quantum cryptography. There is no central concentrator to provision, no firewall rule to write, and no IP-level access granted by virtue of being on the network.
+QuickZTNA is a Zero Trust Network Access platform. It connects devices — laptops, servers, containers — into a single encrypted private network that you can grow from one device to ten thousand. Every connection between every pair of devices is authenticated against your identity provider, authorized against your access policy, and encrypted by WireGuard. There is no central concentrator to provision, no firewall rule to write, and no IP-level access granted by virtue of being on the network.
 
-The rest of this page unpacks the four ideas in that paragraph: Zero Trust, mesh networking, identity-based authorization, and post-quantum encryption.
+The rest of this page unpacks the four ideas in that paragraph: Zero Trust, mesh networking, identity-based authorization, and the encryption model.
 
 ## Zero Trust, briefly
 
@@ -36,7 +36,7 @@ Zero Trust replaces "trust by network position" with "trust by current verificat
 
 A "yes" to all three lets the connection proceed; a "no" to any blocks it. There is no implicit trust to fall back on. Every request, every time.
 
-QuickZTNA implements Zero Trust at the network layer. The identity question is answered by your identity provider (OIDC, SAML, or SCIM-integrated). The posture question is answered by an on-device agent that QuickZTNA installs. The authorization question is answered by the policy file you write (see the [access policies guide](/guide/access-policies/) for the operator-facing view of that). All three are evaluated for every connection attempt between every pair of devices.
+QuickZTNA implements Zero Trust at the network layer. The identity question is answered by your identity provider (OIDC, SAML, or SCIM-integrated). The posture question is answered by the on-device agent that QuickZTNA installs. The authorization question is answered by the access-control rules you write (see the [access policies guide](/guide/access-policies/) for the operator-facing view). All three are evaluated for every connection attempt between every pair of devices.
 
 ## Mesh versus hub-and-spoke
 
@@ -50,7 +50,7 @@ Most traditional VPN products are hub-and-spoke: every client connects to a cent
 
 Mesh networks invert the topology. Every device negotiates direct connections to every device it talks to. There's no central traffic chokepoint; packets flow over the shortest path the network can negotiate.
 
-QuickZTNA is a mesh. The coordination plane — the service that authenticates devices, distributes public keys, holds policy state, and brokers NAT traversal — does not see data-plane traffic. Two devices on the same LAN reach each other over the LAN; two devices on opposite sides of the planet reach each other directly when their networks permit, and over an encrypted relay when they don't. The relay, when used, is a literal blind pipe: it forwards encrypted bytes, has no decryption keys, and cannot inspect content.
+QuickZTNA is a mesh. The coordination plane — the service that authenticates devices, distributes public keys, holds policy state, and brokers NAT traversal — does not see data-plane traffic. Two devices on the same LAN reach each other over the LAN; two devices on opposite sides of the planet reach each other directly when their networks permit, and over an encrypted relay (DERP) when they don't. The relay, when used, is a literal blind pipe: it forwards encrypted bytes, has no decryption keys, and cannot inspect content. QuickZTNA runs DERP relays in two regions today (Bangalore and Frankfurt).
 
 This matters for both performance (no detour) and for the trust model (no central traffic processor with privileged decryption ability). The coordination plane is a brokerage; it does not see your packets.
 
@@ -58,86 +58,68 @@ This matters for both performance (no detour) and for the trust model (no centra
 
 A consequence of Zero Trust is that "the network" stops being a meaningful security boundary. Two devices on the same VPN are not, by virtue of that fact, allowed to talk to each other. They have to satisfy the policy.
 
-This shows up in how QuickZTNA expresses access rules. Policies are written against:
+This shows up in how QuickZTNA expresses access rules. Rules are written against:
 
 - **Users**, identified by your identity provider's user ID. Not by IP address, not by hostname.
-- **Groups**, the same groups you already maintain in your identity provider for HR and access-management purposes. QuickZTNA syncs them via SCIM (paid plans) or via OIDC claims (every plan).
-- **Tags**, strings you attach to devices to express their role: `production`, `database`, `pci`, `contractor-laptop`.
+- **Groups**, the same groups you already maintain in your identity provider. QuickZTNA syncs them via SCIM (paid plans) or via OIDC claims.
+- **Tags**, strings you attach to devices to express their role: `prod`, `database`, `pci`, `contractor-laptop`.
 
-No IP addresses. No subnets. No port ranges. The policy language is intentionally devoid of network primitives because they're not the right vocabulary for the security question.
+No IP addresses. No subnets. No port ranges as the primary vocabulary. The policy language is built around identity and role because they're the right vocabulary for the security question.
 
-This is the meaningful difference between "VPN with extras" and "Zero Trust." If your access rules reference IP addresses, you are operating under the network-perimeter model — even if marketing calls it Zero Trust. If your rules reference identity and role exclusively, you're in Zero Trust territory. The policy language is the giveaway.
+This is the meaningful difference between "VPN with extras" and "Zero Trust." If your access rules reference IP addresses, you are operating under the network-perimeter model — even if marketing calls it Zero Trust. If your rules reference identity and role, you're in Zero Trust territory. The policy language is the giveaway.
 
-The [access policies guide](/guide/access-policies/) covers the operator-facing view of writing those rules. The [REST API docs](/docs/api/) document the policy schema and how to manage policies programmatically.
+The [access policies guide](/guide/access-policies/) covers the operator-facing view of writing those rules. The [REST API docs](/docs/api/) document how to manage them programmatically.
 
-## Post-quantum cryptography: the why
+## Encryption
 
-A long detour, because this is the part of the product most often misunderstood.
+The data plane is **WireGuard**. Each pair of devices establishes a tunnel using WireGuard's Noise-based handshake:
 
-The classical key-exchange primitives we use today — Diffie-Hellman, ECDH, X25519 — derive their security from problems that are hard for classical computers but easy for quantum computers. Shor's algorithm (Peter Shor, 1994) solves discrete logarithm in polynomial time on a sufficiently large quantum computer. The same algorithm breaks RSA, DSA, ECDSA, and every classical asymmetric primitive in current use.
+- **Key exchange:** Curve25519 (X25519) ephemeral Diffie-Hellman.
+- **Bulk encryption:** ChaCha20-Poly1305 authenticated encryption.
+- **Hashing:** BLAKE2s.
 
-The argument for caring about this now is "harvest now, decrypt later." Network traffic encrypted today with X25519 can be captured today and stored cheaply. When a cryptographically-relevant quantum computer becomes available — opinions vary on when, but every credible estimate puts it inside a 15-25 year window — the stored traffic can be retroactively decrypted. For traffic that has long-lived value (intellectual property, regulated personal data, state secrets, financial records, medical records), this is a real exposure today.
+This is the same, well-audited construction used by WireGuard everywhere — fast, small, and formally analysed. The coordination plane brokers public keys and NAT traversal but never holds the data-plane keys, so it cannot decrypt your traffic; the encrypted relay path is likewise a blind pipe.
 
-NIST began standardizing post-quantum algorithms in 2016. The first round of standards published in August 2024: ML-KEM (FIPS 203), ML-DSA (FIPS 204), SLH-DSA (FIPS 205). ML-KEM is the key encapsulation mechanism — the post-quantum replacement for ECDH/X25519. ML-KEM comes in three parameter sets; ML-KEM-768 targets NIST security category 3 (roughly comparable to AES-192).
+### On post-quantum
 
-The US NSA has issued CNSA 2.0 (September 2022), requiring National Security Systems to transition to post-quantum by 2035, with intermediate milestones starting 2025. The German BSI, French ANSSI, and other national cryptographic agencies have published similar timelines. The direction is set.
+Post-quantum cryptography — hybrid key exchange combining classical X25519 with a NIST-standardized KEM such as ML-KEM (FIPS 203) — defends against "harvest now, decrypt later," where traffic captured today is decrypted once a cryptographically-relevant quantum computer exists. It matters for data with long-lived value.
 
-## Why hybrid
-
-The conservative engineering choice is "hybrid" — combining classical X25519 with post-quantum ML-KEM-768 in a single key exchange. The resulting shared secret is derived from both halves; an attacker who breaks one but not the other still cannot recover it.
-
-The reason is risk management. Classical X25519 has 20+ years of cryptanalytic scrutiny behind it; we know its threat surface well. ML-KEM-768 is the NIST standard but it's been a standard for less than two years. If a flaw is found in ML-KEM down the road, hybrid tunnels remain at least as secure as classical WireGuard. If quantum computers arrive on schedule and X25519 falls, ML-KEM still protects us. The hybrid construction is symmetric-secure against breakage on either side.
-
-The exact construction QuickZTNA uses:
-
-1. Both peers generate ephemeral X25519 keypairs and ML-KEM-768 keypairs.
-2. They exchange public keys.
-3. Each side computes the X25519 shared secret and the ML-KEM-768 shared secret independently.
-4. Both shared secrets are fed into HKDF-SHA256 with a domain-separation tag and the transcript of the exchange (binding the derivation to the specific session).
-5. The output is the symmetric encryption key for the tunnel.
-
-The transcript binding (step 4) is the defence against downgrade and re-binding attacks. The data plane after the handshake uses ChaCha20-Poly1305, identical to classical WireGuard — the post-quantum work happens entirely in key establishment.
-
-Per-tunnel handshake adds a few milliseconds (ML-KEM ciphertexts are larger than X25519 public keys — 1088 bytes for ML-KEM-768 ciphertext vs 32 bytes for X25519). Steady-state data-plane throughput is unchanged. In practice the post-quantum cost is invisible outside of microbenchmarks.
+**The shipped QuickZTNA client uses classical WireGuard today.** Hybrid post-quantum key exchange is on our roadmap, not a current product feature. Our [blog](/blog/) covers the background — ML-KEM, hybrid constructions, and the CNSA 2.0 / BSI / ANSSI timelines — and we'll document it here as a product capability only when it ships in the client.
 
 ## Trust roots
 
 A Zero Trust network is only as trustworthy as its trust roots. QuickZTNA's are:
 
-**The device identity.** When a device first joins, it generates a long-term Ed25519 keypair on-device. The public key is registered with the coordination service; the private key never leaves the device's OS-protected key storage (Secure Enclave on Apple, TPM on Windows with TPM, keychain APIs on Linux with TPM, hardware-backed Keystore on Android, Secure Enclave on iOS). The device's identity is bound to this key, not to a re-issuable certificate.
+**The device identity.** When a device first joins, it generates a long-term Ed25519 keypair on-device. The public key is registered with the coordination service; the private key stays in the OS-protected credential store (DPAPI on Windows, the Keychain on macOS, the keyring on Linux). The device's identity is bound to this key.
 
 **The user identity.** Authenticated by your identity provider via OIDC or SAML. QuickZTNA does not store passwords; the IdP is the source of truth for user identity, MFA, and (where SCIM is configured) group membership.
 
-**The control plane's signing key.** The coordination service signs the policy state and key distribution to clients. Clients verify these signatures with a pinned public key (rotated annually, with overlap windows). A compromised coordination service cannot inject a malicious policy without the signing key.
+**The control plane's signing key.** The coordination service signs the state it distributes to clients. A compromised coordination service cannot inject a malicious policy without the signing key.
 
-**The post-quantum primitives.** ML-KEM-768 (FIPS 203) is the formally specified algorithm. Our implementation passes the NIST Known Answer Tests and is reviewed against the reference implementation. The classical half (X25519) uses well-audited library code.
-
-There is no hidden trust — no fourth party, no master key escrow, no government-mandated back door. The trust roots above are the complete set; if you trust them, you can verify that the rest of the system is sound.
+There is no hidden trust — no fourth party, no master key escrow, no back door. The trust roots above are the complete set.
 
 ## Performance characteristics
 
-A few numbers, for reference. All measured on commodity hardware (mid-range laptop, mid-range server) with the current client release.
+A few notes, for reference.
 
-**Tunnel handshake:** ~3-5 milliseconds added latency for the post-quantum portion, on top of the round-trip time required by the handshake itself. End-user impact for interactive workloads: imperceptible.
+**Steady-state throughput:** WireGuard data-plane performance — within a small margin of raw link speed on commodity hardware, because the per-packet path is ChaCha20-Poly1305 with no concentrator detour.
 
-**Steady-state throughput:** Within 1-2% of classical WireGuard on the same hardware. The data plane is ChaCha20-Poly1305 either way; the post-quantum work is bounded to the handshake.
+**Path:** direct peer-to-peer wherever the two networks permit (LAN-local stays on the LAN); an encrypted DERP relay is the fallback only when NAT/firewall conditions block a direct path.
 
-**Memory:** Approximately 12 MB resident per client process, plus per-peer state (under 1 KB per active peer).
+**Footprint:** a small resident client process plus modest per-peer state.
 
-**CPU:** Below 1% of one core at typical workstation traffic volumes. Servers handling gigabit-class traffic see single-digit-percent CPU on a modern core.
-
-These numbers are for the open client — the same one on the [installation page](/guide/installation/).
+These characteristics are for the open Go client — the same one on the [installation page](/guide/installation/).
 
 ## What's next
 
 You now have the conceptual frame. The natural next pages:
 
-[Security model](/docs/security/) zooms in on the cryptographic and operational security properties of the system — the trust model in detail, the audit surface, the compliance posture.
+[Security model](/docs/security/) zooms in on the cryptographic and operational security properties — the trust model in detail, the audit surface, the compliance posture.
 
-[CLI reference](/docs/cli/) is the command-line surface for everything QuickZTNA can do. If you're scripting against the product, this is where the contract is.
+[CLI reference](/docs/cli/) is the command-line surface for everything `ztna` can do.
 
 [REST API overview](/docs/api/) covers the HTTP API for programmatic management of devices, users, policies, and audit logs.
 
 [Integrations](/docs/integrations/) covers SSO setup for the common identity providers.
 
-If you'd rather see the product before reading further, [/guide/quickstart/](/guide/quickstart/) gets a device on the network in two minutes.
+If you'd rather see the product first, [the quickstart](/guide/quickstart/) gets a device on the network in two minutes.

@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "lint:content": "node scripts/lint-content.mjs",
+    "prebuild": "node scripts/lint-content.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"

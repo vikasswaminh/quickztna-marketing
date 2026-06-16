@@ -20,13 +20,13 @@ The docs assume you're already comfortable with the product. If you're not yet �
 
 ## What's here
 
-**[Concepts: Zero Trust and post-quantum cryptography](/docs/concepts/).** The mental model. Why Zero Trust replaces VPN, why mesh replaces hub-and-spoke, what hybrid post-quantum key exchange is and why it matters now. If you have to explain QuickZTNA to a CISO, security architect, or engineering leader, this page is the briefing material.
+**[Concepts: Zero Trust networking](/docs/concepts/).** The mental model. Why Zero Trust replaces VPN, why mesh replaces hub-and-spoke, and how identity-based access works. If you have to explain QuickZTNA to a CISO, security architect, or engineering leader, this page is the briefing material.
 
 **[CLI command reference](/docs/cli/).** Every command, every flag, every exit code. The CLI is the same on Linux, macOS, and Windows; differences where they exist are called out per-command.
 
 **[REST API overview](/docs/api/).** Authentication, versioning, pagination, rate limits, error format, and the endpoint catalogue. The full OpenAPI specification is at `https://login.quickztna.com/api/openapi.json`; this page is the human-readable companion.
 
-**[Security model](/docs/security/).** The cryptographic primitives in use, the trust model, the posture engine, audit logging, compliance posture (SOC 2, FIPS 203, GDPR), and the coordinated-disclosure policy for security researchers.
+**[Security model](/docs/security/).** The cryptographic primitives in use, the trust model, the posture engine, audit logging, compliance posture, and the coordinated-disclosure policy for security researchers.
 
 **[SSO integrations](/docs/integrations/).** Setup details for OIDC, Google Workspace, Microsoft Entra (formerly Azure AD), GitHub, Okta, and Authentik. Plus SAML notes and the SCIM provisioning surface.
 
@@ -40,17 +40,17 @@ Every page has a table of contents on the right rail (desktop) or inline at the 
 
 For people scanning to confirm the technical particulars before reading further:
 
-**Cryptographic primitives.** Hybrid X25519 + ML-KEM-768 (FIPS 203) for key exchange on every tunnel, every plan. ChaCha20-Poly1305 AEAD for data plane. HKDF-SHA256 for key derivation with transcript binding. Ed25519 for device identity signatures. SHA-256 for content hashing.
+**Cryptographic primitives.** WireGuard data plane: Curve25519 (X25519) key exchange, ChaCha20-Poly1305 AEAD, BLAKE2s hashing. Ed25519 for device identity signatures. SHA-256 for content/integrity hashing. (Post-quantum hybrid key exchange is on the roadmap, not in the shipped client.)
 
 **Identity.** OIDC primary; SAML supported for enterprise plans; SCIM 2.0 for user/group sync on Business and Workforce. Per-user MFA enforced through your IdP — QuickZTNA does not maintain a separate password.
 
 **API.** REST over HTTPS with bearer tokens. OpenAPI 3.1 specification. JSON request and response bodies. RFC 7807 error format. Rate-limited per organization with documented limits.
 
-**Compliance.** SOC 2 Type II report available under NDA. GDPR-compliant with documented data flows. FIPS 203 conformant for ML-KEM-768. ISO 27001 in progress (target 2026 Q3).
+**Compliance.** GDPR-aligned with documented data flows and a DPA; HIPAA BAA on Business and above. SOC 2 Type II and ISO 27001 in progress (target 2026).
 
 **Audit.** Every administrative action, every policy decision, and every authentication is logged. Free plan: 90-day retention with dashboard query. Business: one year, queryable via API, exportable to SIEM. Workforce: customizable retention, real-time streaming to your log infrastructure.
 
-**Self-hosting.** Available on the Workforce plan. The control plane runs as a small set of services on your infrastructure with documented requirements. Client binaries are unchanged between managed and self-hosted deployments.
+**Hosting.** Fully managed cloud service; self-hosting is not offered today. Contact sales@quickztna.com if it's a requirement.
 
 ## A note on stability
 
@@ -60,7 +60,7 @@ Internal protocols — the wire format between the client and the coordination s
 
 ## How to read these docs
 
-If you're evaluating QuickZTNA technically, read [Concepts](/docs/concepts/) and [Security](/docs/security/) first. Those answer the "is this product credibly Zero Trust and post-quantum" question, with citations to NIST, IETF, and other primary sources where appropriate.
+If you're evaluating QuickZTNA technically, read [Concepts](/docs/concepts/) and [Security](/docs/security/) first. Those answer the "is this credibly Zero Trust" question, with citations to NIST, IETF, and other primary sources where appropriate.
 
 If you're integrating QuickZTNA into a CI/CD pipeline or other automation, the [CLI](/docs/cli/) and [API](/docs/api/) pages are your reference. The CLI is the easiest entry point for shell scripts; the API is what you want for anything that needs to react to events or query state in bulk.
 

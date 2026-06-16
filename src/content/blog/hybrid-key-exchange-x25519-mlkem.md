@@ -374,13 +374,13 @@ All verified on publication date.
 
 ## Related reading on this blog
 
-- [ML-KEM-768 Explained: The Quantum-Safe Algorithm in Every QuickZTNA Tunnel](/blog/ml-kem-768-explained)
+- [ML-KEM-768 Explained: The Quantum-Safe Key Exchange on Our Roadmap](/blog/ml-kem-768-explained)
 - [Harvest Now, Decrypt Later: Why Your VPN Traffic Is Already Compromised](/blog/harvest-now-decrypt-later)
 - [Post-Quantum VPN: 6 Questions to Ask Your Current Vendor](/blog/post-quantum-vpn-vendor-questions)
 
 ## Try QuickZTNA
 
-Every QuickZTNA tunnel uses the exact hybrid X25519 + ML-KEM-768 construction described above, with transcript binding through HKDF-SHA256 and a two-minute rekey interval. Test it on the Free tier: [sign up](https://login.quickztna.com/auth), connect two devices, and run `ztna status -v` to see the kex mode reported for each tunnel.
+The hybrid X25519 + ML-KEM-768 construction described above is the one QuickZTNA is targeting on its roadmap; the shipped client uses classical WireGuard today. To follow along, [sign up free](https://login.quickztna.com/auth) and connect two devices to try the mesh now.
 
 <!--
 scorecard:

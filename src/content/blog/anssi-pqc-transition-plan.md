@@ -271,7 +271,7 @@ Primary sources. All links verified on the publish date.
 
 ## Try QuickZTNA
 
-QuickZTNA ships hybrid X25519 + ML-KEM-768 on every tunnel by default, aligned with ANSSI's Phase 2 hybrid expectations. For French public-sector, OIV, or OSE deployments requiring Qualification Renforcée, we are happy to engage on a sovereign-curve option (FRP256v1) and on FrodoKEM evaluation — [contact sales](mailto:sales@quickztna.com).
+QuickZTNA has hybrid X25519 + ML-KEM-768 key exchange on its roadmap (classical WireGuard today), aligned with ANSSI's Phase 2 hybrid expectations. For French public-sector, OIV, or OSE deployments requiring Qualification Renforcée, we are happy to engage on a sovereign-curve option (FRP256v1) and on FrodoKEM evaluation — [contact sales](mailto:sales@quickztna.com).
 
 <!--
 scorecard:

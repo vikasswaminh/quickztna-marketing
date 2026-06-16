@@ -158,22 +158,16 @@ On Business plans the audit log is queryable via the API and exportable to your 
 
 ## Policy as code
 
-For teams that want policy under version control:
+For teams that want access rules under version control, manage them through the REST API rather than by hand in the dashboard. Pull the current ACL rules, keep the export in git, review changes through your normal PR process, and push updates back via the API on merge. See the [REST API docs](/docs/api/) for the ACL endpoints.
+
+From the command line, inspect and test rules:
 
 ```bash
-# Pull the current policy to a file
-quickztna policy pull > policy.yaml
-
-# Edit, commit to git, push through PR review
-
-# Apply (dry-run first, then live)
-quickztna policy apply policy.yaml --dry-run
-quickztna policy apply policy.yaml
+ztna acl list                                   # show the current ACL rules
+ztna acl test --src <machine> --dst <machine>   # is this connection allowed, and by which rule?
 ```
 
-The file is canonically YAML or JSON; pick one and stick with it. The CLI supports validation (`quickztna policy lint`) and diff (`quickztna policy diff policy.yaml` shows what would change relative to live). Most teams wire this into CI: a PR that edits `policy.yaml` triggers a lint, the merge triggers a live apply.
-
-This pattern composes with the dry-run feature. Many teams configure their CI to apply changes in dry-run mode on PR merge, run a small synthetic-traffic suite, and then promote to live on a separate manual approval.
+`ztna acl test` is the quick way to confirm a change does what you intend. Teams that automate policy through the API typically run `acl test` (or a small synthetic-traffic suite) against a staging org before promoting a change to production.
 
 ## Common mistakes to avoid
 
@@ -183,7 +177,7 @@ A few patterns we see catch teams.
 
 **Tagging by team in production.** A production database tagged `team-engineering` mixes the team owning the database (an org chart fact) with the access pattern (a security fact). When the database moves to the data team, the tag is stale. Better: tag by role and sensitivity (`database`, `pii`), and let groups (in the subject side of the rule) handle who owns it.
 
-**Forgetting the deny.** When you remove the "engineers can reach production" rule, the engineers no longer have production access — but only if nothing else in the policy grants it. Run `quickztna policy diff` on every change; explicit denies for sensitive destinations make this safer.
+**Forgetting the deny.** When you remove the "engineers can reach production" rule, the engineers no longer have production access — but only if nothing else in the policy grants it. Use `ztna acl test` to confirm the effect of every change; explicit denies for sensitive destinations make this safer.
 
 **Adding service ports inline instead of named services.** Inline `tcp:5432` works but is opaque. Define `postgres` as a named service once; reference it by name everywhere. When you migrate from one Postgres port to another the change is one line in one place.
 

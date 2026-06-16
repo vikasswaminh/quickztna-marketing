@@ -1,292 +1,416 @@
 ---
 title: "QuickZTNA CLI: command reference"
-description: "Every QuickZTNA CLI command, flag, and exit code. Identical on Linux, macOS, and Windows. The stable contract for shell-script automation against QuickZTNA."
+description: "The complete QuickZTNA ztna CLI reference: every command and flag with runnable examples — the same binary on Linux, macOS, and Windows."
 section: "cli"
 order: 3
-updatedAt: 2026-05-16
+updatedAt: 2026-06-15
 primaryKeyword: "QuickZTNA CLI reference"
 faq:
+  - q: "What is the CLI binary called?"
+    a: "ztna. The same command name on Linux, macOS, and Windows. (The package and service may be named QuickZTNA, but every command you type is ztna.)"
   - q: "Is the CLI identical on every platform?"
-    a: "Yes. Same command names, same flags, same output format on Linux, macOS, and Windows (PowerShell or cmd). Platform-specific behaviour — like service installation — is encapsulated in subcommands that exist on all platforms but no-op gracefully where they don't apply."
-  - q: "Can I script against the CLI in production?"
-    a: "Yes. The CLI is a documented stable surface. Subcommand and flag names follow the same 90-day deprecation policy as the REST API: breaking changes are pre-announced via the status page and release notes. JSON output via --json is recommended for any automation; it's stable across releases while the human-readable text output may change for UX reasons."
-  - q: "What's the difference between the CLI and the REST API?"
-    a: "The CLI is convenience over the API. Most CLI commands wrap a single API call; some (like 'doctor') wrap several. If you can express your need as a CLI invocation, the CLI is simpler. If you need event-driven or bulk programmatic management, the REST API is the right surface."
+    a: "The command names and flags are the same on Linux, macOS, and Windows. A few commands are platform-shaped — service install/uninstall, the system log location — but the command surface is identical and platform-specific behaviour is handled inside each command."
+  - q: "Can I script against the CLI?"
+    a: "Yes. Read-only commands accept --json (for example status, peers, ip, netcheck, update, metrics print) and that JSON is the surface to script against. Exit code 0 means success; non-zero means failure."
 ---
 
-The QuickZTNA CLI is the primary command-line surface for the product. It's installed as part of every client and is available on Linux, macOS, and Windows with identical command names, flags, and output formats.
+The QuickZTNA command-line client is **`ztna`**. It ships with every install and is identical on Linux, macOS, and Windows. This page is the reference for every command and its flags, with runnable examples.
 
-This page is the reference: every command, every flag, every exit code. It assumes you've installed the client (see the [installation guide](/guide/installation/)) and have a working sign-in.
+It assumes you've installed the client (see the [installation guide](/guide/installation/)) and authenticated with `ztna login` or `ztna up`.
 
 ## Conventions
 
-Throughout this page:
+- The binary is `ztna`. `<placeholder>` is a value you substitute; `[--optional]` is optional.
+- On Linux, commands that change network state or manage the service generally need `sudo`.
+- **Global flag:** `--log-level <debug|info|warn|error>` is accepted by every command.
+- **`--json`** is available on the read-only/status commands noted below and is the stable surface for scripting; human-readable output may change between releases.
+- **Exit codes:** `0` on success, non-zero on failure. Where a command has a notable failure mode, it's called out.
 
-- Commands are shown as `quickztna <subcommand>`. On Linux servers, that may need `sudo`; we'll note where it does.
-- `<placeholder>` indicates a value you substitute. `[--optional-flag]` is an optional flag.
-- The `--json` flag is universally available and produces machine-readable output suitable for scripting. The human-readable output format is not stable across releases; `--json` is.
+> Networking note: QuickZTNA uses a kernel TUN interface on all three platforms (Linux `/dev/net/tun`, Windows Wintun, macOS `utun`). That's the default and the supported path.
 
-## Global flags
+---
 
-These flags are accepted by every subcommand:
+## Getting connected
 
-- `--json` — emit JSON output. Stable across releases.
-- `--verbose` or `-v` — increase log verbosity. Repeatable for more detail.
-- `--quiet` or `-q` — suppress non-essential output.
-- `--help` or `-h` — show help for the current subcommand.
-- `--version` — show the client version and exit.
+### `ztna login`
 
-## Exit codes
+Authenticate with the QuickZTNA control plane. Browser-based by default.
 
-The CLI uses a small, stable exit-code vocabulary:
-
-- `0` — success.
-- `1` — generic failure (the command ran but did not achieve its goal).
-- `2` — usage error (bad flags, missing required arguments).
-- `3` — not authenticated (no current session; run `quickztna up`).
-- `4` — permission denied by policy.
-- `5` — service unavailable (control plane unreachable or local service not running).
-- `6` — precondition failed (e.g. operation requires the device to be in a specific state).
-
-Subcommands may document additional exit codes; if so, they appear in that subcommand's section below.
-
-## Authentication: `quickztna up` and `quickztna logout`
-
-The two commands that bracket your session.
-
-### `quickztna up [--auth-key=<key>] [--hostname=<name>] [--tags=<csv>]`
-
-Authenticates the device and connects to the QuickZTNA network. On a fresh install, opens a browser window for SSO sign-in. With `--auth-key`, performs non-interactive sign-in using a pre-authentication key generated on the admin dashboard.
-
-Flags:
-
-- `--auth-key=<key>` — use a pre-authentication key (generated in Settings → Keys on the dashboard). For headless servers and fleet deployments.
-- `--hostname=<name>` — override the auto-derived hostname. Useful for prod servers where you want a structured name (`prod-db-01`) rather than the OS hostname.
-- `--tags=<tag1,tag2>` — comma-separated tags to apply on first connect. Applied additively to any tags already attached by a pre-auth key.
-- `--accept-routes` — accept any subnet routes advertised by other peers (for the legacy case of bridging QuickZTNA into a non-QuickZTNA subnet). Off by default.
-- `--shields-up` — enable maximum local lockdown: no peer can initiate to this device, only outbound from this device.
-
-Exit codes: standard. `3` if the user denies the browser prompt; `4` if the user's organization has disabled new-device onboarding.
-
-Example: bring up a server with explicit tags and a pre-auth key.
-
-```bash
-sudo quickztna up \
-  --auth-key=tskey-abc123 \
-  --hostname=prod-db-01 \
-  --tags=production,database
+```
+ztna login                          # browser SSO (default)
+ztna login --auth-key tskey-auth-xxx   # pre-auth key (non-interactive)
+ztna login --github                 # GitHub OAuth via browser
+ztna login --google                 # Google OAuth via browser
+ztna login --sso <org-slug>         # SSO (OIDC/SAML) via browser
+ztna login --interactive            # email/password in the terminal
 ```
 
-### `quickztna logout`
+Flags: `--auth-key <key>`, `--github`, `--google`, `--sso <org-slug>`, `--interactive`, `--hostname <name>` (register under a name other than the OS hostname — useful on cloned VM images where every machine has the same hostname), `--timeout <duration>` (browser callback timeout, default `5m`).
 
-Signs the device out and removes it from the network. The device's public key is revoked centrally; the device cannot reconnect without a fresh sign-in.
+### `ztna up` (alias: `connect`)
 
-This is the right command to run when decommissioning a machine. Do this before uninstalling the client to leave a clean device list.
+Register the machine with the control plane if needed, configure WireGuard, and connect to the mesh.
 
-Exit codes: standard.
+```bash
+# interactive first connect
+sudo ztna up
 
-## State: `quickztna status` and `quickztna whoami`
+# headless / fleet: register non-interactively with a pre-auth key + tags
+sudo ztna up --auth-key tskey-auth-xxx --hostname prod-db-01 --advertise-tags tag:prod,tag:db
+```
 
-### `quickztna status [--json]`
+Key flags:
 
-Print the current state of the local QuickZTNA service: connection status, assigned QuickZTNA address, current peers, last coordination round time.
+- `--auth-key <key>` — pre-auth key for non-interactive registration.
+- `--hostname <name>` — set the machine hostname.
+- `--advertise-tags <csv>` — apply ACL tags (e.g. `tag:prod,tag:k8s`).
+- `--advertise-routes <cidrs>` — advertise local subnets (comma-separated CIDRs); requires admin approval to take effect.
+- `--advertise-exit-node` — offer this machine as an exit node.
+- `--exit-node <ip|auto>` — route all traffic through a peer.
+- `--exit-node-allow-lan-access` — keep the local LAN reachable while using an exit node.
+- `--accept-routes` — accept subnet routes advertised by peers.
+- `--ssh` — enable the SSH server on the tailnet IP.
+- `--shields-up` — block all incoming connections.
+- `--dns` (default `true`) / `--dns-domain <domain>` — MagicDNS and search domain.
+- `--gateway` — run as a headless subnet gateway (IP forwarding + masquerade; Linux).
+- `--operator <user>` — allow a non-root user to manage the connection.
+- `--daemon` — run the VPN in the background (logs to `~/.config/ztna/ztna.log`). This is how the system service runs it.
+- `--force-reauth`, `--reset`.
 
-The human-readable output is designed to be scannable; the JSON output is documented in the [API page](/docs/api/) (the `/status` shape is identical between CLI and API).
+> `--userspace` exists for niche no-TUN/no-root cases but is **not** the supported path — QuickZTNA runs on kernel TUN on all platforms.
 
-Exit codes: `0` if connected, `5` if the service is not running, `3` if not authenticated.
+### `ztna down` (alias: `disconnect`)
 
-### `quickztna whoami [--json]`
+Stop the VPN and send an offline heartbeat.
 
-Print information about the current device and the user it's signed in as: device ID, hostname, owner email, tags, current session age, negotiated key-exchange parameters.
+```bash
+sudo ztna down
+```
 
-The negotiated key-exchange line is worth knowing: it should read `x25519+mlkem768`. If you see `x25519` only, that's a bug — please file a ticket.
+`--accept-risk lose-ssh` confirms the action when bringing the tunnel down would drop the SSH session you're on.
 
-Exit codes: standard.
+### `ztna status`
 
-## Networking: `quickztna ping`, `quickztna ssh`, `quickztna nc`
+Show connection status, machine info, and the peer list.
 
-### `quickztna ping <peer> [--debug] [--count=<n>]`
+```bash
+ztna status
+ztna status --json          # scriptable
+ztna status --active        # only active peers
+```
 
-Ping a peer over the QuickZTNA network. Works on platforms where the standard `ping` doesn't have the ergonomics to handle the overlay (notably Windows). `--debug` adds path information — direct vs relayed, current RTT, MTU.
+Flags: `--json`, `--active`, `--peers` (default `true`).
 
-`<peer>` can be a QuickZTNA hostname or address.
+### `ztna ip`
 
-Exit codes: standard. `4` if the policy denies the connection.
+Print this device's tailnet IP, or look up a peer's IP by name.
 
-### `quickztna ssh <user>@<peer> [-- <command>]`
+```bash
+ztna ip
+ztna ip prod-db-01
+ztna ip --json
+```
 
-Convenience wrapper around the system `ssh` that resolves the peer's QuickZTNA hostname and applies any per-organization SSH configuration. The trailing `--` separates QuickZTNA flags from arguments passed through to `ssh`.
+### `ztna whois <tailnet-ip>`
 
-This is mostly useful for the per-organization defaults (e.g. a corporate `~/.ssh/config` setting); for ad-hoc connections, the regular `ssh` command works just as well over the QuickZTNA network.
+Look up a tailnet IP to find the machine and the user it belongs to.
 
-### `quickztna nc <peer> <port>`
+```bash
+ztna whois 100.64.0.6
+```
 
-Open a TCP connection to a peer on the given port, for ad-hoc debugging. Equivalent to `ncat <peer> <port>` but uses the QuickZTNA name resolution. Useful for confirming whether a port is reachable without firing up a full client.
+### `ztna logout`
 
-## Devices: `quickztna devices`
+Clear local auth tokens. Run this when decommissioning a machine.
 
-Manage devices in your organization. Most subcommands require admin role.
+---
 
-### `quickztna devices list [--filter=<expr>] [--idle-for=<duration>] [--json]`
+## Profiles & organizations
 
-List devices in your organization.
+### `ztna profile`
 
-Filter expression syntax: `tag:production`, `os:linux`, `owner:jane@example.com`. Combine with `+` (AND) or `,` (OR): `tag:production+os:linux`.
+Saved connection profiles for switching between accounts/orgs.
 
-`--idle-for=<duration>` filters to devices not seen for the given duration. Format: `30d`, `7d`, `24h`, `1h`. Useful for routine pruning workflows.
+```bash
+ztna profile list
+ztna profile create <name>
+ztna profile delete <name>
+```
 
-### `quickztna devices show <id-or-hostname> [--json]`
+### `ztna switch [org-slug-or-profile]`
 
-Show full detail on a single device: tags, owner, OS, network state, posture, last seen, peers.
+Switch organization or profile without logging out. No argument = interactive picker.
 
-### `quickztna devices tag-add <id-or-hostname> <tag1> [<tag2>...]`
+```bash
+ztna switch                 # interactive org picker
+ztna switch acme-corp       # switch org by slug
+ztna switch --list          # list orgs/profiles
+ztna switch --profile work  # switch by profile name
+```
 
-Add one or more tags to a device. Idempotent — adding a tag the device already has is a no-op.
+---
 
-### `quickztna devices tag-remove <id-or-hostname> <tag1> [<tag2>...]`
+## Names, DNS & certificates
 
-Remove one or more tags from a device. Idempotent.
+### `ztna dns status`
 
-### `quickztna devices remove <id-or-hostname>`
+Show the MagicDNS resolver status (whether peers resolve by hostname, the search domain, the resolver bind).
 
-Remove a device from the organization. The device is dropped from the network within seconds; its public key is revoked centrally.
+```bash
+ztna dns status
+```
 
-### `quickztna devices prune --idle-for=<duration> [--dry-run]`
+### `ztna peers [name]`
 
-Bulk-remove devices not seen for at least the given duration. Use `--dry-run` first to see what would be removed.
+List peers in the mesh with connection details and NAT-traversal info (direct vs relayed, endpoint, latency).
 
-## Policies: `quickztna policy`
+```bash
+ztna peers
+ztna peers --active
+ztna peers --json
+```
 
-Manage access policies.
+### `ztna cert [domain]`
 
-### `quickztna policy pull [--format=yaml|json] > policy.yaml`
+Request a TLS certificate for the machine's tailnet hostname. If no domain is given, uses the machine's registered name. Wildcards are not supported.
 
-Fetch the current policy and write it to stdout. Useful for the "policy as code" workflow where the canonical policy lives in git.
+```bash
+ztna cert
+ztna cert my-server.myorg.ztna
+ztna cert --cert-file /etc/ssl/certs/ztna.crt --key-file /etc/ssl/private/ztna.key
+ztna cert --serve-demo      # start a demo HTTPS server on :443 using the cert
+```
 
-### `quickztna policy apply <file> [--dry-run]`
+---
 
-Apply a policy from a file. `--dry-run` installs the policy in evaluation mode — connections are logged against both old and new policy, but the old policy still controls actual behaviour. Production teams should always dry-run for at least 24-48 hours before live-applying any non-trivial change.
+## Network diagnostics
 
-### `quickztna policy diff <file>`
+### `ztna netcheck`
 
-Show what would change if `<file>` were applied. Plain-text diff output suitable for code review.
+Comprehensive network diagnostics: STUN discovery, DERP health, UDP connectivity, firewall detection.
 
-### `quickztna policy lint <file>`
+```bash
+ztna netcheck
+ztna netcheck --json
+```
 
-Validate a policy file for syntax and common errors (unknown tags, undefined groups, unreachable rules). Returns non-zero exit code on any issue, suitable for CI gating.
+### `ztna debug`
 
-## Pre-auth keys: `quickztna keys`
+Low-level daemon diagnostics.
 
-### `quickztna keys create [--tags=<csv>] [--expiry=<duration>] [--single-use]`
+```bash
+ztna debug derp         # DERP relay connection status
+ztna debug snapshot     # full forensic state as JSON (sockets, peers, routes, NAT, interfaces)
+ztna debug goroutines   # dump goroutine stacks
+ztna debug metrics      # daemon metrics (Prometheus format)
+```
 
-Create a pre-authentication key. Prints the key to stdout exactly once; it's not retrievable afterwards. The dashboard equivalent is Settings → Keys → New.
+### `ztna log`
 
-Flags:
+View the background VPN daemon's logs.
 
-- `--tags=<tag1,tag2>` — tags pre-applied to any device using this key.
-- `--expiry=<duration>` — how long the key itself is valid. Format: `1h`, `24h`, `7d`.
-- `--single-use` — key can only be used to onboard one device. Recommended for production.
+```bash
+ztna log                # last 50 lines
+ztna log -n 200         # last 200 lines
+ztna log --follow       # stream like tail -f
+ztna log --clear        # clear the log file
+```
 
-### `quickztna keys list [--json]`
+### `ztna bugreport`
 
-List active pre-auth keys for the organization. Shows hashes, not the keys themselves.
+Create a sanitized diagnostic zip (config, logs, status, system info). **Private keys and tokens are excluded.**
 
-### `quickztna keys revoke <key-id>`
+```bash
+ztna bugreport
+ztna bugreport --output /tmp/ztna-report.zip
+```
 
-Revoke a pre-auth key. Devices that already onboarded with the key keep their individual identities (their device keys aren't affected); the leaked key can no longer onboard new devices.
+### `ztna metrics`
 
-## Diagnostics: `quickztna doctor`, `quickztna bug-report`
+Client metrics in Prometheus format.
 
-### `quickztna doctor`
+```bash
+ztna metrics print                              # to stdout
+ztna metrics write /var/lib/node_exporter/ztna.prom   # node_exporter textfile collector
+```
 
-Run the local diagnostic suite. Probes: service status, network interface state, control-plane reachability, DNS resolution, peer reachability, posture compliance, clock skew, MTU. Output is a pass/fail list with remediation hints.
+### `ztna version` · `ztna licenses`
 
-If a support ticket says "run doctor and send the output," that's the command. About 60% of issues are diagnosed entirely by doctor's output.
+`ztna version` prints the client version and build. `ztna licenses` shows open-source license information for bundled components.
 
-Exit codes: `0` if all checks pass, `1` if any fail. Use the exit code in CI scripts to confirm the client is healthy before running tests.
+---
 
-### `quickztna bug-report [--output=<path>]`
+## Routing & exit nodes
 
-Generate a redacted log bundle for support. Collects the last 24 hours of client logs, the recent connection-attempt history, the current posture state, the doctor output, and the client version, with tokens and external peer IPs automatically redacted. Produces a single `.tar.gz` file.
+### `ztna route list`
 
-Default output path: a timestamped file in the current directory. Override with `--output=<path>`.
+List advertised and approved subnet routes in the tailnet. (Advertise routes with `ztna up --advertise-routes` / `ztna set --advertise-routes`; approval is an admin action — see the [admin guide](/guide/admin/routes/).)
 
-Attach the result to your support email at [support@quickztna.com](mailto:support@quickztna.com).
+### `ztna exit-node`
 
-## Service management: `quickztna service`
+```bash
+ztna exit-node list       # available exit nodes
+ztna exit-node suggest    # recommend the best one
+```
 
-The service-management subcommands handle install / uninstall / start / stop of the system service. Most users never need these — the regular installer handles them — but they're useful when deploying via custom configuration-management tools.
+Use one with `ztna set --exit-node <ip|auto>` (or `ztna up --exit-node ...`).
 
-### `quickztna service install`
+### `ztna split-tunnel list`
 
-Install the QuickZTNA system service. Detects the local init system (systemd, launchd, Windows Service Manager, OpenRC, runit) and registers the service appropriately.
+Show the CIDRs excluded from the tunnel (split-tunnel configuration).
 
-### `quickztna service uninstall`
+### `ztna wg-config export`
 
-Remove the QuickZTNA system service. Does not remove the binary.
+Export the underlying WireGuard configuration (for inspection / interop).
 
-### `quickztna service start` / `quickztna service stop` / `quickztna service restart`
+---
 
-Start, stop, or restart the QuickZTNA service. Equivalent to the OS-native commands (`systemctl start quickztna`, etc.); included for cross-platform consistency.
+## Settings
 
-### `quickztna service status`
+### `ztna set`
 
-Show the OS-level service status (running, stopped, failed). Distinct from `quickztna status`, which shows the network state — the service can be running but disconnected (e.g. before `quickztna up`) or running and connected.
+Change settings on the running client without a full restart (updates local config and the control plane where applicable).
 
-## Configuration: `quickztna config`
+```bash
+ztna set --hostname web-03
+ztna set --tags prod,linux,web
+ztna set --accept-routes
+ztna set --exit-node 100.64.0.9
+ztna set --exit-node off
+ztna set --advertise-exit-node
+ztna set --advertise-routes 10.0.0.0/24,192.168.1.0/24
+ztna set --shields-up
+ztna set --ssh
+ztna set --auto-update
+ztna set --exit-node-allow-lan-access
+```
 
-### `quickztna config get <key>`
+---
 
-Print a configuration value. Configuration keys are documented in the dashboard under Settings → Advanced.
+## Access control & security
 
-### `quickztna config set <key> <value>`
+### `ztna acl`
 
-Set a configuration value. Some keys require admin role.
+Network access control rules.
 
-### `quickztna config reset`
+```bash
+ztna acl list                                   # current ACL rules
+ztna acl test --src <machine> --dst <machine>   # is this connection allowed?
+```
 
-Reset configuration to defaults. Does not log the device out or remove peers; just clears local configuration.
+### `ztna posture status`
 
-## Updates: `quickztna update`
+Show this device's posture-compliance status (the checks evaluated against it and pass/fail).
 
-### `quickztna update check`
+### `ztna threat check <ip|domain|hash>`
 
-Check for a newer client release. Prints the latest available version and a changelog URL.
+Check an indicator against threat intelligence.
 
-### `quickztna update apply`
+```bash
+ztna threat check 203.0.113.10
+ztna threat check evil.example.com
+```
 
-Apply the latest available update. Restarts the service after install.
+### `ztna secrets`
 
-On systems managed by a package manager, prefer the package manager's update mechanism (`apt upgrade`, `brew upgrade`). The `quickztna update` commands are primarily for standalone installs.
+Encrypted credentials vault.
 
-## Configuration files
+```bash
+ztna secrets list
+ztna secrets set <name>
+ztna secrets get <name>        # prints to stdout
+ztna secrets rotate <name>
+ztna secrets delete <name>
+```
 
-Most configuration is centralized server-side and pushed to clients by the coordination service. The few local configuration items live in:
+---
 
-- **Linux:** `/etc/quickztna/config.yaml` (system-wide) and `~/.config/quickztna/config.yaml` (per-user).
-- **macOS:** `/Library/Application Support/QuickZTNA/config.yaml` (system-wide) and `~/Library/Application Support/QuickZTNA/config.yaml` (per-user).
-- **Windows:** `%ProgramData%\QuickZTNA\config.yaml` (system-wide) and `%LocalAppData%\QuickZTNA\config.yaml` (per-user).
+## Compliance & audit
 
-These files are managed by the CLI; manual editing is supported but not the recommended path.
+### `ztna compliance report`
 
-## Environment variables
+Generate a compliance report.
 
-The client honours a small set of environment variables for the cases where flags or config files are awkward:
+### `ztna audit list`
 
-- `QUICKZTNA_AUTH_KEY` — equivalent to `--auth-key=<value>` on `up`. Useful in containers.
-- `QUICKZTNA_HOSTNAME` — equivalent to `--hostname=<value>`. Containers, mass deployments.
-- `HTTPS_PROXY` / `HTTP_PROXY` / `NO_PROXY` — standard proxy variables. Honoured by the service.
-- `QUICKZTNA_LOG_LEVEL` — set to `debug` or `trace` for verbose output. Overrides the default of `info`.
-- `QUICKZTNA_STATE_DIR` — override the default state directory location. Mostly useful for non-standard container layouts.
+List recent audit-log entries.
 
-## A note on `sudo`
+---
 
-On Linux, most subcommands that modify state require root (`sudo`). The CLI tells you when this is the case — it'll print a clear "this command requires root" message rather than failing cryptically. Read-only commands (`status`, `whoami`, `devices list`) work without sudo if the local user has been granted CLI access (via `quickztna service grant-access <user>` as root, once).
+## Organization & device administration
 
-On macOS and Windows the equivalent gates are handled via the system's normal privilege-escalation prompts.
+These wrap the same control-plane API the dashboard uses; most require an admin role.
+
+### `ztna machines list`
+
+List all machines in the organization (name, OS, owner, tailnet IP, status).
+
+### `ztna auth-keys list`
+
+List the organization's auth keys. (Create/revoke keys from the dashboard, or via the admin API — see the [admin guide](/guide/admin/auth-keys/).)
+
+---
+
+## Install & service lifecycle
+
+### `ztna install` · `ztna uninstall`
+
+Install or remove the QuickZTNA daemon as a system service that starts on boot.
+
+```bash
+sudo ztna install         # systemd unit (Linux) / launchd plist (macOS) / Windows service
+sudo ztna install --force # overwrite existing service files
+sudo ztna uninstall
+```
+
+`ztna configure install-service` / `ztna configure remove-service` are equivalent service-management helpers.
+
+### `ztna update`
+
+Check for and apply client updates.
+
+```bash
+ztna update --check       # only check, don't download
+ztna update               # check and download/apply
+ztna update --yes         # skip the confirmation prompt
+ztna update --json
+```
+
+On package-manager installs, prefer the package manager. Standalone installs use `ztna update`.
+
+### `ztna completion <bash|zsh|fish|powershell>`
+
+Generate a shell-completion script.
+
+```bash
+# bash, current shell
+source <(ztna completion bash)
+# zsh, persistent
+ztna completion zsh > "${fpath[1]}/_ztna"
+```
+
+---
+
+## Configuration files & environment
+
+Most configuration is centralized server-side and pushed to clients. The local items:
+
+- **Daemon log:** `~/.config/ztna/ztna.log` (Linux, when run with `--daemon`). On Windows the service logs to the Windows Event Log (Application channel, provider `QuickZTNA`); on macOS to `/var/log/quickztna.log`.
+- **Config / state:** under the per-OS app-support / config directory for the user or service account.
+
+Environment variables honoured at install/connect time:
+
+- `ZTNA_AUTH_KEY` — equivalent to `--auth-key`. Used by the install scripts and containers.
+
+```bash
+curl -fsSL https://login.quickztna.com/install.sh | ZTNA_AUTH_KEY=tskey-auth-xxx sh
+```
+
+---
 
 ## What's next
 
-You have the full CLI surface. For the programmatic counterpart, the [REST API overview](/docs/api/) covers the HTTP API. For the security and trust details, the [security model](/docs/security/) is the next read.
-
-If you're hitting an issue with a specific command, the [troubleshooting guide](/guide/troubleshooting/) is operator-facing but covers many CLI failure modes.
+- [Installation guide](/guide/installation/) — install per platform.
+- [Managing devices](/guide/managing-devices/) — day-to-day operator tasks.
+- [Access policies](/guide/access-policies/) — write the rules that decide who reaches what.
+- [Admin guide](/guide/admin/) — org setup, SSO, auth keys, posture, ACLs, and the workforce-security features.

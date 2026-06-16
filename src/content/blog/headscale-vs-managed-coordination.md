@@ -66,7 +66,7 @@ Why teams choose managed.
 
 The managed cost is typically per-user per-month. For a small team, this is often a small fraction of a competent engineer's fully loaded cost per hour.
 
-## 3. The case for self-host (Headscale, NetBird self-host, QuickZTNA Workforce)
+## 3. The case for self-host (Headscale, NetBird self-host)
 
 Why teams choose self-host.
 
@@ -252,7 +252,7 @@ Five questions in sequence.
 4. **Is compliance attestation your responsibility (you need to show auditors your own SOC 2)?** If yes → self-host and invest in the attestation. If you can inherit from a vendor → managed.
 5. **Is there a feature-velocity premium in your evaluation?** If yes → managed. If no → either.
 
-At the end, if the cost math, compliance requirements, and team capability all point to self-host, Headscale is a good choice for a Tailscale-compatible deployment. NetBird for an open-source-first deployment. QuickZTNA Workforce for a proprietary-with-self-host deployment that includes post-quantum on tunnels.
+At the end, if the cost math, compliance requirements, and team capability all point to self-host, Headscale is a good choice for a Tailscale-compatible deployment, and NetBird for an open-source-first deployment. (QuickZTNA is managed cloud only — if managed fits, it brings a full ZTNA + workforce-security feature set.)
 
 ## Further reading
 
@@ -271,7 +271,7 @@ At the end, if the cost math, compliance requirements, and team capability all p
 
 ## Try QuickZTNA
 
-QuickZTNA is managed by default, with self-host available on the Workforce tier. If the cost math above tips toward managed for your team and post-quantum is a requirement, [start on Free](https://login.quickztna.com/auth). If self-host is non-negotiable and open source is not required, [contact sales](mailto:sales@quickztna.com) for the Workforce self-host brief.
+QuickZTNA is managed by default, managed cloud only (no self-host today). If the cost math above tips toward managed for your team and post-quantum is a requirement, [start on Free](https://login.quickztna.com/auth). If self-host is non-negotiable and open source is not required, [contact sales](mailto:sales@quickztna.com) for the Workforce self-host brief.
 
 <!--
 scorecard:

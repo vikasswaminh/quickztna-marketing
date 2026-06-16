@@ -1,6 +1,6 @@
 ---
 title: "Quickstart: 100 devices on QuickZTNA in two minutes"
-description: "From signing up to your first encrypted tunnel in under two minutes. Step-by-step quickstart for QuickZTNA — works on Linux, macOS, Windows, iOS, and Android."
+description: "From signing up to your first encrypted tunnel in under two minutes. A step-by-step QuickZTNA quickstart for Linux, macOS, and Windows."
 section: "getting-started"
 order: 2
 updatedAt: 2026-05-16
@@ -18,9 +18,9 @@ faq:
   - q: "Do I need to open firewall ports on my devices?"
     a: "No. QuickZTNA tunnels are outbound-initiated from each device, so they work behind NAT, CGNAT, and most corporate firewalls without any inbound port forwarding. There is no listening port to expose."
   - q: "What if the one-line install command is blocked by my security policy?"
-    a: "Every install path has a manual alternative. On Linux and macOS you can download the package directly from your admin dashboard; on Windows there's an MSI; on mobile there's the App Store or Play Store. The one-liner is for convenience; nothing about QuickZTNA requires it."
+    a: "Every install path has a manual alternative. On Linux and macOS you can download the release archive directly; on Windows use the PowerShell installer or the manual download. The one-liner is for convenience; nothing about QuickZTNA requires it."
   - q: "Does the free tier really have the same encryption as paid?"
-    a: "Yes. Hybrid X25519 + ML-KEM-768 post-quantum key exchange is enabled by default on every plan, including Free. There is no encryption downgrade path; we don't ship a 'classical-only' build."
+    a: "Yes. Every plan, including Free, uses the same WireGuard encryption — Curve25519 (X25519) key exchange and ChaCha20-Poly1305. There is no downgraded free-tier build."
 ---
 
 This is the shortest page in the user guide on purpose. If it takes you more than two minutes the first time through, that's a documentation bug — please flag it.
@@ -32,7 +32,7 @@ We're going to do four things: create an account, install the client on one devi
 You need:
 
 - One device you can install software on as administrator (your laptop is fine). Linux, macOS, or Windows.
-- A second device, ideally a different OS, to prove the cross-platform mesh works. Your phone is fine.
+- A second device, ideally a different OS, to prove the cross-platform mesh works.
 - A web browser to complete the sign-in.
 - About two minutes.
 
@@ -54,9 +54,9 @@ The dashboard shows a one-line install command. It looks like this (the real one
 curl -fsSL https://login.quickztna.com/install.sh | sh
 ```
 
-On Windows the equivalent is a PowerShell line; on macOS the same `curl` line works. Mobile devices use the App Store or Play Store — search for "QuickZTNA."
+On Windows the equivalent is a PowerShell line (`irm https://login.quickztna.com/install.ps1 | iex`); on macOS the same `curl` line works.
 
-What this command does: it downloads the official client binary for your platform, verifies its signature against the public release key, and installs it as a system service. The whole step typically takes under thirty seconds on a reasonable connection. If you're behind a corporate proxy that blocks shell installs, the [installation page](/guide/installation/) covers manual download paths for every platform.
+What this command does: it downloads the official client binary for your platform, verifies its SHA-256 checksum, and installs it as a system service. The whole step typically takes under thirty seconds on a reasonable connection. If you're behind a corporate proxy that blocks shell installs, the [installation page](/guide/installation/) covers manual download paths for every platform.
 
 When the install finishes, your terminal will open a browser tab and ask you to confirm that the device belongs to you. Click **Approve**. You're now connected. Behind the scenes the client has generated a fresh key pair on the device, registered the public key with the coordination service, and established a tunnel. The private key never leaves the device — it stays in OS-protected key storage.
 
@@ -64,7 +64,7 @@ Glance back at your admin dashboard. The device should appear in the device list
 
 ## Step 3 — Add a second device
 
-Repeat step 2 on your second device. If the first was your laptop, do this one on your phone (download the app, sign in with the same identity, approve) or on another machine you have handy. The same Approve flow happens.
+Repeat step 2 on your second device — another machine you have handy, ideally a different OS. Sign in with the same identity and approve. The same Approve flow happens.
 
 You now have two devices on the same private network. That network exists only in software — there's no router to configure, no VPN concentrator to provision, no firewall rule to write. The devices reach each other directly when their networks allow it, and fall back to an encrypted relay when they don't. Either way, the traffic between them is end-to-end encrypted; the relay is a literal blind pipe with no ability to see plaintext.
 
@@ -80,7 +80,7 @@ ping phone-of-jane
 
 You should see replies inside about a second. If the second device is behind two different NATs (typical for a phone on cellular), the first packet may take a moment longer while the clients negotiate the path. Subsequent packets are at line rate.
 
-That's it. You have a working post-quantum-encrypted Zero Trust network.
+That's it. You have a working encrypted Zero Trust network.
 
 ## What you just bypassed
 
@@ -100,9 +100,9 @@ If you want to **lock down what each person can reach**, jump to the [access pol
 
 If you want to **connect a server** (a database, a build agent, a Kubernetes node), the install command is the same as for a laptop. Tag the device as `server` and write a policy that lets only the right humans reach it. The [installation page](/guide/installation/) covers headless installs and containers in detail.
 
-If you want to understand **how the encryption actually works**, especially the post-quantum part, the [security model](/docs/security/) page in the developer docs is where to go. Short version: every tunnel uses X25519 for classical key exchange and ML-KEM-768 (FIPS 203) for post-quantum key exchange, combined with HKDF-SHA256. The hybrid construction is symmetric-secure even if one of the two primitives is broken.
+If you want to understand **how the encryption actually works**, the [security model](/docs/security/) page in the developer docs is where to go. Short version: every tunnel is WireGuard — Curve25519 (X25519) key exchange and ChaCha20-Poly1305 — with no central decryption point. (Post-quantum hybrid key exchange is on the roadmap, not the shipped client.)
 
-If you hit a problem, the [troubleshooting page](/guide/troubleshooting/) covers the issues we see most often. Run `quickztna doctor` on a stuck device before opening a ticket — it'll usually surface the cause on its own.
+If you hit a problem, the [troubleshooting page](/guide/troubleshooting/) covers the issues we see most often. Run `ztna netcheck` (and `ztna status`) on a stuck device before opening a ticket — they'll usually surface the cause.
 
 ## A small calibration
 

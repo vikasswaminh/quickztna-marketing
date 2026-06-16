@@ -102,11 +102,11 @@ The Client-Connector model specifically is Twingate's differentiator. Alternativ
 
 ## 5. Alternative 3 — QuickZTNA
 
-**Model.** Full ZTNA with WireGuard data plane layered with hybrid post-quantum key exchange. Managed coordination plane; self-host available on Workforce tier.
+**Model.** Full ZTNA with a WireGuard data plane and a built-in workforce-security layer. Managed coordination plane (managed cloud only — no self-host today). Hybrid post-quantum key exchange is on the roadmap; the shipped client uses classical WireGuard today.
 
 **Strengths vs Twingate.**
-- **Post-quantum on every tunnel by default.** Hybrid X25519 + ML-KEM-768, on every tier including Free. See [our ML-KEM-768 post](/blog/ml-kem-768-explained).
-- **Full ZTNA feature set.** ACLs, device posture, session recording (Business tier), workforce analytics (opt-in), audit logs, SIEM export.
+- **Workforce-security layer built in.** File-scan DLP, CASB app-approval, device posture, and an AI Operator that previews and applies policy changes — beyond Twingate's access-only scope. See [our ML-KEM-768 post](/blog/ml-kem-768-explained) for where the crypto roadmap is heading.
+- **Full ZTNA feature set.** ACLs, device posture, workforce analytics (opt-in), audit logs, SIEM export.
 - **Open-protocol data plane** (WireGuard).
 - **Honest tier boundaries.** Free tier is not gated from core security features.
 - **EU + US infrastructure** for data-residency-sensitive deployments.
@@ -169,14 +169,14 @@ Snapshot as of April 2026. Always verify against each vendor's current documenta
 | Dimension | Twingate | Tailscale | NetBird | QuickZTNA | Cloudflare Access | OpenZiti |
 |---|---|---|---|---|---|---|
 | Architecture | Client-Connector ZTNA | Mesh VPN | Mesh VPN | Mesh + ZTNA | Edge identity proxy | ZT overlay + app SDK |
-| Data-plane protocol | Proprietary | WireGuard | WireGuard | WireGuard + PQ PSK | Cloudflare edge | Ziti overlay |
+| Data-plane protocol | Proprietary | WireGuard | WireGuard | WireGuard | Cloudflare edge | Ziti overlay |
 | Licence | Proprietary | Proprietary | BSD-3-Clause | Proprietary | Proprietary | Apache 2.0 |
 | Free tier | Yes (limited) | Yes | Yes | Yes (100 dev, 3 users) | Yes (verify current) | Open source |
-| Self-host | Partial (Connector) | No (Headscale exists) | Yes | Workforce only | No | Yes |
-| Post-quantum default | Verify current | Verify current | Verify current | Yes, hybrid ML-KEM-768 | TLS 1.3 hybrid edge | Verify current |
-| Session recording | Verify current | Enterprise tier | Verify current | Business tier | Via other CF products | Via integrations |
+| Self-host | Partial (Connector) | No (Headscale exists) | Yes | No (managed cloud only) | No | Yes |
+| Post-quantum default | Verify current | Verify current | Verify current | Roadmap (classical today) | TLS 1.3 hybrid edge | Verify current |
+| Session recording | Verify current | Enterprise tier | Verify current | No | Via other CF products | Via integrations |
 | Device posture | Yes | Yes | Yes | Yes | Yes | Policy-based |
-| Typical fit | User-to-resource ZTNA | Developer mesh | Open-source mesh | PQ-first full ZTNA | CF-integrated edge | App-embedded ZT |
+| Typical fit | User-to-resource ZTNA | Developer mesh | Open-source mesh | Full ZTNA + workforce security | CF-integrated edge | App-embedded ZT |
 
 ## 10. Migration playbook
 
@@ -209,7 +209,7 @@ The migration does not have to be a big-bang event. Most teams stagger by depart
 
 ## Try QuickZTNA
 
-If your Twingate exit motivation is post-quantum, self-host flexibility, or a fuller ZTNA feature set, QuickZTNA is a straightforward evaluation. [Start on Free](https://login.quickztna.com/auth) — 100 devices, 3 users, hybrid ML-KEM-768 on every tunnel.
+If your Twingate exit motivation is a fuller ZTNA feature set with a built-in workforce-security layer, QuickZTNA is a straightforward evaluation. [Start on Free](https://login.quickztna.com/auth) — 100 devices, 3 users, free remote SSH, and a WireGuard mesh on every tier.
 
 <!--
 scorecard:
