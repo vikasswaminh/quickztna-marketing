@@ -30,3 +30,14 @@ jobs:
           name: dist
           path: dist/
           retention-days: 7
+
+      # Production deploy — only on push to main (not PRs). Build above already
+      # ran the lint guard via `prebuild`, so a green build == publishable.
+      - name: Deploy to Cloudflare Pages (production)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "3"
+          command: pages deploy dist --project-name=quickztna-marketing --branch=main --commit-dirty=true
