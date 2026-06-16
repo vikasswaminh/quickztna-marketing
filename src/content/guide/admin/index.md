@@ -1,40 +1,51 @@
 ---
 title: "QuickZTNA Admin Guide"
-description: "Run a QuickZTNA organization: SSO and SCIM, auth keys, device approval, ACL and posture policies, the workforce-security features, audit, and billing."
+description: "Run a QuickZTNA organization: SSO and SCIM, auth keys, device approval, ACL and posture policies, the workforce-security features, audit, and billing — per feature."
 section: "admin"
 order: 1
-updatedAt: 2026-06-15
+updatedAt: 2026-06-16
 primaryKeyword: "QuickZTNA admin guide"
 faq:
   - q: "What's the difference between the user guide and the admin guide?"
-    a: "The user guide covers operating a device — install, connect, troubleshoot. The admin guide covers running the organization — connecting your identity provider, issuing auth keys, approving devices, writing access and posture policies, and configuring the workforce-security and audit features. Most admin tasks are done in the dashboard; the ztna CLI and REST API cover the same surface for automation."
+    a: "The user guide covers operating a device — install, connect, troubleshoot. The admin guide covers running the organization — connecting your identity provider, issuing auth keys, approving devices, writing access and posture policies, and configuring the workforce-security and audit features. Each feature has its own deep-dive page here with architecture, configuration, worked REST API/CLI examples, enforcement, limits, and audit events."
   - q: "Do admin tasks require the CLI?"
-    a: "No. Everything is in the admin dashboard. The CLI (ztna acl, ztna machines, ztna auth-keys, ztna posture, etc.) gives read/inspection access and a few actions for scripting; the REST API is the full programmatic surface the dashboard itself uses."
+    a: "No. Everything is in the admin dashboard. The CLI (ztna acl, ztna machines, ztna auth-keys, ztna posture, etc.) gives read/inspection access and a few actions for scripting; the REST API is the full programmatic surface the dashboard itself uses, and every feature page shows the exact calls."
+  - q: "How do I know what's actually shipped versus roadmap?"
+    a: "Each page is explicit about scope and limits. Where a capability is narrower than common shorthand implies — DLP is file-scan and detect-only, CASB is DNS-layer, posture signals are self-reported, PQC and self-hosting are not shipped — the page says so plainly. If you find a gap between a page and the product, that's a docs bug; tell us at support@quickztna.com."
 ---
 
 This is the operator's manual for **running a QuickZTNA organization** — the work that happens in the admin dashboard, not on an individual device. If you're setting up a device, start with the [user guide](/guide/); if you're scripting, the [CLI reference](/docs/cli/) and [REST API](/docs/api/) are the contract.
 
-QuickZTNA is a managed cloud service. You administer your organization through the dashboard at [login.quickztna.com](https://login.quickztna.com); the `ztna` CLI and the REST API expose the same surface for inspection and automation.
+QuickZTNA is a managed cloud service. You administer your organization through the dashboard at [login.quickztna.com](https://login.quickztna.com); the `ztna` CLI and the REST API expose the same surface for inspection and automation. **Every feature below has its own deep-dive page** with a how-it-works diagram, enable steps, worked API/CLI examples, a configuration reference, enforcement and verification, honest limits, and the audit events it emits.
 
-## The admin's job, in four parts
+## Identity & access
 
-1. **Identity & onboarding** — connect your identity provider, decide how devices join (interactive SSO or auth keys), and approve/retire devices. See [Identity & onboarding](/guide/admin/identity/).
-2. **Access control** — decide who can reach what with ACL rules, require a device security baseline with posture, and approve subnet routes and exit nodes. See [Access control](/guide/admin/access-control/).
-3. **Workforce security** — the optional layer on top of the mesh: DLP file scanning, remote shell/desktop, software inventory, user-risk scoring, and the CASB approval workflow. See [Workforce security](/guide/admin/workforce/).
-4. **Observability & billing** — audit logs, compliance reports, threat intelligence, client metrics, the secrets vault, and plan/billing management. See [Observability](/guide/admin/observability/) and [Plans & billing](/guide/admin/billing/).
+- **[Identity & onboarding](/guide/admin/identity/)** — connect OIDC/SAML/Google/GitHub, provision with SCIM, issue auth keys, approve and retire devices.
+- **[Access control: ACLs & ABAC](/guide/admin/access-control/)** — priority-ordered rules over users/tags/groups, ABAC conditions, threat-intel deny, subnet routes and exit nodes.
+- **[Device posture & compliance](/guide/admin/device-posture/)** — require a security baseline (disk encryption, firewall, AV, patch age) in enforce/monitor/disabled modes, with auto-quarantine.
+
+## Network security
+
+- **[DNS filtering & threat feeds](/guide/admin/dns-filtering/)** — block malware/phishing/C2 and content categories with free feeds plus custom allow/blocklists.
+- **[CASB & Shadow IT discovery](/guide/admin/casb/)** — discover SaaS from DNS logs, score risk, enforce per-app policy, and run an approval workflow.
+
+## Workforce security
+
+- **[Workforce security overview](/guide/admin/workforce/)** — the map of the optional workforce layer and what ships today.
+- **[Data Loss Prevention (DLP)](/guide/admin/dlp/)** — file-content scanning for secrets/PII, masked events, SIEM emission (detect-and-alert).
+- **[Workforce analytics & user-risk](/guide/admin/workforce-analytics/)** — opt-in, consent-gated session/productivity analytics, software inventory and patches, seven-factor user-risk.
+- **[Remote access: shell & desktop](/guide/admin/remote-access/)** — free consent-aware SSH/shell over the mesh, and paid WebRTC remote desktop.
+
+## Operate
+
+- **[AI Operator](/guide/admin/ai-operator/)** — natural-language ACLs, event summaries, incident response, and tool-calling chat — every write goes through preview → confirm → revert.
+- **[Observability: audit, compliance, metrics](/guide/admin/observability/)** — audit log and SIEM export, compliance drift + signed reports, threat intel, Prometheus metrics, secrets vault.
+- **[Plans & billing](/guide/admin/billing/)** — the tiers, the feature-flag reference, how gating works, the 60-day trial, and billing.
 
 ## Plans at a glance
 
-QuickZTNA's Free plan covers **100 devices and 3 users, forever**, including the WireGuard mesh, MagicDNS, ABAC policies, device posture, DNS filtering, the AI assistant, and remote SSH. Paid plans add more users, unlimited devices, SCIM provisioning, continuous posture, workforce analytics, DLP, CASB, and remote desktop. Full breakdown on [Plans & billing](/guide/admin/billing/) and the [pricing page](/pricing/).
+QuickZTNA's Free plan covers **100 devices and 3 users, forever**, including the WireGuard mesh, MagicDNS, ABAC policies, device posture, DNS filtering, the AI assistant, and remote SSH. Paid plans add more users, unlimited devices, SCIM, continuous posture, workforce analytics, DLP, CASB, and remote desktop. Full breakdown on [Plans & billing](/guide/admin/billing/) and the [pricing page](/pricing/).
 
 ## A note on what's shipped
 
-This guide describes what the product does **today**. Where a capability is on the roadmap rather than shipped (for example post-quantum key exchange, or self-hosting), it's marked as such — the data plane today is classical WireGuard, and QuickZTNA is managed cloud only. If you find a gap between this guide and the product, that's a docs bug: tell us at [support@quickztna.com](mailto:support@quickztna.com).
-
-## Where to go next
-
-- [Identity & onboarding](/guide/admin/identity/) — SSO, SCIM, auth keys, device approval.
-- [Access control](/guide/admin/access-control/) — ACLs, posture, routes, exit nodes.
-- [Workforce security](/guide/admin/workforce/) — DLP, remote access, inventory, user-risk, CASB.
-- [Observability](/guide/admin/observability/) — audit, compliance, threat, metrics, secrets.
-- [Plans & billing](/guide/admin/billing/) — plans, gates, billing.
+This guide describes what the product does **today**. Where a capability is on the roadmap rather than shipped (for example post-quantum key exchange, or self-hosting), it's marked as such — the data plane today is classical WireGuard, and QuickZTNA is managed cloud only.
