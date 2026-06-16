@@ -113,3 +113,24 @@
     background: linear-gradient(135deg, oklch(0.62 0.19 258), oklch(0.55 0.21 270));
   }
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Fenced code-block contrast fix.
+   The docs/blog prose containers apply `prose-code:bg-muted` for the inline-
+   code pill. That modifier also matches `<code>` INSIDE `<pre>`, painting a
+   near-white background behind Shiki's (github-dark) light syntax tokens →
+   light-on-light / "white on white". Shiki keeps the `<pre>` itself dark via
+   an inline background, so the fix is to make block code transparent and let
+   the dark `<pre>` show through. `.prose pre code` (0,1,2) outranks the
+   `prose-code:*` modifier (0,1,0); placed after `@tailwind utilities` so it
+   also wins on source order. Inline `<code>` (not in a pre) keeps its pill.
+   ────────────────────────────────────────────────────────────────────────── */
+.prose pre code,
+.prose pre code span {
+  background-color: transparent;
+}
+.prose pre code {
+  padding: 0;
+  border-radius: 0;
+  font-weight: inherit;
+}
