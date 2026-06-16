@@ -1,105 +1,16 @@
 ---
-// Shared sidebar for /docs/* and /guide/*.
-// Nav tree is a literal — easier to scan and rearrange than auto-generating
-// from frontmatter ordering, and gives us full control over the grouping that
-// actually ranks (Google rewards stable, readable IA over auto-magic).
+// Shared sidebar for /docs/* and /guide/*. Nav tree lives in src/lib/nav.ts
+// (single source of truth shared with the top-nav dropdowns in Header.astro),
+// so adding a page updates the sidebar and the header dropdowns together.
+import { docsNav, guideNav } from "@/lib/nav";
+
 interface Props {
   collection: "docs" | "guide";
   currentPath: string;
 }
 const { collection, currentPath } = Astro.props;
 
-type Item = { label: string; href: string };
-type Group = { title: string; items: Item[] };
-
-const docsNav: Group[] = [
-  {
-    title: "Overview",
-    items: [
-      { label: "Introduction", href: "/docs/" },
-    ],
-  },
-  {
-    title: "Concepts",
-    items: [
-      { label: "Zero Trust concepts", href: "/docs/concepts/" },
-    ],
-  },
-  {
-    title: "CLI",
-    items: [
-      { label: "Command reference", href: "/docs/cli/" },
-    ],
-  },
-  {
-    title: "API",
-    items: [
-      { label: "REST API overview", href: "/docs/api/" },
-    ],
-  },
-  {
-    title: "Security",
-    items: [
-      { label: "Encryption & posture", href: "/docs/security/" },
-    ],
-  },
-  {
-    title: "Integrations",
-    items: [
-      { label: "SSO: OIDC, Google, GitHub", href: "/docs/integrations/" },
-    ],
-  },
-];
-
-const guideNav: Group[] = [
-  {
-    title: "Getting started",
-    items: [
-      { label: "Welcome", href: "/guide/" },
-      { label: "Quickstart — 2 minute setup", href: "/guide/quickstart/" },
-      { label: "Connecting & everyday commands", href: "/guide/connecting/" },
-      { label: "Exit nodes, routes & split tunnel", href: "/guide/exit-nodes-and-routes/" },
-    ],
-  },
-  {
-    title: "Install",
-    items: [
-      { label: "Linux, macOS, Windows", href: "/guide/installation/" },
-    ],
-  },
-  {
-    title: "Manage",
-    items: [
-      { label: "Devices, tags & expiry", href: "/guide/managing-devices/" },
-    ],
-  },
-  {
-    title: "Access control",
-    items: [
-      { label: "Identity-based policies", href: "/guide/access-policies/" },
-    ],
-  },
-  {
-    title: "Administration",
-    items: [
-      { label: "Admin guide overview", href: "/guide/admin/" },
-      { label: "Identity & onboarding", href: "/guide/admin/identity/" },
-      { label: "Access control: ACLs, posture", href: "/guide/admin/access-control/" },
-      { label: "Workforce security", href: "/guide/admin/workforce/" },
-      { label: "Observability & audit", href: "/guide/admin/observability/" },
-      { label: "Plans & billing", href: "/guide/admin/billing/" },
-    ],
-  },
-  {
-    title: "Help",
-    items: [
-      { label: "Troubleshooting", href: "/guide/troubleshooting/" },
-    ],
-  },
-];
-
 const groups = collection === "docs" ? docsNav : guideNav;
-const otherCollection = collection === "docs" ? "guide" : "docs";
 const otherLabel = collection === "docs" ? "User guide" : "Developer docs";
 const otherHref = collection === "docs" ? "/guide/" : "/docs/";
 
