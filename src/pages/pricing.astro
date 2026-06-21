@@ -1,234 +1,108 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import Button from "@/components/ui/Button.astro";
-import { ArrowRight, Check, Minus, Zap } from "lucide-astro";
+import { ArrowRight, Check, Zap } from "lucide-astro";
 
 const AUTH_URL = "https://login.quickztna.com/auth";
-const SALES_URL = "mailto:sales@quickztna.com?subject=Workforce%20plan%20inquiry";
+const SALES_URL = "mailto:sales@quickztna.com?subject=QuickZTNA%20inquiry";
 
+// 2 plans, IDENTICAL features. The only difference is scale (users + machines).
 const plans = [
   {
     name: "Free",
-    tagline: "For homelabs, founders, small teams.",
+    tagline: "For homelabs, founders, and small teams — forever.",
     price: "$0",
     per: "/mo forever",
     cta: "Start free",
     ctaHref: AUTH_URL,
     highlight: false,
-    limits: ["100 machines", "3 users", "Community support"],
-    features: [
-      "WireGuard-encrypted ZTNA mesh",
-      "MagicDNS + WireGuard mesh",
-      "ACL policies + device posture",
-      "DNS filtering + cloud firewall",
-      "AI Assistant (chat, ACL builder, digest)",
-      "JIT access + access reviews",
-      "SSO · GitHub · Google · TOTP MFA",
-      "Remote shell (SSH) — free tier",
-      "Global DERP relays (BLR + FRA)",
-    ],
+    blurb: "Every feature included. No credit card. No trial clock.",
+    limits: ["Up to 5 users", "2 machines per user (10 total)", "Community support"],
   },
   {
     name: "Business",
-    tagline: "For growing teams · 60-day free trial.",
+    tagline: "Same product — room to grow.",
     price: "$10",
-    per: "per user /mo",
-    cta: "Start 60-day trial",
+    per: "per user / mo",
+    cta: "Start free, upgrade anytime",
     ctaHref: AUTH_URL,
     highlight: true,
-    limits: ["Unlimited machines", "Billed per active user", "Priority email support"],
-    features: [
-      "Everything in Free",
-      "Remote desktop (WebRTC)",
-      "Compliance status dashboard (SOC 2 readiness)",
-      "Secrets vault (AES-256-GCM)",
-      "SCIM 2.0 provisioning",
-      "AI actions + incident response",
-      "JIT recommendations",
-      "60-day free trial",
-    ],
-  },
-  {
-    name: "Workforce",
-    tagline: "For regulated orgs & distributed workforces.",
-    price: "Contact",
-    per: "sales",
-    cta: "Contact sales",
-    ctaHref: SALES_URL,
-    highlight: false,
-    limits: ["Unlimited machines", "Custom per-user pricing", "Dedicated support + SLA"],
-    features: [
-      "Everything in Business",
-      "Workforce analytics + DEM",
-      "DLP + CASB + anomaly detection",
-      "User risk scoring",
-      "Remote desktop (WebRTC)",
-      "Software inventory + patch overview",
-      "App connector (reverse proxy)",
-      "Database access broker",
-      "Kubernetes access",
-      "Terraform provider",
-      "Org groups (departments)",
-    ],
+    blurb: "Identical features to Free. You pay to scale, not to unlock.",
+    limits: ["Unlimited users (billed per seat)", "10 machines per user", "Priority email support"],
   },
 ];
 
-type Row = { feature: string; free: boolean | string; business: boolean | string; workforce: boolean | string };
-type Group = { title: string; rows: Row[] };
-
-const groups: Group[] = [
+// Everything below is included on BOTH plans (full feature parity). Listed once.
+// Only shipped capabilities are advertised here.
+const included = [
   {
-    title: "Core networking",
-    rows: [
-      { feature: "Machines per org", free: "100", business: "Unlimited", workforce: "Unlimited" },
-      { feature: "Users per org", free: "3", business: "Billed / user", workforce: "Billed / user" },
-      { feature: "WireGuard mesh tunnels", free: true, business: true, workforce: true },
-      { feature: "MagicDNS", free: true, business: true, workforce: true },
-      { feature: "DERP relays (Bangalore + Frankfurt)", free: true, business: true, workforce: true },
-      { feature: "ABAC policies + device posture", free: true, business: true, workforce: true },
-      { feature: "Subnet routes + exit nodes", free: true, business: true, workforce: true },
-      { feature: "Auto-quarantine on posture fail", free: true, business: true, workforce: true },
-    ],
+    title: "Connectivity",
+    items: ["WireGuard-encrypted ZTNA mesh", "MagicDNS", "Subnet routes + exit nodes", "Global DERP relays (Bangalore + Frankfurt)"],
+  },
+  {
+    title: "Zero-trust access",
+    items: ["ABAC / ACL policies", "Device posture + auto-quarantine", "JIT access workflow", "Policy versioning + rollback"],
   },
   {
     title: "Identity",
-    rows: [
-      { feature: "Email + password", free: true, business: true, workforce: true },
-      { feature: "GitHub / Google OAuth", free: true, business: true, workforce: true },
-      { feature: "SAML / OIDC SSO", free: true, business: true, workforce: true },
-      { feature: "TOTP MFA + backup codes", free: true, business: true, workforce: true },
-      { feature: "SCIM 2.0 provisioning", free: false, business: true, workforce: true },
-      { feature: "Org groups (departments)", free: false, business: false, workforce: true },
-    ],
+    items: ["SAML / OIDC SSO", "GitHub / Google OAuth", "TOTP MFA + backup codes", "SCIM 2.0 provisioning", "Org groups"],
   },
   {
     title: "AI assistant",
-    rows: [
-      { feature: "AI chat", free: true, business: true, workforce: true },
-      { feature: "Natural-language ACL builder", free: true, business: true, workforce: true },
-      { feature: "Security digest (24h)", free: true, business: true, workforce: true },
-      { feature: "Event summarizer", free: true, business: true, workforce: true },
-      { feature: "Policy drift detection", free: true, business: true, workforce: true },
-      { feature: "Access heatmap", free: true, business: true, workforce: true },
-      { feature: "AI auto-remediation actions", free: false, business: true, workforce: true },
-      { feature: "Incident response playbooks", free: false, business: true, workforce: true },
-      { feature: "JIT access recommendations", free: false, business: true, workforce: true },
-    ],
+    items: ["AI chat", "Natural-language ACL builder", "Security digest", "Event summarizer", "Policy-drift detection", "Access heatmap"],
   },
   {
-    title: "Security & threat",
-    rows: [
-      { feature: "DNS filtering", free: true, business: true, workforce: true },
-      { feature: "Cloud firewall (FaaS)", free: true, business: true, workforce: true },
-      { feature: "Anomaly detection (UEBA)", free: false, business: false, workforce: true },
-      { feature: "Data Loss Prevention (DLP)", free: false, business: false, workforce: true },
-      { feature: "CASB + shadow-IT", free: false, business: false, workforce: true },
-      { feature: "User risk scoring", free: false, business: false, workforce: true },
-    ],
+    title: "Security & data",
+    items: ["DNS filtering", "Cloud firewall", "Data Loss Prevention (file scan)", "CASB + shadow-IT discovery", "User-risk scoring", "Secrets vault (AES-256-GCM)"],
   },
   {
-    title: "Governance & compliance",
-    rows: [
-      { feature: "JIT access workflow", free: true, business: true, workforce: true },
-      { feature: "Access review campaigns", free: true, business: true, workforce: true },
-      { feature: "Policy versioning + rollback", free: true, business: true, workforce: true },
-      { feature: "Compliance reports (SOC 2, ISO, HIPAA)", free: false, business: true, workforce: true },
-      { feature: "Continuous compliance scanning", free: false, business: true, workforce: true },
-      { feature: "Audit log retention", free: "90 days", business: "90 days", workforce: "90 days" },
-    ],
+    title: "Remote support & ops",
+    items: ["Remote shell", "Remote desktop", "Session recording", "Compliance reports (SOC 2, ISO, HIPAA)", "Audit logs (90-day)"],
   },
-  {
-    title: "Endpoint management",
-    rows: [
-      { feature: "Device wipe / lock", free: true, business: true, workforce: true },
-      { feature: "OTA agent updates", free: true, business: true, workforce: true },
-      { feature: "Remote management + shell", free: false, business: true, workforce: true },
-      { feature: "Remote desktop (WebRTC)", free: false, business: false, workforce: true },
-      { feature: "Software inventory + patch overview", free: false, business: false, workforce: true },
-    ],
-  },
-  {
-    title: "Data & access",
-    rows: [
-      { feature: "Secrets vault (AES-256-GCM)", free: false, business: true, workforce: true },
-      { feature: "Database access broker", free: false, business: false, workforce: true },
-      { feature: "Kubernetes access proxy", free: false, business: false, workforce: true },
-      { feature: "App connector (reverse proxy)", free: false, business: false, workforce: true },
-      { feature: "Webhook forwarder", free: false, business: false, workforce: true },
-      { feature: "Terraform provider", free: false, business: false, workforce: true },
-    ],
-  },
-  {
-    title: "Workforce analytics",
-    rows: [
-      { feature: "Session tracking", free: false, business: false, workforce: true },
-      { feature: "App / domain usage", free: false, business: false, workforce: true },
-      { feature: "Productivity scoring", free: false, business: false, workforce: true },
-      { feature: "Schedule compliance", free: false, business: false, workforce: true },
-      { feature: "Digital Experience Monitoring (DEM)", free: false, business: false, workforce: true },
-      { feature: "GDPR monitoring consent", free: false, business: false, workforce: true },
-    ],
-  },
-  {
-    title: "Support & ops",
-    rows: [
-      { feature: "Support channel", free: "Community", business: "Priority email", workforce: "Dedicated + SLA" },
-      { feature: "Trial", free: "—", business: "60 days", workforce: "Pilot on request" },
-      { feature: "Custom invoicing", free: false, business: false, workforce: true },
-      { feature: "DPA + SOC 2 report on request", free: false, business: true, workforce: true },
-    ],
-  },
+];
+
+// The actual difference between the plans — scale, not features.
+const differs = [
+  { label: "Price", free: "$0 forever", business: "$10 / user / mo" },
+  { label: "Users", free: "Up to 5", business: "Unlimited (per seat)" },
+  { label: "Machines", free: "2 / user (10 total)", business: "10 / user" },
+  { label: "Features", free: "Everything", business: "Everything" },
+  { label: "Support", free: "Community", business: "Priority email" },
 ];
 
 const faqs = [
   {
-    q: "What's the difference between Free, Business, and Workforce on encryption?",
-    a: "None — every tunnel on every plan uses the same WireGuard cipher suite (X25519 + ChaCha20-Poly1305 + Poly1305). Encryption is never the upsell. Paid plans add features like SCIM provisioning, secrets vault, workforce analytics, DLP, and the AI Operator — not better crypto.",
+    q: "What's the difference between Free and Business?",
+    a: "Features are identical — both plans include everything. The difference is scale: Free is capped at 5 users and 2 machines per user (10 total); Business is $10 per user / month with unlimited seats and 10 machines per user. You pay to grow, not to unlock features.",
+  },
+  {
+    q: "Is encryption or security different on Free?",
+    a: "No. Every tunnel on both plans uses the same WireGuard cipher suite (X25519 + ChaCha20-Poly1305 + Poly1305), and every security feature — DLP, CASB, posture, SSO, audit logs — is available on Free too. Security is never the upsell.",
+  },
+  {
+    q: "Is there a trial?",
+    a: "No trial needed. The Free plan is full-featured forever for up to 5 users — try everything, then upgrade to Business only when you outgrow the seat or machine limits.",
+  },
+  {
+    q: "What happens when I hit the Free limit?",
+    a: "Device registration blocks at your cap (seats × 2 machines). Adding a paid Business seat raises the cap immediately. Nothing already registered is removed, and lowering seats is a manual admin action — we never auto-quarantine your machines.",
   },
   {
     q: "Why only Razorpay? What about Stripe / wire / invoice?",
-    a: "We launched in India first, so Razorpay is the self-serve default (supports 100+ countries via Razorpay International). For non-Razorpay regions or invoice/wire/cheque payment, contact sales@quickztna.com. Stripe is on the 2026-Q2 roadmap.",
-  },
-  {
-    q: "What happens when I hit the 100-machine limit on Free?",
-    a: "Device registration is hard-blocked at the limit — the 101st device gets a clear 'QUOTA_EXCEEDED' response and isn't added. A safety-net background job also runs every 5 minutes to quarantine any excess machines that got in through a plan downgrade. Nothing already-registered is deleted. Upgrade → quota raises immediately and previously-quarantined devices come back online.",
-  },
-  {
-    q: "Can I downgrade? What happens to my data?",
-    a: "Yes, any time from the Billing page. Paid features gate down immediately. No data is deleted — if you downgrade then re-upgrade, everything resumes where it left off.",
-  },
-  {
-    q: "What does the 60-day Business trial include?",
-    a: "All Business-tier features. No credit card required. On day 61 the org auto-downgrades to Free via the expire-trials cron. You can extend via sales if you need more runway for a pilot.",
+    a: "We launched in India first, so Razorpay is the self-serve default (supports 100+ countries via Razorpay International). For other regions or invoice/wire payment, contact sales@quickztna.com. Stripe is on the roadmap.",
   },
   {
     q: "Is there a self-hosted / on-prem option?",
-    a: "Not today — QuickZTNA is a fully managed cloud service. Contact sales@quickztna.com if self-hosted or air-gapped deployment is a requirement, and we'll discuss your needs and our roadmap.",
-  },
-  {
-    q: "Are superadmins bypassing plan gates?",
-    a: "No. Platform superadmins have cross-org read/write for support, but plan gates are enforced at handler level. A superadmin helping a Free-tier org still hits FEATURE_GATED on paid endpoints. This is intentional.",
-  },
-  {
-    q: "What are the real enforced limits?",
-    a: "All three are hard-gated in code. (1) Feature gates: every paid handler calls requireFeature() and returns FEATURE_GATED to free-tier callers. (2) Machine limit: enforced at device registration time AND by a 5-minute safety-net cron. (3) User limit: enforced at invite-time, programmatic invite, and on auto-join-by-domain — all three paths refuse to add a user past the cap. No 'policy-only' limits; everything in the matrix is backed by code.",
+    a: "Not today — QuickZTNA is a managed cloud service (no self-host today). Contact sales@quickztna.com if air-gapped deployment is a requirement and we'll discuss your needs and our roadmap.",
   },
 ];
 
-function renderCell(v: boolean | string) {
-  if (v === true) return { icon: "check", text: "" };
-  if (v === false) return { icon: "minus", text: "" };
-  return { icon: null, text: v };
-}
-
-// Schema.org Product with three Offers — critical for Google AI Overview eligibility.
-// Without this, the pricing page is invisible to AI search citation for queries like
-// "how much does ZTNA mesh VPN cost" or "free ZTNA mesh VPN for 100 devices."
 const productSchema = {
   "@context": "https://schema.org",
   "@type": "Product",
   name: "QuickZTNA",
-  description: "Remote Workforce Security OS pricing. WireGuard ZTNA mesh + ABAC + AI Operator. Free for 100 devices forever.",
+  description:
+    "Remote Workforce Security OS pricing. WireGuard ZTNA mesh + ABAC + AI Operator. Free forever for up to 5 users — every feature included.",
   brand: { "@type": "Brand", name: "QuickZTNA" },
   category: "Zero Trust Network Access",
   url: "https://quickztna.com/pricing/",
@@ -237,7 +111,7 @@ const productSchema = {
     {
       "@type": "Offer",
       name: "Free",
-      description: "100 devices, 3 users, full ZTNA mesh, community support. Free forever, no credit card.",
+      description: "Up to 5 users, 2 machines per user, every feature included, community support. Free forever, no credit card.",
       price: "0",
       priceCurrency: "USD",
       availability: "https://schema.org/InStock",
@@ -247,7 +121,7 @@ const productSchema = {
     {
       "@type": "Offer",
       name: "Business",
-      description: "Unlimited machines, billed per active user, priority email support, SCIM 2.0, compliance reports. 60-day free trial.",
+      description: "Unlimited users billed per seat, 10 machines per user, every feature included, priority email support.",
       price: "10",
       priceCurrency: "USD",
       priceSpecification: {
@@ -259,14 +133,6 @@ const productSchema = {
       },
       availability: "https://schema.org/InStock",
       url: "https://login.quickztna.com/auth",
-    },
-    {
-      "@type": "Offer",
-      name: "Workforce",
-      description: "For regulated organizations and distributed workforces. Workforce analytics, DLP, CASB, dedicated support with SLA. Custom pricing.",
-      priceCurrency: "USD",
-      availability: "https://schema.org/InStock",
-      url: "mailto:sales@quickztna.com",
     },
   ],
   aggregateRating: undefined,
@@ -292,33 +158,34 @@ const pricingBreadcrumbSchema = {
 };
 ---
 <SiteLayout
-  title="Pricing — QuickZTNA: free for 100 devices, Business at $10 per user"
-  description="Free forever for 100 devices, 3 users. Business at $10 per user / month — unlimited machines, 60-day trial. Workforce on request. Honest per-feature comparison."
+  title="Pricing — QuickZTNA: free forever for 5 users, Business at $10 per user"
+  description="Two plans, identical features. Free forever for up to 5 users (2 machines each). Business at $10 per user / month to scale. Every feature on every plan — you pay for scale, not unlocks."
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(productSchema)} is:inline />
     <script type="application/ld+json" set:html={JSON.stringify(pricingFaqSchema)} is:inline />
     <script type="application/ld+json" set:html={JSON.stringify(pricingBreadcrumbSchema)} is:inline />
   </Fragment>
+
   <!-- HERO -->
   <section class="relative overflow-hidden bg-hero border-b border-border">
     <div class="absolute inset-0 bg-grid opacity-50" aria-hidden="true"></div>
     <div class="relative mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-24">
       <p class="font-mono text-xs uppercase tracking-wider text-primary">Pricing</p>
       <h1 class="mt-4 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-        Start on <span class="text-gradient">Free forever</span>.
-        <br class="hidden sm:block" /> Upgrade when you need it.
+        Every feature, <span class="text-gradient">free to start</span>.
+        <br class="hidden sm:block" /> Pay only to scale.
       </h1>
       <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-        Same WireGuard encryption on every plan. 100 devices on Free. 60-day Business trial.
-        No credit card to start. Honest limits, fully documented.
+        Two plans, identical features. Free forever for up to 5 users — every capability included.
+        Upgrade to Business at $10/user only when you need more seats and machines. No trial clock.
       </p>
     </div>
   </section>
 
   <!-- PLAN CARDS -->
-  <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-    <div class="grid gap-5 lg:grid-cols-3">
+  <section class="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+    <div class="grid gap-5 sm:grid-cols-2">
       {plans.map((p) => (
         <div class={`group relative flex flex-col overflow-hidden rounded-2xl border p-8 shadow-soft transition-all ${
           p.highlight
@@ -327,7 +194,7 @@ const pricingBreadcrumbSchema = {
         }`}>
           {p.highlight && (
             <span class="mb-4 inline-flex w-fit items-center gap-1.5 rounded-full bg-primary px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">
-              <Zap class="h-3 w-3" />Most popular
+              <Zap class="h-3 w-3" />For scaling teams
             </span>
           )}
           <h3 class="text-2xl font-semibold tracking-tight">{p.name}</h3>
@@ -338,7 +205,9 @@ const pricingBreadcrumbSchema = {
             <span class="text-sm text-muted-foreground">{p.per}</span>
           </div>
 
-          <ul class="mt-6 space-y-1.5 font-mono text-xs text-muted-foreground">
+          <p class="mt-4 text-sm font-medium text-foreground">{p.blurb}</p>
+
+          <ul class="mt-5 space-y-1.5 font-mono text-xs text-muted-foreground">
             {p.limits.map((l) => (
               <li class="flex items-center gap-2">
                 <span class="h-1 w-1 rounded-full bg-primary/60"></span>
@@ -349,14 +218,10 @@ const pricingBreadcrumbSchema = {
 
           <div class="my-7 border-t border-border"></div>
 
-          <ul class="flex-1 space-y-2.5 text-sm">
-            {p.features.map((f) => (
-              <li class="flex items-start gap-2.5 text-muted-foreground">
-                <Check class="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={2.5} />
-                <span>{f}</span>
-              </li>
-            ))}
-          </ul>
+          <p class="flex items-start gap-2.5 text-sm text-muted-foreground">
+            <Check class="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={2.5} />
+            <span>Every feature below — DLP, CASB, SSO/SCIM, remote desktop, session recording, the AI assistant, the lot.</span>
+          </p>
 
           <Button
             size="lg"
@@ -371,70 +236,57 @@ const pricingBreadcrumbSchema = {
         </div>
       ))}
     </div>
+
+    <!-- What actually differs -->
+    <div class="mx-auto mt-12 max-w-2xl overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-soft">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-border text-left">
+            <th class="px-5 py-3.5 font-semibold text-foreground">The only differences</th>
+            <th class="w-32 px-3 py-3.5 text-center font-semibold text-foreground">Free</th>
+            <th class="w-32 px-3 py-3.5 text-center font-semibold text-primary">Business</th>
+          </tr>
+        </thead>
+        <tbody>
+          {differs.map((d) => (
+            <tr class="border-t border-border/60">
+              <td class="px-5 py-3 text-foreground">{d.label}</td>
+              <td class="px-3 py-3 text-center text-muted-foreground">{d.free}</td>
+              <td class="px-3 py-3 text-center font-medium text-foreground">{d.business}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   </section>
 
-  <!-- COMPARISON TABLE -->
+  <!-- EVERYTHING INCLUDED (parity) -->
   <section class="border-t border-border bg-surface">
     <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-2xl text-center">
-        <p class="font-mono text-xs uppercase tracking-wider text-primary">Compare every feature</p>
+        <p class="font-mono text-xs uppercase tracking-wider text-primary">Included on every plan</p>
         <h2 class="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-          What's on each plan, row by row.
+          The whole platform — on Free too.
         </h2>
         <p class="mt-3 text-muted-foreground">
-          Derived directly from the feature-gate code. If it's here, it ships.
+          No feature gates. Free and Business get exactly the same capabilities. If it's here, it ships.
         </p>
       </div>
 
-      <div class="mt-12 overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-soft">
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead class="sticky top-0 z-10 bg-surface-elevated/95 backdrop-blur-md">
-              <tr class="border-b border-border text-left">
-                <th class="px-5 py-4 font-semibold text-foreground">Feature</th>
-                <th class="w-28 px-3 py-4 text-center font-semibold text-foreground">Free</th>
-                <th class="w-32 px-3 py-4 text-center font-semibold text-primary">Business</th>
-                <th class="w-32 px-3 py-4 text-center font-semibold text-foreground">Workforce</th>
-              </tr>
-            </thead>
-            <tbody>
-              {groups.map((g) => (
-                <>
-                  <tr class="border-t border-border bg-muted/40">
-                    <td colSpan={4} class="px-5 py-2.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                      {g.title}
-                    </td>
-                  </tr>
-                  {g.rows.map((r) => {
-                    const f = renderCell(r.free);
-                    const b = renderCell(r.business);
-                    const w = renderCell(r.workforce);
-                    return (
-                      <tr class="border-t border-border/60 transition-colors hover:bg-muted/20">
-                        <td class="px-5 py-3.5 text-foreground">{r.feature}</td>
-                        <td class="px-3 py-3.5 text-center text-sm text-muted-foreground">
-                          {f.icon === "check" && <Check class="mx-auto h-4 w-4 text-success" strokeWidth={2.5} />}
-                          {f.icon === "minus" && <Minus class="mx-auto h-4 w-4 text-border" />}
-                          {f.text && <span class="font-mono text-xs">{f.text}</span>}
-                        </td>
-                        <td class="px-3 py-3.5 text-center text-sm text-muted-foreground">
-                          {b.icon === "check" && <Check class="mx-auto h-4 w-4 text-primary" strokeWidth={2.5} />}
-                          {b.icon === "minus" && <Minus class="mx-auto h-4 w-4 text-border" />}
-                          {b.text && <span class="font-mono text-xs font-semibold text-foreground">{b.text}</span>}
-                        </td>
-                        <td class="px-3 py-3.5 text-center text-sm text-muted-foreground">
-                          {w.icon === "check" && <Check class="mx-auto h-4 w-4 text-chart-5" strokeWidth={2.5} />}
-                          {w.icon === "minus" && <Minus class="mx-auto h-4 w-4 text-border" />}
-                          {w.text && <span class="font-mono text-xs">{w.text}</span>}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </>
+      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {included.map((g) => (
+          <div class="rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft">
+            <h3 class="font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{g.title}</h3>
+            <ul class="mt-4 space-y-2.5 text-sm">
+              {g.items.map((it) => (
+                <li class="flex items-start gap-2.5 text-muted-foreground">
+                  <Check class="mt-0.5 h-4 w-4 shrink-0 text-success" strokeWidth={2.5} />
+                  <span>{it}</span>
+                </li>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </ul>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -472,10 +324,11 @@ const pricingBreadcrumbSchema = {
           <div>
             <Zap class="h-8 w-8" />
             <h2 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Ship 100 devices today. Zero-trust from the first connection.
+              Get your whole team on zero-trust today.
             </h2>
             <p class="mt-3 max-w-xl text-primary-foreground/85">
-              Issue one auth key. Pipe one install command. Your whole workforce is on the tailnet.
+              Free for up to 5 users, every feature included. Issue one auth key, run one install command,
+              and your team is on the mesh.
             </p>
           </div>
           <div class="flex flex-col gap-3">
