@@ -34,6 +34,8 @@ faq:
 
 Cloudflare Access is an edge-native identity-aware proxy. It is strong for user-to-web-app access with global-edge latency benefits, but it is not the right product for every remote-access pattern. Teams looking for a Cloudflare Access alternative typically want one of four things: a real device agent with mesh connectivity, an audit-able open-protocol data plane (usually WireGuard), a self-hostable coordination plane, or post-quantum key exchange on the tunnel itself rather than only on the Cloudflare edge. The serious alternatives in 2026: Tailscale, NetBird, QuickZTNA, Twingate, Zscaler Private Access, and AWS Verified Access. This post compares each against the typical motivations for leaving Cloudflare Access.
 
+> **Adding up your tool bill?** An access proxy like Cloudflare Access is usually just one line item — most teams also pay separately for a device-agent mesh, remote support, DLP and a monitoring tool. QuickZTNA bundles all of them into one agent and one bill. [See what you'd save →](/savings/) — up to 90% lower.
+
 ## Who this is for
 
 Security leads running Cloudflare Access today and revisiting the decision, or evaluating for a new deployment with Cloudflare Access on the shortlist. Architects who want a clean framing of the model difference between edge-proxy ZTNA and agent-mesh ZTNA.

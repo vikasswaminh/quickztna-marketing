@@ -33,6 +33,8 @@ faq:
 
 SASE (Secure Access Service Edge) is a Gartner-coined architecture combining SD-WAN networking and four security components: ZTNA, SWG, CASB, and FWaaS. SSE (Security Service Edge) is the security-only subset of SASE, introduced by Gartner in 2021. ZTNA (Zero Trust Network Access) is one of the components of both. In practice, a 50-person team rarely needs full SASE — the cost and complexity are shaped for enterprises. A focused ZTNA product plus a handful of discrete security tools usually covers the real need. This post explains the three terms precisely, shows where they overlap, and recommends what a small team should buy and in what order.
 
+> **Adding up your tool bill?** Buying ZTNA, a mesh VPN, DLP, remote support and monitoring as separate products is exactly the sprawl SASE was meant to fix — without enterprise SASE pricing. QuickZTNA bundles them into one agent and one bill. [See what you'd save →](/savings/) — up to 90% lower.
+
 ## Who this is for
 
 CIOs, security leads, and engineering managers at mid-sized organisations (30–500 people) trying to figure out which acronym applies to them and whether they need a full SASE platform. Also analysts and buyers writing RFIs who need the taxonomy straight.

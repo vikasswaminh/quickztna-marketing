@@ -35,6 +35,8 @@ faq:
 
 Every ransomware incident report from 2020 through 2025 lists RDP over the internet in the top three initial access vectors. Secure remote desktop is not optional — raw RDP exposure on the public internet is a near-certain path to compromise. This list compares the ten most important options in 2026, from the VPN-less ZTNA approach to browser-based WebRTC alternatives. Spoiler: any solution that leaves port 3389 open to the internet is not on this list.
 
+> **Adding up your tool bill?** Remote-desktop tools like TeamViewer are usually just one line item — most teams also pay separately for a mesh VPN, a ZTNA gateway, DLP and a monitoring tool. QuickZTNA bundles secure remote desktop and shell with all of them into one agent and one bill. [See what you'd save →](/savings/) — up to 90% lower.
+
 ## Why legacy remote desktop fails
 
 **RDP (direct internet exposure).** Port 3389 open to the internet means automated scanners find the endpoint within minutes of provisioning. Password-spraying attacks run continuously at scale. No MFA by default. Enterprise Windows deployments with domain admin credentials create maximum blast radius when compromised.
