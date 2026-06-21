@@ -1,0 +1,337 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import Button from "@/components/ui/Button.astro";
+import { ArrowRight, Check, Zap, Mail } from "lucide-astro";
+
+const AUTH_URL = "https://login.quickztna.com/auth";
+const SALES_URL = "mailto:sales@quickztna.com?subject=Consolidation%20%26%20pricing%20inquiry";
+
+// Tool rows for the calculator. Prices are typical published list rates per
+// user/month; every field is editable in the UI so the result is always the
+// visitor's own number, never an asserted one. `on` = checked by default.
+const tools = [
+  { on: true,  name: "TeamViewer / AnyDesk",        cat: "Remote support",            price: 25 },
+  { on: true,  name: "Tailscale / Twingate",        cat: "Mesh VPN",                  price: 6 },
+  { on: true,  name: "Zscaler / Cloudflare Access", cat: "ZTNA / SSE",                price: 15 },
+  { on: true,  name: "Hubstaff / ActivTrak",        cat: "Workforce monitoring",      price: 10 },
+  { on: false, name: "Cisco Umbrella",              cat: "DNS / web filtering",       price: 5 },
+  { on: false, name: "Forcepoint / MS Purview",     cat: "Data loss prevention",      price: 8 },
+  { on: false, name: "Netskope",                    cat: "CASB (SaaS / AI control)",  price: 6 },
+  { on: false, name: "Intune / Kandji",             cat: "Device posture",            price: 8 },
+  { on: false, name: "Exabeam",                     cat: "User risk / UEBA",          price: 8 },
+  { on: false, name: "Splunk / Datadog",            cat: "Audit / SIEM logging",      price: 8 },
+  { on: false, name: "Okta / JumpCloud",            cat: "SSO + SCIM",                price: 4 },
+  { on: false, name: "1Password / Vault",           cat: "Secrets management",        price: 8 },
+];
+
+// The consolidation map: the job a team pays a separate vendor for, and the
+// QuickZTNA capability that covers it. Every QuickZTNA item is a shipped
+// feature also listed on /pricing — no claims beyond what the product does.
+const replaces = [
+  { job: "Remote-control a user's screen to fix it", vendor: "TeamViewer, AnyDesk",   qz: "Remote desktop" },
+  { job: "Shell into a machine to troubleshoot",      vendor: "SSH tools, Splashtop",  qz: "Remote shell" },
+  { job: "Connect remote devices privately",          vendor: "Tailscale, Twingate",   qz: "WireGuard mesh + MagicDNS" },
+  { job: "Right user + right device → right app",      vendor: "Zscaler, CF Access",    qz: "ABAC access, posture-gated" },
+  { job: "Block malicious domains, filter web",        vendor: "Cisco Umbrella",        qz: "DNS filtering + cloud firewall" },
+  { job: "Stop secrets & PII from leaving",            vendor: "Forcepoint, Purview",   qz: "DLP — catches & masks secrets" },
+  { job: "See & control SaaS and AI app usage",        vendor: "Netskope",              qz: "CASB + approval workflow" },
+  { job: "Keep devices compliant",                     vendor: "Intune, Kandji",        qz: "Posture + auto-quarantine" },
+  { job: "Track time, apps & productivity",            vendor: "Hubstaff, ActivTrak",   qz: "Workforce analytics" },
+  { job: "SSO + auto user provisioning",               vendor: "Okta, JumpCloud",       qz: "SAML / OIDC + SCIM" },
+  { job: "Store & share secrets safely",               vendor: "1Password, Vault",      qz: "Secrets vault" },
+];
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://quickztna.com" },
+    { "@type": "ListItem", position: 2, name: "Savings calculator", item: "https://quickztna.com/savings/" },
+  ],
+};
+---
+<SiteLayout
+  title="Savings calculator — replace 8 remote-workforce tools with one bill"
+  description="See what you'd save by replacing TeamViewer, Tailscale, Zscaler, your monitoring tool and more with one QuickZTNA agent. Tick your stack, get your number — up to 90% lower."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} is:inline />
+  </Fragment>
+
+  <!-- HERO -->
+  <section class="relative overflow-hidden bg-hero border-b border-border">
+    <div class="absolute inset-0 bg-grid opacity-50" aria-hidden="true"></div>
+    <div class="relative mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-24">
+      <p class="font-mono text-xs uppercase tracking-wider text-primary">Savings calculator</p>
+      <h1 class="mt-4 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+        Replace 8 tools. <span class="text-gradient">Cut up to 90%</span> of the cost.
+      </h1>
+      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+        One agent connects every device, locks down your data, watches productivity, and lets IT
+        fix any machine. Tick the tools you pay for today and see your number — edit any price to
+        match your real invoice.
+      </p>
+    </div>
+  </section>
+
+  <!-- CALCULATOR -->
+  <section id="savings-calc" class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+    <div class="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+      <!-- LEFT: stack -->
+      <div class="rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft sm:p-8">
+        <h2 class="font-mono text-xs uppercase tracking-wider text-muted-foreground">Your current stack</h2>
+        <div class="mt-5 overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-border text-left">
+                <th class="w-8 py-2.5"></th>
+                <th class="py-2.5 font-semibold text-foreground">Tool</th>
+                <th class="w-28 py-2.5 text-right font-semibold text-foreground">$/seat/mo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tools.map((t) => (
+                <tr class="tool-row border-b border-border/60" data-name={t.name} data-cat={t.cat}>
+                  <td class="py-3">
+                    <input type="checkbox" class="h-4 w-4 cursor-pointer rounded border-border" style="accent-color: var(--primary)" checked={t.on} />
+                  </td>
+                  <td class="py-3">
+                    <span class="font-medium text-foreground">{t.name}</span>
+                    <span class="block text-xs text-muted-foreground">{t.cat}</span>
+                  </td>
+                  <td class="py-3 text-right">
+                    <span class="text-muted-foreground">$</span>
+                    <input
+                      type="number" min="0" step="1" value={t.price} data-price
+                      class="w-20 rounded-md border border-border bg-surface px-2 py-1.5 text-right text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-6 flex flex-wrap gap-6">
+          <div>
+            <label for="seats" class="mb-1.5 block text-xs text-muted-foreground">Number of seats</label>
+            <input
+              id="seats" type="number" min="1" value="50"
+              class="w-32 rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
+          <div>
+            <label for="qz" class="mb-1.5 block text-xs text-muted-foreground">QuickZTNA $/seat/mo</label>
+            <input
+              id="qz" type="number" min="0" value="10"
+              class="w-32 rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: result -->
+      <div class="lg:sticky lg:top-24 lg:self-start">
+        <div class="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/[0.05] via-surface-elevated to-surface-elevated p-6 shadow-soft sm:p-8">
+          <h2 class="font-mono text-xs uppercase tracking-wider text-muted-foreground">You'd save</h2>
+          <div id="saveAnnual" class="mt-2 text-5xl font-semibold tracking-tight text-success">$0</div>
+          <p class="text-sm text-muted-foreground">per year</p>
+
+          <dl class="mt-6 space-y-px text-sm">
+            <div class="flex justify-between border-b border-dashed border-border py-2">
+              <dt class="text-muted-foreground">Current stack</dt><dd id="curMo" class="font-medium tabular-nums">$0/mo</dd>
+            </div>
+            <div class="flex justify-between border-b border-dashed border-border py-2">
+              <dt class="text-muted-foreground">QuickZTNA</dt><dd id="qzMo" class="font-medium tabular-nums">$0/mo</dd>
+            </div>
+            <div class="flex justify-between border-b border-dashed border-border py-2">
+              <dt class="text-muted-foreground">Monthly saving</dt><dd id="saveMo" class="font-medium tabular-nums">$0/mo</dd>
+            </div>
+          </dl>
+
+          <span id="pct" class="mt-4 inline-block rounded-full border border-success/40 bg-success/10 px-3 py-1 text-sm font-semibold text-success">0% lower</span>
+
+          <ul id="cancelList" class="mt-5 space-y-1.5"></ul>
+
+          <Button size="lg" href={AUTH_URL} class="mt-6 h-11 w-full font-medium">
+            Start free<ArrowRight class="ml-1.5 h-4 w-4" />
+          </Button>
+          <button
+            id="emailBtn" type="button"
+            class="mt-2.5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-border text-sm font-medium text-foreground transition-colors hover:bg-muted"
+          >
+            <Mail class="h-4 w-4" />Email this to my boss
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <p class="mt-8 max-w-3xl text-xs leading-relaxed text-muted-foreground">
+      Prices are typical published list rates per user / month and vary by plan and negotiation —
+      edit any field to match your actual spend. QuickZTNA replaces the ZTNA, mesh-VPN, DLP, CASB,
+      DNS-filtering, device-posture, remote-support and workforce-monitoring functions teams use
+      every day. It is not a full inline web proxy, a full MDM (no OS patch-push), or a
+      screen-recording suite — and we'll tell you that up front. Your number, your math.
+    </p>
+  </section>
+
+  <!-- WHAT YOU CAN CANCEL -->
+  <section class="border-t border-border bg-surface">
+    <div class="mx-auto max-w-5xl px-4 py-20 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="font-mono text-xs uppercase tracking-wider text-primary">One agent, many jobs</p>
+        <h2 class="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">What you can finally cancel</h2>
+        <p class="mt-3 text-muted-foreground">
+          You're not buying eight products — you're buying eight jobs. QuickZTNA does them in one.
+        </p>
+      </div>
+
+      <div class="mt-12 overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-soft">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-muted/40">
+              <tr class="border-b border-border text-left">
+                <th class="px-5 py-3.5 font-semibold text-foreground">The job</th>
+                <th class="px-5 py-3.5 font-semibold text-muted-foreground">Tool you cancel</th>
+                <th class="px-5 py-3.5 font-semibold text-primary">QuickZTNA</th>
+              </tr>
+            </thead>
+            <tbody>
+              {replaces.map((r) => (
+                <tr class="border-t border-border/60 transition-colors hover:bg-muted/20">
+                  <td class="px-5 py-3.5 text-foreground">{r.job}</td>
+                  <td class="px-5 py-3.5 text-muted-foreground">{r.vendor}</td>
+                  <td class="px-5 py-3.5">
+                    <span class="inline-flex items-center gap-2 text-foreground">
+                      <Check class="h-4 w-4 shrink-0 text-success" strokeWidth={2.5} />{r.qz}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOTTOM CTA -->
+  <section class="relative overflow-hidden border-t border-border bg-surface">
+    <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <div class="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary to-chart-2 p-12 text-primary-foreground shadow-elevated lg:p-16">
+        <div class="absolute inset-0 bg-grid opacity-10"></div>
+        <div class="relative grid items-center gap-8 lg:grid-cols-[1.5fr_1fr]">
+          <div>
+            <Zap class="h-8 w-8" />
+            <h2 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
+              Stop renewing five bills. Start with one.
+            </h2>
+            <p class="mt-3 max-w-xl text-primary-foreground/85">
+              Free for 3 users and 100 machines. No credit card. Connect, secure and fix your whole
+              workforce from one dashboard.
+            </p>
+          </div>
+          <div class="flex flex-col gap-3">
+            <Button size="lg" variant="secondary" href={AUTH_URL} class="h-11 font-medium">
+              Start free — no card<ArrowRight class="ml-1.5 h-4 w-4" />
+            </Button>
+            <a
+              href={SALES_URL}
+              class="inline-flex h-11 items-center justify-center rounded-md border border-primary-foreground/30 px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-foreground/10"
+            >
+              Talk to sales
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</SiteLayout>
+
+<script>
+  function initSavings() {
+    const root = document.getElementById("savings-calc");
+    if (!root) return;
+    const seatsEl = document.getElementById("seats");
+    const qzEl = document.getElementById("qz");
+    const rows = Array.from(root.querySelectorAll(".tool-row"));
+    const fmt = (n) => "$" + Math.round(n).toLocaleString("en-US");
+
+    function calc() {
+      const seats = Math.max(1, Number(seatsEl.value) || 0);
+      const qz = Math.max(0, Number(qzEl.value) || 0);
+      let perSeat = 0;
+      const cancel = [];
+
+      rows.forEach((row) => {
+        const cb = row.querySelector('input[type="checkbox"]');
+        const price = Number(row.querySelector("[data-price]").value) || 0;
+        if (cb.checked) {
+          perSeat += price;
+          cancel.push({ name: row.dataset.name, cat: row.dataset.cat });
+        }
+        row.classList.toggle("opacity-40", !cb.checked);
+      });
+
+      const curMo = perSeat * seats;
+      const qzMo = qz * seats;
+      const saveMo = Math.max(0, curMo - qzMo);
+      const saveYr = saveMo * 12;
+      const pct = curMo > 0 ? Math.round((saveMo / curMo) * 100) : 0;
+
+      document.getElementById("saveAnnual").textContent = fmt(saveYr);
+      document.getElementById("curMo").textContent = fmt(curMo) + "/mo";
+      document.getElementById("qzMo").textContent = fmt(qzMo) + "/mo";
+      document.getElementById("saveMo").textContent = fmt(saveMo) + "/mo";
+      document.getElementById("pct").textContent = pct + "% lower";
+
+      const list = document.getElementById("cancelList");
+      list.innerHTML = "";
+      if (cancel.length) {
+        const head = document.createElement("li");
+        head.className = "font-mono text-[11px] uppercase tracking-wider text-muted-foreground";
+        head.textContent = "Cancel these subscriptions:";
+        list.appendChild(head);
+      }
+      cancel.forEach((c) => {
+        const li = document.createElement("li");
+        li.className = "flex items-center gap-2 text-sm text-muted-foreground";
+        li.innerHTML =
+          '<span class="text-destructive font-bold">✕</span>' +
+          c.name +
+          ' <span class="text-xs opacity-70">— ' + c.cat + "</span>";
+        list.appendChild(li);
+      });
+
+      window.__share = { seats, cancel, curMo, qzMo, saveMo, saveYr, pct, fmt };
+    }
+
+    const emailBtn = document.getElementById("emailBtn");
+    if (emailBtn) {
+      emailBtn.addEventListener("click", () => {
+        const s = window.__share;
+        const list = s.cancel.map((c) => " - " + c.name + " (" + c.cat + ")").join("\n");
+        const body =
+          "Hi,\n\n" +
+          "I ran the numbers on our remote-workforce tools. We're paying about " + s.fmt(s.curMo) +
+          "/mo (" + s.fmt(s.curMo * 12) + "/yr) across " + s.cancel.length + " separate subscriptions.\n\n" +
+          "QuickZTNA replaces all of them in one bill for about " + s.fmt(s.qzMo) + "/mo — saving roughly " +
+          s.fmt(s.saveYr) + " a year (" + s.pct + "% lower) for our " + s.seats + " seats.\n\n" +
+          "Tools we could cancel:\n" + list + "\n\n" +
+          "It connects every device, stops data leaking to AI/SaaS tools, checks device posture, " +
+          "keeps an audit trail, and lets IT remote-fix any machine — all from one dashboard.\n\n" +
+          "Worth a look: https://quickztna.com";
+        const url =
+          "mailto:?subject=" + encodeURIComponent("We could save " + s.fmt(s.saveYr) + "/yr on remote-workforce tools") +
+          "&body=" + encodeURIComponent(body);
+        window.location.href = url;
+      });
+    }
+
+    root.addEventListener("input", calc);
+    calc();
+  }
+
+  initSavings();
+  document.addEventListener("astro:after-swap", initSavings);
+</script>
