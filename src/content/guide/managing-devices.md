@@ -83,7 +83,7 @@ Every device's authentication has a finite lifetime. The default is 180 days. Wh
 
 You can adjust the lifetime in Settings → Network → Key lifetime. Shorter lifetimes (30 or 90 days) are appropriate for regulated industries — HIPAA, PCI, financial — where periodic forced re-auth is a control auditors expect. The trade-off is operator time: shorter rotation means the prompt fires more often.
 
-For Business and Workforce plans, you can also enforce **per-tag lifetime overrides**. For example, devices tagged `payment-processing` can be required to rotate every 30 days, while general workstations stay on the default 180. This is the right pattern when most of your fleet is low-sensitivity but a small fraction touches regulated data.
+You can also enforce **per-tag lifetime overrides**. For example, devices tagged `payment-processing` can be required to rotate every 30 days, while general workstations stay on the default 180. This is the right pattern when most of your fleet is low-sensitivity but a small fraction touches regulated data.
 
 A separate concept worth not confusing with key expiry: **session keys** (the actual encryption keys for an in-flight tunnel) rotate automatically every two minutes regardless of the device key lifetime. That rotation is invisible to users and uninterrupted. Device key expiry is a re-authentication event; session key rotation is a cryptographic hygiene event. Different concerns, different intervals.
 
@@ -96,9 +96,9 @@ The procedure is the same in all three cases. On the admin dashboard, find the d
 - The device is dropped from the network. Active sessions terminate within seconds.
 - The device's public key is revoked centrally. Even if the binary still has the private key on disk, it cannot reconnect.
 - The on-device client detects the revocation on its next coordination check-in (under a minute) and clears its local state, including cached policy and peer lists.
-- The device's audit history is preserved according to your plan's log retention policy (90 days on Free, one year on Business, configurable on Workforce).
+- The device's audit history is preserved according to your plan's log retention policy (90 days on Free, one year on Business).
 
-For employee offboarding specifically, the better pattern is to remove the **user** rather than each of their devices individually. Removing a user in Settings → Members revokes every device they own in one operation and prevents them from authenticating any new device. If you've correctly tied users to your SSO source, deprovisioning the user in your identity provider triggers the QuickZTNA user removal automatically (SCIM, on Business and Workforce plans).
+For employee offboarding specifically, the better pattern is to remove the **user** rather than each of their devices individually. Removing a user in Settings → Members revokes every device they own in one operation and prevents them from authenticating any new device. If you've correctly tied users to your SSO source, deprovisioning the user in your identity provider triggers the QuickZTNA user removal automatically (SCIM, available on every plan).
 
 For a suspected-stolen device, the additional step is to investigate before removing. The device's audit log shows what it has accessed recently — usually enough to scope the blast radius. If you remove the device first you lose nothing operationally, but you'll want the access trail captured before the device disappears from the active view.
 

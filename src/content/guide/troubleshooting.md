@@ -121,7 +121,7 @@ If `ztna netcheck`, `ztna status`, and this page haven't surfaced the issue:
 
 2. **Email [support@quickztna.com](mailto:support@quickztna.com)** with the bug report, what you expected, and what you saw. Include the device's tailnet hostname so we can correlate with service-side logs.
 
-3. **For active production issues on Business or Workforce plans**, use the priority support channel (admin dashboard → Settings → Support).
+3. **For active production issues on the Business plan**, use the priority support channel (admin dashboard → Settings → Support).
 
 4. **For suspected security issues**, write to [security@quickztna.com](mailto:security@quickztna.com) instead of regular support.
 

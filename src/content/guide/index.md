@@ -6,8 +6,8 @@ order: 1
 updatedAt: 2026-05-16
 primaryKeyword: "QuickZTNA user guide"
 faq:
-  - q: "Is QuickZTNA really free for 100 devices?"
-    a: "Yes. The Free plan covers 100 devices and 3 users, forever, with no trial timer. Every tunnel uses the same WireGuard encryption on every plan — there is no downgraded free-tier build."
+  - q: "Is QuickZTNA really free?"
+    a: "Yes. The Free plan covers up to 5 users (2 machines each), forever, with no trial timer — and it includes every feature. Both plans use the same WireGuard encryption; the only difference between Free and Business is scale (users and machines)."
   - q: "Do I need to install anything on a server to use QuickZTNA?"
     a: "No. The coordination plane is fully managed. You install a small client on each device that should join the network. The client is open-source code and runs as an ordinary system service."
   - q: "What's the difference between the user guide and the developer docs?"
@@ -76,7 +76,7 @@ The [troubleshooting page](/guide/troubleshooting/) covers about ninety percent 
 
 The [developer docs](/docs/) cover the contract — CLI flags, API responses, error codes. If your question is "what does this exit code mean" or "what fields can the API return," that's the place.
 
-Direct support is via [support@quickztna.com](mailto:support@quickztna.com). Free plan support is best-effort with a typical first response inside one business day. Business plan support has a documented response-time SLA on the [pricing page](/pricing/). Workforce plan customers get a dedicated channel; talk to your account contact.
+Direct support is via [support@quickztna.com](mailto:support@quickztna.com). Free plan support is best-effort with a typical first response inside one business day. Business plan support is priority email — see the [pricing page](/pricing/).
 
 For security issues — vulnerabilities, suspected key compromise, anything that should not be discussed in a public ticket — write to [security@quickztna.com](mailto:security@quickztna.com). Our coordinated-disclosure policy is on the security page of the developer docs.
 

@@ -42,13 +42,13 @@ For people scanning to confirm the technical particulars before reading further:
 
 **Cryptographic primitives.** WireGuard data plane: Curve25519 (X25519) key exchange, ChaCha20-Poly1305 AEAD, BLAKE2s hashing. Ed25519 for device identity signatures. SHA-256 for content/integrity hashing. (Post-quantum hybrid key exchange is on the roadmap, not in the shipped client.)
 
-**Identity.** OIDC primary; SAML supported for enterprise plans; SCIM 2.0 for user/group sync on Business and Workforce. Per-user MFA enforced through your IdP — QuickZTNA does not maintain a separate password.
+**Identity.** OIDC primary; SAML supported; SCIM 2.0 for user/group sync — available on every plan. Per-user MFA enforced through your IdP — QuickZTNA does not maintain a separate password.
 
 **API.** REST over HTTPS with bearer tokens. OpenAPI 3.1 specification. JSON request and response bodies. RFC 7807 error format. Rate-limited per organization with documented limits.
 
-**Compliance.** GDPR-aligned with documented data flows and a DPA; HIPAA BAA on Business and above. SOC 2 Type II and ISO 27001 in progress (target 2026).
+**Compliance.** GDPR-aligned with documented data flows and a DPA; HIPAA BAA on Business. SOC 2 Type II and ISO 27001 in progress (target 2026).
 
-**Audit.** Every administrative action, every policy decision, and every authentication is logged. Free plan: 90-day retention with dashboard query. Business: one year, queryable via API, exportable to SIEM. Workforce: customizable retention, real-time streaming to your log infrastructure.
+**Audit.** Every administrative action, every policy decision, and every authentication is logged. Free plan: 90-day retention with dashboard query. Business: one year, queryable via API, exportable to SIEM, with real-time event streaming.
 
 **Hosting.** Fully managed cloud service; self-hosting is not offered today. Contact sales@quickztna.com if it's a requirement.
 
@@ -76,7 +76,7 @@ If you find an error in the docs — a wrong exit code, a stale endpoint descrip
 
 ## Contact
 
-For technical questions about anything in these docs, [support@quickztna.com](mailto:support@quickztna.com) is the right place. Free plan support is best-effort; Business and Workforce plans have documented response-time SLAs.
+For technical questions about anything in these docs, [support@quickztna.com](mailto:support@quickztna.com) is the right place. Free plan support is best-effort; the Business plan has priority email support.
 
 For security issues — vulnerabilities, suspected key compromise, anything that should not be discussed publicly — [security@quickztna.com](mailto:security@quickztna.com) is the right channel. Our coordinated-disclosure policy is on the [security page](/docs/security/).
 

@@ -171,12 +171,12 @@ const featuresFaq = [
     a: "Yes. WireGuard's X25519 + ChaCha20-Poly1305 + Poly1305 cipher suite is used on every tunnel, on every plan including Free. It is not a paid feature, not behind a flag, and cannot be downgraded. Key rotation follows the WireGuard spec.",
   },
   {
-    q: "What is the difference between Free, Business, and Workforce plans?",
-    a: "Free covers 100 devices and 3 users with WireGuard ZTNA mesh, MagicDNS, ABAC policies, device posture, DNS filtering, AI assistant, remote shell, and the global DERP relay fleet (Bangalore + Frankfurt today). Business ($10 per user per month) adds unlimited machines, remote desktop, secrets vault, SCIM provisioning, and a 60-day trial. Workforce (custom pricing) adds workforce analytics, software inventory, user-risk scoring, DLP, CASB, anomaly detection, database access broker, Kubernetes access, and Terraform provider.",
+    q: "What is the difference between the Free and Business plans?",
+    a: "Features are identical — both plans include the entire platform (WireGuard ZTNA mesh, ABAC + device posture, DNS filtering, AI assistant, remote shell + desktop, session recording, DLP, CASB, SCIM, secrets vault, and more). The only difference is scale: Free covers up to 5 users with 2 machines per user; Business ($10 per user per month) is unlimited users billed per seat, with 10 machines per user. You pay to grow, not to unlock features.",
   },
   {
     q: "Does QuickZTNA support SAML / OIDC SSO?",
-    a: "Yes. SAML 2.0 and OIDC SSO work on every plan including Free. Pre-configured connectors exist for Google Workspace, Microsoft Entra (formerly Azure AD), Okta, Authentik, GitHub, and any standards-compliant identity provider. SCIM 2.0 provisioning for proactive user lifecycle management is included on Business and Workforce plans.",
+    a: "Yes. SAML 2.0 and OIDC SSO work on every plan including Free. Pre-configured connectors exist for Google Workspace, Microsoft Entra (formerly Azure AD), Okta, Authentik, GitHub, and any standards-compliant identity provider. SCIM 2.0 provisioning for proactive user lifecycle management is included on every plan.",
   },
   {
     q: "Can QuickZTNA replace my existing VPN?",
@@ -188,7 +188,7 @@ const featuresFaq = [
   },
   {
     q: "What compliance certifications does QuickZTNA support?",
-    a: "We offer a GDPR-aligned DPA and sign HIPAA Business Associate Agreements on the Business plan and above. SOC 2 Type II and ISO 27001 certifications are in progress with target completion in 2026.",
+    a: "We offer a GDPR-aligned DPA and sign HIPAA Business Associate Agreements on the Business plan. SOC 2 Type II and ISO 27001 certifications are in progress with target completion in 2026.",
   },
   {
     q: "Is there a self-hosted or air-gapped deployment option?",
@@ -196,7 +196,7 @@ const featuresFaq = [
   },
   {
     q: "Does the AI assistant share data with third parties?",
-    a: "The AI assistant uses Anthropic's Claude API. Tenant data sent to the API is subject to Anthropic's enterprise data handling: not retained, not used for training. Workforce-plan customers can disable AI features entirely if their compliance posture requires no third-party processing. The AI is a convenience layer over our own API — every action is auditable and reversible.",
+    a: "The AI assistant uses Anthropic's Claude API. Tenant data sent to the API is subject to Anthropic's enterprise data handling: not retained, not used for training. Admins can disable AI features entirely if their compliance posture requires no third-party processing. The AI is a convenience layer over our own API — every action is auditable and reversible.",
   },
 ];
 
@@ -264,13 +264,10 @@ const featuresBreadcrumbSchema = {
       </div>
       <div class="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs">
         <span class="inline-flex items-center gap-1.5 rounded-full border border-success/30 bg-success/5 px-2.5 py-1 font-mono font-medium text-success">
-          <span class="h-1.5 w-1.5 rounded-full bg-success"></span>Free — 100 devices, 3 users
+          <span class="h-1.5 w-1.5 rounded-full bg-success"></span>Free — 5 users, every feature
         </span>
         <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/5 px-2.5 py-1 font-mono font-medium text-primary">
-          <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>Business — $10/mo · 60-day trial
-        </span>
-        <span class="inline-flex items-center gap-1.5 rounded-full border border-chart-5/30 bg-chart-5/5 px-2.5 py-1 font-mono font-medium text-chart-5">
-          <span class="h-1.5 w-1.5 rounded-full bg-chart-5"></span>Workforce — Contact sales
+          <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>Business — $10 / user / mo
         </span>
       </div>
     </div>
@@ -355,7 +352,7 @@ const featuresBreadcrumbSchema = {
               <ArrowRight class="ml-1.5 h-4 w-4" />
             </Button>
             <Button size="lg" href={AUTH_URL} class="h-11 font-medium bg-primary-foreground/10 border border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/20">
-              Start free · 100 devices
+              Start free · 5 users
             </Button>
           </div>
         </div>

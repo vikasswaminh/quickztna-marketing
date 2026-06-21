@@ -9,9 +9,9 @@ faq:
   - q: "Can I use more than one identity provider at the same time?"
     a: "Yes. Many teams use Google Workspace for full-time employees and GitHub for contractor access, with both sources mapped to different role groups in QuickZTNA. The admin dashboard supports any number of configured identity providers; users authenticate with the one their email or identity matches."
   - q: "Is SCIM provisioning required or optional?"
-    a: "Optional but recommended on Business and Workforce plans. Without SCIM, users self-onboard on first sign-in (just-in-time provisioning) and group membership is read from OIDC claims. With SCIM, users and groups are pushed proactively from your IdP, which is the right pattern for tight offboarding and large group hierarchies."
+    a: "Optional but recommended on every plan. Without SCIM, users self-onboard on first sign-in (just-in-time provisioning) and group membership is read from OIDC claims. With SCIM, users and groups are pushed proactively from your IdP, which is the right pattern for tight offboarding and large group hierarchies."
   - q: "Do you support SAML?"
-    a: "Yes, on Business and Workforce plans. SAML 2.0 with SP-initiated and IdP-initiated flows. OIDC is preferred for new deployments because it's simpler and the security properties are equivalent or better; SAML is offered for compatibility with IdPs that don't speak OIDC or for procurement reasons."
+    a: "Yes, on every plan. SAML 2.0 with SP-initiated and IdP-initiated flows. OIDC is preferred for new deployments because it's simpler and the security properties are equivalent or better; SAML is offered for compatibility with IdPs that don't speak OIDC or for procurement reasons."
 ---
 
 QuickZTNA integrates with every major identity provider. This page covers the setup specifics for the common ones — Google Workspace, Microsoft Entra (formerly Azure AD), GitHub, Okta, Authentik — plus the generic OIDC, SAML, and SCIM paths for anything not specifically named.
@@ -24,9 +24,9 @@ Three protocols, in order of preference:
 
 **OIDC (OpenID Connect)** is the right default for new deployments. Every major IdP supports it. The security properties are well-understood; the configuration is simple; refresh tokens give you long-lived sessions without re-prompting users every hour.
 
-**SAML 2.0** is supported on Business and Workforce plans. Use it when your IdP doesn't speak OIDC (legacy enterprise IdPs), when your procurement / security team insists on SAML for historical reasons, or when you need very specific SAML-only features like attribute mapping that doesn't translate cleanly to OIDC claims.
+**SAML 2.0** is supported on every plan. Use it when your IdP doesn't speak OIDC (legacy enterprise IdPs), when your procurement / security team insists on SAML for historical reasons, or when you need very specific SAML-only features like attribute mapping that doesn't translate cleanly to OIDC claims.
 
-**SCIM 2.0** is not an authentication protocol — it's the provisioning protocol used alongside OIDC or SAML. Optional but recommended for fleets larger than 50 people on Business or Workforce plans. SCIM pushes user creation, group changes, and offboarding events from your IdP to QuickZTNA in near real time. Without SCIM, the same data flows on a slower, sign-in-triggered basis.
+**SCIM 2.0** is not an authentication protocol — it's the provisioning protocol used alongside OIDC or SAML. Optional but recommended for fleets larger than 50 people. SCIM pushes user creation, group changes, and offboarding events from your IdP to QuickZTNA in near real time. Without SCIM, the same data flows on a slower, sign-in-triggered basis.
 
 You can mix and match. A common pattern: OIDC for authentication, SCIM for provisioning, configured once on each side.
 
@@ -176,7 +176,7 @@ Authentik's SCIM provider plugin is available if you want proactive provisioning
 
 ## SAML 2.0
 
-For IdPs that don't speak OIDC or for procurement reasons. Available on Business and Workforce plans.
+For IdPs that don't speak OIDC or for procurement reasons. Available on every plan.
 
 **Setup in QuickZTNA:**
 

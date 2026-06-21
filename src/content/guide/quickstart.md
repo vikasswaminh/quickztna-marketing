@@ -1,5 +1,5 @@
 ---
-title: "Quickstart: 100 devices on QuickZTNA in two minutes"
+title: "Quickstart: QuickZTNA in two minutes"
 description: "From signing up to your first encrypted tunnel in under two minutes. A step-by-step QuickZTNA quickstart for Linux, macOS, and Windows."
 section: "getting-started"
 order: 2

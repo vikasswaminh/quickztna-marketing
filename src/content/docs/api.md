@@ -212,11 +212,11 @@ Groups are read-only via the QuickZTNA API; the source of truth is your identity
 - `GET /audit-log` — paginated event stream. Supports `since`, `until`, `event_type`, `actor`, `subject` filters.
 - `GET /audit-log/{event_id}` — single event with full detail.
 
-The audit log retention depends on your plan: 90 days on Free, one year on Business, configurable on Workforce. Workforce plans can also stream events in real time via the events endpoint below.
+The audit log retention depends on your plan: 90 days on Free, one year on Business. The events endpoint below can stream events in real time.
 
 ### Real-time events
 
-- `GET /events?stream=true` — Server-Sent Events stream of audit and system events. Workforce-plan only.
+- `GET /events?stream=true` — Server-Sent Events stream of audit and system events.
 
 The same data as the audit log, but pushed as it happens. Useful for SIEM ingestion or real-time alerting.
 

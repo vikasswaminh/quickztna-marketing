@@ -84,7 +84,7 @@ There is no implicit fourth trust root. We do not have a master decryption key, 
 
 ## Device posture
 
-The posture engine evaluates a device's security state at connection time on every plan, and continuously throughout a session on Business and Workforce plans.
+The posture engine evaluates a device's security state at connection time and continuously throughout a session — on every plan.
 
 Built-in posture signals:
 
@@ -124,7 +124,7 @@ Audit data is retained per the schedule above and is queryable from the dashboar
 
 **GDPR.** Our data flows are documented in our Data Protection Addendum, available to all customers. We are a controller for limited operational data (organization administrator contact info) and a processor for the bulk of customer data (devices, users, policies, audit logs). The DPA includes EU-standard contractual clauses for any data transferred outside the EEA.
 
-**NIS2 / DORA / HIPAA.** We've mapped QuickZTNA's controls to the technical requirements of NIS2 (Directive (EU) 2022/2555), DORA (Regulation (EU) 2022/2554), and the HIPAA Security Rule. Mapping documents are available on request. We are not a HIPAA business associate by default but will sign a BAA on the Business plan and above; Workforce-plan customers in healthcare are encouraged to discuss specific compliance needs with their account contact.
+**NIS2 / DORA / HIPAA.** We've mapped QuickZTNA's controls to the technical requirements of NIS2 (Directive (EU) 2022/2555), DORA (Regulation (EU) 2022/2554), and the HIPAA Security Rule. Mapping documents are available on request. We are not a HIPAA business associate by default but will sign a BAA on the Business plan; customers in healthcare are encouraged to discuss specific compliance needs with their account contact.
 
 **ISO 27001.** In progress, target completion 2026 Q3.
 
