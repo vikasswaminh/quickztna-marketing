@@ -21,7 +21,7 @@ QuickZTNA's client is a single binary, **`ztna`**, on Linux, macOS, and Windows.
 ## Before you install
 
 - **Administrator access** on the device (to register a service and create the network interface).
-- A **QuickZTNA account** — sign up at [login.quickztna.com](https://login.quickztna.com/auth). The Free plan covers up to 5 users (2 machines each), with every feature included.
+- A **QuickZTNA account** — sign up at [login.quickztna.com](https://login.quickztna.com/auth). The Free plan covers up to 5 users (5 machines each), with every feature included.
 - **Outbound HTTPS** to `login.quickztna.com` (TCP/443). Peer-to-peer data uses UDP where possible and transparently falls back to an encrypted relay (DERP) when UDP is blocked. No inbound ports.
 
 ## Linux & macOS — one-line install

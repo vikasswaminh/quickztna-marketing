@@ -17,7 +17,7 @@ const plans = [
     ctaHref: AUTH_URL,
     highlight: false,
     blurb: "Every feature included. No credit card. No trial clock.",
-    limits: ["Up to 5 users", "2 machines per user (10 total)", "Community support"],
+    limits: ["Up to 5 users", "5 machines per user (25 total)", "Community support"],
   },
   {
     name: "Business",
@@ -65,7 +65,7 @@ const included = [
 const differs = [
   { label: "Price", free: "$0 forever", business: "$10 / user / mo" },
   { label: "Users", free: "Up to 5", business: "Unlimited (per seat)" },
-  { label: "Machines", free: "2 / user (10 total)", business: "10 / user" },
+  { label: "Machines", free: "5 / user (25 total)", business: "10 / user" },
   { label: "Features", free: "Everything", business: "Everything" },
   { label: "Support", free: "Community", business: "Priority email" },
 ];
@@ -73,7 +73,7 @@ const differs = [
 const faqs = [
   {
     q: "What's the difference between Free and Business?",
-    a: "Features are identical — both plans include everything. The difference is scale: Free is capped at 5 users and 2 machines per user (10 total); Business is $10 per user / month with unlimited seats and 10 machines per user. You pay to grow, not to unlock features.",
+    a: "Features are identical — both plans include everything. The difference is scale: Free is capped at 5 users and 5 machines per user (25 total); Business is $10 per user / month with unlimited seats and 10 machines per user. You pay to grow, not to unlock features.",
   },
   {
     q: "Is encryption or security different on Free?",
@@ -85,7 +85,7 @@ const faqs = [
   },
   {
     q: "What happens when I hit the Free limit?",
-    a: "Device registration blocks at your cap (seats × 2 machines). Adding a paid Business seat raises the cap immediately. Nothing already registered is removed, and lowering seats is a manual admin action — we never auto-quarantine your machines.",
+    a: "Device registration blocks at your cap (seats × 5 machines). Adding a paid Business seat raises the cap immediately. Nothing already registered is removed, and lowering seats is a manual admin action — we never auto-quarantine your machines.",
   },
   {
     q: "Why only Razorpay? What about Stripe / wire / invoice?",
@@ -111,7 +111,7 @@ const productSchema = {
     {
       "@type": "Offer",
       name: "Free",
-      description: "Up to 5 users, 2 machines per user, every feature included, community support. Free forever, no credit card.",
+      description: "Up to 5 users, 5 machines per user, every feature included, community support. Free forever, no credit card.",
       price: "0",
       priceCurrency: "USD",
       availability: "https://schema.org/InStock",
@@ -159,7 +159,7 @@ const pricingBreadcrumbSchema = {
 ---
 <SiteLayout
   title="Pricing — QuickZTNA: free forever for 5 users, Business at $10 per user"
-  description="Two plans, identical features. Free forever for up to 5 users (2 machines each). Business at $10 per user / month to scale. Every feature on every plan — you pay for scale, not unlocks."
+  description="Two plans, identical features. Free forever for up to 5 users (5 machines each). Business at $10 per user / month to scale. Every feature on every plan — you pay for scale, not unlocks."
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(productSchema)} is:inline />
