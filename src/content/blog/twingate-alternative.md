@@ -104,10 +104,10 @@ The Client-Connector model specifically is Twingate's differentiator. Alternativ
 
 ## 5. Alternative 3 — QuickZTNA
 
-**Model.** Full ZTNA with a WireGuard data plane and a built-in workforce-security layer. Managed coordination plane (managed cloud only — no self-host today). Hybrid post-quantum key exchange is on the roadmap; the shipped client uses classical WireGuard today.
+**Model.** Full ZTNA with a WireGuard data plane and a built-in workforce-security layer. Managed coordination plane (managed cloud only — no self-host today). Hybrid post-quantum key exchange (X25519 + ML-KEM-768) ships in the client today, negotiated per tunnel with graceful fallback to classical WireGuard when a peer doesn't support it.
 
 **Strengths vs Twingate.**
-- **Workforce-security layer built in.** File-scan DLP, CASB app-approval, device posture, and an AI Operator that previews and applies policy changes — beyond Twingate's access-only scope. See [our ML-KEM-768 post](/blog/ml-kem-768-explained) for where the crypto roadmap is heading.
+- **Workforce-security layer built in.** File-scan DLP, CASB app-approval, device posture, and an AI Operator that previews and applies policy changes — beyond Twingate's access-only scope. See [our ML-KEM-768 post](/blog/ml-kem-768-explained) for how the hybrid post-quantum handshake works.
 - **Full ZTNA feature set.** ACLs, device posture, workforce analytics (opt-in), audit logs, SIEM export.
 - **Open-protocol data plane** (WireGuard).
 - **Honest tier boundaries.** Free tier is not gated from core security features.

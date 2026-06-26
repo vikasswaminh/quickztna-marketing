@@ -253,7 +253,7 @@ The tools below each address some combination of these three challenges. None ad
 - Included on every plan with no separate licensing.
 
 **Limitations.**
-- Coverage is currently scoped to tunnel traffic. Offline transfers (USB, print, local copy) are outside the tunnel and not inspected.
+- Coverage is currently a periodic scan of common local directories (Downloads, Documents, Desktop, /tmp). Clipboard, USB, print, and live tunnel-stream inspection are not yet wired.
 - Pattern library is growing; current support covers credit cards, SSNs, and API keys. Document fingerprinting and ML classifiers are on the roadmap.
 - Included on every plan — both Free and Business, with full feature parity.
 
@@ -284,7 +284,7 @@ A complete remote-team DLP posture in 2026 typically requires two layers:
 
 **Layer 1 — SaaS coverage.** A tool that scans data entering SaaS platforms — Google Drive, Slack, GitHub, Jira — for sensitive patterns. Nightfall AI or Google Workspace DLP depending on your ecosystem. Zero agent overhead; covers the most common exfiltration path (paste into SaaS).
 
-**Layer 2 — Endpoint/tunnel coverage.** Either a dedicated endpoint DLP agent (Purview if Microsoft-centric, CrowdStrike if you already have Falcon, Forcepoint for regulated industries) or a ZTNA product with built-in DLP (QuickZTNA, included on every plan). This covers transfers that do not go through the SaaS layer: browser downloads, USB, print, and tunnel traffic.
+**Layer 2 — Endpoint coverage.** Either a dedicated endpoint DLP agent (Purview if Microsoft-centric, CrowdStrike if you already have Falcon, Forcepoint for regulated industries) for the full set of local channels — browser downloads, USB, print — or a lighter ZTNA-built-in option (QuickZTNA, included on every plan) that scans files landing in common local directories. This catches sensitive data that never goes through the SaaS layer.
 
 Full SASE with a cloud proxy (Zscaler or Netskope) covers layer 2 at the network level but requires routing all internet traffic through the proxy — which adds latency, complicates BYOD, and requires TLS inspection that some security teams resist.
 
