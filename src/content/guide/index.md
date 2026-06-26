@@ -7,7 +7,7 @@ updatedAt: 2026-05-16
 primaryKeyword: "QuickZTNA user guide"
 faq:
   - q: "Is QuickZTNA really free?"
-    a: "Yes. The Free plan covers up to 5 users (5 machines each), forever, with no trial timer — and it includes every feature. Both plans use the same WireGuard encryption; the only difference between Free and Business is scale (users and machines)."
+    a: "Yes. The Free plan covers up to 5 users (and up to 100 devices), forever, with no trial timer — and it includes every feature. Both plans use the same WireGuard encryption; the only difference between Free and Business is scale (Business is billed per user, never per device)."
   - q: "Do I need to install anything on a server to use QuickZTNA?"
     a: "No. The coordination plane is fully managed. You install a small client on each device that should join the network. The client is open-source code and runs as an ordinary system service."
   - q: "What's the difference between the user guide and the developer docs?"

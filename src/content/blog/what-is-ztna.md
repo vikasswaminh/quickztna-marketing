@@ -265,7 +265,7 @@ Primary sources verified on the publish date.
 
 ## Try QuickZTNA
 
-QuickZTNA implements the NIST SP 800-207 architecture with a mesh data plane, hybrid post-quantum key exchange, ABAC policy, continuous device posture, and full audit logging. [Start on Free](https://login.quickztna.com/auth) — no credit card, 100 devices, 3 users.
+QuickZTNA implements the NIST SP 800-207 architecture with a mesh data plane, hybrid post-quantum key exchange, ABAC policy, continuous device posture, and full audit logging. [Start on Free](https://login.quickztna.com/auth) — no credit card, 100 devices, 5 users.
 
 <!--
 scorecard:

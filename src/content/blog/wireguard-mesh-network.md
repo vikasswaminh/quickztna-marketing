@@ -258,7 +258,7 @@ Any two of the above usually tips the decision toward a product. See our [WireGu
 
 ## Try QuickZTNA
 
-QuickZTNA handles the four coordination-server jobs (peer registration, NAT traversal, policy, identity) on top of standard WireGuard, with hybrid post-quantum PSK on every tunnel. [Start on Free](https://login.quickztna.com/auth) — 100 devices, 3 users, no config files to maintain.
+QuickZTNA handles the four coordination-server jobs (peer registration, NAT traversal, policy, identity) on top of standard WireGuard, with hybrid post-quantum PSK on every tunnel. [Start on Free](https://login.quickztna.com/auth) — 100 devices, 5 users, no config files to maintain.
 
 <!--
 scorecard:

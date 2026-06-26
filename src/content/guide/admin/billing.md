@@ -1,92 +1,73 @@
 ---
 title: "Plans & billing"
-description: "QuickZTNA plans and what each one gates, the 60-day Business trial, how plan enforcement works, and billing via Razorpay or custom invoicing."
+description: "QuickZTNA's two plans — Free and Business — with full feature parity, per-seat pricing, an org-wide device cap, and billing via Dodo Payments."
 section: "admin"
 order: 13
-updatedAt: 2026-06-16
+updatedAt: 2026-06-26
 primaryKeyword: "QuickZTNA plans billing"
 faq:
   - q: "Is the Free plan really free forever?"
-    a: "Yes — 100 devices and 3 users, no trial timer, no credit card. WireGuard mesh, MagicDNS, ABAC policies, device posture (at-connect), DNS filtering, the AI assistant, and remote SSH are all on Free. You upgrade only for more users, unlimited devices, or paid features like SCIM, continuous posture, DLP, CASB, or remote desktop."
-  - q: "Do platform superadmins bypass plan gates?"
-    a: "No. Plan gates are enforced at the handler level via requireFeature(). A superadmin assisting a Free-tier org still hits the feature gate on paid endpoints — the gating is intentional and consistent across dashboard, CLI, and API."
+    a: "Yes — up to 5 users and 100 devices, no trial timer, no credit card. Every feature is on Free: WireGuard mesh, MagicDNS, ABAC policies, device posture, DNS filtering, the AI assistant, remote SSH, DLP, CASB, SCIM, and remote desktop — the lot. You upgrade to Business only for more seats, never to unlock features."
+  - q: "What's the difference between Free and Business?"
+    a: "Scale, not features. Both plans include the entire platform (full parity). Free is capped at 5 users and 100 devices; Business is $10 per user / month with unlimited seats and a 10,000-device cap. Billing is per user — devices are never metered per seat."
   - q: "How quickly does a plan change take effect?"
-    a: "Feature entitlements are cached per org for 600 seconds, so a plan change is visible within a minute (the cache is also invalidated on subscription/plan_features writes). Downgrades are immediate and non-destructive: downgrade then re-upgrade and everything resumes."
+    a: "Seat and device limits update on the next subscription/seat sync, and entitlements are cached per org for 600 seconds. Downgrades are non-destructive: nothing already registered is removed."
   - q: "What happens to child organizations' plans?"
-    a: "A child org with no subscription of its own inherits its parent's effective plan. So entitlements flow down an org group from the parent's billing automatically."
+    a: "A child org with no subscription of its own inherits its parent's effective plan, so entitlements flow down an org group from the parent's billing automatically."
 ---
 
-This page covers the plan tiers, exactly **how plan enforcement works**, and how billing is handled. For current prices and the full feature matrix, the [pricing page](/pricing/) is the source of truth — this page is the admin's mechanical view.
+This page covers the two plan tiers, how plan limits are enforced, and how billing is handled. For current prices and the full feature matrix, the [pricing page](/pricing/) is the source of truth — this page is the admin's mechanical view.
 
 ## 1. The tiers
 
-- **Free** — 100 devices and 3 users, forever. WireGuard mesh, MagicDNS, ABAC policies, device posture (at connect), DNS filtering, the AI assistant, and **remote SSH** are included.
-- **Business** — per-user pricing with **unlimited devices** and a **60-day free trial** (no card). Adds SCIM, continuous posture, workforce analytics, DLP, CASB, remote desktop, and longer audit retention.
-- **Workforce** — custom, for larger / regulated deployments; the deepest workforce-security and retention options.
+QuickZTNA has **two plans with identical features** — you pay to scale, not to unlock.
 
-Exact prices and limits change — the [pricing page](/pricing/) is canonical.
+- **Free** — up to **5 users** and **100 devices**, forever. Every feature is included: WireGuard mesh, MagicDNS, ABAC policies, device posture, DNS filtering, the AI assistant, remote SSH, DLP, CASB, SCIM, remote desktop, secrets vault, and compliance reports — the entire platform.
+- **Business** — **$10 per user / month**, billed per seat. Unlimited users and a **10,000-device cap**. Same features as Free, plus priority email support. No trial and no card to start — you begin on Free and upgrade when you outgrow the seat limit.
 
-## 2. How plan enforcement works
+Exact prices and limits can change — the [pricing page](/pricing/) is canonical.
 
-Every gated handler calls `requireFeature(db, org_id, '<feature>', request)`, which resolves the org's **effective plan** and checks the `plan_features` table:
+## 2. How plan limits are enforced
 
-```
-  requireFeature(org, feature)
-        │
-        ▼
-   billing_subscriptions → resolveEffectivePlan()
-     trialing & not expired → trial plan
-     trialing & expired     → free
-     paid & period expired / inactive status → free
-     (no subscription)      → inherit parent org's plan, else free
-        │
-        ▼
-   plan_features WHERE plan = <effective> AND enabled = true
-        │
-   feature in list? ── yes → allowed (null)
-                     └ no  → 403 FEATURE_GATED  "requires an upgraded plan"
-        │
-   result cached in Valkey (key features:<org_id>, 600s TTL)
-```
+Both plans are entitled to **every feature** (`plan_features` has all capabilities enabled for both Free and Business), so the difference is **scale**, enforced as two limits:
 
-The cache is shared with the dashboard's feature-check and invalidated when a subscription or `plan_features` row changes — so the dashboard, CLI, and API always agree.
+- **Seats (users)** — the billing meter. Business bills one seat per org member; seat count is reconciled to the payment provider when a member is added or removed.
+- **Devices** — a single **org-wide cap** (100 on Free, 10,000 on Business), checked at machine registration. Devices are **not** metered per seat. When an org is at its cap, new device registration returns `QUOTA_EXCEEDED` until a slot is freed or the org upgrades.
 
-## 3. Feature-flag reference
+Effective-plan resolution: an org with an active Business subscription is Business; otherwise (no subscription, cancelled, or billing period expired) it falls back to Free. An org with no subscription of its own inherits its parent org's effective plan. The result is cached in Valkey (`features:<org_id>`, 600 s TTL) and invalidated on subscription changes, so the dashboard, CLI, and API always agree.
 
-Each admin capability is gated by a named feature flag. Which plan includes which flag is defined in `plan_features` (and shown on [pricing](/pricing/)); the flags themselves are:
+## 3. Capabilities (on every plan)
 
-| Feature flag | Gates | Page |
-| --- | --- | --- |
-| `dns_filtering` | DNS threat/category filtering | [DNS filtering](/guide/admin/dns-filtering/) |
-| `casb` | Shadow-IT discovery & app policy | [CASB](/guide/admin/casb/) |
-| `dlp` | File-scan data-loss detection | [DLP](/guide/admin/dlp/) |
-| `scim` | SCIM 2.0 provisioning | [Identity](/guide/admin/identity/) |
-| `workforce_analytics` | Sessions, schedule, productivity, inventory | [Workforce analytics](/guide/admin/workforce-analytics/) |
-| `user_risk_scoring` | Seven-factor user risk | [Workforce analytics](/guide/admin/workforce-analytics/) |
-| `remote_shell` | Remote SSH/shell (enabled on all plans) | [Remote access](/guide/admin/remote-access/) |
-| `remote_desktop` | WebRTC remote desktop | [Remote access](/guide/admin/remote-access/) |
-| `secrets_vault` | Encrypted secrets vault | [Observability](/guide/admin/observability/) |
-| `compliance_reports` | Drift evaluation + signed reports | [Observability](/guide/admin/observability/) |
-| `nl_acl_builder`, `event_summarizer`, `incident_response`, `ai_chat`, `ai_actions` | AI Operator capabilities | [AI Operator](/guide/admin/ai-operator/) |
+Every capability below ships on **both** Free and Business — there are no paid-only feature flags:
 
-Posture, ACLs, and the mesh are part of the baseline and are not paid-gated (posture enforcement modes and continuous re-evaluation differ by plan).
+| Capability | Page |
+| --- | --- |
+| DNS threat/category filtering | [DNS filtering](/guide/admin/dns-filtering/) |
+| Shadow-IT discovery & app policy (CASB) | [CASB](/guide/admin/casb/) |
+| File-scan data-loss detection (DLP) | [DLP](/guide/admin/dlp/) |
+| SCIM 2.0 provisioning | [Identity](/guide/admin/identity/) |
+| Workforce analytics (sessions, schedule, productivity, inventory) | [Workforce analytics](/guide/admin/workforce-analytics/) |
+| Seven-factor user-risk scoring | [Workforce analytics](/guide/admin/workforce-analytics/) |
+| Remote SSH/shell | [Remote access](/guide/admin/remote-access/) |
+| WebRTC remote desktop | [Remote access](/guide/admin/remote-access/) |
+| Encrypted secrets vault | [Observability](/guide/admin/observability/) |
+| Drift evaluation + signed compliance reports | [Observability](/guide/admin/observability/) |
+| AI Operator (NL ACL builder, event summarizer, security digest, AI chat, policy-drift) | [AI Operator](/guide/admin/ai-operator/) |
 
-## 4. How the trial works
+Posture, ACLs, and the mesh are part of the baseline on both plans.
 
-The Business trial runs 60 days with all Business features and no credit card. At the end the org auto-downgrades to Free (via the expire-trials job); **no data is deleted** — paid features simply gate down. Extend a trial through sales if a pilot needs more runway.
+## 4. Billing
 
-## 5. Billing
+Billing is handled by **Dodo Payments**, our **Merchant of Record** — Dodo processes the card and handles global tax and compliance — with **custom invoicing** available for larger contracts. Manage your subscription from the dashboard's billing area (`/api/manage-subscription`); checkout is created via `/api/create-checkout`, and subscription state is reconciled by the Dodo webhook. Changes apply immediately.
 
-Billing is handled via **Razorpay**, with **custom invoicing** for larger contracts. Manage your subscription from the dashboard's billing area (`/api/manage-subscription`); checkout is created via `/api/create-checkout`, and subscription state is reconciled by the Razorpay webhook. Changes apply immediately.
+## 5. Verification & troubleshooting
 
-## 6. Verification & troubleshooting
+- **New device registration returns `QUOTA_EXCEEDED`** → the org is at its device cap (100 on Free, 10,000 on Business). Free a slot or upgrade.
+- **A seat change isn't reflected in billing** → seat count syncs to the provider on member add/remove; confirm the subscription `status` is `active`.
+- **Upgraded but limits unchanged** → wait up to 600 s for the entitlement cache, or confirm the subscription `status` is `active`.
+- **Child org missing seats/limits** → ensure the parent org's subscription carries them (children inherit the parent's effective plan).
 
-- **A paid call returns `403 FEATURE_GATED`** → that feature isn't in the org's effective plan; upgrade, or check the trial hasn't expired.
-- **Upgraded but still gated** → wait up to 600 s for the entitlement cache, or confirm the subscription `status` is `active`.
-- **Child org missing features** → ensure the parent org's subscription carries them (children inherit).
-- **Trial ended unexpectedly** → check `trial_ends_at`; the org falls back to Free automatically.
-
-## 7. Next
+## 6. Next
 
 - [Pricing page](/pricing/) — current prices and the full feature matrix.
 - [Admin guide home](/guide/admin/) — the rest of the administration topics.

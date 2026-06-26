@@ -164,7 +164,7 @@ Pricing changes. Always reference the vendor's current pricing page. General sha
 
 - **Tailscale**: Free tier for personal use, Business tier per user, Enterprise tier custom.
 - **NetBird**: Free tier with user limits, paid tier per user.
-- **QuickZTNA**: Free tier for 100 devices + 3 users, Business at $10/user/month with unlimited devices (60-day free trial), Workforce custom.
+- **QuickZTNA**: Free tier for 5 users + 100 devices (every feature included), Business at $10/user/month with unlimited users (billed per seat) and a 10,000-device cap — identical features on both plans, no trial.
 
 Per-user pricing shapes differ slightly: some products include unlimited devices per user, some limit, and the precise limits matter at scale. Model your own expected user and device counts against each vendor's pricing page before picking.
 

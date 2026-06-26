@@ -173,7 +173,7 @@ Snapshot as of April 2026. Always verify against each vendor's current documenta
 | Architecture | Client-Connector ZTNA | Mesh VPN | Mesh VPN | Mesh + ZTNA | Edge identity proxy | ZT overlay + app SDK |
 | Data-plane protocol | Proprietary | WireGuard | WireGuard | WireGuard | Cloudflare edge | Ziti overlay |
 | Licence | Proprietary | Proprietary | BSD-3-Clause | Proprietary | Proprietary | Apache 2.0 |
-| Free tier | Yes (limited) | Yes | Yes | Yes (100 dev, 3 users) | Yes (verify current) | Open source |
+| Free tier | Yes (limited) | Yes | Yes | Yes (100 dev, 5 users) | Yes (verify current) | Open source |
 | Self-host | Partial (Connector) | No (Headscale exists) | Yes | No (managed cloud only) | No | Yes |
 | Post-quantum default | Verify current | Verify current | Verify current | Roadmap (classical today) | TLS 1.3 hybrid edge | Verify current |
 | Session recording | Verify current | Enterprise tier | Verify current | No | Via other CF products | Via integrations |
@@ -211,7 +211,7 @@ The migration does not have to be a big-bang event. Most teams stagger by depart
 
 ## Try QuickZTNA
 
-If your Twingate exit motivation is a fuller ZTNA feature set with a built-in workforce-security layer, QuickZTNA is a straightforward evaluation. [Start on Free](https://login.quickztna.com/auth) — 100 devices, 3 users, free remote SSH, and a WireGuard mesh on every tier.
+If your Twingate exit motivation is a fuller ZTNA feature set with a built-in workforce-security layer, QuickZTNA is a straightforward evaluation. [Start on Free](https://login.quickztna.com/auth) — 100 devices, 5 users, free remote SSH, and a WireGuard mesh on every tier.
 
 <!--
 scorecard:

@@ -161,7 +161,7 @@ Snapshot as of April 2026. Always verify against each vendor's current documenta
 | Architecture | Edge proxy | Mesh | Mesh | Mesh + ZTNA | ZTNA proxy | ZTNA proxy | Web-app proxy |
 | Data plane | CF proprietary | WireGuard | WireGuard | WireGuard | Proprietary | Proprietary | AWS-managed |
 | Self-host | No | No (Headscale exists) | Yes | No | Partial | No | No |
-| Free tier | Yes (verify current) | Yes | Yes | Yes (100 dev, 3 users) | Yes (limited) | No | Check AWS pricing |
+| Free tier | Yes (verify current) | Yes | Yes | Yes (100 dev, 5 users) | Yes (limited) | No | Check AWS pricing |
 | Tunnel-level PQ | Edge TLS 1.3 hybrid | Verify | Verify | Roadmap | Verify | Verify | Verify |
 | Mesh P2P | No | Yes | Yes | Yes | No | No | No |
 | Clientless browser | Yes | No | No | Partial (admin UI) | No | Yes | Yes |

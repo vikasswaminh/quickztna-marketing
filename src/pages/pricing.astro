@@ -17,7 +17,7 @@ const plans = [
     ctaHref: AUTH_URL,
     highlight: false,
     blurb: "Every feature included. No credit card. No trial clock.",
-    limits: ["Up to 5 users", "5 machines per user (25 total)", "Community support"],
+    limits: ["Up to 5 users", "Up to 100 devices", "Community support"],
   },
   {
     name: "Business",
@@ -28,7 +28,7 @@ const plans = [
     ctaHref: AUTH_URL,
     highlight: true,
     blurb: "Identical features to Free. You pay to scale, not to unlock.",
-    limits: ["Unlimited users (billed per seat)", "10 machines per user", "Priority email support"],
+    limits: ["Unlimited users (billed per seat)", "Up to 10,000 devices", "Priority email support"],
   },
 ];
 
@@ -65,7 +65,7 @@ const included = [
 const differs = [
   { label: "Price", free: "$0 forever", business: "$10 / user / mo" },
   { label: "Users", free: "Up to 5", business: "Unlimited (per seat)" },
-  { label: "Machines", free: "5 / user (25 total)", business: "10 / user" },
+  { label: "Devices", free: "Up to 100", business: "Up to 10,000" },
   { label: "Features", free: "Everything", business: "Everything" },
   { label: "Support", free: "Community", business: "Priority email" },
 ];
@@ -73,7 +73,7 @@ const differs = [
 const faqs = [
   {
     q: "What's the difference between Free and Business?",
-    a: "Features are identical — both plans include everything. The difference is scale: Free is capped at 5 users and 5 machines per user (25 total); Business is $10 per user / month with unlimited seats and 10 machines per user. You pay to grow, not to unlock features.",
+    a: "Features are identical — both plans include everything. The difference is scale: Free covers up to 5 users (and up to 100 devices org-wide); Business is $10 per user / month with unlimited seats and up to 10,000 devices. You're billed per user, never per device. You pay to grow, not to unlock features.",
   },
   {
     q: "Is encryption or security different on Free?",
@@ -85,11 +85,11 @@ const faqs = [
   },
   {
     q: "What happens when I hit the Free limit?",
-    a: "Device registration blocks at your cap (seats × 5 machines). Adding a paid Business seat raises the cap immediately. Nothing already registered is removed, and lowering seats is a manual admin action — we never auto-quarantine your machines.",
+    a: "Free includes a generous org-wide cap of 100 devices; upgrading to Business raises it to 10,000. Devices aren't billed per seat — you only pay for users. Nothing already registered is removed if you change plans, and we never auto-quarantine your machines.",
   },
   {
-    q: "Why only Razorpay? What about Stripe / wire / invoice?",
-    a: "We launched in India first, so Razorpay is the self-serve default (supports 100+ countries via Razorpay International). For other regions or invoice/wire payment, contact sales@quickztna.com. Stripe is on the roadmap.",
+    q: "How does billing work? What about invoice / wire?",
+    a: "Payments are handled by Dodo Payments, our Merchant of Record — they process the card and handle global tax and compliance, so checkout works in 100+ countries. For invoice/wire payment or larger contracts, contact sales@quickztna.com.",
   },
   {
     q: "Is there a self-hosted / on-prem option?",
@@ -111,7 +111,7 @@ const productSchema = {
     {
       "@type": "Offer",
       name: "Free",
-      description: "Up to 5 users, 5 machines per user, every feature included, community support. Free forever, no credit card.",
+      description: "Up to 5 users, up to 100 devices, every feature included, community support. Free forever, no credit card.",
       price: "0",
       priceCurrency: "USD",
       availability: "https://schema.org/InStock",
@@ -121,7 +121,7 @@ const productSchema = {
     {
       "@type": "Offer",
       name: "Business",
-      description: "Unlimited users billed per seat, 10 machines per user, every feature included, priority email support.",
+      description: "Unlimited users billed per seat, up to 10,000 devices, every feature included, priority email support.",
       price: "10",
       priceCurrency: "USD",
       priceSpecification: {
@@ -159,7 +159,7 @@ const pricingBreadcrumbSchema = {
 ---
 <SiteLayout
   title="Pricing — QuickZTNA: free forever for 5 users, Business at $10 per user"
-  description="Two plans, identical features. Free forever for up to 5 users (5 machines each). Business at $10 per user / month to scale. Every feature on every plan — you pay for scale, not unlocks."
+  description="Two plans, identical features. Free forever for up to 5 users (up to 100 devices). Business at $10 per user / month to scale. Every feature on every plan — you pay for scale, not unlocks."
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(productSchema)} is:inline />

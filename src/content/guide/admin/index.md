@@ -40,11 +40,11 @@ QuickZTNA is a managed cloud service. You administer your organization through t
 
 - **[AI Operator](/guide/admin/ai-operator/)** — natural-language ACLs, event summaries, incident response, and tool-calling chat — every write goes through preview → confirm → revert.
 - **[Observability: audit, compliance, metrics](/guide/admin/observability/)** — audit log and SIEM export, compliance drift + signed reports, threat intel, Prometheus metrics, secrets vault.
-- **[Plans & billing](/guide/admin/billing/)** — the tiers, the feature-flag reference, how gating works, the 60-day trial, and billing.
+- **[Plans & billing](/guide/admin/billing/)** — the two tiers, what's included (full feature parity), how seat + device limits are enforced, and billing.
 
 ## Plans at a glance
 
-QuickZTNA's Free plan covers **100 devices and 3 users, forever**, including the WireGuard mesh, MagicDNS, ABAC policies, device posture, DNS filtering, the AI assistant, and remote SSH. Paid plans add more users, unlimited devices, SCIM, continuous posture, workforce analytics, DLP, CASB, and remote desktop. Full breakdown on [Plans & billing](/guide/admin/billing/) and the [pricing page](/pricing/).
+QuickZTNA's Free plan covers **5 users and 100 devices, forever**, with **every feature included** — the WireGuard mesh, MagicDNS, ABAC policies, device posture, DNS filtering, the AI assistant, remote SSH, SCIM, workforce analytics, DLP, CASB, and remote desktop. Business ($10 per user / month) adds only scale: unlimited users (billed per seat) and a 10,000-device cap — the same features. Full breakdown on [Plans & billing](/guide/admin/billing/) and the [pricing page](/pricing/).
 
 ## A note on what's shipped
 

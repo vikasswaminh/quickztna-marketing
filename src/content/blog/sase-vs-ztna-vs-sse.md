@@ -222,7 +222,7 @@ Primary sources. All links verified on the publish date.
 
 ## Try QuickZTNA
 
-If the recommended sequence above starts with ZTNA, QuickZTNA is a natural first buy — it covers the ZTNA need without committing to the full SASE stack. [Start on Free](https://login.quickztna.com/auth) for 100 devices and 3 users.
+If the recommended sequence above starts with ZTNA, QuickZTNA is a natural first buy — it covers the ZTNA need without committing to the full SASE stack. [Start on Free](https://login.quickztna.com/auth) for 5 users and 100 devices.
 
 <!--
 scorecard:

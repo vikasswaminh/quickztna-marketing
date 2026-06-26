@@ -170,7 +170,7 @@ Snapshot as of April 2026 from each product's own documentation. Always confirm 
 | Data plane | WireGuard | WireGuard (Tailscale clients) | WireGuard | WireGuard | Cloudflare edge | Proprietary | Ziti overlay |
 | Coordination | Managed | Self-host | Both | Managed | Managed | Managed | Both |
 | Licence | Proprietary | BSD-3-Clause | BSD-3-Clause | Proprietary | Proprietary | Proprietary | Apache 2.0 |
-| Free tier | Yes | N/A (DIY) | Yes | Yes (100 devices, 3 users) | Yes (up to 50 users historically — verify) | Yes (limited) | Open source |
+| Free tier | Yes | N/A (DIY) | Yes | Yes (100 devices, 5 users) | Yes (up to 50 users historically — verify) | Yes (limited) | Open source |
 | Post-quantum default | Verify current | N/A (depends on clients) | Verify current | Roadmap | Partial, TLS 1.3 hybrid on edge | Verify current | Verify current |
 | Session recording | Enterprise-tier | No | Verify current | No | Via other CF products | Verify current | Via integrations |
 | Device posture | Yes | No | Yes | Yes | Yes | Yes | Policy-based |
@@ -208,7 +208,7 @@ For a Tailscale-to-Headscale migration specifically, the migration can be close 
 
 ## Try QuickZTNA
 
-If a full ZTNA + workforce-security feature set and honest tier boundaries match your evaluation criteria, QuickZTNA is worth 10 minutes. [Start on the Free tier](https://login.quickztna.com/auth) — 100 devices, 3 users, free remote SSH, no credit card.
+If a full ZTNA + workforce-security feature set and honest tier boundaries match your evaluation criteria, QuickZTNA is worth 10 minutes. [Start on the Free tier](https://login.quickztna.com/auth) — 100 devices, 5 users, free remote SSH, no credit card.
 
 <!--
 scorecard:
