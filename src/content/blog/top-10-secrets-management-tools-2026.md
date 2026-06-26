@@ -239,7 +239,7 @@ None of this is possible with an `.env` file.
 
 ## 10. QuickZTNA Secrets Vault
 
-**Category.** Built-in secrets vault in the ZTNA platform (Workforce tier).
+**Category.** Built-in secrets vault in the ZTNA platform (included on every plan).
 
 **Architecture.** QuickZTNA's Secrets Vault feature provides a KV secrets store inside the QuickZTNA platform. Applications and users accessing resources through the ZTNA tunnel can retrieve secrets gated behind the same identity layer that controls network access. Secrets access inherits the user's ZTNA session identity — no separate authentication for the secrets store.
 

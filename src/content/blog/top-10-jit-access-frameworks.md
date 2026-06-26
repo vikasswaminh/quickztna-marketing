@@ -225,7 +225,7 @@ The result is a dense mesh of persistent high-privilege accounts, any one of whi
 
 ## 10. QuickZTNA JIT Access
 
-**Category.** ZTNA-native JIT access with session recording integration (Workforce tier).
+**Category.** ZTNA-native JIT access with session recording integration (included on every plan).
 
 **How it works.** QuickZTNA's JIT access feature applies time-limited access grants to ZTNA-protected resources. A developer or administrator requests access to a resource through the QuickZTNA admin portal or Slack. The request is routed to the configured approver. Approved access creates a time-limited resource ACL entry that expires automatically at the approved duration. The session during the approved window is automatically recorded.
 

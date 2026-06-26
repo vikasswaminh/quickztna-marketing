@@ -126,7 +126,7 @@ DERP (Designated Encrypted Relay for Packets) is a Tailscale-coined term for the
 
 A mesh deployment typically runs DERP servers in multiple geographic regions. Peers discover the nearest DERP and use it as fallback. Direct peer-to-peer is always preferred when available; DERP is the safety net.
 
-QuickZTNA runs DERP relays in four regions (BLR, NYC, LON, SFO). Tailscale runs a larger fabric. Headscale allows configuration of your own DERP or use of Tailscale's public DERP. NetBird provides a similar relay layer.
+QuickZTNA runs DERP relays in two regions (Bangalore and Frankfurt). Tailscale runs a larger fabric. Headscale allows configuration of your own DERP or use of Tailscale's public DERP. NetBird provides a similar relay layer.
 
 ## 6. Policy distribution
 

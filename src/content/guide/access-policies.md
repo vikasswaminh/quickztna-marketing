@@ -85,7 +85,7 @@ Three concepts in play.
 
 Groups are the single highest-leverage primitive in a QuickZTNA policy. A well-defined group lets you express "engineers can reach development" as one rule; a poorly-defined group forces you to maintain a list of individual users that ages immediately.
 
-The good news: you almost certainly already have the groups you need. Your identity provider — Google Workspace, Microsoft Entra, Okta, GitHub, Authentik, anything OIDC — already classifies your people. QuickZTNA syncs those groups via SCIM (on Business and Workforce plans) or via OIDC claims (on every plan including Free). Once synced, a group membership change in your IdP propagates to QuickZTNA's policy evaluator within seconds.
+The good news: you almost certainly already have the groups you need. Your identity provider — Google Workspace, Microsoft Entra, Okta, GitHub, Authentik, anything OIDC — already classifies your people. QuickZTNA syncs those groups via SCIM or via OIDC claims — both on every plan, including Free. Once synced, a group membership change in your IdP propagates to QuickZTNA's policy evaluator within seconds.
 
 This is the right pattern: your identity provider is the source of truth for who belongs to the engineering team, the SRE team, the contractor pool. QuickZTNA's policy file references those groups by name. When someone joins or leaves a team, the policy doesn't need editing — the group membership change happens upstream and the policy automatically reflects it.
 

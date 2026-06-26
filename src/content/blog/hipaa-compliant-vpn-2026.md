@@ -235,7 +235,7 @@ Primary sources. All links verified on the publish date.
 
 ## Try QuickZTNA
 
-QuickZTNA Business and Workforce tiers include HIPAA-aligned features: BAA on request, per-session audit log export, FIDO2 MFA, device posture, and hybrid PQ encryption on every tunnel. [Contact sales](mailto:sales@quickztna.com) for the BAA template and HIPAA evaluation brief.
+QuickZTNA includes HIPAA-aligned features on every plan: per-session audit log export, FIDO2 MFA, device posture, and hybrid PQ encryption on every tunnel. [Contact sales](mailto:sales@quickztna.com) for a BAA and the HIPAA evaluation brief.
 
 <!--
 scorecard:

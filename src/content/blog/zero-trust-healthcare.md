@@ -235,7 +235,7 @@ Sequence can be adjusted for local realities; order of items 2-10 and 11-13 matt
 
 ## Try QuickZTNA
 
-QuickZTNA Workforce tier includes healthcare-specific features: BAA on request, mesh architecture for distributed clinics, enclave gateway for legacy medical devices, graded posture policy for clinical workstations, and HIPAA-aligned audit logging. [Contact sales](mailto:sales@quickztna.com) for a healthcare evaluation brief.
+QuickZTNA includes healthcare-relevant features on every plan: mesh architecture for distributed clinics, graded posture policy for clinical workstations, and HIPAA-aligned audit logging. [Contact sales](mailto:sales@quickztna.com) for a BAA, enclave-gateway options for legacy medical devices, and a healthcare evaluation brief.
 
 <!--
 scorecard:

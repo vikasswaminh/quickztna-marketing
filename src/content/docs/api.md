@@ -234,7 +234,7 @@ The same data as the audit log, but pushed as it happens. Useful for SIEM ingest
 
 ## Webhooks
 
-The API supports outbound webhooks for organizations on Business and Workforce plans. Configure webhook destinations in the admin dashboard under Settings → Webhooks.
+The API supports outbound webhooks for all organizations. Configure webhook destinations in the admin dashboard under Settings → Webhooks.
 
 Each webhook receives a signed POST request when an interesting event happens (device added, device removed, policy applied, posture violation, sign-in failure, etc.). The signature is HMAC-SHA256 over the request body with the per-webhook secret; verify it on your side before trusting the payload.
 

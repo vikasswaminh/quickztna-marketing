@@ -233,14 +233,14 @@ Not every screen-capture tool qualifies as compliance-grade. The requirements th
 
 ## 10. QuickZTNA Session Recording
 
-**Category.** Built-in session recording inside the ZTNA tunnel (Workforce tier).
+**Category.** Built-in session recording inside the ZTNA tunnel (included on every plan).
 
 **How it works.** QuickZTNA's session recorder captures all activity transiting the ZTNA tunnel — keystrokes, commands, terminal output, and application-layer data — for sessions to protected resources. Recordings are stored in tamper-evident, append-only storage with a per-recording cryptographic hash. The audit log entry links the session recording to the ZTNA access event: the device, the user identity, the posture state at session initiation, and the resource accessed.
 
 **Compliance advantages.**
 - Zero additional deployment. If QuickZTNA is already the remote access layer, session recording is enabled in the admin console — no new infrastructure.
 - Device posture at session initiation is captured in the audit record. Compliance reviewers can verify not just who accessed the resource but whether their device was in a compliant state.
-- Session recording integrates with JIT access workflows (Workforce tier). When a JIT access request is approved, the resulting session is automatically recorded. The approval request, approver identity, and session recording are all linked in the compliance report.
+- Session recording integrates with JIT access workflows (both included on every plan). When a JIT access request is approved, the resulting session is automatically recorded. The approval request, approver identity, and session recording are all linked in the compliance report.
 - Immutable storage with cryptographic hash chain satisfies SOC 2 CC7.2, PCI-DSS Requirement 10, and HIPAA 164.312(b) technical safeguard requirements.
 
 **Strengths.** Operational simplicity. For organisations using QuickZTNA as their ZTNA/VPN replacement, adding session recording requires one toggle rather than a separate PAM platform deployment with a six-month implementation project.
@@ -264,7 +264,7 @@ Not every screen-capture tool qualifies as compliance-grade. The requirements th
 | Sysdig / Falco | Syscall events | ✅ | ✅ | ✅ Best-in-class | Mid-enterprise | ❌ |
 | Ekran System | Screen video | ✅ OCR | ✅ | ❌ | Mid-market | ❌ |
 | Silverfort | Authentication log | ✅ | ✅ | ❌ | Mid-enterprise | ❌ |
-| QuickZTNA | Tunnel + keystroke | Growing | ✅ Hash chain | ❌ | Workforce tier | Secrets Vault |
+| QuickZTNA | Tunnel + keystroke | Growing | ✅ Hash chain | ❌ | Every plan | Secrets Vault |
 
 ---
 

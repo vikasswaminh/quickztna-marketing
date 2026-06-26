@@ -177,7 +177,7 @@ The tools below are categorised accordingly.
 
 ---
 
-## 10. QuickZTNA AI Assistant (Business and Workforce tier)
+## 10. QuickZTNA AI Assistant
 
 **Category.** Natural-language policy generation and access anomaly detection within ZTNA.
 
@@ -194,7 +194,7 @@ The tools below are categorised accordingly.
 
 **Limitations.** The AI models are specific to access control and network policy — not general threat detection. Does not replace a SIEM or endpoint detection tool.
 
-**Best fit.** QuickZTNA Business and Workforce customers wanting AI-assisted policy management and access anomaly detection without deploying a separate specialised tool.
+**Best fit.** QuickZTNA customers wanting AI-assisted policy management and access anomaly detection without deploying a separate specialised tool — the AI assistant is included on every plan.
 
 ---
 
@@ -223,4 +223,4 @@ The tools below are categorised accordingly.
 
 ## Try QuickZTNA AI Features
 
-QuickZTNA's AI assistant for natural-language ACL generation, policy drift detection, and access anomaly alerts is available on Business and Workforce tiers. [Start a free trial](https://quickztna.com/signup) or [book a demo](mailto:sales@quickztna.com) to see the AI features live.
+QuickZTNA's AI assistant for natural-language ACL generation, policy drift detection, and access anomaly alerts is included on every plan. [Start free](https://login.quickztna.com/auth) or [book a demo](mailto:sales@quickztna.com) to see the AI features live.

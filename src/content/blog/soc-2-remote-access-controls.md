@@ -244,7 +244,7 @@ Not every auditor requests every item. Most requests fall into categories 1–14
 
 ## Try QuickZTNA
 
-QuickZTNA Business and Workforce tiers include audit log export, SSO with FIDO2 MFA, device posture, per-tunnel kex mode logging, and policy-as-code — the eleven Common Criteria above each have a direct product feature. [Contact sales](mailto:sales@quickztna.com) for the SOC 2 control-mapping worksheet.
+QuickZTNA includes audit log export, SSO with FIDO2 MFA, device posture, per-tunnel kex mode logging, and policy-as-code on every plan — the eleven Common Criteria above each have a direct product feature. [Contact sales](mailto:sales@quickztna.com) for the SOC 2 control-mapping worksheet.
 
 <!--
 scorecard:

@@ -199,7 +199,7 @@ The correct 2026 architecture: ZTNA gates access, device posture is verified, id
 
 ---
 
-## 10. QuickZTNA Remote Desktop (Workforce tier)
+## 10. QuickZTNA Remote Desktop
 
 **Category.** ZTNA-native WebRTC remote desktop with session recording.
 

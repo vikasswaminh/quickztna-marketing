@@ -198,14 +198,14 @@ The solution architecture:
 
 ## 10. QuickZTNA Database Access Broker
 
-**Category.** ZTNA-integrated database proxy (Workforce tier).
+**Category.** ZTNA-brokered database access (included on every plan).
 
 **How it works.** QuickZTNA's database access broker provides a ZTNA-gated proxy to PostgreSQL, MySQL, and MSSQL databases. Developers connect through the ZTNA tunnel; the broker verifies their identity and device posture before establishing the database session. Credentials are dynamically issued for the session and logged. SQL query metadata (query type, table name, row count) is captured without logging data content, satisfying audit requirements while respecting data privacy.
 
 **Supported databases.** PostgreSQL, MySQL, Microsoft SQL Server (current). MongoDB and Redis on roadmap.
 
 **Strengths.**
-- Single ZTNA architecture covers both network access and database access control. No separate database proxy to deploy and maintain.
+- Single ZTNA architecture covers both network access and database access control. QuickZTNA runs the control plane (identity, posture, JIT, audit) and drives a lightweight agent you deploy alongside the database — no separate vendor proxy product to license.
 - Device posture check at database session initiation — unmanaged devices are denied database access regardless of credential validity.
 - SQL metadata audit log satisfies PCI-DSS Requirement 10 and SOC 2 database access monitoring without logging customer data.
 - JIT access integration: database sessions can be gated behind an approval workflow with automatic session recording.

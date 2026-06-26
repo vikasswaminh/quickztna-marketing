@@ -188,7 +188,7 @@ Most Kubernetes security posture problems are access control problems. ClusterAd
 
 ## 10. QuickZTNA Kubernetes Access
 
-**Category.** ZTNA-gated Kubernetes API access (Workforce tier).
+**Category.** ZTNA-gated Kubernetes API access (included on every plan).
 
 **How it works.** QuickZTNA's Kubernetes access feature routes kubectl and kubeconfig traffic through the ZTNA gateway, enforcing device posture checks before API server access is possible. The Kubernetes API server is not directly reachable — it is a QuickZTNA-protected resource. Identity-bound access uses the user's ZTNA session identity to scope their Kubernetes RBAC. JIT access requests can gate access to production namespaces behind an approval workflow.
 

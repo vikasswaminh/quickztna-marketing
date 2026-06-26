@@ -250,12 +250,12 @@ The tools below each address some combination of these three challenges. None ad
 - Single agent deployment. Teams running QuickZTNA for remote access do not need a separate DLP agent.
 - DLP policies integrate with the ZTNA identity model. You can apply different DLP rules to different users, departments, or posture states — a contractor with an unmanaged device can face stricter scanning than a full-time employee on a managed corporate machine.
 - Session recording captures the context around a DLP event. The audit log includes not just the blocked transfer but the session transcript, the destination, and the user identity.
-- Available on the Workforce tier with no separate licensing.
+- Included on every plan with no separate licensing.
 
 **Limitations.**
 - Coverage is currently scoped to tunnel traffic. Offline transfers (USB, print, local copy) are outside the tunnel and not inspected.
 - Pattern library is growing; current support covers credit cards, SSNs, and API keys. Document fingerprinting and ML classifiers are on the roadmap.
-- Workforce tier only — not available on Free or Business.
+- Included on every plan — both Free and Business, with full feature parity.
 
 **Best fit.** Organisations using QuickZTNA for ZTNA who want DLP without adding a third agent to every device.
 
@@ -284,7 +284,7 @@ A complete remote-team DLP posture in 2026 typically requires two layers:
 
 **Layer 1 — SaaS coverage.** A tool that scans data entering SaaS platforms — Google Drive, Slack, GitHub, Jira — for sensitive patterns. Nightfall AI or Google Workspace DLP depending on your ecosystem. Zero agent overhead; covers the most common exfiltration path (paste into SaaS).
 
-**Layer 2 — Endpoint/tunnel coverage.** Either a dedicated endpoint DLP agent (Purview if Microsoft-centric, CrowdStrike if you already have Falcon, Forcepoint for regulated industries) or a ZTNA product with built-in DLP (QuickZTNA on Workforce tier). This covers transfers that do not go through the SaaS layer: browser downloads, USB, print, and tunnel traffic.
+**Layer 2 — Endpoint/tunnel coverage.** Either a dedicated endpoint DLP agent (Purview if Microsoft-centric, CrowdStrike if you already have Falcon, Forcepoint for regulated industries) or a ZTNA product with built-in DLP (QuickZTNA, included on every plan). This covers transfers that do not go through the SaaS layer: browser downloads, USB, print, and tunnel traffic.
 
 Full SASE with a cloud proxy (Zscaler or Netskope) covers layer 2 at the network level but requires routing all internet traffic through the proxy — which adds latency, complicates BYOD, and requires TLS inspection that some security teams resist.
 
