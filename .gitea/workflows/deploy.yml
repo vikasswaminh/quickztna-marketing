@@ -1,0 +1,30 @@
+name: deploy
+on: [push, pull_request]
+jobs:
+  deploy:
+    runs-on: nh-runner
+    steps:
+      - name: Clone, build, deploy to Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PROJECT: ${{ vars.PAGES_PROJECT }}
+          GT: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          REF: ${{ github.head_ref || github.ref_name }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -e
+          W=$(mktemp -d)
+          git clone -q "http://gitea:${GT}@172.16.70.60:3000/${REPO}.git" "$W"
+          cd "$W"; git checkout -q "$SHA" 2>/dev/null || true
+          if [ -f package.json ]; then
+            if [ -f pnpm-lock.yaml ]; then corepack enable; pnpm install --frozen-lockfile; pnpm build
+            elif [ -f package-lock.json ]; then npm ci; npm run build
+            else npm install; npm run build; fi
+            OUT="$W/dist"
+          else
+            OUT="$W/_site"; mkdir -p "$OUT"; cp -a . "$OUT"/; rm -rf "$OUT/.git" "$OUT/.gitea" "$OUT/.github"
+          fi
+          echo "deploy $OUT -> $PROJECT (branch $REF)"
+          npx --yes wrangler@4 pages deploy "$OUT" --project-name="$PROJECT" --branch="$REF" --commit-dirty=true
