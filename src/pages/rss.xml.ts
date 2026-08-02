@@ -11,7 +11,7 @@ export async function GET(context: APIContext) {
     title: "QuickZTNA Blog",
     description:
       "ZTNA mesh, workforce security, compliance, and engineering notes. Primary-sourced, technical, and honest.",
-    site: context.site ?? "https://quickztna.com",
+    site: context.site ?? "https://www.quickztna.com",
     items: posts.map((post) => ({
       title: post.data.title,
       description: post.data.description,

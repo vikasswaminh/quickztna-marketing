@@ -17,7 +17,7 @@ const { entry, collection } = Astro.props;
 const { data } = entry;
 const { headings } = await render(entry);
 
-const siteUrl = "https://quickztna.com";
+const siteUrl = "https://www.quickztna.com";
 const slug = entry.id.replace(/\.md$/, "");
 const isIndex = slug === "index" || slug === "";
 const path = isIndex ? `/${collection}/` : `/${collection}/${slug}/`;

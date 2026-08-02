@@ -13,7 +13,7 @@ interface Props {
 const { post } = Astro.props;
 const { data } = post;
 
-const siteUrl = "https://quickztna.com";
+const siteUrl = "https://www.quickztna.com";
 const slug = post.id.replace(/\.md$/, "");
 const canonical = `${siteUrl}/blog/${slug}/`;
 const ogImage = data.heroImage

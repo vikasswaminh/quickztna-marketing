@@ -37,11 +37,11 @@ const rest = allPosts.filter((p) => p.id !== featured?.id);
 const blogIndexSchema = {
   "@context": "https://schema.org",
   "@type": "Blog",
-  "@id": "https://quickztna.com/blog/",
-  url: "https://quickztna.com/blog/",
+  "@id": "https://www.quickztna.com/blog/",
+  url: "https://www.quickztna.com/blog/",
   name: "QuickZTNA Blog",
   description: "Engineering notes, compliance deep-dives, and honest comparisons on Zero Trust Network Access, workforce security, and EU/US regulatory frameworks.",
-  publisher: { "@id": "https://quickztna.com/#organization" },
+  publisher: { "@id": "https://www.quickztna.com/#organization" },
   inLanguage: "en",
   blogPost: allPosts.slice(0, 20).map((p) => {
     const slug = p.id.replace(/\.md$/, "");
@@ -49,7 +49,7 @@ const blogIndexSchema = {
       "@type": "BlogPosting",
       headline: p.data.title,
       description: p.data.description,
-      url: `https://quickztna.com/blog/${slug}/`,
+      url: `https://www.quickztna.com/blog/${slug}/`,
       datePublished: p.data.publishedAt.toISOString(),
       dateModified: (p.data.updatedAt ?? p.data.publishedAt).toISOString(),
       author: { "@type": "Person", name: p.data.author.name },
@@ -61,8 +61,8 @@ const blogBreadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: "https://quickztna.com" },
-    { "@type": "ListItem", position: 2, name: "Blog", item: "https://quickztna.com/blog/" },
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://www.quickztna.com" },
+    { "@type": "ListItem", position: 2, name: "Blog", item: "https://www.quickztna.com/blog/" },
   ],
 };
 ---
