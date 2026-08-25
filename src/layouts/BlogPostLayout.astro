@@ -1,77 +1,80 @@
 ---
-import SiteLayout from "./SiteLayout.astro";
-import type { CollectionEntry } from "astro:content";
-import ReadingProgress from "@/components/blog/ReadingProgress.astro";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import ShareButtons from "@/components/blog/ShareButtons.astro";
 import AuthorCard from "@/components/blog/AuthorCard.astro";
 import RelatedPosts from "@/components/blog/RelatedPosts.astro";
-import ShareButtons from "@/components/blog/ShareButtons.astro";
+import type { CollectionEntry } from "astro:content";
 
 interface Props {
   post: CollectionEntry<"blog">;
 }
 
 const { post } = Astro.props;
-const { data } = post;
+const { data, id } = post;
+const slug = id.replace(/\.md$/, "");
 
-const siteUrl = "https://www.quickztna.com";
-const slug = post.id.replace(/\.md$/, "");
-const canonical = `${siteUrl}/blog/${slug}/`;
-const ogImage = data.heroImage
-  ? `${siteUrl}${data.heroImage}`
-  : `${siteUrl}/og/${slug}.svg`;
-
+const canonical = `https://www.quickztna.com/blog/${slug}/`;
 const published = data.publishedAt.toISOString();
-const updated = (data.updatedAt ?? data.publishedAt).toISOString();
+const modified = (data.updatedAt ?? data.publishedAt).toISOString();
 const readingTime = data.wordCount ? Math.ceil(data.wordCount / 230) : null;
 
-// ── Schema.org ────────────────────────────────────────────────────────────────
-const blogPostingSchema = {
+const categoryLabel: Record<string, string> = {
+  architecture: "Architecture",
+  comparison: "Comparison",
+  compliance: "Compliance",
+  technical: "Technical",
+  fundamentals: "Fundamentals",
+  industry: "Industry",
+};
+
+const techArticleSchema = {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
+  "@type": "TechArticle",
+  "@id": `${canonical}#article`,
+  url: canonical,
   headline: data.title,
   description: data.description,
-  image: ogImage,
+  datePublished: published,
+  dateModified: modified,
+  inLanguage: "en-US",
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": canonical,
+  },
   author: {
     "@type": "Person",
     name: data.author.name,
-    ...(data.author.url ? { url: data.author.url } : {}),
+    jobTitle: data.author.role,
+    url: data.author.url ?? "https://www.quickztna.com",
   },
   publisher: {
     "@type": "Organization",
     name: "QuickZTNA",
-    logo: { "@type": "ImageObject", url: `${siteUrl}/logo.png` },
+    url: "https://www.quickztna.com",
+    logo: {
+      "@type": "ImageObject",
+      url: "https://www.quickztna.com/favicon.svg",
+    },
   },
-  datePublished: published,
-  dateModified: updated,
-  mainEntityOfPage: canonical,
   keywords: [data.primaryKeyword, ...data.tags].join(", "),
-  wordCount: data.wordCount ?? undefined,
+  articleSection: categoryLabel[data.category] ?? data.category,
+  wordCount: data.wordCount,
+  dependencies: "WireGuard, Go, Linux kernel >= 5.6",
+  proficiencyLevel: "Professional",
 };
 
 const faqSchema =
-  data.faq.length > 0
+  data.faq && data.faq.length > 0
     ? {
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        mainEntity: data.faq.map((f) => ({
+        mainEntity: data.faq.map((item) => ({
           "@type": "Question",
-          name: f.q,
-          acceptedAnswer: { "@type": "Answer", text: f.a },
-        })),
-      }
-    : null;
-
-const howToSchema =
-  data.howToSteps && data.howToSteps.length > 0
-    ? {
-        "@context": "https://schema.org",
-        "@type": "HowTo",
-        name: data.title,
-        step: data.howToSteps.map((s, i) => ({
-          "@type": "HowToStep",
-          position: i + 1,
-          name: s.name,
-          text: s.text,
+          name: item.q,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.a,
+          },
         })),
       }
     : null;
@@ -80,124 +83,114 @@ const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
-    { "@type": "ListItem", position: 2, name: "Blog", item: `${siteUrl}/blog/` },
-    { "@type": "ListItem", position: 3, name: data.title, item: canonical },
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://www.quickztna.com",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Blog",
+      item: "https://www.quickztna.com/blog/",
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: data.title,
+      item: canonical,
+    },
   ],
 };
-
-const categoryLabel: Record<string, string> = {
-  "post-quantum": "Post-quantum",
-  compliance: "Compliance",
-  comparison: "Comparison",
-  fundamentals: "Fundamentals",
-  technical: "Technical",
-  industry: "Industry",
-};
 ---
+
 <SiteLayout
-  title={data.title + " | QuickZTNA Blog"}
+  title={`${data.title} — QuickZTNA Blog`}
   description={data.description}
   canonical={canonical}
-  ogImage={ogImage}
+  ogImage={data.heroImage}
 >
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(blogPostingSchema)} is:inline />
+    <script type="application/ld+json" set:html={JSON.stringify(techArticleSchema)} is:inline />
     <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} is:inline />
-    {faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />}
-    {howToSchema && <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} is:inline />}
+    {faqSchema && (
+      <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />
+    )}
   </Fragment>
 
-  <!-- Reading progress bar (CSS-only, fixed top) -->
-  <ReadingProgress />
-
-  <!-- Skip to content -->
-  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded focus:bg-primary focus:px-3 focus:py-1 focus:text-sm focus:text-primary-foreground">
-    Skip to content
-  </a>
-
-  <!-- Breadcrumb -->
-  <div class="border-b border-border/50 bg-muted/20">
-    <nav aria-label="Breadcrumb" class="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">
-      <ol class="flex flex-wrap items-center gap-1 font-mono text-xs text-muted-foreground">
-        <li><a href="/" class="hover:text-primary">Home</a></li>
-        <li aria-hidden="true" class="text-border">/</li>
-        <li><a href="/blog/" class="hover:text-primary">Blog</a></li>
-        <li aria-hidden="true" class="text-border">/</li>
-        <li class="text-foreground truncate max-w-xs">{data.title}</li>
-      </ol>
-    </nav>
+  <!-- Breadcrumbs -->
+  <div class="border-b border-border bg-surface py-3">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <nav aria-label="Breadcrumb">
+        <ol class="flex items-center gap-2 font-mono text-xs text-muted-foreground">
+          <li><a href="/" class="hover:text-primary font-medium transition-colors">Home</a></li>
+          <li aria-hidden="true" class="text-border">/</li>
+          <li><a href="/blog/" class="hover:text-primary font-medium transition-colors">Blog</a></li>
+          <li aria-hidden="true" class="text-border">/</li>
+          <li class="truncate max-w-[240px] sm:max-w-md text-primary font-bold" aria-current="page">
+            {data.title}
+          </li>
+        </ol>
+      </nav>
+    </div>
   </div>
 
-  <!--
-    Layout:
-    mobile  → single column (article full-width, ToC as <details>)
-    desktop → [article 2xl] [sticky sidebar 64]
-  -->
   <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-    <div class="lg:grid lg:grid-cols-[1fr_17rem] lg:gap-12 xl:gap-16">
+    <div class="grid gap-12 lg:grid-cols-[1fr_320px]">
 
-      <!-- ── MAIN ARTICLE ─────────────────────────────────────────── -->
+      <!-- ── ARTICLE BODY ─────────────────────────────────────────── -->
       <article id="main-content" class="min-w-0">
 
         <!-- Article header -->
-        <header class="mb-8">
+        <header class="mb-8 pb-8 border-b border-gray-100">
           <!-- Category + reading time -->
           <div class="mb-4 flex flex-wrap items-center gap-2">
             <a
               href={`/blog/?category=${data.category}`}
-              class="rounded-full border border-primary/30 bg-primary/10 px-3 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-primary hover:bg-primary/20 transition-colors"
+              class="rounded-full border border-accent/25 bg-accent-light px-3.5 py-1 font-mono text-[11px] font-bold uppercase tracking-wider text-accent hover:bg-accent hover:text-white transition-all"
             >
               {categoryLabel[data.category] ?? data.category}
             </a>
             {readingTime && (
-              <span class="font-mono text-xs text-muted-foreground">{readingTime} min read</span>
+              <span class="font-mono text-xs text-muted-foreground font-medium">· {readingTime} min read</span>
             )}
             {data.wordCount && (
-              <span class="font-mono text-xs text-muted-foreground">· {data.wordCount.toLocaleString()} words</span>
+              <span class="font-mono text-xs text-muted-foreground font-medium">· {data.wordCount.toLocaleString()} words</span>
             )}
           </div>
 
           <!-- Title -->
-          <h1 class="text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+          <h1 class="text-3xl font-extrabold leading-tight tracking-tight text-primary sm:text-4xl lg:text-5xl">
             {data.title}
           </h1>
 
           <!-- Description -->
-          <p class="mt-4 text-lg leading-relaxed text-muted-foreground">{data.description}</p>
+          <p class="mt-4 text-base sm:text-lg leading-relaxed text-muted-foreground font-medium">{data.description}</p>
 
           <!-- Author + dates -->
-          <div class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
+          <div class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-muted-foreground">
             <address class="not-italic">
-              By <span class="font-semibold text-foreground">{data.author.name}</span>
-              {data.author.role && <span class="ml-1 text-xs text-muted-foreground">· {data.author.role}</span>}
+              By <span class="font-bold text-primary">{data.author.name}</span>
+              {data.author.role && <span class="ml-1 text-xs text-muted-foreground">({data.author.role})</span>}
             </address>
             <span aria-hidden="true">·</span>
-            <time datetime={published}>
+            <time datetime={published} class="font-mono text-xs">
               {data.publishedAt.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
             </time>
             {data.updatedAt && (
               <>
                 <span aria-hidden="true">·</span>
-                <span class="text-xs">
-                  Updated {data.updatedAt.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                <span class="font-mono text-xs">
+                  Updated {data.updatedAt.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
                 </span>
               </>
             )}
           </div>
 
-          <!-- Trust badges -->
-          <div class="mt-4 flex flex-wrap gap-2">
-            {["WireGuard", "Zero Trust", "GDPR"].map((badge) => (
-              <span class="rounded border border-border bg-muted/50 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                {badge}
-              </span>
-            ))}
-          </div>
-
           <!-- Hero image -->
           {data.heroImage && (
-            <div class="mt-8 overflow-hidden rounded-2xl border border-border">
+            <div class="mt-8 overflow-hidden rounded-2xl border border-border shadow-soft">
               <img
                 src={data.heroImage}
                 alt={data.heroAlt ?? data.title}
@@ -215,17 +208,17 @@ const categoryLabel: Record<string, string> = {
         <div
           id="article-body"
           class="prose prose-slate max-w-none
-            prose-headings:scroll-mt-28 prose-headings:font-bold
-            prose-h2:mt-12 prose-h2:text-2xl prose-h2:border-b prose-h2:border-border/50 prose-h2:pb-2
+            prose-headings:scroll-mt-28 prose-headings:font-bold prose-headings:text-primary
+            prose-h2:mt-12 prose-h2:text-2xl prose-h2:border-b prose-h2:border-border prose-h2:pb-2
             prose-h3:mt-8 prose-h3:text-xl
-            prose-p:leading-relaxed prose-p:text-foreground/80
-            prose-a:text-primary prose-a:underline-offset-2 prose-a:font-medium
-            prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
-            prose-pre:rounded-xl prose-pre:border prose-pre:border-border prose-pre:bg-muted
-            prose-blockquote:border-l-primary prose-blockquote:bg-accent/30 prose-blockquote:rounded-r-lg prose-blockquote:py-0.5
-            prose-table:text-sm prose-th:bg-muted prose-th:font-semibold
-            prose-img:rounded-xl prose-img:border prose-img:border-border
-            prose-strong:text-foreground"
+            prose-p:leading-relaxed prose-p:text-gray-700
+            prose-a:text-accent prose-a:underline-offset-2 prose-a:font-semibold hover:prose-a:underline
+            prose-code:rounded prose-code:bg-surface prose-code:border prose-code:border-border prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm prose-code:font-mono prose-code:text-accent prose-code:before:content-none prose-code:after:content-none
+            prose-pre:rounded-2xl prose-pre:border prose-pre:border-border prose-pre:bg-primary prose-pre:text-white
+            prose-blockquote:border-l-accent prose-blockquote:bg-accent-light prose-blockquote:rounded-r-xl prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:text-primary
+            prose-table:text-sm prose-th:bg-surface prose-th:font-bold prose-th:text-primary
+            prose-img:rounded-2xl prose-img:border prose-img:border-border prose-img:shadow-soft
+            prose-strong:text-primary prose-strong:font-bold"
         >
           <slot />
         </div>
@@ -233,15 +226,15 @@ const categoryLabel: Record<string, string> = {
         <!-- FAQ section -->
         {data.faq.length > 0 && (
           <section class="mt-16 border-t border-border pt-10" id="faq">
-            <h2 class="text-2xl font-bold text-foreground">Frequently asked questions</h2>
-            <dl class="mt-6 space-y-6">
+            <h2 class="text-2xl font-bold text-primary mb-6">Frequently asked questions</h2>
+            <div class="space-y-4">
               {data.faq.map((item) => (
-                <div class="rounded-xl border border-border bg-card p-5">
-                  <dt class="text-base font-semibold text-foreground">{item.q}</dt>
-                  <dd class="mt-2 text-sm leading-relaxed text-muted-foreground">{item.a}</dd>
+                <div class="rounded-2xl border border-border bg-surface p-5 shadow-soft">
+                  <h3 class="text-base font-bold text-primary">{item.q}</h3>
+                  <p class="mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground font-medium">{item.a}</p>
                 </div>
               ))}
-            </dl>
+            </div>
           </section>
         )}
 
@@ -255,10 +248,10 @@ const categoryLabel: Record<string, string> = {
         </div>
 
         <!-- Share + tags row -->
-        <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+        <div class="mt-6 flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-gray-100">
           <div class="flex flex-wrap gap-1.5">
             {data.tags.map((tag) => (
-              <span class="rounded-full border border-border px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground hover:border-primary/40 hover:text-primary transition-colors cursor-default">
+              <span class="rounded-full border border-border bg-surface px-3 py-1 font-mono text-[11px] text-muted-foreground hover:border-accent hover:text-accent transition-colors cursor-default">
                 #{tag}
               </span>
             ))}
@@ -267,20 +260,21 @@ const categoryLabel: Record<string, string> = {
         </div>
 
         <!-- Bottom CTA banner -->
-        <aside class="mt-12 rounded-2xl border border-primary/20 bg-gradient-to-br from-accent/50 to-background p-6" aria-label="Try QuickZTNA">
-          <p class="font-mono text-[11px] font-bold uppercase tracking-widest text-primary">Try QuickZTNA</p>
-          <h3 class="mt-2 text-xl font-semibold text-foreground">
+        <aside class="mt-12 rounded-2xl border border-border bg-primary p-6 sm:p-8 text-white shadow-elevated" aria-label="Try QuickZTNA">
+          <span class="font-mono text-[10px] font-bold uppercase tracking-widest text-accent block mb-1">
+            Instant mesh deploy
+          </span>
+          <h3 class="text-xl sm:text-2xl font-bold text-white">
             Zero Trust mesh — free for up to 5 users, forever
           </h3>
-          <p class="mt-2 text-sm text-muted-foreground">
-            WireGuard-encrypted mesh, ABAC policies, and device posture.
-            No credit card, no trial expiry on the free plan.
+          <p class="mt-2 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed max-w-xl">
+            WireGuard-encrypted mesh, ABAC policies, workforce DLP, and device posture. No credit card, no trial expiry on the free plan.
           </p>
-          <div class="mt-4 flex flex-wrap gap-3">
-            <a href="https://login.quickztna.com/auth" class="rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity">
-              Start free
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="https://login.quickztna.com/auth" class="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-6 py-2.5 text-xs font-bold text-white hover:bg-accent/95 shadow-md shadow-accent/20 transition-all active:scale-95">
+              Start free — no card required
             </a>
-            <a href="/pricing/" class="rounded-md border border-border bg-background px-5 py-2.5 text-sm font-medium hover:bg-muted transition-colors">
+            <a href="/pricing/" class="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-xs font-semibold text-white hover:bg-white/20 transition-all">
               Compare plans
             </a>
           </div>
@@ -292,15 +286,17 @@ const categoryLabel: Record<string, string> = {
         <div class="sticky top-24 space-y-6">
 
           <!-- Sidebar CTA -->
-          <div class="rounded-xl border border-primary/20 bg-gradient-to-b from-accent/40 to-background p-5">
-            <p class="font-mono text-[10px] font-bold uppercase tracking-widest text-primary">Free plan</p>
-            <p class="mt-2 text-sm font-semibold text-foreground leading-snug">
-              Zero Trust mesh — free for up to 5 users
+          <div class="rounded-2xl border border-border bg-surface p-5 shadow-soft">
+            <span class="font-mono text-[10px] font-bold uppercase tracking-widest text-accent block mb-1">FREE FOREVER</span>
+            <h4 class="text-sm font-bold text-primary leading-snug">
+              Zero Trust mesh for your whole team
+            </h4>
+            <p class="mt-1.5 text-xs text-muted-foreground font-medium leading-relaxed">
+              WireGuard mesh + DLP + AI Operator. One command install. No credit card.
             </p>
-            <p class="mt-1.5 text-xs text-muted-foreground">WireGuard mesh + ABAC. No card required.</p>
             <a
               href="https://login.quickztna.com/auth"
-              class="mt-4 block w-full rounded-md bg-primary py-2 text-center text-xs font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
+              class="mt-4 block w-full rounded-full bg-accent py-2.5 text-center text-xs font-bold text-white hover:bg-accent/95 shadow-md shadow-accent/20 transition-all active:scale-95"
             >
               Start free →
             </a>
