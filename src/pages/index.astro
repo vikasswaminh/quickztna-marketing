@@ -308,13 +308,10 @@ const softwareApplicationSchema = {
           },
         ].map((s) => (
           <div class="relative overflow-hidden rounded-2xl border border-border bg-white p-6 shadow-soft transition-all hover:border-accent group">
-            <div class="absolute -right-4 -top-6 text-accent/5 font-extrabold text-[110px] select-none pointer-events-none group-hover:text-accent/10 transition-colors font-mono">
+            <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-100 font-extrabold text-[120px] leading-none select-none pointer-events-none group-hover:text-gray-200/60 transition-colors font-mono">
               {s.n}
             </div>
             <div class="relative z-10">
-              <div class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-accent-light text-accent font-mono font-bold text-xs mb-4">
-                {s.n}
-              </div>
               <h3 class="text-lg font-bold text-primary mb-2">{s.title}</h3>
               <p class="text-xs leading-relaxed text-muted-foreground font-medium">{s.desc}</p>
             </div>
