@@ -147,172 +147,59 @@ const plans = [
   <!-- ═══════════════════════════════════════════════
        HERO
   ═══════════════════════════════════════════════ -->
+  <!-- ═══════════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════════ -->
   <section class="relative overflow-hidden bg-white">
     <!-- Subtle grid background -->
     <div class="absolute inset-0 bg-[linear-gradient(to_right,#f0fdf480_1px,transparent_1px),linear-gradient(to_bottom,#f0fdf480_1px,transparent_1px)] bg-[size:48px_48px]" aria-hidden="true"></div>
-    <div class="relative mx-auto max-w-7xl px-4 pt-16 pb-20 sm:px-6 lg:px-8 lg:pt-20 lg:pb-28">
-      <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+    <div class="relative mx-auto max-w-5xl px-4 pt-20 pb-16 text-center sm:px-6 lg:px-8 lg:pt-28 lg:pb-20">
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1 text-xs font-semibold text-primary shadow-soft">
+        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        REMOTE WORKFORCE SECURITY OS
+      </div>
 
-        <!-- Left: copy -->
-        <div>
-          <!-- Badge -->
-          <div class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
-            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            REMOTE WORKFORCE SECURITY OS
-          </div>
+      <h1 class="mt-6 text-4xl font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-6xl lg:text-7xl">
+        Zero Trust security<br class="hidden sm:inline" />
+        without the <span class="text-primary">infrastructure</span> headache.
+      </h1>
 
-          <h1 class="mt-5 text-4xl font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-5xl">
-            Zero Trust security<br />
-            without the<br />
-            <span class="text-primary">infrastructure</span> headache.
-          </h1>
+      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
+        Connect employees, services and code areas through encrypted private links. Better private access controls.
+      </p>
 
-          <p class="mt-5 max-w-md text-base leading-relaxed text-muted-foreground">
-            Connect employees, services and code areas through encrypted private links. Better private access controls.
-          </p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+        <a
+          href={AUTH_URL}
+          class="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-base font-semibold text-white transition-all hover:bg-primary/90 hover:shadow-glow"
+        >
+          Start Free
+          <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a
+          href="#how-it-works"
+          class="inline-flex items-center gap-2 rounded-full border border-border bg-white px-6 py-3 text-base font-medium text-gray-700 transition-colors hover:bg-muted shadow-soft"
+        >
+          <svg class="h-4 w-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          See how it works
+        </a>
+      </div>
 
-          <div class="mt-7 flex flex-wrap items-center gap-3">
-            <a
-              href={AUTH_URL}
-              class="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-primary/90 hover:shadow-glow"
-            >
-              Start Free
-              <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-            <a
-              href="#how-it-works"
-              class="inline-flex items-center gap-1.5 rounded-full border border-border bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-muted"
-            >
-              <svg class="h-4 w-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-              See how it works
-            </a>
-          </div>
-
-          <!-- Trust badges -->
-          <div class="mt-6 flex flex-wrap items-center gap-5 text-xs text-muted-foreground">
-            <span class="flex items-center gap-1.5">
-              <svg class="h-3.5 w-3.5 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              No MFA to users
-            </span>
-            <span class="flex items-center gap-1.5">
-              <svg class="h-3.5 w-3.5 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              No credit card
-            </span>
-            <span class="flex items-center gap-1.5">
-              <svg class="h-3.5 w-3.5 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              2-minute setup
-            </span>
-          </div>
-        </div>
-
-        <!-- Right: Dashboard mockup -->
-        <div class="relative">
-          <!-- Glow -->
-          <div class="absolute -inset-6 rounded-3xl bg-primary/8 blur-2xl" aria-hidden="true"></div>
-          <div class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-elevated">
-
-            <!-- Dashboard top bar -->
-            <div class="flex items-center justify-between border-b border-gray-100 bg-gray-50/80 px-4 py-3">
-              <div class="flex items-center gap-2.5">
-                <div class="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
-                  <svg class="h-4 w-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>
-                <span class="text-sm font-semibold text-gray-800">QuickZTNA</span>
-              </div>
-              <span class="flex items-center gap-1.5 rounded-full bg-success/10 px-2.5 py-1 text-xs font-medium text-success">
-                <span class="h-1.5 w-1.5 rounded-full bg-success"></span>
-                All systems operational
-              </span>
-            </div>
-
-            <!-- Sidebar + content -->
-            <div class="flex">
-              <!-- Sidebar -->
-              <div class="w-32 shrink-0 border-r border-gray-100 bg-gray-50/60 py-3">
-                {[
-                  { icon: "▦", label: "Overview", active: true },
-                  { icon: "⬡", label: "Devices", active: false },
-                  { icon: "⊞", label: "Access", active: false },
-                  { icon: "♟", label: "Users", active: false },
-                  { icon: "≡", label: "Policies", active: false },
-                  { icon: "◈", label: "Analytics", active: false },
-                  { icon: "⚙", label: "Settings", active: false },
-                ].map((item) => (
-                  <div class={`flex items-center gap-2 px-3 py-1.5 text-xs ${item.active ? "bg-primary/10 text-primary font-medium rounded-md mx-1" : "text-gray-500 hover:text-gray-700"}`}>
-                    <span class="text-[10px]">{item.icon}</span>
-                    <span>{item.label}</span>
-                  </div>
-                ))}
-              </div>
-
-              <!-- Main content -->
-              <div class="flex-1 p-4">
-                <!-- Header row -->
-                <div class="mb-3 flex items-center justify-between">
-                  <p class="text-xs font-semibold text-gray-700">Main Overview</p>
-                  <span class="flex items-center gap-1 rounded-full bg-success/10 px-2 py-0.5 text-[10px] font-medium text-success">
-                    <span class="h-1.5 w-1.5 rounded-full bg-success"></span>
-                    All systems operational
-                  </span>
-                </div>
-
-                <!-- Stats row -->
-                <div class="mb-4 grid grid-cols-3 gap-2">
-                  <div class="rounded-lg border border-gray-100 bg-gray-50 p-2.5 text-center">
-                    <p class="text-base font-bold text-gray-900">100 / 100</p>
-                    <p class="text-[10px] text-gray-500">Devices Online</p>
-                  </div>
-                  <div class="rounded-lg border border-gray-100 bg-gray-50 p-2.5 text-center">
-                    <p class="text-base font-bold text-gray-900">12</p>
-                    <p class="text-[10px] text-gray-500">Policies Active</p>
-                  </div>
-                  <div class="rounded-lg border border-gray-100 bg-gray-50 p-2.5 text-center">
-                    <p class="text-base font-bold text-primary">3.2ms</p>
-                    <p class="text-[10px] text-gray-500">Avg Latency</p>
-                  </div>
-                </div>
-
-                <!-- Connected services -->
-                <div class="grid grid-cols-2 gap-3">
-                  <div>
-                    <p class="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400">Connected Services</p>
-                    {[
-                      { label: "Webservers", latency: "52ms", ok: true },
-                      { label: "API Gateway", latency: "71ms", ok: true },
-                      { label: "Database", latency: "30ms", ok: true },
-                      { label: "Internal Server", latency: "9.5ms", ok: true },
-                    ].map((svc) => (
-                      <div class="mb-1 flex items-center justify-between">
-                        <div class="flex items-center gap-1.5">
-                          <span class={`h-1.5 w-1.5 rounded-full ${svc.ok ? "bg-success" : "bg-warning"}`}></span>
-                          <span class="text-[10px] text-gray-600">{svc.label}</span>
-                        </div>
-                        <span class="text-[10px] font-mono text-gray-400">{svc.latency}</span>
-                      </div>
-                    ))}
-                    <button class="mt-1.5 text-[10px] font-medium text-primary hover:underline">VIEW ACTIVITY →</button>
-                  </div>
-                  <div>
-                    <p class="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400">Network Map</p>
-                    <div class="flex h-20 items-center justify-center rounded-lg border border-dashed border-gray-200 bg-gray-50">
-                      <div class="text-center">
-                        <div class="relative mx-auto h-10 w-10">
-                          <!-- Network nodes -->
-                          <div class="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 rounded-full bg-primary/30 border border-primary/60"></div>
-                          <div class="absolute left-0 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-gray-200 border border-gray-300"></div>
-                          <div class="absolute right-0 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-gray-200 border border-gray-300"></div>
-                          <div class="absolute bottom-0 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full bg-gray-200 border border-gray-300"></div>
-                          <!-- Center node -->
-                          <div class="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary border-2 border-white shadow-sm"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <!-- Trust badges -->
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground sm:text-sm">
+        <span class="flex items-center gap-1.5 font-medium">
+          <svg class="h-4 w-4 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          No MFA to users
+        </span>
+        <span class="flex items-center gap-1.5 font-medium">
+          <svg class="h-4 w-4 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          No credit card
+        </span>
+        <span class="flex items-center gap-1.5 font-medium">
+          <svg class="h-4 w-4 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          2-minute setup
+        </span>
       </div>
     </div>
   </section>
