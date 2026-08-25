@@ -437,11 +437,14 @@ const plans = [
           },
         ].map((step, i) => (
           <>
-            <div class="flex flex-col items-center rounded-2xl border border-gray-100 bg-gray-50/80 p-8 text-center shadow-soft hover:shadow-elevated hover:border-primary/20 transition-all">
-              <span class="mb-3 font-mono text-xs font-bold text-primary">{step.n}</span>
-              <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white border border-gray-100 shadow-soft" set:html={step.icon} />
-              <h3 class="text-lg font-bold text-gray-900">{step.title}</h3>
-              <p class="mt-2 text-sm text-muted-foreground">{step.desc}</p>
+            <div class="group relative overflow-hidden flex flex-col items-center rounded-2xl border border-gray-100 bg-gray-50/80 p-8 text-center shadow-soft hover:shadow-elevated hover:border-primary/20 transition-all">
+              <!-- Subtle Watermark Number -->
+              <span class="absolute -top-1 right-3 select-none font-mono text-6xl font-black text-gray-300/40 transition-colors group-hover:text-primary/15 pointer-events-none">
+                {step.n}
+              </span>
+              <div class="relative z-10 mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-gray-100 bg-white shadow-soft transition-transform group-hover:scale-105" set:html={step.icon} />
+              <h3 class="relative z-10 text-lg font-bold text-gray-900">{step.title}</h3>
+              <p class="relative z-10 mt-2 text-sm text-muted-foreground">{step.desc}</p>
             </div>
             {i < 2 && (
               <div class="hidden lg:flex items-center justify-center">
