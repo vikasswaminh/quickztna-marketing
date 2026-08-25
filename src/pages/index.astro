@@ -320,42 +320,85 @@ const plans = [
   <!-- ═══════════════════════════════════════════════
        FEATURE STRIP
   ═══════════════════════════════════════════════ -->
-  <section class="border-y border-gray-100 bg-white">
-    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-        {[
-          {
-            icon: `<svg class="h-6 w-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
-            title: "WireGuard®",
-            desc: "High-performance mesh",
-          },
-          {
-            icon: `<svg class="h-6 w-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c.552 0 1-.448 1-1V8a1 1 0 0 0-.553-.894l-8-4a1 1 0 0 0-.894 0l-8 4A1 1 0 0 0 2 8v3c0 7.18 5.907 11.5 10 12.93C16.093 22.5 22 18.18 22 11z"/></svg>`,
-            title: "Zero Trust",
-            desc: "Verify every request",
-          },
-          {
-            icon: `<svg class="h-6 w-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="2"/></svg>`,
-            title: "ABAC",
-            desc: "Identity & context aware",
-          },
-          {
-            icon: `<svg class="h-6 w-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
-            title: "AI Operator",
-            desc: "Policies & path lifecycle",
-          },
-          {
-            icon: `<svg class="h-6 w-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="M5 8h.01M8 8h.01"/><path d="M11 8h6"/><path d="M5 12h14"/></svg>`,
-            title: "Built for Scale",
-            desc: "From 10 to 1000+ devices",
-          },
-        ].map((f) => (
-          <div class="flex flex-col items-center gap-2 text-center">
-            <div class="flex h-12 w-12 items-center justify-center rounded-xl border border-primary/10 bg-primary/5" set:html={f.icon} />
-            <p class="text-sm font-semibold text-gray-800">{f.title}</p>
-            <p class="text-xs text-muted-foreground">{f.desc}</p>
+  <section class="bg-white pb-16 pt-4">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="overflow-hidden rounded-2xl border border-gray-200/80 bg-white p-4 shadow-soft sm:rounded-3xl sm:p-6 sm:shadow-elevated">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:gap-0 lg:divide-x lg:divide-gray-200/80">
+          <!-- WireGuard -->
+          <div class="flex items-center gap-3.5 px-3 py-2 sm:px-4">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center">
+              <svg class="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 6v12" />
+                <path d="M12 8a4 4 0 0 0 0 8" />
+                <path d="M12 8a4 4 0 0 1 0 8" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-bold text-gray-900 leading-tight">WireGuard®</p>
+              <p class="text-xs text-gray-500 leading-tight mt-0.5 whitespace-nowrap">High-performance mesh</p>
+            </div>
           </div>
-        ))}
+
+          <!-- Zero Trust -->
+          <div class="flex items-center gap-3.5 px-3 py-2 sm:px-4">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center">
+              <svg class="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-bold text-gray-900 leading-tight">Zero Trust</p>
+              <p class="text-xs text-gray-500 leading-tight mt-0.5 whitespace-nowrap">Verify every request</p>
+            </div>
+          </div>
+
+          <!-- ABAC -->
+          <div class="flex items-center gap-3.5 px-3 py-2 sm:px-4">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center">
+              <svg class="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"/>
+                <circle cx="12" cy="12" r="2.5"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-bold text-gray-900 leading-tight">ABAC</p>
+              <p class="text-xs text-gray-500 leading-tight mt-0.5 whitespace-nowrap">Identity & context aware</p>
+            </div>
+          </div>
+
+          <!-- AI Operator -->
+          <div class="flex items-center gap-3.5 px-3 py-2 sm:px-4">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center">
+              <svg class="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4"/>
+                <path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4l1.4-1.4M17 7l1.4-1.4"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-bold text-gray-900 leading-tight">AI Operator</p>
+              <p class="text-xs text-gray-500 leading-tight mt-0.5 whitespace-nowrap">Policies & path lifecycle</p>
+            </div>
+          </div>
+
+          <!-- Built for Scale -->
+          <div class="flex items-center gap-3.5 px-3 py-2 sm:px-4">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center">
+              <svg class="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="18" cy="5" r="2.5"/>
+                <circle cx="6" cy="12" r="2.5"/>
+                <circle cx="18" cy="19" r="2.5"/>
+                <circle cx="6" cy="19" r="2.5"/>
+                <path d="M18 7.5v9M8.5 12h7M8.5 19h7M6 14.5v2"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-bold text-gray-900 leading-tight">Built for Scale</p>
+              <p class="text-xs text-gray-500 leading-tight mt-0.5 whitespace-nowrap">From 10 to 1000+ devices</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
