@@ -6,28 +6,16 @@ import { docsNav, guideNav } from "@/lib/nav";
 const AUTH_URL = "https://login.quickztna.com/auth";
 
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
-const isActive = (href: string) => (href === "/" ? path === "/" : path === href || path.startsWith(href + "/"));
+const isActive = (href: string) =>
+  href === "/" ? path === "/" : path === href || path.startsWith(href + "/");
+
+const linkCls = (href: string) =>
+  `rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
+    isActive(href) ? "text-foreground bg-muted" : "text-muted-foreground"
+  }`;
 
 const triggerBase =
-  "inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:text-foreground";
-
-// Product dropdown items
-const productItems = [
-  { label: "Overview", href: "/", desc: "Remote Workforce Security OS" },
-  { label: "Features", href: "/features", desc: "Full platform feature set" },
-  { label: "Workforce", href: "/workforce", desc: "For distributed teams" },
-  { label: "Pricing", href: "/pricing", desc: "Free forever · $10/user to scale" },
-  { label: "Savings", href: "/savings", desc: "Compare vs alternatives" },
-];
-
-// Resources dropdown items
-const resourceItems = [
-  { label: "User Guide", href: "/guide/" },
-  { label: "Quickstart", href: "/guide/quickstart/" },
-  { label: "Documentation", href: "/docs/" },
-  { label: "API Reference", href: "/docs/api/" },
-  { label: "Blog", href: "/blog/" },
-];
+  "inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground";
 ---
 
 <header class="sticky top-0 z-40 w-full border-b border-border/60 bg-white/90 backdrop-blur-md">
@@ -39,56 +27,30 @@ const resourceItems = [
     <!-- Desktop nav -->
     <nav class="hidden items-center gap-0.5 md:flex">
 
-      <!-- Product dropdown -->
+      <!-- Home -->
+      <a href="/" class={linkCls("/")}>Home</a>
+
+      <!-- Features -->
+      <a href="/features" class={linkCls("/features")}>Features</a>
+
+      <!-- Pricing -->
+      <a href="/pricing" class={linkCls("/pricing")}>Pricing</a>
+
+      <!-- Savings -->
+      <a href="/savings" class={linkCls("/savings")}>Savings</a>
+
+      <!-- Docs dropdown -->
       <div class="group relative">
         <button
           type="button"
           aria-haspopup="menu"
-          class={`${triggerBase} ${isActive("/") && path === "/" ? "text-foreground" : "text-muted-foreground"}`}
+          class={`${triggerBase} ${isActive("/docs") ? "text-foreground bg-muted" : "text-muted-foreground"}`}
         >
-          Product
+          Docs
           <svg data-chev class="h-3 w-3 transition-transform group-hover:rotate-180" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <div class="invisible absolute left-0 top-full z-50 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
           <div class="w-64 rounded-xl border border-border bg-white p-2 shadow-elevated">
-            {productItems.map((item) => (
-              <a href={item.href} class="flex flex-col rounded-lg px-3 py-2.5 transition-colors hover:bg-muted">
-                <span class="text-sm font-medium text-foreground">{item.label}</span>
-                <span class="text-xs text-muted-foreground">{item.desc}</span>
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <!-- Features link -->
-      <a
-        href="/features"
-        class={`${triggerBase} ${isActive("/features") ? "text-foreground" : "text-muted-foreground"}`}
-      >
-        Features
-      </a>
-
-      <!-- Pricing link -->
-      <a
-        href="/pricing"
-        class={`${triggerBase} ${isActive("/pricing") ? "text-foreground" : "text-muted-foreground"}`}
-      >
-        Pricing
-      </a>
-
-      <!-- Documentation dropdown -->
-      <div class="group relative">
-        <button
-          type="button"
-          aria-haspopup="menu"
-          class={`${triggerBase} ${isActive("/docs") ? "text-foreground" : "text-muted-foreground"}`}
-        >
-          Documentation
-          <svg data-chev class="h-3 w-3 transition-transform group-hover:rotate-180" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <div class="invisible absolute left-0 top-full z-50 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-          <div class="w-56 rounded-xl border border-border bg-white p-2 shadow-elevated">
             {docsNav.map((g) => (
               <a href={g.items[0].href} class="block rounded-lg px-3 py-2.5 transition-colors hover:bg-muted">
                 <span class="block text-sm font-medium text-foreground">{g.title}</span>
@@ -99,28 +61,39 @@ const resourceItems = [
         </div>
       </div>
 
-      <!-- Resources dropdown -->
+      <!-- Guide dropdown -->
       <div class="group relative">
         <button
           type="button"
           aria-haspopup="menu"
-          class={`${triggerBase} ${isActive("/guide") || isActive("/blog") ? "text-foreground" : "text-muted-foreground"}`}
+          class={`${triggerBase} ${isActive("/guide") ? "text-foreground bg-muted" : "text-muted-foreground"}`}
         >
-          Resources
+          Guide
           <svg data-chev class="h-3 w-3 transition-transform group-hover:rotate-180" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <div class="invisible absolute right-0 top-full z-50 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-          <div class="w-48 rounded-xl border border-border bg-white p-2 shadow-elevated">
-            {resourceItems.map((item) => (
-              <a href={item.href} class="block rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
-                {item.label}
-              </a>
+        <div class="invisible absolute left-0 top-full z-50 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+          <div class="grid w-[34rem] max-w-[calc(100vw-2rem)] grid-cols-2 gap-x-6 gap-y-4 rounded-xl border border-border bg-white p-4 shadow-elevated">
+            {guideNav.map((g) => (
+              <div>
+                <p class="mb-1.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{g.title}</p>
+                <ul class="space-y-0.5">
+                  {g.items.map((it) => (
+                    <li>
+                      <a href={it.href} class="block rounded px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">{it.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
           </div>
         </div>
       </div>
+
+      <!-- Blog -->
+      <a href="/blog" class={linkCls("/blog")}>Blog</a>
     </nav>
 
+    <!-- Right side buttons -->
     <div class="flex items-center gap-2">
       <a
         href={AUTH_URL}
@@ -155,13 +128,14 @@ const resourceItems = [
   <!-- Mobile drawer -->
   <div id="mobile-nav" class="hidden border-t border-border/60 bg-white md:hidden">
     <nav class="mx-auto max-w-7xl space-y-1 px-4 py-3 text-sm sm:px-6">
-      {productItems.map((l) => (
-        <a href={l.href} class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">{l.label}</a>
-      ))}
+      <a href="/" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">Home</a>
+      <a href="/features" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">Features</a>
+      <a href="/pricing" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">Pricing</a>
+      <a href="/savings" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">Savings</a>
 
       <!-- Docs (collapsible) -->
       <button type="button" data-section="m-docs" class="flex w-full items-center justify-between rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">
-        <span>Documentation</span>
+        <span>Docs</span>
         <svg data-chevron class="h-3.5 w-3.5 transition-transform" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div id="m-docs" class="hidden space-y-0.5 border-l border-border/60 pl-3">
@@ -170,18 +144,25 @@ const resourceItems = [
         ))}
       </div>
 
-      <!-- Resources (collapsible) -->
-      <button type="button" data-section="m-resources" class="flex w-full items-center justify-between rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">
-        <span>Resources</span>
+      <!-- Guide (collapsible) -->
+      <button type="button" data-section="m-guide" class="flex w-full items-center justify-between rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">
+        <span>Guide</span>
         <svg data-chevron class="h-3.5 w-3.5 transition-transform" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <div id="m-resources" class="hidden space-y-0.5 border-l border-border/60 pl-3">
-        {resourceItems.map((it) => (
-          <a href={it.href} class="block rounded px-3 py-1.5 text-muted-foreground hover:bg-muted hover:text-foreground">{it.label}</a>
+      <div id="m-guide" class="hidden border-l border-border/60 pl-3">
+        {guideNav.map((g) => (
+          <div class="mb-2">
+            <p class="px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">{g.title}</p>
+            {g.items.map((it) => (
+              <a href={it.href} class="block rounded px-3 py-1.5 text-muted-foreground hover:bg-muted hover:text-foreground">{it.label}</a>
+            ))}
+          </div>
         ))}
       </div>
 
-      <div class="pt-2 border-t border-border/60 flex gap-2">
+      <a href="/blog" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">Blog</a>
+
+      <div class="flex gap-2 border-t border-border/60 pt-2">
         <a href={AUTH_URL} class="flex-1 rounded-md px-3 py-2 text-center text-sm font-medium text-muted-foreground hover:bg-muted">Login</a>
         <a href={AUTH_URL} class="flex-1 rounded-full bg-primary px-3 py-2 text-center text-sm font-semibold text-primary-foreground">Start Free →</a>
       </div>
