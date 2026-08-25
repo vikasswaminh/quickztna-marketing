@@ -1,42 +1,113 @@
 ---
 import Logo from "./Logo.astro";
-import Button from "@/components/ui/Button.astro";
-import { docsNav, guideNav } from "@/lib/nav";
 
 const AUTH_URL = "https://login.quickztna.com/auth";
 
-const path = Astro.url.pathname.replace(/\/$/, "") || "/";
-const isActive = (href: string) =>
-  href === "/" ? path === "/" : path === href || path.startsWith(href + "/");
+const docsNav = [
+  {
+    title: "Concepts",
+    items: [
+      { label: "Overview", href: "/docs/concepts/#overview" },
+      { label: "Zero Trust Network Access (ZTNA)", href: "/docs/concepts/#ztna" },
+      { label: "Attribute-Based Access Control (ABAC)", href: "/docs/concepts/#abac" },
+      { label: "WireGuard Mesh & DERP", href: "/docs/concepts/#wireguard-mesh-derp" },
+    ],
+  },
+  {
+    title: "Security & Posture",
+    items: [
+      { label: "Device Posture Checks", href: "/docs/security/#device-posture" },
+      { label: "Data Loss Prevention (DLP)", href: "/docs/security/#dlp" },
+      { label: "CASB & App Controls", href: "/docs/security/#casb" },
+      { label: "Encryption & Key Management", href: "/docs/security/#encryption" },
+    ],
+  },
+  {
+    title: "Integrations",
+    items: [
+      { label: "SSO & Identity Providers", href: "/docs/integrations/#sso" },
+      { label: "SCIM 2.0 Provisioning", href: "/docs/integrations/#scim" },
+      { label: "SIEM & Audit Streaming", href: "/docs/integrations/#siem" },
+    ],
+  },
+  {
+    title: "API & Developer",
+    items: [
+      { label: "REST API Reference", href: "/docs/api/" },
+      { label: "CLI Reference", href: "/docs/cli/" },
+      { label: "Terraform Provider", href: "/docs/integrations/#terraform" },
+    ],
+  },
+];
 
-const linkCls = (href: string) =>
-  `rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
-    isActive(href) ? "text-foreground bg-muted" : "text-muted-foreground"
+const guideNav = [
+  {
+    title: "Getting Started",
+    items: [
+      { label: "Quickstart (2 min)", href: "/guide/quickstart/" },
+      { label: "Installation", href: "/guide/installation/" },
+      { label: "Connecting Your First Device", href: "/guide/connecting/" },
+      { label: "Managing Devices", href: "/guide/managing-devices/" },
+    ],
+  },
+  {
+    title: "Networking",
+    items: [
+      { label: "Access Policies", href: "/guide/access-policies/" },
+      { label: "Exit Nodes & Subnet Routes", href: "/guide/exit-nodes-and-routes/" },
+      { label: "Troubleshooting", href: "/guide/troubleshooting/" },
+    ],
+  },
+  {
+    title: "Workforce & Admin",
+    items: [
+      { label: "Workforce Security Overview", href: "/guide/admin/workforce/" },
+      { label: "AI Operator", href: "/guide/admin/ai-operator/" },
+      { label: "Device Posture Policies", href: "/guide/admin/device-posture/" },
+      { label: "DLP & Content Scanning", href: "/guide/admin/dlp/" },
+      { label: "CASB & Shadow IT", href: "/guide/admin/casb/" },
+    ],
+  },
+  {
+    title: "Platform Administration",
+    items: [
+      { label: "Identity & SSO Setup", href: "/guide/admin/identity/" },
+      { label: "DNS Filtering & MagicDNS", href: "/guide/admin/dns-filtering/" },
+      { label: "Remote Access & Shell", href: "/guide/admin/remote-access/" },
+      { label: "Workforce Analytics", href: "/guide/admin/workforce-analytics/" },
+      { label: "Audit Logs & Observability", href: "/guide/admin/observability/" },
+      { label: "Billing & Subscriptions", href: "/guide/admin/billing/" },
+    ],
+  },
+];
+
+const pathname = Astro.url.pathname;
+const isActive = (path: string) =>
+  path === "/" ? pathname === "/" : pathname.startsWith(path);
+
+const linkCls = (path: string) =>
+  `px-3 py-1.5 text-sm font-medium transition-colors rounded-md ${
+    isActive(path)
+      ? "text-primary font-semibold bg-muted"
+      : "text-muted-foreground hover:text-primary hover:bg-muted/60"
   }`;
 
 const triggerBase =
-  "inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground";
+  "inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-md transition-colors hover:text-primary hover:bg-muted/60";
 ---
 
-<header class="sticky top-0 z-40 w-full border-b border-border/60 bg-white/90 backdrop-blur-md">
-  <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-    <a href="/" class="flex items-center">
+<header class="sticky top-0 z-40 w-full border-b border-border/80 bg-white/95 backdrop-blur-sm">
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+    <!-- Left: Logo -->
+    <a href="/" class="flex items-center gap-2 group cursor-pointer no-underline" aria-label="QuickZTNA Home">
       <Logo />
     </a>
 
-    <!-- Desktop nav -->
-    <nav class="hidden items-center gap-0.5 md:flex">
-
-      <!-- Home -->
+    <!-- Center navigation -->
+    <nav class="hidden items-center gap-1 md:flex" aria-label="Primary Navigation">
       <a href="/" class={linkCls("/")}>Home</a>
-
-      <!-- Features -->
       <a href="/features" class={linkCls("/features")}>Features</a>
-
-      <!-- Pricing -->
       <a href="/pricing" class={linkCls("/pricing")}>Pricing</a>
-
-      <!-- Savings -->
       <a href="/savings" class={linkCls("/savings")}>Savings</a>
 
       <!-- Docs dropdown -->
@@ -44,7 +115,7 @@ const triggerBase =
         <button
           type="button"
           aria-haspopup="menu"
-          class={`${triggerBase} ${isActive("/docs") ? "text-foreground bg-muted" : "text-muted-foreground"}`}
+          class={`${triggerBase} ${isActive("/docs") ? "text-primary bg-muted font-semibold" : "text-muted-foreground"}`}
         >
           Docs
           <svg data-chev class="h-3 w-3 transition-transform group-hover:rotate-180" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -53,7 +124,7 @@ const triggerBase =
           <div class="w-64 rounded-xl border border-border bg-white p-2 shadow-elevated">
             {docsNav.map((g) => (
               <a href={g.items[0].href} class="block rounded-lg px-3 py-2.5 transition-colors hover:bg-muted">
-                <span class="block text-sm font-medium text-foreground">{g.title}</span>
+                <span class="block text-sm font-medium text-primary">{g.title}</span>
                 <span class="block text-xs text-muted-foreground">{g.items[0].label}</span>
               </a>
             ))}
@@ -66,7 +137,7 @@ const triggerBase =
         <button
           type="button"
           aria-haspopup="menu"
-          class={`${triggerBase} ${isActive("/guide") ? "text-foreground bg-muted" : "text-muted-foreground"}`}
+          class={`${triggerBase} ${isActive("/guide") ? "text-primary bg-muted font-semibold" : "text-muted-foreground"}`}
         >
           Guide
           <svg data-chev class="h-3 w-3 transition-transform group-hover:rotate-180" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -75,11 +146,11 @@ const triggerBase =
           <div class="grid w-[34rem] max-w-[calc(100vw-2rem)] grid-cols-2 gap-x-6 gap-y-4 rounded-xl border border-border bg-white p-4 shadow-elevated">
             {guideNav.map((g) => (
               <div>
-                <p class="mb-1.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{g.title}</p>
+                <p class="mb-1.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-accent">{g.title}</p>
                 <ul class="space-y-0.5">
                   {g.items.map((it) => (
                     <li>
-                      <a href={it.href} class="block rounded px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">{it.label}</a>
+                      <a href={it.href} class="block rounded px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-primary">{it.label}</a>
                     </li>
                   ))}
                 </ul>
@@ -94,16 +165,16 @@ const triggerBase =
     </nav>
 
     <!-- Right side buttons -->
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-3">
       <a
         href={AUTH_URL}
-        class="hidden rounded-md px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+        class="hidden rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-primary sm:inline-flex"
       >
         Login
       </a>
       <a
         href={AUTH_URL}
-        class="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-glow"
+        class="inline-flex items-center gap-1.5 rounded-full bg-accent hover:bg-accent/95 px-4 py-2 text-xs font-bold text-white transition-all shadow-sm shadow-accent/20 active:scale-95"
       >
         Start Free
         <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -118,7 +189,7 @@ const triggerBase =
         aria-label="Toggle navigation menu"
         aria-expanded="false"
         aria-controls="mobile-nav"
-        class="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground md:hidden"
+        class="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-primary md:hidden"
       >
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       </button>
@@ -128,43 +199,43 @@ const triggerBase =
   <!-- Mobile drawer -->
   <div id="mobile-nav" class="hidden border-t border-border/60 bg-white md:hidden">
     <nav class="mx-auto max-w-7xl space-y-1 px-4 py-3 text-sm sm:px-6">
-      <a href="/" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">Home</a>
-      <a href="/features" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">Features</a>
-      <a href="/pricing" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">Pricing</a>
-      <a href="/savings" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">Savings</a>
+      <a href="/" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-primary">Home</a>
+      <a href="/features" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-primary">Features</a>
+      <a href="/pricing" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-primary">Pricing</a>
+      <a href="/savings" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-primary">Savings</a>
 
       <!-- Docs (collapsible) -->
-      <button type="button" data-section="m-docs" class="flex w-full items-center justify-between rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">
+      <button type="button" data-section="m-docs" class="flex w-full items-center justify-between rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-primary">
         <span>Docs</span>
         <svg data-chevron class="h-3.5 w-3.5 transition-transform" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div id="m-docs" class="hidden space-y-0.5 border-l border-border/60 pl-3">
         {docsNav.map((g) => (
-          <a href={g.items[0].href} class="block rounded px-3 py-1.5 text-muted-foreground hover:bg-muted hover:text-foreground">{g.title}</a>
+          <a href={g.items[0].href} class="block rounded px-3 py-1.5 text-muted-foreground hover:bg-muted hover:text-primary">{g.title}</a>
         ))}
       </div>
 
       <!-- Guide (collapsible) -->
-      <button type="button" data-section="m-guide" class="flex w-full items-center justify-between rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">
+      <button type="button" data-section="m-guide" class="flex w-full items-center justify-between rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-primary">
         <span>Guide</span>
         <svg data-chevron class="h-3.5 w-3.5 transition-transform" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div id="m-guide" class="hidden border-l border-border/60 pl-3">
         {guideNav.map((g) => (
           <div class="mb-2">
-            <p class="px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">{g.title}</p>
+            <p class="px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-accent">{g.title}</p>
             {g.items.map((it) => (
-              <a href={it.href} class="block rounded px-3 py-1.5 text-muted-foreground hover:bg-muted hover:text-foreground">{it.label}</a>
+              <a href={it.href} class="block rounded px-3 py-1.5 text-muted-foreground hover:bg-muted hover:text-primary">{it.label}</a>
             ))}
           </div>
         ))}
       </div>
 
-      <a href="/blog" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">Blog</a>
+      <a href="/blog" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-primary">Blog</a>
 
       <div class="flex gap-2 border-t border-border/60 pt-2">
         <a href={AUTH_URL} class="flex-1 rounded-md px-3 py-2 text-center text-sm font-medium text-muted-foreground hover:bg-muted">Login</a>
-        <a href={AUTH_URL} class="flex-1 rounded-full bg-primary px-3 py-2 text-center text-sm font-semibold text-primary-foreground">Start Free →</a>
+        <a href={AUTH_URL} class="flex-1 rounded-full bg-accent hover:bg-accent/95 px-3 py-2 text-center text-sm font-bold text-white shadow-sm">Start Free →</a>
       </div>
     </nav>
   </div>
