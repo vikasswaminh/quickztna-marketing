@@ -258,21 +258,74 @@ const softwareApplicationSchema = {
   <section class="border-b border-border bg-surface py-6">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="rounded-2xl border border-border bg-white p-4 sm:p-6 shadow-soft flex flex-col lg:flex-row items-center justify-between divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
-        {[
-          { title: "WireGuard®", desc: "High-performance mesh", icon: "🌐" },
-          { title: "Zero Trust", desc: "Verify every request", icon: "🛡️" },
-          { title: "ABAC", desc: "Identity & context aware", icon: "🔑" },
-          { title: "AI Operator", desc: "Policies & path lifecycle", icon: "✨" },
-          { title: "Built for Scale", desc: "From 10 to 1000+ devices", icon: "📈" },
-        ].map((f) => (
-          <div class="flex items-center gap-3.5 px-4 lg:px-6 py-3 lg:py-0 w-full lg:w-auto flex-1">
-            <span class="text-xl shrink-0">{f.icon}</span>
-            <div>
-              <h4 class="text-xs font-bold text-primary">{f.title}</h4>
-              <p class="text-[11px] text-muted-foreground font-medium">{f.desc}</p>
-            </div>
+        <!-- WireGuard® -->
+        <div class="flex items-center gap-3.5 px-4 lg:px-6 py-3 lg:py-0 w-full lg:w-auto flex-1">
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent-light text-accent">
+            <svg class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+              <circle cx="12" cy="12" r="10" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2 12h20" />
+            </svg>
           </div>
-        ))}
+          <div>
+            <h4 class="text-xs font-bold text-primary">WireGuard®</h4>
+            <p class="text-[11px] text-muted-foreground font-medium">High-performance mesh</p>
+          </div>
+        </div>
+
+        <!-- Zero Trust -->
+        <div class="flex items-center gap-3.5 px-4 lg:px-6 py-3 lg:py-0 w-full lg:w-auto flex-1">
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent-light text-accent">
+            <svg class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="m9 12 2 2 4-4" />
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-primary">Zero Trust</h4>
+            <p class="text-[11px] text-muted-foreground font-medium">Verify every request</p>
+          </div>
+        </div>
+
+        <!-- ABAC -->
+        <div class="flex items-center gap-3.5 px-4 lg:px-6 py-3 lg:py-0 w-full lg:w-auto flex-1">
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent-light text-accent">
+            <svg class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 11l7 7m-3-1l2 2m-4 0l2 2" />
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-primary">ABAC</h4>
+            <p class="text-[11px] text-muted-foreground font-medium">Identity & context aware</p>
+          </div>
+        </div>
+
+        <!-- AI Operator -->
+        <div class="flex items-center gap-3.5 px-4 lg:px-6 py-3 lg:py-0 w-full lg:w-auto flex-1">
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent-light text-accent">
+            <svg class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-primary">AI Operator</h4>
+            <p class="text-[11px] text-muted-foreground font-medium">Policies & path lifecycle</p>
+          </div>
+        </div>
+
+        <!-- Built for Scale -->
+        <div class="flex items-center gap-3.5 px-4 lg:px-6 py-3 lg:py-0 w-full lg:w-auto flex-1">
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent-light text-accent">
+            <svg class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-primary">Built for Scale</h4>
+            <p class="text-[11px] text-muted-foreground font-medium">From 10 to 1000+ devices</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
