@@ -3,53 +3,94 @@ import Logo from "./Logo.astro";
 import Button from "@/components/ui/Button.astro";
 import { docsNav, guideNav } from "@/lib/nav";
 
-const simpleLinks = [
-  { href: "/", label: "Home" },
-  { href: "/features", label: "Features" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/savings", label: "Savings" },
-];
+const AUTH_URL = "https://login.quickztna.com/auth";
 
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 const isActive = (href: string) => (href === "/" ? path === "/" : path === href || path.startsWith(href + "/"));
-const AUTH_URL = "https://login.quickztna.com/auth";
 
 const triggerBase =
-  "inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground";
+  "inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:text-foreground";
+
+// Product dropdown items
+const productItems = [
+  { label: "Overview", href: "/", desc: "Remote Workforce Security OS" },
+  { label: "Features", href: "/features", desc: "Full platform feature set" },
+  { label: "Workforce", href: "/workforce", desc: "For distributed teams" },
+  { label: "Pricing", href: "/pricing", desc: "Free forever · $10/user to scale" },
+  { label: "Savings", href: "/savings", desc: "Compare vs alternatives" },
+];
+
+// Resources dropdown items
+const resourceItems = [
+  { label: "User Guide", href: "/guide/" },
+  { label: "Quickstart", href: "/guide/quickstart/" },
+  { label: "Documentation", href: "/docs/" },
+  { label: "API Reference", href: "/docs/api/" },
+  { label: "Blog", href: "/blog/" },
+];
 ---
-<header class="sticky top-0 z-40 w-full border-b border-border/60 bg-background/80 backdrop-blur-md">
+
+<header class="sticky top-0 z-40 w-full border-b border-border/60 bg-white/90 backdrop-blur-md">
   <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
     <a href="/" class="flex items-center">
       <Logo />
     </a>
 
     <!-- Desktop nav -->
-    <nav class="hidden items-center gap-1 md:flex">
-      {simpleLinks.map((l) => (
-        <a
-          href={l.href}
-          class={`rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
-            isActive(l.href) ? "text-foreground bg-muted" : "text-muted-foreground"
-          }`}
-        >
-          {l.label}
-        </a>
-      ))}
+    <nav class="hidden items-center gap-0.5 md:flex">
 
-      <!-- Docs dropdown (categories) -->
+      <!-- Product dropdown -->
       <div class="group relative">
         <button
           type="button"
           aria-haspopup="menu"
-          class={`${triggerBase} ${isActive("/docs") ? "text-foreground bg-muted" : "text-muted-foreground"}`}
+          class={`${triggerBase} ${isActive("/") && path === "/" ? "text-foreground" : "text-muted-foreground"}`}
         >
-          Docs
+          Product
           <svg data-chev class="h-3 w-3 transition-transform group-hover:rotate-180" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <div class="invisible absolute left-0 top-full z-50 pt-2 opacity-0 transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-          <div class="w-72 rounded-lg border border-border bg-background p-2 shadow-lg">
+        <div class="invisible absolute left-0 top-full z-50 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+          <div class="w-64 rounded-xl border border-border bg-white p-2 shadow-elevated">
+            {productItems.map((item) => (
+              <a href={item.href} class="flex flex-col rounded-lg px-3 py-2.5 transition-colors hover:bg-muted">
+                <span class="text-sm font-medium text-foreground">{item.label}</span>
+                <span class="text-xs text-muted-foreground">{item.desc}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Features link -->
+      <a
+        href="/features"
+        class={`${triggerBase} ${isActive("/features") ? "text-foreground" : "text-muted-foreground"}`}
+      >
+        Features
+      </a>
+
+      <!-- Pricing link -->
+      <a
+        href="/pricing"
+        class={`${triggerBase} ${isActive("/pricing") ? "text-foreground" : "text-muted-foreground"}`}
+      >
+        Pricing
+      </a>
+
+      <!-- Documentation dropdown -->
+      <div class="group relative">
+        <button
+          type="button"
+          aria-haspopup="menu"
+          class={`${triggerBase} ${isActive("/docs") ? "text-foreground" : "text-muted-foreground"}`}
+        >
+          Documentation
+          <svg data-chev class="h-3 w-3 transition-transform group-hover:rotate-180" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="invisible absolute left-0 top-full z-50 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+          <div class="w-56 rounded-xl border border-border bg-white p-2 shadow-elevated">
             {docsNav.map((g) => (
-              <a href={g.items[0].href} class="block rounded-md px-3 py-2 transition-colors hover:bg-muted">
+              <a href={g.items[0].href} class="block rounded-lg px-3 py-2.5 transition-colors hover:bg-muted">
                 <span class="block text-sm font-medium text-foreground">{g.title}</span>
                 <span class="block text-xs text-muted-foreground">{g.items[0].label}</span>
               </a>
@@ -58,47 +99,45 @@ const triggerBase =
         </div>
       </div>
 
-      <!-- Guide dropdown (grouped mega-panel) -->
+      <!-- Resources dropdown -->
       <div class="group relative">
         <button
           type="button"
           aria-haspopup="menu"
-          class={`${triggerBase} ${isActive("/guide") ? "text-foreground bg-muted" : "text-muted-foreground"}`}
+          class={`${triggerBase} ${isActive("/guide") || isActive("/blog") ? "text-foreground" : "text-muted-foreground"}`}
         >
-          Guide
+          Resources
           <svg data-chev class="h-3 w-3 transition-transform group-hover:rotate-180" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <div class="invisible absolute right-0 top-full z-50 pt-2 opacity-0 transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-          <div class="grid w-[34rem] max-w-[calc(100vw-2rem)] grid-cols-2 gap-x-6 gap-y-4 rounded-lg border border-border bg-background p-4 shadow-lg">
-            {guideNav.map((g) => (
-              <div>
-                <p class="mb-1.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{g.title}</p>
-                <ul class="space-y-0.5">
-                  {g.items.map((it) => (
-                    <li>
-                      <a href={it.href} class="block rounded px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">{it.label}</a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+        <div class="invisible absolute right-0 top-full z-50 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+          <div class="w-48 rounded-xl border border-border bg-white p-2 shadow-elevated">
+            {resourceItems.map((item) => (
+              <a href={item.href} class="block rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+                {item.label}
+              </a>
             ))}
           </div>
         </div>
       </div>
-
-      <a
-        href="/blog"
-        class={`rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
-          isActive("/blog") ? "text-foreground bg-muted" : "text-muted-foreground"
-        }`}
-      >
-        Blog
-      </a>
     </nav>
 
     <div class="flex items-center gap-2">
-      <Button variant="ghost" size="sm" href={AUTH_URL} class="hidden sm:inline-flex">Sign in</Button>
-      <Button size="sm" href={AUTH_URL} class="font-medium">Get started free</Button>
+      <a
+        href={AUTH_URL}
+        class="hidden rounded-md px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+      >
+        Login
+      </a>
+      <a
+        href={AUTH_URL}
+        class="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-glow"
+      >
+        Start Free
+        <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+
       <!-- Mobile hamburger -->
       <button
         id="mobile-nav-toggle"
@@ -114,15 +153,15 @@ const triggerBase =
   </div>
 
   <!-- Mobile drawer -->
-  <div id="mobile-nav" class="hidden border-t border-border/60 bg-background md:hidden">
+  <div id="mobile-nav" class="hidden border-t border-border/60 bg-white md:hidden">
     <nav class="mx-auto max-w-7xl space-y-1 px-4 py-3 text-sm sm:px-6">
-      {simpleLinks.map((l) => (
+      {productItems.map((l) => (
         <a href={l.href} class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">{l.label}</a>
       ))}
 
       <!-- Docs (collapsible) -->
       <button type="button" data-section="m-docs" class="flex w-full items-center justify-between rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">
-        <span>Docs</span>
+        <span>Documentation</span>
         <svg data-chevron class="h-3.5 w-3.5 transition-transform" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div id="m-docs" class="hidden space-y-0.5 border-l border-border/60 pl-3">
@@ -131,23 +170,21 @@ const triggerBase =
         ))}
       </div>
 
-      <!-- Guide (collapsible, grouped) -->
-      <button type="button" data-section="m-guide" class="flex w-full items-center justify-between rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">
-        <span>Guide</span>
+      <!-- Resources (collapsible) -->
+      <button type="button" data-section="m-resources" class="flex w-full items-center justify-between rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">
+        <span>Resources</span>
         <svg data-chevron class="h-3.5 w-3.5 transition-transform" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <div id="m-guide" class="hidden border-l border-border/60 pl-3">
-        {guideNav.map((g) => (
-          <div class="mb-2">
-            <p class="px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">{g.title}</p>
-            {g.items.map((it) => (
-              <a href={it.href} class="block rounded px-3 py-1.5 text-muted-foreground hover:bg-muted hover:text-foreground">{it.label}</a>
-            ))}
-          </div>
+      <div id="m-resources" class="hidden space-y-0.5 border-l border-border/60 pl-3">
+        {resourceItems.map((it) => (
+          <a href={it.href} class="block rounded px-3 py-1.5 text-muted-foreground hover:bg-muted hover:text-foreground">{it.label}</a>
         ))}
       </div>
 
-      <a href="/blog" class="block rounded-md px-3 py-2 font-medium text-muted-foreground hover:bg-muted hover:text-foreground">Blog</a>
+      <div class="pt-2 border-t border-border/60 flex gap-2">
+        <a href={AUTH_URL} class="flex-1 rounded-md px-3 py-2 text-center text-sm font-medium text-muted-foreground hover:bg-muted">Login</a>
+        <a href={AUTH_URL} class="flex-1 rounded-full bg-primary px-3 py-2 text-center text-sm font-semibold text-primary-foreground">Start Free →</a>
+      </div>
     </nav>
   </div>
 </header>
