@@ -1,54 +1,57 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@1,6..72,300..600&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap");
-
 :root {
   --radius: 0.75rem;
 
-  --background: oklch(0.995 0.003 250);
-  --foreground: oklch(0.18 0.03 260);
+  --background: #FFFFFF;
+  --foreground: #111827;
 
-  --surface: oklch(0.985 0.005 250);
-  --surface-elevated: oklch(1 0 0);
+  --surface: #F8FAFC;
+  --surface-elevated: #FFFFFF;
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.03 260);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.03 260);
+  --card: #FFFFFF;
+  --card-foreground: #111827;
+  --popover: #FFFFFF;
+  --popover-foreground: #111827;
 
-  --primary: oklch(0.55 0.21 262);
-  --primary-foreground: oklch(0.99 0.003 250);
+  /* 30% Structure: Midnight Navy (#0B1F3A) */
+  --primary: #0B1F3A;
+  --primary-foreground: #FFFFFF;
 
-  --secondary: oklch(0.96 0.01 250);
-  --secondary-foreground: oklch(0.22 0.03 260);
+  --secondary: #F1F5F9;
+  --secondary-foreground: #0B1F3A;
 
-  --muted: oklch(0.955 0.008 250);
-  --muted-foreground: oklch(0.5 0.02 258);
+  --muted: #F8FAFC;
+  --muted-foreground: #64748B;
 
-  --accent: oklch(0.94 0.04 258);
-  --accent-foreground: oklch(0.28 0.1 262);
+  /* 10% Accent: Vermilion Red-Orange (#DE3B28) */
+  --accent: #DE3B28;
+  --accent-light: #FFF1F0;
+  --accent-foreground: #FFFFFF;
 
-  --success: oklch(0.7 0.16 162);
-  --success-foreground: oklch(0.15 0.03 160);
+  --success: #16A34A;
+  --success-foreground: #FFFFFF;
 
-  --warning: oklch(0.78 0.15 75);
-  --warning-foreground: oklch(0.2 0.05 70);
+  --warning: #F59E0B;
+  --warning-foreground: #111827;
 
-  --destructive: oklch(0.6 0.22 27);
-  --destructive-foreground: oklch(0.99 0.003 250);
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
 
-  --border: oklch(0.92 0.01 250);
-  --input: oklch(0.92 0.01 250);
-  --ring: oklch(0.62 0.19 262);
-  --grid-line: oklch(0.9 0.012 250);
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #DE3B28;
+  --grid-line: rgba(222, 59, 40, 0.05);
 
-  --chart-1: oklch(0.62 0.19 262);
-  --chart-2: oklch(0.7 0.16 200);
-  --chart-3: oklch(0.7 0.16 162);
-  --chart-4: oklch(0.78 0.15 75);
-  --chart-5: oklch(0.65 0.22 330);
+  --chart-1: #DE3B28;
+  --chart-2: #0B1F3A;
+  --chart-3: #16A34A;
+  --chart-4: #F59E0B;
+  --chart-5: #6366F1;
 }
 
 @layer base {
@@ -60,6 +63,7 @@
     font-family: "Work Sans", ui-sans-serif, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
   }
 
   body {
@@ -72,6 +76,10 @@
   kbd,
   .font-mono {
     font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  }
+
+  .font-serif {
+    font-family: 'Newsreader', 'Cormorant Garamond', Georgia, serif;
   }
 
   h1,
@@ -87,7 +95,7 @@
     background-image:
       linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
       linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-    background-size: 56px 56px;
+    background-size: 48px 48px;
     -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 75%);
     mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 75%);
   }
@@ -96,35 +104,25 @@
     background:
       radial-gradient(
         ellipse 1200px 600px at 50% -10%,
-        oklch(0.92 0.06 258 / 0.55),
+        rgba(222, 59, 40, 0.06),
         transparent 60%
       ),
-      linear-gradient(180deg, oklch(0.99 0.005 250) 0%, oklch(0.97 0.01 250) 100%);
+      linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, oklch(0.55 0.21 262), oklch(0.6 0.18 200));
+    background: linear-gradient(135deg, #DE3B28, #E28743);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
   .bg-gradient-primary {
-    background: linear-gradient(135deg, oklch(0.62 0.19 258), oklch(0.55 0.21 270));
+    background: linear-gradient(135deg, #0B1F3A, #163866);
   }
 }
 
-/* ──────────────────────────────────────────────────────────────────────────
-   Fenced code-block contrast fix.
-   The docs/blog prose containers apply `prose-code:bg-muted` for the inline-
-   code pill. That modifier also matches `<code>` INSIDE `<pre>`, painting a
-   near-white background behind Shiki's (github-dark) light syntax tokens →
-   light-on-light / "white on white". Shiki keeps the `<pre>` itself dark via
-   an inline background, so the fix is to make block code transparent and let
-   the dark `<pre>` show through. `.prose pre code` (0,1,2) outranks the
-   `prose-code:*` modifier (0,1,0); placed after `@tailwind utilities` so it
-   also wins on source order. Inline `<code>` (not in a pre) keeps its pill.
-   ────────────────────────────────────────────────────────────────────────── */
+/* Fenced code-block contrast fix */
 .prose pre code,
 .prose pre code span {
   background-color: transparent;

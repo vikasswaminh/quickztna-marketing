@@ -16,23 +16,23 @@ const related = slugs
 ---
 
 {related.length > 0 && (
-  <aside class="mt-4">
-    <p class="mb-3 font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+  <div class="rounded-2xl border border-border bg-white p-5 shadow-soft">
+    <p class="mb-3 font-mono text-[11px] font-bold uppercase tracking-widest text-primary">
       Related posts
     </p>
-    <ul class="space-y-3">
-      {related.map((post) => {
+    <ul class="space-y-3 divide-y divide-gray-100">
+      {related.map((post, idx) => {
         const slug = post.id.replace(/\.md$/, "");
         return (
-          <li>
+          <li class={idx > 0 ? "pt-3" : ""}>
             <a
               href={`/blog/${slug}/`}
-              class="group block rounded-lg border border-border bg-card p-3 text-sm hover:border-primary/40 hover:bg-muted/40 transition-colors"
+              class="group block transition-all"
             >
-              <span class="font-mono text-[10px] uppercase tracking-wider text-primary">
+              <span class="font-mono text-[10px] font-bold uppercase tracking-wider text-accent">
                 {post.data.category.replace("-", " ")}
               </span>
-              <p class="mt-1 font-medium leading-snug text-foreground group-hover:text-primary line-clamp-2">
+              <p class="mt-1 text-xs font-bold leading-snug text-primary group-hover:text-accent transition-colors line-clamp-2">
                 {post.data.title}
               </p>
             </a>
@@ -40,5 +40,5 @@ const related = slugs
         );
       })}
     </ul>
-  </aside>
+  </div>
 )}
