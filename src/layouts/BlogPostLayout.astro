@@ -3,11 +3,16 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 import ShareButtons from "@/components/blog/ShareButtons.astro";
 import AuthorCard from "@/components/blog/AuthorCard.astro";
 import RelatedPosts from "@/components/blog/RelatedPosts.astro";
-import type { CollectionEntry } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 
 interface Props {
   post: CollectionEntry<"blog">;
 }
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+allPosts.sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+);
 
 const { post } = Astro.props;
 const { data, id } = post;
@@ -25,7 +30,33 @@ const categoryLabel: Record<string, string> = {
   technical: "Technical",
   fundamentals: "Fundamentals",
   industry: "Industry",
+  "post-quantum": "Architecture",
 };
+
+const categoryKeys = [
+  "architecture",
+  "comparison",
+  "compliance",
+  "technical",
+  "fundamentals",
+  "industry",
+];
+
+const counts: Record<string, number> = {
+  architecture: 0,
+  comparison: 0,
+  compliance: 0,
+  technical: 0,
+  fundamentals: 0,
+  industry: 0,
+};
+
+for (const p of allPosts) {
+  const normCat = p.data.category === "post-quantum" ? "architecture" : p.data.category;
+  counts[normCat] = (counts[normCat] ?? 0) + 1;
+}
+
+const currentNormCat = data.category === "post-quantum" ? "architecture" : data.category;
 
 const techArticleSchema = {
   "@context": "https://schema.org",
@@ -121,7 +152,7 @@ const breadcrumbSchema = {
 
   <!-- Breadcrumbs -->
   <div class="border-b border-border bg-surface py-3">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-[1560px] px-4 sm:px-6 lg:px-8">
       <nav aria-label="Breadcrumb">
         <ol class="flex items-center gap-2 font-mono text-xs text-muted-foreground">
           <li><a href="/" class="hover:text-primary font-medium transition-colors">Home</a></li>
@@ -136,8 +167,8 @@ const breadcrumbSchema = {
     </div>
   </div>
 
-  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-    <div class="grid gap-12 lg:grid-cols-[1fr_320px]">
+  <div class="mx-auto max-w-[1560px] px-4 py-8 sm:px-6 lg:px-8">
+    <div class="grid gap-8 lg:gap-12 lg:grid-cols-[1fr_340px] xl:grid-cols-[1fr_360px]">
 
       <!-- ── ARTICLE BODY ─────────────────────────────────────────── -->
       <article id="main-content" class="min-w-0">
@@ -283,29 +314,54 @@ const breadcrumbSchema = {
 
       <!-- ── RIGHT SIDEBAR ────────────────────────────────────────── -->
       <aside class="hidden lg:block">
-        <div class="sticky top-24 space-y-6">
+        <div class="sticky top-20 space-y-5">
 
-          <!-- Sidebar CTA -->
-          <div class="rounded-2xl border border-border bg-surface p-5 shadow-soft">
-            <span class="font-mono text-[10px] font-bold uppercase tracking-widest text-accent block mb-1">FREE FOREVER</span>
-            <h4 class="text-sm font-bold text-primary leading-snug">
-              Zero Trust mesh for your whole team
-            </h4>
-            <p class="mt-1.5 text-xs text-muted-foreground font-medium leading-relaxed">
-              WireGuard mesh + DLP + AI Operator. One command install. No credit card.
+          <!-- Widget 1: Free Forever CTA Card -->
+          <div class="rounded-2xl border border-blue-100/80 bg-white p-5 shadow-soft hover:shadow-elevated transition-shadow">
+            <span class="font-mono text-[11px] font-extrabold uppercase tracking-widest text-blue-600 block mb-1">
+              FREE FOREVER
+            </span>
+            <h3 class="text-base font-extrabold text-gray-900 leading-snug">
+              ZTNA mesh for your whole team
+            </h3>
+            <p class="mt-1.5 text-xs text-gray-500 leading-relaxed">
+              WireGuard mesh + DLP + AI Operator. One install command. No card.
             </p>
             <a
               href="https://login.quickztna.com/auth"
-              class="mt-4 block w-full rounded-full bg-accent py-2.5 text-center text-xs font-bold text-white hover:bg-accent/95 shadow-md shadow-accent/20 transition-all active:scale-95"
+              class="mt-4 flex items-center justify-center gap-1.5 w-full rounded-full bg-blue-600 py-2.5 px-4 text-center text-xs font-bold text-white hover:bg-blue-700 shadow-md shadow-blue-600/20 transition-all active:scale-95"
             >
-              Start free →
+              <span>Start free</span>
+              <span class="text-sm">→</span>
             </a>
           </div>
 
-          <!-- Related posts -->
-          {data.relatedSlugs && data.relatedSlugs.length > 0 && (
-            <RelatedPosts slugs={data.relatedSlugs} currentSlug={slug} />
-          )}
+          <!-- Widget 2: Latest Posts List (Shows fully on scroll) -->
+          <div class="rounded-2xl border border-gray-200/80 bg-white p-5 shadow-soft">
+            <h3 class="mb-3 font-mono text-[11px] font-extrabold uppercase tracking-wider text-blue-600">
+              LATEST POSTS
+            </h3>
+            <ul class="divide-y divide-gray-100">
+              {allPosts
+                .filter((p) => p.id.replace(/\.md$/, "") !== slug)
+                .slice(0, 5)
+                .map((item, idx) => {
+                  const s = item.id.replace(/\.md$/, "");
+                  return (
+                    <li class={idx > 0 ? "pt-3" : ""}>
+                      <a href={`/blog/${s}/`} class="group block pb-3">
+                        <p class="text-xs font-bold leading-snug text-gray-900 group-hover:text-blue-600 line-clamp-2 transition-colors">
+                          {item.data.title}
+                        </p>
+                        <time class="mt-1 block font-mono text-[10px] text-gray-400 font-medium" datetime={item.data.publishedAt.toISOString()}>
+                          {item.data.publishedAt.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                        </time>
+                      </a>
+                    </li>
+                  );
+                })}
+            </ul>
+          </div>
 
         </div>
       </aside>
