@@ -192,11 +192,14 @@ const softwareApplicationSchema = {
   <!-- ═══════════════════════════════════════════════
        HERO (Centered with Red-Orange Highlight)
   ═══════════════════════════════════════════════ -->
-  <section class="relative overflow-hidden bg-white bg-grid border-b border-border pt-16 pb-12 sm:pt-20 sm:pb-14">
+  <section class="relative overflow-hidden bg-white border-b border-border pt-16 pb-12 sm:pt-20 sm:pb-14 animate-fade-in">
+    <!-- Grid background placed in separate absolute div to prevent masking content -->
+    <div class="absolute inset-0 bg-grid opacity-60 pointer-events-none" aria-hidden="true"></div>
+    
     <!-- Center glow -->
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-accent/5 rounded-full blur-[100px] pointer-events-none" aria-hidden="true"></div>
 
-    <div class="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8 flex flex-col items-center">
+    <div class="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8 flex flex-col items-center z-10">
       <!-- Badge -->
       <div class="inline-flex items-center gap-2 rounded-full border border-accent/25 bg-accent-light px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider text-accent shadow-sm">
         <span class="flex h-1.5 w-1.5 rounded-full bg-accent animate-pulse"></span>
@@ -210,7 +213,7 @@ const softwareApplicationSchema = {
       </h1>
 
       <!-- Subtitle -->
-      <p class="mx-auto mt-6 max-w-2xl text-base sm:text-lg leading-relaxed text-muted-foreground font-medium">
+      <p class="mx-auto mt-6 max-w-2xl text-sm sm:text-base leading-relaxed text-muted-foreground font-medium">
         WireGuard mesh ZTNA + ABAC. Workforce DLP, device posture, software inventory, user-risk scoring. AI Operator previews, applies, and reverts ACL + firewall + policy changes. Free forever for up to 5 users.
       </p>
 
@@ -218,14 +221,14 @@ const softwareApplicationSchema = {
       <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
         <a
           href={AUTH_URL}
-          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3 text-sm font-bold text-white transition-all hover:bg-accent/95 shadow-md shadow-accent/20 active:scale-95"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3 text-sm font-bold text-white transition-all hover:bg-accent/95 shadow-md shadow-accent/20 active:scale-95 cursor-pointer"
         >
           Start free — no card required
           <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
         <a
           href={QUICKSTART_URL}
-          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-border bg-white px-6 py-3 text-sm font-semibold text-primary transition-all hover:border-accent hover:bg-muted shadow-soft active:scale-95"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-border bg-white px-6 py-3 text-sm font-semibold text-primary transition-all hover:border-accent hover:bg-muted shadow-soft active:scale-95 cursor-pointer"
         >
           Read the 2-minute quickstart
         </a>
