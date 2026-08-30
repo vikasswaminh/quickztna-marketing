@@ -72,7 +72,7 @@ Why teams choose self-host.
 
 - **Data sovereignty.** The coordination plane never leaves your infrastructure.
 - **No per-user pricing.** Costs scale with infrastructure, not seat count.
-- **Licence flexibility.** Headscale is BSD-3-Clause; NetBird is BSD-3-Clause; QuickZTNA self-host is the same managed codebase shipped to your infrastructure.
+- **Licence flexibility.** Headscale is BSD-3-Clause; NetBird is BSD-3-Clause; QuickZTNA is proprietary and managed cloud only — there is no self-host option.
 - **Customisation.** Fork-friendly for open-source options. API hooks for specific workflows.
 - **Air-gapped capability.** Isolated environments where managed SaaS is not reachable.
 - **Long-term cost predictability.** Known infrastructure line items over years.

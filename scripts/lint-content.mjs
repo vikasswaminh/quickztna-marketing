@@ -136,7 +136,10 @@ const denied = (s, matchIndex = null) => {
     // vault"), short enough that a denial cannot reach across a whole paragraph.
     text = s.slice(Math.max(0, matchIndex - 350), matchIndex + 350);
   }
-  const flat = text.replace(/[*_`]/g, "");
+  // Strip HTML tags as well as markdown emphasis: on an .astro surface the
+  // accurate "QuickZTNA does <strong>not</strong> offer CASB" would otherwise not
+  // read as a denial, because the tag sits between the auxiliary and "not".
+  const flat = text.replace(/<[^>]*>/g, "").replace(/[*_`]/g, "");
   return DENIAL.some((re) => re.test(flat));
 };
 
@@ -282,8 +285,15 @@ const PRODUCT_RULES = [
       /^(?!.*\b(?:our|quickztna['’]s|we)\s+roadmap\b)(?=.*(?:\b(?:EU|European Commission|NIST|NSA|BSI|ANSSI|NCSC|IBM|Tailscale|Cloudflare|industry|vendor|their)(?:['’]s)\s[^.\n]{0,40}roadmap\b|\bthe\s+EU['’]s\b|roadmap\]\(http))/i,
   },
   {
-    re: /(self-host(ed|ing)?[^.\n|]{0,30}workforce|workforce[^.\n|]{0,25}self-host)/i,
-    msg: "self-host-on-Workforce claim — QuickZTNA is managed cloud only",
+    // Any self-host claim about us, not just the Workforce-tier variant. The old
+    // rule needed "Workforce" within a short window, so a direct claim
+    // ("QuickZTNA self-host is the same managed codebase shipped to your
+    // infrastructure") went unchecked.
+    // Subject-verb, not proximity. A bare window flagged accurate comparison prose
+    // that lists OTHER vendors' self-host status beside our "managed cloud"
+    // ("NetBird managed or self-host, QuickZTNA managed cloud").
+    re: /(self-host(ed|ing|able)?[^.\n|]{0,30}workforce|workforce[^.\n|]{0,25}self-host|\bquickztna\s+(self-host\w*|(can\s+be\s+|is\s+|offers?\s+)self-host\w*)|self-host\w*\s+(is\s+)?(available|offered|supported)[^.\n|]{0,20}quickztna)/i,
+    msg: "self-host claim — QuickZTNA is managed cloud only; there is no self-host option",
   },
 ];
 

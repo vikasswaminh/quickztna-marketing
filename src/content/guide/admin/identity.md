@@ -39,7 +39,7 @@ Identity is the foundation of a Zero Trust deployment: every **user** authentica
 
 ## 3. Connect your identity provider
 
-QuickZTNA authenticates users against your IdP. Supported: **OIDC** (Google Workspace, Microsoft Entra/Azure AD, Okta, Authentik, generic OIDC) and **GitHub**/**Google** sign-in. **SAML login is disabled product-wide** — connect SAML-capable IdPs over OIDC instead for quick starts. Per-provider setup (redirect URIs, client IDs, claim mapping) is in the [SSO integrations doc](/docs/integrations/). Users sign in with:
+QuickZTNA authenticates users against your IdP. Supported: **OIDC** (Google Workspace, Microsoft Entra/Azure AD, Okta, Authentik, generic OIDC) and **GitHub**/**Google** sign-in. **SAML login is disabled product-wide** — IdPs that also speak OIDC should be connected over OIDC; SAML-only providers are not supported today for quick starts. Per-provider setup (redirect URIs, client IDs, claim mapping) is in the [SSO integrations doc](/docs/integrations/). Users sign in with:
 
 ```bash
 ztna login --sso <org-slug>     # OIDC via browser
