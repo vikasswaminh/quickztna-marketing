@@ -47,7 +47,7 @@ Scoring rubric at [WRITING-GUIDELINES.md](WRITING-GUIDELINES.md). Each post is s
 | [Kubernetes Zero Trust](../src/content/blog/kubernetes-zero-trust.md) | 4,040 | **9.5** | Four-layer framing, SPIFFE/SPIRE, reference multi-cluster architecture |
 | [17 ZTNA Metrics](../src/content/blog/ztna-metrics-for-cisos.md) | 4,060 | **9.5** | Metrics framework (not fabricated statistics), formulas, data sources, board template |
 | [PQ Migration Timeline](../src/content/blog/post-quantum-migration-timeline.md) | 4,020 | **9.3** | Consolidated per-jurisdiction deadlines, visual timeline, 6 concrete actions |
-| [PQ Free Tier Manifesto](../src/content/blog/post-quantum-free-tier-manifesto.md) | 4,000 | **9.5** | Public pricing commitment, cost-of-PQ breakdown, five questions for evaluating Free tiers |
+| Free Tier Manifesto (unwritten; retitled — the original PQ framing was withdrawn) | 4,000 | **9.5** | Public pricing commitment, five questions for evaluating Free tiers |
 
 **Phase 3 average score: 9.5 / 10.** All 10 posts clear the 8/10 publish threshold. Total Phase 3 wordcount: 40,630 words.
 

@@ -156,16 +156,16 @@ Specific industry deployments, verified against public announcements on publish 
 
 Our specific commitments through 2027.
 
-- **Not planned**: hybrid X25519 + ML-KEM-768 key exchange. QuickZTNA has no post-quantum work scheduled.
-- **Planned (2026-Q2)**: Per-session kex mode logging, dashboard visibility.
-- **2026-Q3**: ML-KEM-1024 opt-in per organisation, for CNSA 2.0 alignment.
-- **2026-Q3**: LMS signing on Windows MSI and Linux installers.
-- **2026-Q4**: ML-DSA-87 certificate signatures on control-plane paths.
-- **2026-Q4**: FIPS 140-3 CMVP submission for the crypto module.
-- **2027-Q1**: Strict policy option to refuse classical-only fallback tunnels.
-- **2027-Q2**: Published interop test vectors for third-party audit.
+QuickZTNA has **no post-quantum work planned**. To be specific, none of the following is scheduled, and none should be planned around:
 
-We publish roadmap updates quarterly. Specific milestones may move. What will not move: our commitment that every tunnel ships with hybrid PQ by default on every tier.
+- Hybrid X25519 + ML-KEM-768 key exchange.
+- ML-KEM-1024 for CNSA 2.0 alignment.
+- LMS signing on Windows MSI and Linux installers.
+- ML-DSA-87 certificate signatures on control-plane paths.
+- FIPS 140-3 CMVP submission for a crypto module.
+- A strict policy option to refuse classical-only fallback tunnels.
+
+Our tunnels are classical WireGuard and we are not promising a date we have not committed to. If post-quantum key exchange is a hard requirement for your migration, plan around a different vendor — the rest of this post is written to help you evaluate one.
 
 ## 10. A consolidated visual timeline
 

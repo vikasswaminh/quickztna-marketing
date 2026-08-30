@@ -83,21 +83,42 @@ const DENIAL = [
   // is the opposite of a claim, but names the capability and a ship-verb.
   // Deliberately NOT a bare "would ship/add": that would exempt a positive
   // conditional promise like "QuickZTNA would add CASB for enterprise customers".
-  // The "if it ever ships" construction is what makes it a denial.
-  /\b(?:only\s+)?if\s+it\s+ever\s+(?:ships|shipped)\b/i,
+  // The FULL construction is required: "would <verb> … only if it ever ship(ped)".
+  // A bare "if it ever ships" still let a positive promise through
+  // ("QuickZTNA will ship ML-KEM if it ever ships version 2").
+  /\bwould\s+\w+[^.\n]{0,60}\bonly\s+if\s+it\s+ever\s+(?:ships|shipped)\b/i,
   /\bthere\s+(?:is|are|'s)\s+no\b/i,
   /\b(?:was|were|has been|have been|are|is)\s+(?:removed|withdrawn|deleted|retired)\b/i,
   /\b(?:we|quickztna)\s+(?:removed|withdrew|deleted|dropped)\b/i,
   /\bremoved\s+in\s+\d{4}\b|\bremoved\s+(?:from|in)\s+the\b/i,
   /\bdeliberately\s+(?:no|not|has no)\b/i,
+  // The writing guidelines' own forbidden list, and any prose that labels the
+  // enumeration that follows as withdrawn.
+  /\bnever\s+claim\b|\bwithdrawn capabilities\b|\bdo not claim\b/i,
   // "no session recording", "no secrets vault", "no content inspection" — a bare
   // "no" counts only when a withdrawn-capability noun follows close behind.
   /\bno\b(?=[^.\n]{0,40}\b(?:recording|vault|desktop|analytics|inspection|scanning|inventory|scoring|casb|dlp|fido2|webauthn|workforce|post-quantum|ml-?kem|assistant|operator)\b)/i,
 ];
 // Strip markdown emphasis first: "QuickZTNA does **not** implement PQC" must read
 // as a denial, and "*never* collected" likewise.
-const denied = (s) => {
-  const flat = s.replace(/[*_`]/g, "");
+//
+// `upto` scopes the denial to the text PRECEDING the assertion it supposedly
+// negates, within a short window. A clause-wide boolean let a denial at the start
+// excuse an unrelated positive claim later in the same clause.
+const denied = (s, matchIndex = null) => {
+  let text = s;
+  if (matchIndex !== null) {
+    // Window around the assertion. Symmetric because a removal enumeration can
+    // put the denial after the list ("DLP, CASB, ... were all removed") as well as
+    // before it. The window is what stops a denial at one end of a long clause
+    // from excusing an unrelated claim at the other; the ':' clause split handles
+    // the "What will not move: <positive promise>" shape.
+    // 350 chars: long enough to span a full withdrawn-capability enumeration
+    // ("… removed DLP PII-scanning, CASB, workforce analytics, … and the secrets
+    // vault"), short enough that a denial cannot reach across a whole paragraph.
+    text = s.slice(Math.max(0, matchIndex - 350), matchIndex + 350);
+  }
+  const flat = text.replace(/[*_`]/g, "");
   return DENIAL.some((re) => re.test(flat));
 };
 
@@ -110,9 +131,20 @@ const denied = (s) => {
 // directly against a tag ("...+ AI Operator.</p>") with no whitespace, so a
 // whitespace-only sentence split left whole markup blocks coalesced into one
 // giant clause — which then inherited any denial or allowlisted phrase in it.
+// A colon is a clause boundary too. "What will not move: our commitment that every
+// tunnel ships with hybrid PQ by default" put a denial and the claim it does NOT
+// negate in one clause, and the clause-wide exemption hid the claim. Splitting on
+// ':' is safe now that attribution is scope-based rather than proximity-based —
+// a surface needs no subject, so "Every feature is included: mesh, ..., vault"
+// is still caught after the split.
 const splitClauses = (text) =>
   text
-    .split(/(?<=[.!?])\s+|(?<=[.!?])(?=<)|\s*;\s*|(?<=>)\s*(?=<)|<br\s*\/?>/i)
+    .split(
+      // The ':' split deliberately excludes object-literal keys (`job: "…"`),
+      // which would otherwise separate a savings-page entry from the `note:`
+      // that explains it is a capability we do NOT replace.
+      /(?<=[.!?])\s+|(?<=[.!?])(?=<)|\s*;\s+|(?<=[a-z)])\s*:\s+(?!["'])|(?<=>)\s*(?=<)|<br\s*\/?>/i,
+    )
     .filter(Boolean);
 
 // Group physical lines into SENTENCE units before splitting into clauses.
@@ -208,8 +240,10 @@ const PRODUCT_RULES = [
     // The roadmap must be POSSESSED by the third party, and the leading lookahead
     // makes sure a nearby third-party name can't launder a claim about ours:
     // "NIST's ML-KEM is on QuickZTNA's roadmap" must still fail.
+    // The possessive is REQUIRED — "NIST ML-KEM is on the roadmap" must still fail,
+    // because an unqualified roadmap on our own surface means ours.
     unless:
-      /^(?!.*\b(?:our|quickztna['’]s|we)\s+roadmap\b)(?=.*(?:\b(?:EU|European Commission|NIST|NSA|BSI|ANSSI|NCSC|IBM|Tailscale|Cloudflare|industry|vendor|their)(?:['’]s)?\s[^.\n]{0,40}roadmap\b|roadmap\]\(http))/i,
+      /^(?!.*\b(?:our|quickztna['’]s|we)\s+roadmap\b)(?=.*(?:\b(?:EU|European Commission|NIST|NSA|BSI|ANSSI|NCSC|IBM|Tailscale|Cloudflare|industry|vendor|their)(?:['’]s)\s[^.\n]{0,40}roadmap\b|\bthe\s+EU['’]s\b|roadmap\]\(http))/i,
   },
   {
     re: /(self-host(ed|ing)?[^.\n|]{0,30}workforce|workforce[^.\n|]{0,25}self-host)/i,
@@ -236,8 +270,19 @@ const REMOVED = [
   // `also` means: both patterns must appear in the same clause, in any order.
   {
     re: /\b(ml-?kem|post-quantum|quantum-safe|hybrid pq)\b/i,
-    also: /\b(ships?|shipped|uses?|using|runs?|implements?|implemented|provides?|includes?|included|enabled|by default|on every tunnel|in every[^.\n]{0,20}tunnel)\b/i,
+    // Assertion forms, not just shipping verbs. Declarative promises evade a
+    // verb-only list: "an ML-KEM-1024 opt-in", "hybrid PQ encryption default-on",
+    // "uses ML-KEM on every tier", and bare table cells reading "Yes".
+    also: /\b(ships?|shipped|uses?|using|runs?|implements?|implemented|provides?|includes?|included|enabled|enables?|adds?|offers?|opt-in|scheduled|planned|commitment|default-on|by default|on every|in every|every tier|every plan|^\|?\s*yes\b)\b/i,
     msg: "PQC-as-shipped claim — PQC was WITHDRAWN; tunnels are classical WireGuard",
+  },
+  // "QuickZTNA ships it on every tunnel" after an allowlisted definition: the
+  // definition is redacted, so no PQC term survives for the co-occurrence rule.
+  // Catch the anaphor itself.
+  {
+    re: /\b(ships?|uses?|runs?|implements?|enables?)\s+(it|them|this|that)\b/i,
+    also: /\bevery[^.\n]{0,25}(tunnel|tier|plan)\b|by default/i,
+    msg: "anaphoric shipped claim — name what is shipped; PQC is not shipped",
   },
   // "We use this construction in every QuickZTNA tunnel" names no PQC term at all,
   // so the co-occurrence rule above cannot see it — the referent is anaphoric.
@@ -248,7 +293,12 @@ const REMOVED = [
   {
     re: /\bthis construction\b/i,
     also: /\b(in|on) every[^.\n]{0,25}tunnel\b|every quickztna tunnel/i,
-    unless: /\b(classical|x25519 \+ chacha|chacha20|curve25519|noise)\b/i,
+    // The exception must POSITIVELY identify the construction as classical.
+    // A contrastive mention ("Unlike classical WireGuard, this construction runs
+    // in every QuickZTNA tunnel") names a classical primitive while asserting the
+    // opposite, so contrastive connectives disqualify the exemption.
+    unless:
+      /^(?!.*\b(unlike|rather than|instead of|whereas|as opposed to|not just)\b).*\b(classical|x25519 \+ chacha|chacha20|curve25519|noise)\b/i,
     msg: "anaphoric PQC-as-shipped claim — name the crypto explicitly; PQC is not shipped",
   },
   {
@@ -370,7 +420,14 @@ const SUBJ_RE = new RegExp(SUBJ, "i");
 
 let problems = 0;
 for (const file of ROOTS.flatMap((r) => walk(r))) {
-  const isBlog = /[\\/]blog[\\/]/.test(file);
+  // Blog POSTS are vendor-neutral-ish and need explicit attribution. The blog
+  // INDEX and its layouts/templates are product surfaces — they carry sidebars and
+  // CTAs written in our voice. Treating src/pages/blog/index.astro as a "post" made
+  // its CTA ("WireGuard mesh + DLP + AI Operator.") unattributed and unchecked.
+  const isBlog =
+    /[\\/]blog[\\/]/.test(file) &&
+    /[\\/]content[\\/]/.test(file) &&
+    !/[\\/](index|_)[^\\/]*$/.test(file);
   // Split on \r?\n, not \n. A trailing \r breaks heading detection, because JS
   // treats \r as a line terminator that `.` will not match — so /^#{2,6}\s+(.*)$/
   // failed on every CRLF file and blog section attribution silently never fired.
@@ -388,7 +445,7 @@ for (const file of ROOTS.flatMap((r) => walk(r))) {
     for (const rawClause of splitClauses(text)) {
       const clause = redactAllowed(rawClause);
       if (!clause.trim()) continue;
-      const negated = denied(clause);
+      // Denial is evaluated per MATCH below, not once per clause.
 
       // Attribution: surfaces describe our product by definition; the blog needs
       // the product name in the clause or in the enclosing heading.
@@ -402,10 +459,12 @@ for (const file of ROOTS.flatMap((r) => walk(r))) {
       ];
 
       for (const { re, msg, noExempt, unless, also } of rules) {
-        if (negated && !noExempt) continue;
         if (unless && unless.test(clause)) continue;
         if (also && !also.test(clause)) continue;
-        if (re.test(clause)) {
+        const m = clause.match(re);
+        if (m) {
+          // Scope the denial to THIS assertion rather than the whole clause.
+          if (!noExempt && denied(clause, m.index)) continue;
           console.error(`  ${file}:${i + 1}  ${msg}`);
           console.error(`    > ${clause.trim().slice(0, 130)}`);
           problems++;
