@@ -1,4 +1,4 @@
----
+﻿---
 title: "NIS2 Directive Remote Access Requirements: A Builder's Checklist"
 description: "NIS2 has applied to EU organisations since October 2024. Remote-access-specific reading of Article 21 with a concrete implementation checklist."
 publishedAt: 2026-04-26
@@ -216,7 +216,7 @@ How each NIS2 requirement maps to a concrete feature in a modern ZTNA product.
 |---|---|
 | Cryptography (21(2)(h)) | Hybrid post-quantum key exchange, TLS 1.3, ephemeral WireGuard keys |
 | Access control (21(2)(i)) | ABAC/ACL policies, identity-tied peers, least-privilege routing |
-| MFA (21(2)(j)) | SSO with FIDO2/WebAuthn, TOTP, continuous device posture |
+| MFA (21(2)(j)) | OIDC SSO with TOTP MFA, continuous device posture |
 | Supply chain (21(2)(d)) | Vendor audit reports, DPA, SLA incident notification |
 | Incident handling (21(2)(b)) | Per-tunnel audit logs, export to SIEM, kex mode per session |
 | Asset management (21(2)(i)) | Device registration, posture-based admission, auto-quarantine |
@@ -262,7 +262,7 @@ Primary sources. All links verified on the publish date.
 
 ## Try QuickZTNA
 
-QuickZTNA covers most of Article 21's remote-access-related technical categories out of the box: hybrid post-quantum cryptography, identity-tied peers, device posture, SSO with FIDO2, per-session audit logs, signed binaries, and SLA incident notification in the enterprise tier. It does not replace your own policy, incident-handling runbook, or training programme. [Start free](https://login.quickztna.com/auth) to evaluate, or [contact sales](mailto:sales@quickztna.com) for the NIS2 alignment brief.
+QuickZTNA covers several of Article 21's remote-access-related technical categories out of the box: identity-tied peers, device posture, OIDC SSO with TOTP MFA, per-session audit logs, signed binaries, and SLA incident notification in the enterprise tier. It does not replace your own policy, incident-handling runbook, or training programme. [Start free](https://login.quickztna.com/auth) to evaluate, or [contact sales](mailto:sales@quickztna.com) for the NIS2 alignment brief.
 
 <!--
 scorecard:

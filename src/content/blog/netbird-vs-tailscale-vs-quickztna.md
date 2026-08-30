@@ -19,7 +19,7 @@ faq:
   - q: "Are NetBird, Tailscale, and QuickZTNA all based on WireGuard?"
     a: "Yes. All three use WireGuard as the data-plane protocol for peer-to-peer tunnels between devices. The differences are in the coordination plane (Tailscale managed, NetBird managed or self-host, QuickZTNA managed cloud), the licence of the codebase (Tailscale proprietary, NetBird BSD-3-Clause, QuickZTNA proprietary), and the feature layer built on top."
   - q: "Which has the best free tier?"
-    a: "All three have meaningful free tiers as of 2026. Exact limits change — verify current numbers on each vendor's pricing page. The three products differ less on free-tier generosity than they do on what is gated behind paid tiers. QuickZTNA deliberately keeps ACLs, SSO, FIDO2, and remote SSH on the Free tier."
+    a: "All three have meaningful free tiers as of 2026. Exact limits change — verify current numbers on each vendor's pricing page. The three products differ less on free-tier generosity than they do on what is gated behind paid tiers. QuickZTNA deliberately keeps ACLs, SSO, TOTP MFA, and remote SSH on the Free tier."
   - q: "Which is easiest to self-host?"
     a: "NetBird, because the managed and self-host products come from the same codebase. Tailscale is not self-hostable as a company product, but [Headscale](/blog/headscale-vs-managed-coordination) is an independent third-party implementation compatible with Tailscale clients. QuickZTNA is a managed cloud service today and does not offer self-host."
   - q: "What about post-quantum?"
