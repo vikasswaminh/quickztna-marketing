@@ -175,7 +175,7 @@ Snapshot as of April 2026. Always verify against each vendor's current documenta
 | Licence | Proprietary | Proprietary | BSD-3-Clause | Proprietary | Proprietary | Apache 2.0 |
 | Free tier | Yes (limited) | Yes | Yes | Yes (5 users, 5 devices each) | Yes (verify current) | Open source |
 | Self-host | Partial (Connector) | No (Headscale exists) | Yes | No (managed cloud only) | No | Yes |
-| Post-quantum default | Verify current | Verify current | Verify current | No (classical today) | TLS 1.3 hybrid edge | Verify current |
+| Post-quantum tunnel KEX | Verify current | Verify current | Verify current | No (classical today) | TLS 1.3 hybrid edge | Verify current |
 | Session recording | Verify current | Enterprise tier | Verify current | No | Via other CF products | Via integrations |
 | Device posture | Yes | Yes | Yes | Yes | Yes | Policy-based |
 | Typical fit | User-to-resource ZTNA | Developer mesh | Open-source mesh | Full ZTNA + workforce security | CF-integrated edge | App-embedded ZT |

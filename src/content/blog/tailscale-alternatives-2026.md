@@ -171,7 +171,7 @@ Snapshot as of April 2026 from each product's own documentation. Always confirm 
 | Coordination | Managed | Self-host | Both | Managed | Managed | Managed | Both |
 | Licence | Proprietary | BSD-3-Clause | BSD-3-Clause | Proprietary | Proprietary | Proprietary | Apache 2.0 |
 | Free tier | Yes | N/A (DIY) | Yes | Yes (100 devices, 5 users) | Yes (up to 50 users historically — verify) | Yes (limited) | Open source |
-| Post-quantum default | Verify current | N/A (depends on clients) | Verify current | Roadmap | Partial, TLS 1.3 hybrid on edge | Verify current | Verify current |
+| Post-quantum tunnel KEX | Verify current | N/A (depends on clients) | Verify current | Roadmap | Partial, TLS 1.3 hybrid on edge | Verify current | Verify current |
 | Session recording | Enterprise-tier | No | Verify current | No | Via other CF products | Verify current | Via integrations |
 | Device posture | Yes | No | Yes | Yes | Yes | Yes | Policy-based |
 | SSO + SCIM | Yes | Limited | Yes | Yes | Yes | Yes | Depends on deployment |
