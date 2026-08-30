@@ -7,7 +7,7 @@ updatedAt: 2026-06-16
 primaryKeyword: "QuickZTNA SSO SCIM auth keys"
 faq:
   - q: "Which identity providers does QuickZTNA support?"
-    a: "Any OIDC provider — Google Workspace, Microsoft Entra (Azure AD), Okta, Authentik, and generic OIDC — plus GitHub and Google sign-in. SAML login is disabled product-wide, so SAML-only IdPs must be connected over OIDC. Users authenticate against your IdP; QuickZTNA never stores passwords. SCIM 2.0 provisioning is available on paid plans."
+    a: "Any OIDC provider — Google Workspace, Microsoft Entra (Azure AD), Okta, Authentik, and generic OIDC — plus GitHub and Google sign-in. SAML login is disabled product-wide: an IdP that also speaks OIDC should be connected over OIDC, and a SAML-only provider is not supported today. Users authenticate against your IdP; QuickZTNA never stores passwords. SCIM 2.0 provisioning is available on paid plans."
   - q: "How does SCIM authenticate, and what does it sync?"
     a: "SCIM uses an API key that carries the 'scim' scope as its Bearer token — not an ordinary auth key. With it, your IdP can list, create, update, and deactivate org members against /api/scim/Users (PATCH is supported; bulk and filter are not). Provision a user upstream and they can onboard; deprovision them and QuickZTNA removes them."
   - q: "What's the difference between an auth key and an API key?"

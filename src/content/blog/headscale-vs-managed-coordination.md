@@ -271,7 +271,7 @@ At the end, if the cost math, compliance requirements, and team capability all p
 
 ## Try QuickZTNA
 
-QuickZTNA is managed by default, managed cloud only (no self-host today). If the cost math above tips toward managed for your team and post-quantum is a requirement, [start on Free](https://login.quickztna.com/auth). If self-host is non-negotiable and open source is not required, [contact sales](mailto:sales@quickztna.com) for a self-host evaluation brief.
+QuickZTNA is managed cloud only — there is no self-host option, and none is planned. If the cost math above tips toward managed for your team, [start on Free](https://login.quickztna.com/auth). If self-host is non-negotiable, QuickZTNA is not your product: Headscale and NetBird are the options in this comparison that actually run on your own infrastructure.
 
 <!--
 scorecard:

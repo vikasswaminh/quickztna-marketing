@@ -234,7 +234,7 @@ As of April 2026:
 
 ### WireGuard
 
-No native post-quantum key exchange. The protocol supports an optional pre-shared key (PSK) that can be populated from a higher-layer post-quantum exchange. This is the approach used in [QuickZTNA](/blog/ml-kem-768-explained), NetBird, and some Tailscale configurations.
+No native post-quantum key exchange. The protocol supports an optional pre-shared key (PSK) that can be populated from a higher-layer post-quantum exchange. This is the approach used by products that do implement post-quantum key exchange; QuickZTNA is not one of them (see [ML-KEM-768 explained](/blog/ml-kem-768-explained)). NetBird and some Tailscale configurations.
 
 ### OpenVPN
 

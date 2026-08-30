@@ -96,6 +96,8 @@ const DENIAL = [
   /\b(?:removed|withdrew|deleted|retired|dropped)\b(?=[^.\n]{0,60}\b(?:dlp|casb|workforce|session|remote|software|inventory|scoring|analytics|vault|operator|assistant|recording|desktop|post-quantum|ml-?kem|fido2|webauthn)\b)/i,
   /\b(?:doesn't|don't|didn't|isn't|aren't|wasn't|weren't|won't|can't|cannot|hasn't|haven't)\b/i,
   /\bnever\b|\bno longer\b|\bneither\b/i,
+  // Adjectival absence: "QuickZTNA CASB is unsupported / unavailable / unimplemented".
+  /\b(?:un(?:supported|available|implemented|shipped)|absent|non-existent|nonexistent)\b/i,
   /\bnot\s+(?:implemented|shipped|offered|supported|planned|available|certified|on the roadmap|a\b|one of)/i,
   // Explicitly hypothetical framing — "we would document it only if it ever shipped"
   // is the opposite of a claim, but names the capability and a ship-verb.
