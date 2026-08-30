@@ -96,7 +96,7 @@ We cover Headscale in more depth in [Self-Hosting Headscale vs a Managed Coordin
 
 ## 5. QuickZTNA — full ZTNA + workforce security
 
-**What it is.** QuickZTNA is a full ZTNA product built on WireGuard. Beyond the mesh VPN, it adds ABAC ACLs, device posture, file-scan DLP, a CASB approval workflow, workforce analytics (opt-in), software inventory, user-risk scoring, an AI Operator for policy changes, SSO with FIDO2, and SCIM provisioning. The data plane is classical WireGuard today; hybrid post-quantum key exchange is on the roadmap (see [ML-KEM-768 Explained](/blog/ml-kem-768-explained)).
+**What it is.** QuickZTNA is a full ZTNA product built on WireGuard. Beyond the mesh VPN, it adds ABAC ACLs, device posture, DNS threat filtering, an edge firewall, JIT access governance, access reviews, and audit inventory, user-risk scoring, an AI Operator for policy changes, SSO with FIDO2, and SCIM provisioning. The data plane is classical WireGuard today; hybrid post-quantum key exchange is on the roadmap (see [ML-KEM-768 Explained](/blog/ml-kem-768-explained)).
 
 **Strengths.**
 - **Access governance depth.** ACLs, device posture, JIT access with approvals, access-review campaigns, audit logs and exportable compliance evidence — beyond a basic mesh.
@@ -170,7 +170,7 @@ Snapshot as of April 2026 from each product's own documentation. Always confirm 
 | Data plane | WireGuard | WireGuard (Tailscale clients) | WireGuard | WireGuard | Cloudflare edge | Proprietary | Ziti overlay |
 | Coordination | Managed | Self-host | Both | Managed | Managed | Managed | Both |
 | Licence | Proprietary | BSD-3-Clause | BSD-3-Clause | Proprietary | Proprietary | Proprietary | Apache 2.0 |
-| Free tier | Yes | N/A (DIY) | Yes | Yes (100 devices, 5 users) | Yes (up to 50 users historically — verify) | Yes (limited) | Open source |
+| Free tier | Yes | N/A (DIY) | Yes | Yes (5 users, 5 devices each) | Yes (up to 50 users historically — verify) | Yes (limited) | Open source |
 | Post-quantum tunnel KEX | Verify current | N/A (depends on clients) | Verify current | Roadmap | Partial, TLS 1.3 hybrid on edge | Verify current | Verify current |
 | Session recording | Enterprise-tier | No | Verify current | No | Via other CF products | Verify current | Via integrations |
 | Device posture | Yes | No | Yes | Yes | Yes | Yes | Policy-based |

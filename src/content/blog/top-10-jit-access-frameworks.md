@@ -1,4 +1,4 @@
----
+﻿---
 title: "Top 10 Just-In-Time Access Frameworks for Zero Trust in 2026"
 description: "Standing privileges are the silent risk hiding in every IAM config. Compare 10 JIT access frameworks on workflow, integration depth, and compliance evidence."
 publishedAt: 2026-05-10
@@ -276,4 +276,4 @@ The result is a dense mesh of persistent high-privilege accounts, any one of whi
 
 ## Try QuickZTNA JIT Access
 
-QuickZTNA Workforce includes built-in JIT access with Slack approval, automatic session recording, and SOC 2-ready audit export — shipping Q3 2026. [Join the early access list](mailto:sales@quickztna.com).
+QuickZTNA includes built-in JIT access with approval workflow and audit export supporting SOC 2 evidence — shipping Q3 2026. [Join the early access list](mailto:sales@quickztna.com).

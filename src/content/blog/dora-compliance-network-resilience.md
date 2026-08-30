@@ -268,7 +268,7 @@ Primary sources only. All links verified on the publish date.
 
 ## Try QuickZTNA
 
-QuickZTNA includes the features most relevant to DORA on every plan: per-tenant audit log export, FIDO2/WebAuthn SSO, device posture, and DPAs aligned with Article 30 minimum contractual terms. For financial-entity deployments, [contact sales](mailto:sales@quickztna.com) for an incident-notification SLA, the DORA alignment brief, and a financial-entity evaluation.
+QuickZTNA includes the features most relevant to DORA on every plan: per-tenant audit log export, OIDC SSO with TOTP MFA, device posture, and DPAs aligned with Article 30 minimum contractual terms. For financial-entity deployments, [contact sales](mailto:sales@quickztna.com) for an incident-notification SLA, the DORA alignment brief, and a financial-entity evaluation.
 
 <!--
 scorecard:

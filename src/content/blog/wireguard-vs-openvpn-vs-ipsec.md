@@ -1,4 +1,4 @@
----
+﻿---
 title: "WireGuard vs OpenVPN vs IPsec: A 2026 Engineering Comparison"
 description: "WireGuard, OpenVPN, and IPsec are the three VPN protocols that matter in 2026. Performance, security, code size, and operational simplicity compared."
 publishedAt: 2026-05-07
@@ -295,7 +295,7 @@ Moving between protocols is usually a protocol migration with co-existence rathe
 
 ## Try QuickZTNA
 
-QuickZTNA is built on WireGuard as the data plane, with a mesh coordination layer and hybrid post-quantum PSK on every tunnel. [Start on Free](https://login.quickztna.com/auth) to see modern WireGuard deployed as a full ZTNA.
+QuickZTNA is built on WireGuard as the data plane, with a mesh coordination layer; tunnels are classical WireGuard with no post-quantum layer. [Start on Free](https://login.quickztna.com/auth) to see modern WireGuard deployed as a full ZTNA.
 
 <!--
 scorecard:

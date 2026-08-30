@@ -211,7 +211,7 @@ The migration does not have to be a big-bang event. Most teams stagger by depart
 
 ## Try QuickZTNA
 
-If your Twingate exit motivation is a fuller ZTNA feature set with a built-in workforce-security layer, QuickZTNA is a straightforward evaluation. [Start on Free](https://login.quickztna.com/auth) — 100 devices, 5 users, free remote SSH, and a WireGuard mesh on every tier.
+If your Twingate exit motivation is a fuller ZTNA feature set with a built-in workforce-security layer, QuickZTNA is a straightforward evaluation. [Start on Free](https://login.quickztna.com/auth) — 5 devices per user, 5 users, free remote SSH, and a WireGuard mesh on every tier.
 
 <!--
 scorecard:

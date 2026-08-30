@@ -253,7 +253,7 @@ full session capture, use one of the tools above.
 | Sysdig / Falco | Syscall events | ✅ | ✅ | ✅ Best-in-class | Mid-enterprise | ❌ |
 | Ekran System | Screen video | ✅ OCR | ✅ | ❌ | Mid-market | ❌ |
 | Silverfort | Authentication log | ✅ | ✅ | ❌ | Mid-enterprise | ❌ |
-| QuickZTNA | Tunnel + keystroke | Growing | ✅ Hash chain | ❌ | Every plan | Secrets Vault |
+
 
 ---
 

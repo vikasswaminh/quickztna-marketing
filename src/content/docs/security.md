@@ -6,7 +6,7 @@ order: 5
 updatedAt: 2026-05-16
 primaryKeyword: "ZTNA security model"
 faq:
-  - q: "Is QuickZTNA SOC 2 certified?"
+  - q: "Does QuickZTNA hold a SOC 2 attestation?"
     a: "SOC 2 Type II and ISO 27001 are in progress, targeting 2026. Today we provide a GDPR-aligned Data Protection Addendum and sign HIPAA Business Associate Agreements on the Business plan and above. Request current status via security@quickztna.com."
   - q: "Does QuickZTNA hold customer encryption keys?"
     a: "No. Every device generates its own long-term Ed25519 identity key locally; the private key never leaves the device's OS-protected key storage. Session keys for tunnels are derived ephemerally on both peers and never sent over the wire. We have no key-escrow mechanism and could not decrypt customer traffic even under court order."
@@ -34,7 +34,7 @@ The model explicitly does not assume:
 
 - **Trust in our infrastructure.** Our coordination plane is a key-and-policy broker; it does not see data-plane traffic. A breach of our infrastructure does not give an attacker the ability to decrypt past or current traffic; it gives them the ability to refuse to broker future connections.
 
-- **Trust in third-party identity providers.** We rely on the IdP for authentication, but a compromised IdP is bounded to "can sign in as a user." Strong MFA at the IdP layer is the standard defence; we recommend hardware-backed factors (FIDO2, WebAuthn) and forbid configuration paths that would weaken your IdP's posture.
+- **Trust in third-party identity providers.** We rely on the IdP for authentication, but a compromised IdP is bounded to "can sign in as a user." Strong MFA at the IdP layer is the standard defence; enable the strongest factor your provider offers. We recommend hardware-backed factors (FIDO2, WebAuthn) and forbid configuration paths that would weaken your IdP's posture.
 
 ## Cryptographic primitives
 

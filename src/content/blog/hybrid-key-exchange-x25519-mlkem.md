@@ -325,7 +325,7 @@ If you see the hybrid group in the server temp key line, the endpoint supports h
 
 WireGuard does not have a TLS-style codepoint or negotiation. The protocol is fixed. What it does have is an optional pre-shared key (PSK) field on every peer, mixed into the handshake for additional forward secrecy.
 
-QuickZTNA runs the hybrid X25519 + ML-KEM-768 exchange as a separate protocol at a higher layer, relayed through our coordination server. The resulting 32-byte derived key is installed as the WireGuard PSK for that peer. WireGuard's own Noise handshake then runs as normal, but with the PSK field populated from a post-quantum exchange rather than left empty or statically configured.
+QuickZTNA does not run this exchange; its tunnels are classical WireGuard. A design of this shape would run as a separate protocol at a higher layer, relayed through a coordination server. The resulting 32-byte derived key is installed as the WireGuard PSK for that peer. WireGuard's own Noise handshake then runs as normal, but with the PSK field populated from a post-quantum exchange rather than left empty or statically configured.
 
 A few consequences worth highlighting:
 

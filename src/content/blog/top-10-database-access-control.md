@@ -1,4 +1,4 @@
----
+﻿---
 title: "Top 10 Database Access Control Tools for Zero Trust in 2026"
 description: "Direct database access is the last firewall exception holding your zero-trust architecture together. 10 database access control tools ranked with honest trade-offs."
 publishedAt: 2026-05-11
@@ -247,4 +247,4 @@ The solution architecture:
 
 ## Try QuickZTNA Database Access
 
-QuickZTNA Workforce includes a database access broker with ZTNA posture gating, JIT approval, and SQL metadata audit logging. [Contact sales](mailto:sales@quickztna.com) for early access to the database proxy feature.
+QuickZTNA includes a database access broker with ZTNA posture gating, JIT approval, and SQL metadata audit logging. [Contact sales](mailto:sales@quickztna.com) for early access to the database proxy feature.

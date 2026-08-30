@@ -22,7 +22,7 @@ This page covers the two plan tiers, how plan limits are enforced, and how billi
 
 QuickZTNA has **two plans with identical features** — you pay to scale, not to unlock.
 
-- **Free** — up to **5 users** and **100 devices**, forever. Every feature is included: WireGuard mesh, MagicDNS, ABAC policies, device posture, DNS filtering, the AI assistant, remote SSH, DLP, CASB, SCIM, remote desktop, secrets vault, and compliance reports — the entire platform.
+- **Free** — up to **5 users** and **5 devices per user** (25 total), forever. Every feature is included: WireGuard mesh, MagicDNS, ABAC policies, device posture, DNS threat filtering, edge firewall, JIT access, access reviews, remote SSH, SCIM, remote desktop, secrets vault, and compliance reports — the entire platform.
 - **Business** — **$10 per user / month**, billed per seat. Unlimited users and a **10,000-device cap**. Same features as Free, plus priority email support. No trial and no card to start — you begin on Free and upgrade when you outgrow the seat limit.
 
 Exact prices and limits can change — the [pricing page](/pricing/) is canonical.
