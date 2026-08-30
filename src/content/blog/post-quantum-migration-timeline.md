@@ -1,4 +1,4 @@
----
+﻿---
 title: "The 2026 Post-Quantum Migration Timeline: Every Major Deadline on One Page"
 description: "Post-quantum cryptography has a migration timeline set by regulators, standards bodies, and vendors. Every known deadline through 2035 with primary sources."
 publishedAt: 2026-05-09
@@ -238,7 +238,7 @@ Subscribe to NIST CSRC announcements, NSA Cybersecurity Advisories, your jurisdi
 
 ## Try QuickZTNA
 
-If PQ migration is on your 2026 roadmap, QuickZTNA can be part of your first concrete deployment — every tunnel ships with hybrid X25519 + ML-KEM-768 by default. [Start on Free](https://login.quickztna.com/auth).
+QuickZTNA does not implement post-quantum cryptography, so it is not a PQ migration step — tunnels are classical WireGuard. It covers the access-control side of a zero-trust programme: ABAC policies, device posture, JIT access and audit evidence. [Start on Free](https://login.quickztna.com/auth).
 
 <!--
 scorecard:

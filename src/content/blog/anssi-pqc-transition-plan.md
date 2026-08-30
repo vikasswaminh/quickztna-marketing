@@ -1,4 +1,4 @@
----
+﻿---
 title: "ANSSI PQC Transition Plan: France's Deadlines for Public Sector Networks"
 description: "ANSSI, France's cyber agency, has a three-phase plan for post-quantum. What each phase requires and how to align ZTNA with ANSSI qualification."
 publishedAt: 2026-04-28
@@ -271,7 +271,7 @@ Primary sources. All links verified on the publish date.
 
 ## Try QuickZTNA
 
-QuickZTNA has hybrid X25519 + ML-KEM-768 key exchange on its roadmap (classical WireGuard today), aligned with ANSSI's Phase 2 hybrid expectations. For French public-sector, OIV, or OSE deployments requiring Qualification Renforcée, we are happy to engage on a sovereign-curve option (FRP256v1) and on FrodoKEM evaluation — [contact sales](mailto:sales@quickztna.com).
+QuickZTNA does not implement post-quantum key exchange and does not have it on the roadmap; tunnels are classical WireGuard, aligned with ANSSI's Phase 2 hybrid expectations. For French public-sector, OIV, or OSE deployments requiring Qualification Renforcée, we are happy to engage on a sovereign-curve option (FRP256v1) and on FrodoKEM evaluation — [contact sales](mailto:sales@quickztna.com).
 
 <!--
 scorecard:

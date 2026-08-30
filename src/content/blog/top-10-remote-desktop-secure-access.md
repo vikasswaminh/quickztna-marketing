@@ -1,4 +1,4 @@
----
+﻿---
 title: "Top 10 Secure Remote Desktop Solutions in 2026"
 description: "RDP exposure is the leading ransomware initial access vector. Compare 10 secure remote desktop solutions on security model, performance, and zero-trust integration."
 publishedAt: 2026-05-14
@@ -199,31 +199,15 @@ The correct 2026 architecture: ZTNA gates access, device posture is verified, id
 
 ---
 
-## 10. QuickZTNA Remote Desktop
+## A note on QuickZTNA
 
-**Category.** ZTNA-native WebRTC remote desktop with session recording.
-
-**How it works.** QuickZTNA Workforce includes a WebRTC-based remote desktop feature for Windows and Linux machines enrolled in the QuickZTNA network. Users access a managed machine through the QuickZTNA admin portal or web interface. The ZTNA layer verifies identity, device posture, and access policy before establishing the WebRTC session. Sessions are recorded to the immutable audit log.
-
-**Security model.**
-- Target machines do not require inbound ports. QuickZTNA uses relay infrastructure when direct WebRTC connection is unavailable.
-- Device posture of the connecting device is verified via the QuickZTNA agent before session establishment — unmanaged devices denied.
-- JIT access integration: remote desktop to production servers can require approval, recorded session attached to approval request.
-- Clipboard and file transfer policies configurable per machine or group.
-- Session recording stored with cryptographic hash in tamper-evident storage.
-
-**Strengths.**
-- No client software required on the user's device for browser-based access. The WebRTC session renders in any modern browser.
-- Consolidated with ZTNA: one admin console for network access policy and desktop session management.
-- Session recordings linked to ZTNA access events — compliance reports include both the network access record and the session recording.
-- Posture-gated desktop access: a developer with an unmanaged or non-compliant device cannot start a remote desktop session to a production server.
-
-**Limitations.** WebRTC graphical performance is good for administrative tasks; not optimal for graphics-intensive workloads (3D modelling, video editing).
-
-**Best fit.** Organisations using QuickZTNA Workforce who want remote desktop integrated with their ZTNA identity and posture model, without deploying a separate VDI or remote desktop platform.
+**QuickZTNA does not offer remote desktop.** An earlier version of this post described a
+WebRTC screen-control session; that capability was removed from the product in 2026. What
+remains is an interactive remote *shell* over the encrypted mesh — consent-gated, one-time
+token, fully audited — which covers command-line diagnostics but not graphical support. For
+screen control, pair QuickZTNA's access layer with one of the tools above.
 
 ---
-
 ## Comparison
 
 | Tool | No-inbound-port | MFA | Session recording | Device posture | JIT access | Browser-based |
@@ -247,6 +231,6 @@ The correct 2026 architecture: ZTNA gates access, device posture is verified, id
 - [Device Posture Checks That Actually Work](/blog/device-posture-checks)
 - [Session Recording for Compliance](/blog/top-10-session-recording-compliance)
 
-## Try QuickZTNA Remote Desktop
+## Try QuickZTNA for secure access
 
-QuickZTNA Workforce includes WebRTC-based remote desktop with posture gating, session recording, and JIT access integration. No VDI infrastructure, no inbound ports. [Contact sales](mailto:sales@quickztna.com) for a Workforce demo.
+QuickZTNA has no remote desktop, but it removes the reason most teams expose one: reach any machine over an encrypted mesh with identity-based policies, device posture, and consent-gated remote shell for command-line work. Free for up to 5 users. [Start free](https://login.quickztna.com/auth).

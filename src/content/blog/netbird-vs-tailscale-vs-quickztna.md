@@ -1,4 +1,4 @@
----
+﻿---
 title: "NetBird vs Tailscale vs QuickZTNA: A Developer-Focused Comparison"
 description: "NetBird, Tailscale, and QuickZTNA — three WireGuard mesh products for developers. Architecture, licensing, feature depth, and security model compared."
 publishedAt: 2026-04-30
@@ -124,7 +124,7 @@ NetBird's post-quantum state should be verified against [the current NetBird doc
 
 ### QuickZTNA
 
-QuickZTNA's tunnels use classical WireGuard today (Curve25519 + ChaCha20-Poly1305). Hybrid post-quantum key exchange (X25519 + ML-KEM-768) is on the roadmap — see [our ML-KEM-768 post](/blog/ml-kem-768-explained) for the construction and the standards timeline — but it is not in the shipped client today.
+QuickZTNA's tunnels use classical WireGuard (Curve25519 + ChaCha20-Poly1305). Post-quantum key exchange is not implemented and is not planned — if that is a requirement, none of these three vendors should be chosen on our account. See [our ML-KEM-768 post](/blog/ml-kem-768-explained) for background on the algorithm.
 
 **For teams where PQ is a hard requirement today, none of these three ships it on the tunnel yet — verify each vendor's current status.** For teams where PQ is a future concern, all three are tracking the transition.
 

@@ -1,4 +1,4 @@
----
+﻿---
 title: "Harvest Now, Decrypt Later: Why Your VPN Traffic Is Already Compromised"
 description: "Harvest now, decrypt later is a real attack model. Nation-state actors record encrypted traffic today to decrypt with future quantum computers."
 publishedAt: 2026-04-24
@@ -173,7 +173,7 @@ Every key exchange you still use should be ephemeral. Static Diffie-Hellman and 
 
 ## 9. Where QuickZTNA stands
 
-QuickZTNA's tunnels today use classical WireGuard (Curve25519 + ChaCha20-Poly1305) — secure against today's adversaries. Hybrid post-quantum key exchange (X25519 + ML-KEM-768) is on our roadmap; we describe the construction we're targeting in [ML-KEM-768 Explained](/blog/ml-kem-768-explained).
+QuickZTNA's tunnels use classical WireGuard (Curve25519 + ChaCha20-Poly1305) — secure against today's adversaries, but not against a future cryptographically-relevant quantum computer. We do not implement hybrid post-quantum key exchange and it is not on our roadmap, so if harvest-now-decrypt-later is in your threat model, plan for a tunnel layer that does. [ML-KEM-768 Explained](/blog/ml-kem-768-explained) covers the algorithm.
 
 The design intent when it ships: hybrid on every tunnel rather than a paid add-on, ephemeral keys per handshake, and an auditable per-tunnel key-exchange mode — because we don't believe harvest-now protection should be a premium feature. Until then, the data plane is classical WireGuard, and we say so plainly rather than imply otherwise.
 

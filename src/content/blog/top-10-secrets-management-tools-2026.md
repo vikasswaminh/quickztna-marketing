@@ -1,4 +1,4 @@
----
+﻿---
 title: "Top 10 Secrets Management Tools in 2026"
 description: "API keys, tokens, and credentials don't belong in env files. 10 secrets management tools ranked on enterprise features, audit trails, and zero-trust integration."
 publishedAt: 2026-05-08
@@ -237,26 +237,15 @@ None of this is possible with an `.env` file.
 
 ---
 
-## 10. QuickZTNA Secrets Vault
+## A note on QuickZTNA
 
-**Category.** Built-in secrets vault in the ZTNA platform (included on every plan).
-
-**Architecture.** QuickZTNA's Secrets Vault feature provides a KV secrets store inside the QuickZTNA platform. Applications and users accessing resources through the ZTNA tunnel can retrieve secrets gated behind the same identity layer that controls network access. Secrets access inherits the user's ZTNA session identity — no separate authentication for the secrets store.
-
-**Key capabilities.**
-- Unified identity: the same identity assertion that grants access to the network resource controls access to secrets for that resource. If a developer's device posture check fails, both the network access and the secrets access are denied simultaneously.
-- Audit integration: secrets access events appear in the same immutable audit log as all ZTNA access events, simplifying compliance reporting.
-- Per-resource scoping: secrets are associated with resources in the ZTNA resource catalogue. Access is implicitly scoped to users authorised for that resource.
-- Works alongside external vaults: QuickZTNA does not replace Vault or AWS SM for dynamic database credentials. It complements them by gating access to the primary vault through the ZTNA identity layer.
-
-**Strengths.** Eliminates a separate authentication flow for secrets in the context of ZTNA-mediated access. Posture-based access extends naturally to secrets — an unmanaged device that fails a posture check cannot retrieve credentials even if it has valid identity.
-
-**Limitations.** Scoped to secrets relevant to ZTNA-protected resources. Not a general-purpose secrets management platform for all application workloads. Dynamic secrets and certificate issuance require a dedicated tool like Vault.
-
-**Best fit.** Organisations using QuickZTNA for ZTNA who want secrets access integrated with ZTNA posture and identity, without a separate secrets access policy to manage.
+**QuickZTNA does not offer a secrets manager.** An earlier version of this post described a
+built-in "Secrets Vault" feature; that capability was removed from the product in 2026 and
+never returned. If you use QuickZTNA for Zero Trust network access, pair it with one of the
+nine tools above — the ZTNA layer controls who can reach the vault's endpoint, and the vault
+controls what they can read once there. Those are complementary jobs, not competing ones.
 
 ---
-
 ## Comparison table
 
 | Tool | Hosted/Self-hosted | Dynamic secrets | Audit logs | BYOK/DKE | Developer UX | Compliance (FedRAMP, SOC2) |
@@ -270,7 +259,6 @@ None of this is possible with an `.env` file.
 | Infisical | Both | ✅ Growing | ✅ | Self-hosted option | Excellent | Growing |
 | 1Password SA | Hosted SaaS | ❌ | Partial | ❌ | Excellent | SOC 2 |
 | Akeyless | Hosted + Gateway | ✅ | ✅ | ✅ DKE | Good | SOC 2 |
-| QuickZTNA Vault | Hosted SaaS | No | ✅ | — | Good | SOC 2 (via ZTNA) |
 
 ---
 
@@ -282,7 +270,6 @@ None of this is possible with an `.env` file.
 
 **Add a developer workflow layer.** Doppler or Infisical on top of your cloud-native store handles the developer workflow problem: environment hierarchy, CI/CD injection, cross-cloud sync. Your cloud store holds the authoritative encrypted values; the workflow layer makes them usable without copy-pasting.
 
-**If you are running QuickZTNA Workforce.** Use QuickZTNA Secrets Vault for resource-scoped secrets that need to inherit ZTNA posture checks. Keep Vault or AWS SM for the broader secrets estate.
 
 ## Related reading
 
@@ -290,6 +277,6 @@ None of this is possible with an `.env` file.
 - [ZTNA vs VPN: 8 Real Differences](/blog/ztna-vs-vpn)
 - [Zero Trust on a Budget: Free Tier Options](/blog/zero-trust-budget-options)
 
-## Try QuickZTNA Secrets Vault
+## Try QuickZTNA for the access layer
 
-QuickZTNA Workforce includes a built-in Secrets Vault that gates credential access behind ZTNA identity and device posture — no separate secrets management product to evaluate. [Request a Workforce trial](mailto:sales@quickztna.com) to see the integration in action.
+QuickZTNA has no secrets manager — but it does control who can reach the machine your vault runs on. Identity-based ABAC policies, continuous device posture, and just-in-time access with approvals, free for up to 5 users. [Start free](https://login.quickztna.com/auth).

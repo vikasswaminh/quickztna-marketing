@@ -1,4 +1,4 @@
----
+﻿---
 title: "Hybrid Key Exchange X25519 + ML-KEM-768: The Complete Guide"
 description: "Hybrid post-quantum key exchange combines X25519 with ML-KEM-768 so a session stays secret if either primitive holds. Construction, code, failure modes."
 publishedAt: 2026-04-25
@@ -380,7 +380,7 @@ All verified on publication date.
 
 ## Try QuickZTNA
 
-The hybrid X25519 + ML-KEM-768 construction described above is the one QuickZTNA is targeting on its roadmap; the shipped client uses classical WireGuard today. To follow along, [sign up free](https://login.quickztna.com/auth) and connect two devices to try the mesh now.
+The hybrid X25519 + ML-KEM-768 construction described above is not implemented by QuickZTNA, which uses classical WireGuard; the shipped client uses classical WireGuard today. To follow along, [sign up free](https://login.quickztna.com/auth) and connect two devices to try the mesh now.
 
 <!--
 scorecard:

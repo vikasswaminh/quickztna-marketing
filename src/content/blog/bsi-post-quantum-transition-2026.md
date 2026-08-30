@@ -1,4 +1,4 @@
----
+﻿---
 title: "BSI TR-02102-1 and Post-Quantum: Germany's 2026 Crypto Baseline"
 description: "Germany's BSI TR-02102-1 sets the cryptographic baseline for federal and regulated entities. Current recommendations, PQ transition, and what it means."
 publishedAt: 2026-04-27
@@ -228,7 +228,7 @@ Primary sources. All links verified on the publish date.
 
 ## Try QuickZTNA
 
-QuickZTNA has hybrid X25519 + ML-KEM-768 key exchange on its roadmap (classical WireGuard today). The planned construction uses FIPS 203 ML-KEM via the Go 1.24 standard library with HKDF-SHA256 derivation and transcript binding — aligned with TR-02102-1's hybrid-preference guidance. For German federal or KRITIS deployments, contact sales for a TR-02102 alignment brief. [Start free](https://login.quickztna.com/auth) to evaluate.
+QuickZTNA does not implement post-quantum key exchange and does not have it on the roadmap; tunnels are classical WireGuard. The planned construction uses FIPS 203 ML-KEM via the Go 1.24 standard library with HKDF-SHA256 derivation and transcript binding — aligned with TR-02102-1's hybrid-preference guidance. For German federal or KRITIS deployments, contact sales for a TR-02102 alignment brief. [Start free](https://login.quickztna.com/auth) to evaluate.
 
 <!--
 scorecard:

@@ -1,4 +1,4 @@
----
+﻿---
 title: "NSA CNSA 2.0: Every Deadline DoD Contractors Need to Know"
 description: "CNSA 2.0 is the NSA's post-quantum algorithm suite for US National Security Systems. Approved algorithms, transition deadlines, and what DoD vendors must do."
 publishedAt: 2026-04-25
@@ -24,7 +24,7 @@ faq:
   - q: "What is the difference between CNSA 1.0 and CNSA 2.0?"
     a: "CNSA 1.0 specified classical algorithms — AES, SHA-2, RSA, ECDSA with specific parameter sets for National Security Systems. CNSA 2.0 replaces the asymmetric components (key establishment and signatures) with post-quantum algorithms: ML-KEM-1024 for key establishment and ML-DSA-87 for signatures, plus specialised hash-based signatures for software and firmware. Symmetric algorithms are unchanged."
   - q: "Does QuickZTNA meet CNSA 2.0 today?"
-    a: "QuickZTNA has hybrid X25519 + ML-KEM-768 key exchange on its roadmap (classical WireGuard today). That is aligned with CNSA 2.0's lattice-based key establishment intent but uses parameter set 768 rather than the CNSA-specified 1024. ML-KEM-1024 support is on our 2026-Q3 roadmap for customers who require it. We will not label the product CNSA 2.0 compliant until the full suite (1024 key establishment, ML-DSA-87 signatures, FIPS-validated modules) ships and is tested."
+    a: "No. QuickZTNA does not implement post-quantum cryptography at all — tunnels use classical WireGuard (X25519 + ChaCha20-Poly1305), and ML-KEM is not on the roadmap. If CNSA 2.0 key establishment is a hard requirement for your programme, QuickZTNA does not meet it and we will not imply a timeline we have not committed to. What it does provide is the access-control layer: ABAC policies, device posture, just-in-time access and audit evidence, alongside whatever CNSA-compliant tunnel technology your programme mandates."
   - q: "When does the first CNSA 2.0 deadline actually hit?"
     a: "The earliest deadline in the 2022 NSA advisory is for software and firmware signing: begin using quantum-resistant algorithms by 2025, use exclusively by 2030. Other classes — web browsers, cloud services, networking equipment, operating systems — have later dates, with the final NSS-wide deadline in 2035. The exact per-class schedule is in the advisory, summarised below."
   - q: "How do I keep evidence of compliance for my DoD contract?"
@@ -250,7 +250,7 @@ Primary sources. All links verified on the publish date.
 
 ## Try QuickZTNA
 
-If you sell into DoD, our 2026-Q3 ML-KEM-1024 opt-in will be the path. In the meantime, every current QuickZTNA tunnel already ships hybrid X25519 + ML-KEM-768 — aligned with CNSA 2.0's lattice-based key-establishment intent — at NIST category 3. [Contact sales](mailto:sales@quickztna.com) to discuss a CNSA-aligned deployment path.
+**QuickZTNA does not implement post-quantum cryptography.** Tunnels use classical WireGuard (X25519 + ChaCha20-Poly1305), and hybrid ML-KEM is not on our roadmap. If CNSA 2.0 alignment is a procurement requirement for you today, we are not the right fit for that requirement, and we would rather say so than sell you a timeline. What QuickZTNA does provide is the access-control half of the problem: identity-based ABAC policies, continuous device posture, just-in-time access with approvals, and audit evidence. [Contact sales](mailto:sales@quickztna.com) if that is useful alongside a CNSA-compliant tunnel layer.
 
 <!--
 scorecard:
