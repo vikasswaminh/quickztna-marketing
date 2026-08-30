@@ -1,6 +1,6 @@
 ﻿---
-title: "ML-KEM-768 Explained: The Quantum-Safe Algorithm in Every QuickZTNA Tunnel"
-description: "ML-KEM-768 is the NIST-standardised post-quantum KEM published as FIPS 203. How it works, real benchmarks, and why we pair it with X25519."
+title: "ML-KEM-768 Explained: The NIST Quantum-Safe KEM (FIPS 203)"
+description: "ML-KEM-768 is the NIST-standardised post-quantum KEM published as FIPS 203. How the algorithm works, real benchmarks, key sizes, and why hybrids pair it with X25519."
 publishedAt: 2026-04-24
 author:
   name: QuickZTNA Engineering
