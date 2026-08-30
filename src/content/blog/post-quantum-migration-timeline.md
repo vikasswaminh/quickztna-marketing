@@ -1,4 +1,4 @@
----
+﻿---
 title: "The 2026 Post-Quantum Migration Timeline: Every Major Deadline on One Page"
 description: "Post-quantum cryptography has a migration timeline set by regulators, standards bodies, and vendors. Every known deadline through 2035 with primary sources."
 publishedAt: 2026-05-09
@@ -144,7 +144,7 @@ Specific industry deployments, verified against public announcements on publish 
 
 ### VPN and ZTNA vendors
 
-- **QuickZTNA**: Hybrid X25519 + ML-KEM-768 key exchange is on the roadmap, not shipped.
+- **QuickZTNA**: classical WireGuard only. Post-quantum key exchange is not implemented and not planned.
 - **Tailscale**, **NetBird**, **Twingate**, **Zscaler**, others: check current vendor documentation for per-product status.
 
 ### Messaging
@@ -156,7 +156,7 @@ Specific industry deployments, verified against public announcements on publish 
 
 Our specific commitments through 2027.
 
-- **Planned (2026-Q2)**: Hybrid X25519 + ML-KEM-768 key exchange (on the roadmap, not yet shipped).
+- **Not planned**: hybrid X25519 + ML-KEM-768 key exchange. QuickZTNA has no post-quantum work scheduled.
 - **Planned (2026-Q2)**: Per-session kex mode logging, dashboard visibility.
 - **2026-Q3**: ML-KEM-1024 opt-in per organisation, for CNSA 2.0 alignment.
 - **2026-Q3**: LMS signing on Windows MSI and Linux installers.
@@ -238,7 +238,7 @@ Subscribe to NIST CSRC announcements, NSA Cybersecurity Advisories, your jurisdi
 
 ## Try QuickZTNA
 
-If PQ migration is on your 2026 roadmap, QuickZTNA can be part of your first concrete deployment — every tunnel ships with hybrid X25519 + ML-KEM-768 by default. [Start on Free](https://login.quickztna.com/auth).
+QuickZTNA does not implement post-quantum cryptography, so it is not a PQ migration step — tunnels are classical WireGuard. It covers the access-control side of a zero-trust programme: ABAC policies, device posture, JIT access and audit evidence. [Start on Free](https://login.quickztna.com/auth).
 
 <!--
 scorecard:

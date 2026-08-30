@@ -10,35 +10,35 @@ const SALES_URL = "mailto:sales@quickztna.com?subject=Consolidation%20%26%20pric
 // user/month; every field is editable in the UI so the result is always the
 // visitor's own number, never an asserted one. `on` = checked by default.
 const tools = [
-  { on: true,  name: "TeamViewer / AnyDesk",        cat: "Remote support",            price: 25 },
   { on: true,  name: "Tailscale / Twingate",        cat: "Mesh VPN",                  price: 6 },
   { on: true,  name: "Zscaler / Cloudflare Access", cat: "ZTNA / SSE",                price: 15 },
-  { on: true,  name: "Hubstaff / ActivTrak",        cat: "Workforce monitoring",      price: 10 },
-  { on: false, name: "Cisco Umbrella",              cat: "DNS / web filtering",       price: 5 },
-  { on: false, name: "Forcepoint / MS Purview",     cat: "Data loss prevention",      price: 8 },
-  { on: false, name: "Netskope",                    cat: "CASB (SaaS / AI control)",  price: 6 },
-  { on: false, name: "Intune / Kandji",             cat: "Device posture",            price: 8 },
-  { on: false, name: "Exabeam",                     cat: "User risk / UEBA",          price: 8 },
-  { on: false, name: "Splunk / Datadog",            cat: "Audit / SIEM logging",      price: 8 },
-  { on: false, name: "Okta / JumpCloud",            cat: "SSO + SCIM",                price: 4 },
-  { on: false, name: "1Password / Vault",           cat: "Secrets management",        price: 8 },
+  { on: true,  name: "Cisco Umbrella",              cat: "DNS / web filtering",       price: 5 },
+  { on: false, name: "Bastion / jump-host tooling", cat: "Remote shell access",       price: 6 },
+  { on: false, name: "Intune / Kandji (posture)",   cat: "Device posture checks",     price: 8 },
+  { on: false, name: "PAM / JIT access tooling",    cat: "Just-in-time access",       price: 9 },
 ];
 
 // The consolidation map: the job a team pays a separate vendor for, and the
 // QuickZTNA capability that covers it. Every QuickZTNA item is a shipped
 // feature also listed on /pricing — no claims beyond what the product does.
 const replaces = [
-  { job: "Remote-control a user's screen to fix it", vendor: "TeamViewer, AnyDesk",   qz: "Remote desktop" },
-  { job: "Shell into a machine to troubleshoot",      vendor: "SSH tools, Splashtop",  qz: "Remote shell" },
-  { job: "Connect remote devices privately",          vendor: "Tailscale, Twingate",   qz: "WireGuard mesh + MagicDNS" },
-  { job: "Right user + right device → right app",      vendor: "Zscaler, CF Access",    qz: "ABAC access, posture-gated" },
-  { job: "Block malicious domains, filter web",        vendor: "Cisco Umbrella",        qz: "DNS filtering + cloud firewall" },
-  { job: "Stop secrets & PII from leaving",            vendor: "Forcepoint, Purview",   qz: "DLP — catches & masks secrets" },
-  { job: "See & control SaaS and AI app usage",        vendor: "Netskope",              qz: "CASB + approval workflow" },
-  { job: "Keep devices compliant",                     vendor: "Intune, Kandji",        qz: "Posture + auto-quarantine" },
-  { job: "Track time, apps & productivity",            vendor: "Hubstaff, ActivTrak",   qz: "Workforce analytics" },
-  { job: "SSO + auto user provisioning",               vendor: "Okta, JumpCloud",       qz: "SAML / OIDC + SCIM" },
-  { job: "Store & share secrets safely",               vendor: "1Password, Vault",      qz: "Secrets vault" },
+  { job: "Connect remote devices privately",     vendor: "Tailscale, Twingate",   qz: "WireGuard mesh + MagicDNS" },
+  { job: "Right user + right device → right app", vendor: "Zscaler, CF Access",    qz: "ABAC access, posture-gated" },
+  { job: "Block malicious domains",              vendor: "Cisco Umbrella",        qz: "DNS threat filtering + edge firewall" },
+  { job: "Shell into a machine to troubleshoot", vendor: "Bastion / jump hosts",  qz: "Remote shell (free tier)" },
+  { job: "Gate access on device compliance",     vendor: "Intune, Kandji",        qz: "Posture checks + auto-quarantine" },
+  { job: "Time-bound elevated access",           vendor: "PAM / JIT tooling",     qz: "JIT grants + access reviews" },
+  { job: "Prove access controls to an auditor",  vendor: "GRC point tools",       qz: "Evidence bundles + 90-day audit log" },
+];
+
+// What QuickZTNA does NOT replace. Stated plainly because a consolidation
+// pitch that hides the gaps is the kind of claim this page exists to avoid.
+const doesNotReplace = [
+  { job: "Your identity provider", note: "QuickZTNA authenticates against Okta / Entra / Google via OIDC — it consumes your IdP, it does not replace it." },
+  { job: "Remote desktop control", note: "There is remote shell for diagnostics, but no screen-control product — keep TeamViewer or AnyDesk if you need it." },
+  { job: "DLP, CASB and workforce monitoring", note: "Removed in the 2026 lean pivot. File-hash malware detection remains; PII scanning, SaaS discovery and productivity analytics do not." },
+  { job: "A full SIEM", note: "Audit logs are retained 90 days and exportable, but Splunk / Datadog do far more." },
+  { job: "A secrets manager", note: "Use 1Password or Vault — QuickZTNA has no secrets vault." },
 ];
 
 const breadcrumbSchema = {
@@ -51,8 +51,8 @@ const breadcrumbSchema = {
 };
 ---
 <SiteLayout
-  title="Savings calculator — replace 8 remote-workforce tools with one bill"
-  description="See what you'd save by replacing TeamViewer, Tailscale, Zscaler, your monitoring tool and more with one QuickZTNA agent. Tick your stack, get your number — up to 90% lower."
+  title="Savings calculator — consolidate your ZTNA, mesh VPN and DNS filtering"
+  description="See what you'd save by folding your mesh VPN, ZTNA gateway, DNS filtering and jump-host tooling into one QuickZTNA agent. Tick your stack, get yournumber — up to 90% lower."
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} is:inline />
@@ -64,7 +64,7 @@ const breadcrumbSchema = {
     <div class="relative mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-24">
       <p class="font-mono text-xs uppercase tracking-wider text-primary">Savings calculator</p>
       <h1 class="mt-4 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-        Replace 8 tools. <span class="text-gradient">Cut up to 90%</span> of the cost.
+        Fold the access stack into <span class="text-gradient">one bill</span>.
       </h1>
       <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
         One agent connects every device, locks down your data, watches productivity, and lets IT
@@ -168,10 +168,10 @@ const breadcrumbSchema = {
 
     <p class="mt-8 max-w-3xl text-xs leading-relaxed text-muted-foreground">
       Prices are typical published list rates per user / month and vary by plan and negotiation —
-      edit any field to match your actual spend. QuickZTNA replaces the ZTNA, mesh-VPN, DLP, CASB,
-      DNS-filtering, device-posture, remote-support and workforce-monitoring functions teams use
-      every day. It is not a full inline web proxy, a full MDM (no OS patch-push), or a
-      screen-recording suite — and we'll tell you that up front. Your number, your math.
+      edit any field to match your actual spend. QuickZTNA covers the ZTNA, mesh-VPN,
+      DNS-filtering, device-posture, jump-host and just-in-time-access functions teams use every
+      day. It does not replace your identity provider, a remote-desktop tool, a full MDM (no OS
+      patch-push), a full SIEM, or a secrets manager — see the list below. Your number, your math.
     </p>
   </section>
 
@@ -210,6 +210,21 @@ const breadcrumbSchema = {
               ))}
             </tbody>
           </table>
+        </div>
+
+        <div class="mt-10 rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft">
+          <h3 class="text-base font-semibold">What QuickZTNA does <span class="text-destructive">not</span> replace</h3>
+          <p class="mt-1 text-sm text-muted-foreground">
+            A consolidation pitch that hides the gaps isn't worth your time. Keep budget for these:
+          </p>
+          <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+            {doesNotReplace.map((d) => (
+              <li class="rounded-xl border border-border bg-surface p-4">
+                <div class="text-sm font-semibold text-foreground">{d.job}</div>
+                <div class="mt-1 text-xs leading-relaxed text-muted-foreground">{d.note}</div>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
@@ -315,7 +330,7 @@ const breadcrumbSchema = {
           "Hi,\n\n" +
           "I ran the numbers on our remote-workforce tools. We're paying about " + s.fmt(s.curMo) +
           "/mo (" + s.fmt(s.curMo * 12) + "/yr) across " + s.cancel.length + " separate subscriptions.\n\n" +
-          "QuickZTNA replaces all of them in one bill for about " + s.fmt(s.qzMo) + "/mo — saving roughly " +
+          "QuickZTNA covers those jobs in one bill for about " + s.fmt(s.qzMo) + "/mo — saving roughly " +
           s.fmt(s.saveYr) + " a year (" + s.pct + "% lower) for our " + s.seats + " seats.\n\n" +
           "Tools we could cancel:\n" + list + "\n\n" +
           "It connects every device, stops data leaking to AI/SaaS tools, checks device posture, " +

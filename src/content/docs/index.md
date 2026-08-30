@@ -1,4 +1,4 @@
----
+﻿---
 title: "QuickZTNA developer documentation"
 description: "Reference documentation for QuickZTNA: CLI commands, REST API, security model, and SSO integrations. The contract between your systems and the QuickZTNA platform."
 section: "overview"
@@ -42,13 +42,13 @@ For people scanning to confirm the technical particulars before reading further:
 
 **Cryptographic primitives.** WireGuard data plane: Curve25519 (X25519) key exchange, ChaCha20-Poly1305 AEAD, BLAKE2s hashing. Ed25519 for device identity signatures. SHA-256 for content/integrity hashing. (Post-quantum hybrid key exchange is on the roadmap, not in the shipped client.)
 
-**Identity.** OIDC primary; SAML supported; SCIM 2.0 for user/group sync — available on every plan. Per-user MFA enforced through your IdP — QuickZTNA does not maintain a separate password.
+**Identity.** OIDC primary; SAML login is currently disabled pending a security fix; SCIM 2.0 for user/group sync — available on every plan. Per-user MFA enforced through your IdP — QuickZTNA does not maintain a separate password.
 
 **API.** REST over HTTPS with bearer tokens. OpenAPI 3.1 specification. JSON request and response bodies. RFC 7807 error format. Rate-limited per organization with documented limits.
 
 **Compliance.** GDPR-aligned with documented data flows and a DPA; HIPAA BAA on Business. SOC 2 Type II and ISO 27001 in progress (target 2026).
 
-**Audit.** Every administrative action, every policy decision, and every authentication is logged. Free plan: 90-day retention with dashboard query. Business: one year, queryable via API, exportable to SIEM, with real-time event streaming.
+**Audit.** Every administrative action, every policy decision, and every authentication is logged, with 90-day retention on both plans — queryable from the dashboard and via the API, exportable to your SIEM, with real-time event streaming.
 
 **Hosting.** Fully managed cloud service; self-hosting is not offered today. Contact sales@quickztna.com if it's a requirement.
 

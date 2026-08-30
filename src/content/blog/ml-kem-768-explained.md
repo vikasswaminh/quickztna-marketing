@@ -1,6 +1,6 @@
----
-title: "ML-KEM-768 Explained: The Quantum-Safe Algorithm in Every QuickZTNA Tunnel"
-description: "ML-KEM-768 is the NIST-standardised post-quantum KEM in every QuickZTNA tunnel. How it works, real benchmarks, and why we pair it with X25519."
+﻿---
+title: "ML-KEM-768 Explained: The NIST Quantum-Safe KEM (FIPS 203)"
+description: "ML-KEM-768 is the NIST-standardised post-quantum KEM published as FIPS 203. How the algorithm works, real benchmarks, key sizes, and why hybrids pair it with X25519."
 publishedAt: 2026-04-24
 author:
   name: QuickZTNA Engineering
@@ -32,7 +32,7 @@ faq:
 
 ## TL;DR
 
-ML-KEM-768 is the NIST-standardised post-quantum key encapsulation mechanism published as [FIPS 203](https://csrc.nist.gov/pubs/fips/203/final) on August 13, 2024. It is derived from CRYSTALS-Kyber and based on the hardness of the Module Learning With Errors problem. In QuickZTNA, every WireGuard tunnel uses ML-KEM-768 in a hybrid combination with X25519, so that breaking a tunnel requires breaking both a post-quantum lattice scheme and a classical elliptic-curve scheme. A public key is 1,184 bytes, a ciphertext is 1,088 bytes, and a shared secret is 32 bytes. Encapsulation and decapsulation each run in well under a millisecond on commodity hardware. This post explains how ML-KEM-768 works, how we use it, and what to ask other vendors before you trust their "quantum-safe" marketing.
+ML-KEM-768 is the NIST-standardised post-quantum key encapsulation mechanism published as [FIPS 203](https://csrc.nist.gov/pubs/fips/203/final) on August 13, 2024. It is derived from CRYSTALS-Kyber and based on the hardness of the Module Learning With Errors problem. In a hybrid deployment it is paired with X25519, so that breaking a tunnel requires breaking both a post-quantum lattice scheme and a classical elliptic-curve scheme. A public key is 1,184 bytes, a ciphertext is 1,088 bytes, and a shared secret is 32 bytes. Encapsulation and decapsulation each run in well under a millisecond on commodity hardware. This post explains how ML-KEM-768 works and what to ask a vendor before you trust their "quantum-safe" marketing. To be explicit about our own product: QuickZTNA does **not** implement post-quantum key exchange — its tunnels are classical WireGuard (X25519 + ChaCha20-Poly1305).
 
 ## Who this is for
 
@@ -121,7 +121,7 @@ During the four-year NIST process, the CRYSTALS-Kyber submission went through ro
 2. **Implicit rejection value derivation.** In Kyber, the "implicit rejection" response for a malformed ciphertext was derived differently. ML-KEM fixed the procedure to avoid a potential variant of the FO transform ambiguity.
 3. **Deterministic encapsulation API.** FIPS 203 specifies a deterministic KeyGen that accepts a seed, simplifying known-answer testing and FIPS 140-3 validation.
 
-Practical implication: if you have code that uses a pre-standard Kyber library from 2022 or 2023, you cannot interoperate with a peer running ML-KEM. You must upgrade. Every major language has a standards-conformant implementation today. The Go 1.24 standard library, which QuickZTNA uses, exposes ML-KEM-768 through the `crypto/mlkem` package.
+Practical implication: if you have code that uses a pre-standard Kyber library from 2022 or 2023, you cannot interoperate with a peer running ML-KEM. You must upgrade. Every major language has a standards-conformant implementation today. The Go standard library exposes ML-KEM-768 through the `crypto/mlkem` package from Go 1.24 onward.
 
 ## 7. Hybrid mode: X25519 + ML-KEM-768
 
@@ -209,7 +209,7 @@ Ten things to verify when you ship ML-KEM-768 yourself.
 7. **Validate public keys at the deserialisation boundary.** FIPS 203 specifies that encapsulators must check that the public key decodes to valid polynomial coefficients. A buggy decoder can be used as an oracle.
 8. **Do not reuse nonces across rekey.** ML-KEM itself has no nonces; this is about the AEAD used afterwards. But a common mistake is to keep the AEAD key constant across rekey; rotate it.
 9. **Keep a compile-time flag for classical-only fallback.** Operators sometimes have to disable PQC to interoperate with stale peers. Make it loud and logged, not silent.
-10. **Log the key exchange mode in your session table.** You want to grep through logs later and prove what crypto protected which session. We log `kex=hybrid-x25519-mlkem768` on every established tunnel.
+10. **Log the key exchange mode in your session table.** You want to grep through logs later and prove what crypto protected which session — a line such as `kex=hybrid-x25519-mlkem768` per established tunnel.
 
 ## 11. Compliance posture: CNSA 2.0, BSI, ANSSI
 
@@ -265,7 +265,9 @@ Primary sources first, secondary reading after. All links verified on the publis
 
 ## Try QuickZTNA
 
-ML-KEM-768 is not a feature gate. Every QuickZTNA tunnel — on every plan, including the Free tier — runs hybrid X25519 + ML-KEM-768 by default. Start a free account, add a peer, and run `ztna status` to see the exact key exchange mode reported for each tunnel. If you need ML-KEM-1024 for CNSA 2.0 alignment, [contact sales](mailto:sales@quickztna.com) — it is on the 2026-Q3 roadmap.
+To be direct about where we stand: QuickZTNA does **not** ship post-quantum key exchange. Our tunnels are classical WireGuard — X25519 for key agreement, ChaCha20-Poly1305 for the data channel — and we are not promising a PQC date we have not built. If post-quantum key exchange is a hard requirement for you today, this post is the checklist to take to vendors who claim it; hold them to §12's questions rather than to a marketing badge.
+
+What QuickZTNA does offer is the rest of the Zero Trust stack: a WireGuard mesh, ABAC access policy, device posture with auto-quarantine, DNS threat filtering, JIT access with approvals, and signed compliance evidence. Start a free account and run `ztna status` to see exactly what protects each tunnel.
 
 <!--
 scorecard:

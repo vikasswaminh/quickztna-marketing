@@ -1,4 +1,4 @@
----
+﻿---
 title: "NetBird vs Tailscale vs QuickZTNA: A Developer-Focused Comparison"
 description: "NetBird, Tailscale, and QuickZTNA — three WireGuard mesh products for developers. Architecture, licensing, feature depth, and security model compared."
 publishedAt: 2026-04-30
@@ -19,11 +19,11 @@ faq:
   - q: "Are NetBird, Tailscale, and QuickZTNA all based on WireGuard?"
     a: "Yes. All three use WireGuard as the data-plane protocol for peer-to-peer tunnels between devices. The differences are in the coordination plane (Tailscale managed, NetBird managed or self-host, QuickZTNA managed cloud), the licence of the codebase (Tailscale proprietary, NetBird BSD-3-Clause, QuickZTNA proprietary), and the feature layer built on top."
   - q: "Which has the best free tier?"
-    a: "All three have meaningful free tiers as of 2026. Exact limits change — verify current numbers on each vendor's pricing page. The three products differ less on free-tier generosity than they do on what is gated behind paid tiers. QuickZTNA deliberately keeps ACLs, SSO, FIDO2, and remote SSH on the Free tier."
+    a: "All three have meaningful free tiers as of 2026. Exact limits change — verify current numbers on each vendor's pricing page. The three products differ less on free-tier generosity than they do on what is gated behind paid tiers. QuickZTNA deliberately keeps ACLs, SSO, TOTP MFA, and remote SSH on the Free tier."
   - q: "Which is easiest to self-host?"
     a: "NetBird, because the managed and self-host products come from the same codebase. Tailscale is not self-hostable as a company product, but [Headscale](/blog/headscale-vs-managed-coordination) is an independent third-party implementation compatible with Tailscale clients. QuickZTNA is a managed cloud service today and does not offer self-host."
   - q: "What about post-quantum?"
-    a: "All three ship classical WireGuard today (Curve25519 + ChaCha20-Poly1305), which is secure against current adversaries. Hybrid post-quantum key exchange (X25519 + ML-KEM) is on industry roadmaps — including QuickZTNA's — but is not in QuickZTNA's shipped client today. Verify each vendor's current documented status."
+    a: "All three ship classical WireGuard today (Curve25519 + ChaCha20-Poly1305), which is secure against current adversaries. Hybrid post-quantum key exchange (X25519 + ML-KEM) is on several industry roadmaps; QuickZTNA has not implemented it and does not have it planned. Verify each vendor's current documented status."
   - q: "Do I need a coordination server to use WireGuard directly?"
     a: "No, you can run bare WireGuard with static config files and static peer lists. The coordination-server model only exists because managing peer discovery, key rotation, and access policies manually across many peers is operationally painful. All three products exist to solve that pain — with different trade-offs."
   - q: "Can these products talk to each other?"
@@ -32,9 +32,9 @@ faq:
 
 ## TL;DR
 
-NetBird, Tailscale, and QuickZTNA all build on WireGuard as the data-plane protocol and all deliver a mesh-VPN experience with centralised coordination. They differ in three important axes: licensing (BSD-3-Clause for NetBird, proprietary for Tailscale and QuickZTNA), self-host capability (NetBird fully, Tailscale not directly but Headscale exists, QuickZTNA managed cloud only), and the feature layer on top. Tailscale has the most mature developer ergonomics after multiple years of product iteration, NetBird has the strongest open-source story, and QuickZTNA ships the most complete ZTNA + workforce-security set: ABAC with device posture, file-scan DLP, a CASB approval workflow, software inventory, user-risk scoring, and an AI Operator for policy changes. This post is a developer-focused comparison, meaning we prioritise the practical engineering evaluation over marketing claims.
+NetBird, Tailscale, and QuickZTNA all build on WireGuard as the data-plane protocol and all deliver a mesh-VPN experience with centralised coordination. They differ in three important axes: licensing (BSD-3-Clause for NetBird, proprietary for Tailscale and QuickZTNA), self-host capability (NetBird fully, Tailscale not directly but Headscale exists, QuickZTNA managed cloud only), and the feature layer on top. Tailscale has the most mature developer ergonomics after multiple years of product iteration, NetBird has the strongest open-source story, and QuickZTNA goes deepest on access governance: ABAC with device posture, JIT access requests with approvals, access-review campaigns, policy version rollback, DNS threat filtering, a per-org edge firewall, and signed compliance evidence — with remote shell included on the free tier. This post is a developer-focused comparison, meaning we prioritise the practical engineering evaluation over marketing claims.
 
-> **Adding up your tool bill?** A mesh VPN is usually just one line item — most teams also pay separately for remote support, a ZTNA gateway, DLP and a monitoring tool. QuickZTNA bundles all of them into one agent and one bill. [See what you'd save →](/savings/) — up to 90% lower.
+> **Adding up your tool bill?** A mesh VPN is usually just one line item — most teams also pay separately for a ZTNA gateway, DNS filtering and a monitoring tool. QuickZTNA folds those into one agent and one bill. [See what you'd save →](/savings/)
 
 ## Who this is for
 
@@ -65,7 +65,7 @@ Where they diverge starts in the coordination plane and moves outward from there
 
 ### QuickZTNA
 
-QuickZTNA runs a proprietary coordination server with managed regional deployments. The data plane is classical WireGuard (Curve25519 + ChaCha20-Poly1305); hybrid post-quantum key exchange is on the roadmap, not the shipped client (see [our ML-KEM-768 post](/blog/ml-kem-768-explained) for the background). DERP-style relays in two regions (Bangalore and Frankfurt) provide relay fallback.
+QuickZTNA runs a proprietary coordination server with managed regional deployments. The data plane is classical WireGuard (Curve25519 + ChaCha20-Poly1305); post-quantum key exchange is not implemented and not planned (see [our ML-KEM-768 post](/blog/ml-kem-768-explained) for the background). DERP-style relays in two regions (Bangalore and Frankfurt) provide relay fallback.
 
 **Key takeaway.** All three are architecturally similar at a high level. The visible differences are in what sits on top of the WireGuard data plane — the workforce-security layer in QuickZTNA, the open-source coordination in NetBird, the multi-year-refined developer ergonomics in Tailscale.
 
@@ -124,7 +124,7 @@ NetBird's post-quantum state should be verified against [the current NetBird doc
 
 ### QuickZTNA
 
-QuickZTNA's tunnels use classical WireGuard today (Curve25519 + ChaCha20-Poly1305). Hybrid post-quantum key exchange (X25519 + ML-KEM-768) is on the roadmap — see [our ML-KEM-768 post](/blog/ml-kem-768-explained) for the construction and the standards timeline — but it is not in the shipped client today.
+QuickZTNA's tunnels use classical WireGuard (Curve25519 + ChaCha20-Poly1305). Post-quantum key exchange is not implemented and is not planned — if that is a requirement, none of these three vendors should be chosen on our account. See [our ML-KEM-768 post](/blog/ml-kem-768-explained) for background on the algorithm.
 
 **For teams where PQ is a hard requirement today, none of these three ships it on the tunnel yet — verify each vendor's current status.** For teams where PQ is a future concern, all three are tracking the transition.
 
@@ -140,9 +140,9 @@ NetBird has been growing its compliance story; verify current attestations with 
 
 ### QuickZTNA
 
-QuickZTNA's paid tiers add workforce-security features — file-scan DLP, a CASB approval workflow, workforce analytics (opt-in, with a consent dialog on monitored devices), software inventory, and user-risk scoring. Audit logs are exportable to SIEM formats. See [our compliance posts](/blog/nis2-remote-access-requirements) for how this maps to NIS2 and DORA requirements.
+QuickZTNA has identical features on both plans — DNS threat filtering, a per-org edge firewall, file-hash malware detection, JIT access with approvals, access-review campaigns, and versioned ACLs with rollback. Audit logs are exportable to SIEM formats. Free and Business differ only in seats and devices per seat.
 
-For regulated-entity deployments where workforce-security controls (DLP, device posture, audit, CASB) are a compliance expectation, QuickZTNA's feature set is more complete. For simple developer-mesh use cases, the compliance surface is less material.
+For regulated-entity deployments where access governance (JIT approvals, access reviews, device posture, exportable audit evidence) is a compliance expectation, QuickZTNA's feature set is more complete. For simple developer-mesh use cases, the compliance surface is less material.
 
 ## 8. Developer experience
 
@@ -178,12 +178,12 @@ A flowchart in prose.
 - (QuickZTNA is managed cloud only — not a fit when self-host is required.)
 
 **If the deepest ZTNA + workforce-security feature set is the priority:**
-- ABAC + device posture, file-scan DLP, CASB, AI Operator, and free SSH: **QuickZTNA**
+- ABAC + device posture, DNS threat filtering, JIT access governance, and free SSH: **QuickZTNA**
 
 **If maximum developer ergonomics and multi-year community maturity is the priority:**
 - **Tailscale**
 
-**If compliance features (DLP, device posture, workforce analytics, audit-log depth) are part of the evaluation:**
+**If compliance features (device posture, JIT approvals, access reviews, audit-log depth) are part of the evaluation:**
 - **QuickZTNA Business or Workforce**
 
 **If open source under a permissive licence is the non-negotiable:**

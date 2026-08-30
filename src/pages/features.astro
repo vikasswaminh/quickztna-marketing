@@ -4,7 +4,6 @@ import Button from "@/components/ui/Button.astro";
 import {
   ArrowRight,
   Network,
-  Sparkles,
   ShieldCheck,
   Gavel,
   Fingerprint,
@@ -51,19 +50,14 @@ const sections: Section[] = [
   },
   {
     n: "02",
-    title: "AI & Assistant",
-    blurb: "Claude-powered. Answers questions about your tenant, drafts policies, explains events, takes action.",
-    icon: Sparkles,
+    title: "Admin Insights",
+    blurb: "Deterministic reports computed from your own tenant data. No model in the decision path.",
+    icon: BarChart3,
     features: [
-      { name: "AI chat", desc: "Conversational Q&A about your network, policies, users, and recent events.", plans: ["free", "business"] },
-      { name: "Natural-language ACLs", desc: "Type \"Laptops can SSH to prod between 9–6 IST\" — get a ready-to-apply ACL rule.", plans: ["free", "business"] },
-      { name: "Event summarizer", desc: "24-hour security digest. Anomalies surfaced, noise suppressed.", plans: ["free", "business"] },
-      { name: "Security digest", desc: "Daily report: machines, threats blocked, compliance rate, JIT requests.", plans: ["free", "business"] },
-      { name: "Policy drift detection", desc: "AI reviews your ACLs vs industry baselines. Flags overly permissive rules.", plans: ["free", "business"] },
-      { name: "Access heatmap", desc: "Visualize which users touch which resources, when, how often.", plans: ["free", "business"] },
-      { name: "AI actions", desc: "Approved auto-remediation. AI proposes, admin confirms, system executes with rollback.", plans: ["free", "business"] },
-      { name: "Incident response playbooks", desc: "Generate context-aware response steps for a specific incident.", plans: ["free", "business"] },
-      { name: "JIT recommendations", desc: "Suggests time-bounded grants based on historical access patterns.", plans: ["free", "business"] },
+      { name: "Security digest", desc: "24-hour report: machines, threats blocked, compliance rate, JIT requests.", plans: ["free", "business"] },
+      { name: "Policy drift detection", desc: "Flags overly permissive ACL rules against a deterministic baseline.", plans: ["free", "business"] },
+      { name: "Access heatmap", desc: "Which users touch which resources, when, how often.", plans: ["free", "business"] },
+      { name: "Optional LLM summary", desc: "Any insight can be rendered as a written summary — opt-in per request, off by default. The underlying numbers are computed, not generated.", plans: ["free", "business"] },
     ],
   },
   {
@@ -72,12 +66,10 @@ const sections: Section[] = [
     blurb: "Defense in depth. Shipped as a single agent, not five separate tools to deploy.",
     icon: ShieldCheck,
     features: [
-      { name: "DNS filtering", desc: "Per-org allow/deny lists. Domain-query analytics per device.", plans: ["free", "business"] },
+      { name: "DNS threat filtering", desc: "Multi-feed phishing and malware blocklists refreshed every 6 hours, plus per-org allow/deny lists. An org is only ever filtered by the feeds it enabled.", plans: ["free", "business"] },
       { name: "Cloud firewall (FaaS)", desc: "Stateful firewall rules at the edge. Per-app, per-user, per-tag.", plans: ["free", "business"] },
-      { name: "Anomaly detection", desc: "UEBA baselines. Flags unusual access patterns, data movement, login geography.", plans: ["free", "business"] },
-      { name: "Data Loss Prevention (DLP)", desc: "Scans Downloads / Documents / Desktop / /tmp filesystem for credit cards, SSNs, API keys, private keys. Redacts matches; reports to dashboard.", plans: ["free", "business"] },
-      { name: "CASB", desc: "SaaS app discovery, shadow-IT visibility, approval workflow.", plans: ["free", "business"] },
-      { name: "User risk scoring", desc: "Per-user risk timeline. Combines posture, behavior, threat intel.", plans: ["free", "business"] },
+      { name: "Threat-IP blocking", desc: "Blocked-IP lists delivered per organization to every endpoint, with MISP feed import.", plans: ["free", "business"] },
+      { name: "Malware detection (file-hash)", desc: "Agents report SHA-256 file hashes; confirmed-malicious hits are recorded and, in enforce mode, quarantine the device.", plans: ["free", "business"] },
     ],
   },
   {
@@ -101,7 +93,7 @@ const sections: Section[] = [
     features: [
       { name: "Email + password", desc: "PBKDF2-SHA256 100K iterations. Timing-safe. Per-email rate-limited.", plans: ["free", "business"] },
       { name: "GitHub / Google OAuth", desc: "One-click sign-in for dev teams. Respects org domains.", plans: ["free", "business"] },
-      { name: "SAML / OIDC SSO", desc: "Okta, Azure AD, Google Workspace, Auth0, any IdP.", plans: ["free", "business"] },
+      { name: "OIDC SSO", desc: "Okta, Azure AD, Google Workspace, Auth0, any OIDC-compliant IdP. (SAML login is temporarily disabled pending a security fix — use OIDC with the same providers.)", plans: ["free", "business"] },
       { name: "TOTP MFA", desc: "RFC 6238. Replay-protected (used codes cached 90s). 10 backup codes per user.", plans: ["free", "business"] },
       { name: "SCIM 2.0 provisioning", desc: "Automated user lifecycle from Okta, Azure AD. Groups sync.", plans: ["free", "business"] },
       { name: "Org groups (departments)", desc: "Sub-tenants within an org. Scoped ACLs, isolated users.", plans: ["free", "business"] },
@@ -110,12 +102,11 @@ const sections: Section[] = [
   {
     n: "06",
     title: "Endpoint Management",
-    blurb: "One agent — remote commands, secure shell, WebRTC desktop, OTA updates.",
+    blurb: "One agent — remote diagnostics, secure shell, device lifecycle, OTA updates.",
     icon: Monitor,
     features: [
       { name: "Remote management", desc: "Run safe diagnostic commands across the fleet. Whitelisted verbs only.", plans: ["free", "business"] },
-      { name: "Remote desktop (WebRTC)", desc: "Browser-based remote control. Consent-gated, session-recorded.", plans: ["free", "business"] },
-      { name: "Software inventory", desc: "Installed-application list per device, with versions and publishers.", plans: ["free", "business"] },
+      { name: "Remote shell", desc: "Browser-based shell for diagnostics, opened with a single-use ticket. Included on every plan, not gated behind an enterprise tier.", plans: ["free", "business"] },
       { name: "Device wipe / lock", desc: "Admin can lock or wipe stolen/lost devices with signed commands.", plans: ["free", "business"] },
       { name: "OTA agent updates", desc: "Self-update via signed releases. Controlled by client_versions table.", plans: ["free", "business"] },
     ],
@@ -126,26 +117,11 @@ const sections: Section[] = [
     blurb: "Protect internal apps, databases, Kubernetes, cloud VPCs — through the same tailnet.",
     icon: Database,
     features: [
-      { name: "Secrets vault", desc: "AES-256-GCM encrypted secrets with versioning and rotation policies.", plans: ["free", "business"] },
       { name: "Database access broker", desc: "Register PG/MySQL/Mongo/Redis. JIT credentials, scoped queries, audit.", plans: ["free", "business"] },
       { name: "Kubernetes access", desc: "Identity-scoped kubeconfig. RBAC inherited from your org roles.", plans: ["free", "business"] },
       { name: "App connector", desc: "Protect internal web apps (Jira, Jenkins, Grafana) with reverse proxy + ZTNA auth.", plans: ["free", "business"] },
       { name: "Webhook forwarder", desc: "Inbound webhooks delivered through the mesh to private targets.", plans: ["free", "business"] },
       { name: "Terraform provider", desc: "Full IaC for machines, ACLs, DNS, users, settings. GitOps-friendly.", plans: ["free", "business"] },
-    ],
-  },
-  {
-    n: "08",
-    title: "Workforce & Productivity",
-    blurb: "Built for distributed teams. Consent-first, GDPR-aware, compliance-ready.",
-    icon: BarChart3,
-    features: [
-      { name: "Session tracking", desc: "Login/logout, active time, idle windows, machine activity.", plans: ["free", "business"] },
-      { name: "App & domain usage", desc: "Top domains per user, per machine. Productive vs unproductive categorization.", plans: ["free", "business"] },
-      { name: "Productivity scoring", desc: "Rule-based scoring. Custom rules per team. Weekly reports.", plans: ["free", "business"] },
-      { name: "Schedule compliance", desc: "Work-hour adherence. Flag excessive overtime, weekend work.", plans: ["free", "business"] },
-      { name: "Digital Experience Monitoring", desc: "Per-device network health: latency, packet loss, jitter. Health score.", plans: ["free", "business"] },
-      { name: "Monitoring consent (GDPR)", desc: "Required user acknowledgment before analytics start. Audit-logged.", plans: ["free", "business"] },
     ],
   },
 ];
@@ -170,15 +146,15 @@ const featuresFaq = [
   },
   {
     q: "What is the difference between the Free and Business plans?",
-    a: "Features are identical — both plans include the entire platform (WireGuard ZTNA mesh, ABAC + device posture, DNS filtering, AI assistant, remote shell + desktop, session recording, DLP, CASB, SCIM, secrets vault, and more). The only difference is scale: Free covers up to 5 users (and up to 100 devices); Business ($10 per user per month) is unlimited users billed per seat, with up to 10,000 devices. Billing is per user, never per device — you pay to grow, not to unlock features.",
+    a: "Features are identical — both plans include the entire platform (WireGuard ZTNA mesh, ABAC + device posture, DNS threat filtering, edge firewall, JIT access, access reviews, compliance reports, remote shell, SSO, SCIM, and more). The only difference is scale: Free covers 5 users and up to 100 devices; Business ($10 per user per month) is unlimited users billed per seat, with up to 10,000 devices. Billing is per user, never per device — you pay to grow, not to unlock features.",
   },
   {
-    q: "Does QuickZTNA support SAML / OIDC SSO?",
-    a: "Yes. SAML 2.0 and OIDC SSO work on every plan including Free. Pre-configured connectors exist for Google Workspace, Microsoft Entra (formerly Azure AD), Okta, Authentik, GitHub, and any standards-compliant identity provider. SCIM 2.0 provisioning for proactive user lifecycle management is included on every plan.",
+    q: "Does QuickZTNA support OIDC SSO?",
+    a: "Yes. OIDC SSO works on every plan including Free, with pre-configured connectors for Google Workspace, Microsoft Entra (formerly Azure AD), Okta, Authentik, GitHub, and any standards-compliant identity provider. SCIM 2.0 provisioning and TOTP multi-factor authentication are included on every plan. SAML login is temporarily disabled pending a security fix — the same identity providers work over OIDC in the meantime.",
   },
   {
     q: "Can QuickZTNA replace my existing VPN?",
-    a: "Yes, for most workloads. QuickZTNA is a mesh VPN with WireGuard data plane plus the full ZTNA feature set (identity-based ACLs, continuous device posture, audit log retention, AI Operator for policy changes). Teams typically migrate user-VPN, site-to-site, and bastion-host access. Hardware VPN concentrators and IPsec-specific compliance scenarios may still need a separate solution.",
+    a: "Yes, for most workloads. QuickZTNA is a mesh VPN with WireGuard data plane plus the full ZTNA feature set (identity-based ACLs, continuous device posture, audit log retention, JIT access with approvals and policy rollback). Teams typically migrate user-VPN, site-to-site, and bastion-host access. Hardware VPN concentrators and IPsec-specific compliance scenarios may still need a separate solution.",
   },
   {
     q: "Which platforms does QuickZTNA support?",
@@ -193,8 +169,8 @@ const featuresFaq = [
     a: "Not today — QuickZTNA is a fully managed cloud service. If self-hosted or air-gapped deployment is a requirement for your organization, contact sales@quickztna.com to discuss your needs and our roadmap.",
   },
   {
-    q: "Does the AI assistant share data with third parties?",
-    a: "The AI assistant uses Anthropic's Claude API. Tenant data sent to the API is subject to Anthropic's enterprise data handling: not retained, not used for training. Admins can disable AI features entirely if their compliance posture requires no third-party processing. The AI is a convenience layer over our own API — every action is auditable and reversible.",
+    q: "Does any tenant data go to a third-party AI provider?",
+    a: "Not by default. Admin Insights are computed deterministically from your own tenant data — no model sits in the decision path. A written summary of an insight can be requested explicitly per call, and only then is that report's content sent to the LLM provider; leave it off and no tenant data reaches a third-party model at all.",
   },
 ];
 
@@ -213,8 +189,8 @@ const featuresWebPageSchema = {
   "@type": "WebPage",
   "@id": "https://www.quickztna.com/features/",
   url: "https://www.quickztna.com/features/",
-  name: "QuickZTNA features — ZTNA mesh, AI assistant, workforce analytics",
-  description: "Complete feature matrix across eight categories: networking, AI, security, governance, identity, endpoint management, data access, workforce analytics.",
+  name: "QuickZTNA features — ZTNA mesh, ABAC policies, DNS threat filtering",
+  description: "Complete feature matrix across seven categories: networking, admin insights, security, governance, identity, endpoint management, and data access.",
   isPartOf: { "@id": "https://www.quickztna.com/#website" },
   about: { "@type": "Thing", name: "Zero Trust Network Access features" },
   primaryImageOfPage: { "@type": "ImageObject", url: "https://www.quickztna.com/favicon.svg" },
@@ -230,8 +206,8 @@ const featuresBreadcrumbSchema = {
 };
 ---
 <SiteLayout
-  title="Features — QuickZTNA: ZTNA mesh, AI assistant, workforce analytics"
-  description="Complete QuickZTNA feature matrix: WireGuard mesh, ABAC policies, AI Operator, SSO + SCIM, filesystem DLP, CASB, workforce analytics."
+  title="Features — QuickZTNA: ZTNA mesh, ABAC policies, DNS threat filtering"
+  description="Complete QuickZTNA feature matrix: WireGuard mesh, ABAC policies with device posture, DNS threat filtering, JIT access governance, SSO + SCIM, Terraform."
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(featuresWebPageSchema)} is:inline />
@@ -247,9 +223,9 @@ const featuresBreadcrumbSchema = {
         One agent. <span class="text-gradient">Every layer</span> of access.
       </h1>
       <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-        QuickZTNA consolidates your VPN, SSO gateway, secrets manager, SIEM, DLP, session recorder,
-        and Terraform workflow into one tailnet. Every feature below is shipped, tested, and gated
-        by plan — no coming-soon shelf.
+        QuickZTNA consolidates your VPN, SSO gateway, DNS filtering, access-governance workflow,
+        and Terraform state into one tailnet. Every feature below is shipped today and available on
+        both plans — no coming-soon shelf, and nothing here is gated behind an upgrade.
       </p>
       <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
         <Button size="lg" href={AUTH_URL} class="h-11 px-6 font-medium">

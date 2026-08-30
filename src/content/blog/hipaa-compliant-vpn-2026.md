@@ -1,4 +1,4 @@
----
+﻿---
 title: "HIPAA-Compliant VPN in 2026: What the Rule Actually Says About Encryption"
 description: "HIPAA encryption is 'addressable', not optional. The Security Rule technical safeguards for remote access, and what a HIPAA-aligned VPN looks like in 2026."
 publishedAt: 2026-05-02
@@ -235,7 +235,7 @@ Primary sources. All links verified on the publish date.
 
 ## Try QuickZTNA
 
-QuickZTNA includes HIPAA-aligned features on every plan: per-session audit log export, FIDO2 MFA, device posture, and hybrid PQ encryption on every tunnel. [Contact sales](mailto:sales@quickztna.com) for a BAA and the HIPAA evaluation brief.
+QuickZTNA includes HIPAA-aligned features on every plan: per-session audit log export, TOTP MFA, device posture, JIT access with approvals, and WireGuard encryption (X25519 + ChaCha20-Poly1305) on every tunnel. Note that it does not implement post-quantum cryptography. [Contact sales](mailto:sales@quickztna.com) for a BAA and the HIPAA evaluation brief.
 
 <!--
 scorecard:

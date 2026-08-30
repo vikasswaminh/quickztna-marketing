@@ -1,4 +1,4 @@
----
+﻿---
 title: "Plans & billing"
 description: "QuickZTNA's two plans — Free and Business — with full feature parity, per-seat pricing, an org-wide device cap, and billing via Dodo Payments."
 section: "admin"
@@ -7,9 +7,9 @@ updatedAt: 2026-06-26
 primaryKeyword: "QuickZTNA plans billing"
 faq:
   - q: "Is the Free plan really free forever?"
-    a: "Yes — up to 5 users and 100 devices, no trial timer, no credit card. Every feature is on Free: WireGuard mesh, MagicDNS, ABAC policies, device posture, DNS filtering, the AI assistant, remote SSH, DLP, CASB, SCIM, and remote desktop — the lot. You upgrade to Business only for more seats, never to unlock features."
+    a: "Yes — up to 5 users and up to 100 devices, no trial timer, no credit card. Every feature is on Free: WireGuard mesh, MagicDNS, ABAC policies, device posture, DNS threat filtering, edge firewall, JIT access, access reviews, remote SSH, SCIM, and compliance reports — the lot. You upgrade to Business only for more seats, never to unlock features."
   - q: "What's the difference between Free and Business?"
-    a: "Scale, not features. Both plans include the entire platform (full parity). Free is capped at 5 users and 100 devices; Business is $10 per user / month with unlimited seats and a 10,000-device cap. Billing is per user — devices are never metered per seat."
+    a: "Scale, not features. Both plans include the entire platform (full parity). Free is capped at 5 users and 100 devices; Business is $10 per user / month with unlimited seats and a 10,000-device ceiling. Billing is per user — devices are never metered."
   - q: "How quickly does a plan change take effect?"
     a: "Seat and device limits update on the next subscription/seat sync, and entitlements are cached per org for 600 seconds. Downgrades are non-destructive: nothing already registered is removed."
   - q: "What happens to child organizations' plans?"
@@ -22,8 +22,8 @@ This page covers the two plan tiers, how plan limits are enforced, and how billi
 
 QuickZTNA has **two plans with identical features** — you pay to scale, not to unlock.
 
-- **Free** — up to **5 users** and **100 devices**, forever. Every feature is included: WireGuard mesh, MagicDNS, ABAC policies, device posture, DNS filtering, the AI assistant, remote SSH, DLP, CASB, SCIM, remote desktop, secrets vault, and compliance reports — the entire platform.
-- **Business** — **$10 per user / month**, billed per seat. Unlimited users and a **10,000-device cap**. Same features as Free, plus priority email support. No trial and no card to start — you begin on Free and upgrade when you outgrow the seat limit.
+- **Free** — up to **5 users** and up to **100 devices**, forever. Every feature is included: WireGuard mesh, MagicDNS, ABAC policies, device posture, DNS threat filtering, edge firewall, JIT access, access reviews, remote SSH, SCIM, and compliance reports — the entire platform.
+- **Business** — **$10 per user / month**, billed per seat. Unlimited users and up to **10,000 devices**. Same features as Free, plus priority email support. No trial and no card to start — you begin on Free and upgrade when you outgrow the seat limit.
 
 Exact prices and limits can change — the [pricing page](/pricing/) is canonical.
 
@@ -43,16 +43,11 @@ Every capability below ships on **both** Free and Business — there are no paid
 | Capability | Page |
 | --- | --- |
 | DNS threat/category filtering | [DNS filtering](/guide/admin/dns-filtering/) |
-| Shadow-IT discovery & app policy (CASB) | [CASB](/guide/admin/casb/) |
-| File-scan data-loss detection (DLP) | [DLP](/guide/admin/dlp/) |
+| File-hash malware detection | [Malware detection](/guide/admin/dlp/) |
 | SCIM 2.0 provisioning | [Identity](/guide/admin/identity/) |
-| Workforce analytics (sessions, schedule, productivity, inventory) | [Workforce analytics](/guide/admin/workforce-analytics/) |
-| Seven-factor user-risk scoring | [Workforce analytics](/guide/admin/workforce-analytics/) |
 | Remote SSH/shell | [Remote access](/guide/admin/remote-access/) |
-| WebRTC remote desktop | [Remote access](/guide/admin/remote-access/) |
-| Encrypted secrets vault | [Observability](/guide/admin/observability/) |
+| JIT access requests + approvals | [Access control](/guide/admin/access-control/) |
 | Drift evaluation + signed compliance reports | [Observability](/guide/admin/observability/) |
-| AI Operator (NL ACL builder, event summarizer, security digest, AI chat, policy-drift) | [AI Operator](/guide/admin/ai-operator/) |
 
 Posture, ACLs, and the mesh are part of the baseline on both plans.
 

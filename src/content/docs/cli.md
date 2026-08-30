@@ -1,4 +1,4 @@
----
+﻿---
 title: "QuickZTNA CLI: command reference"
 description: "The complete QuickZTNA ztna CLI reference: every command and flag with runnable examples — the same binary on Linux, macOS, and Windows."
 section: "cli"
@@ -41,7 +41,7 @@ ztna login                          # browser SSO (default)
 ztna login --auth-key tskey-auth-xxx   # pre-auth key (non-interactive)
 ztna login --github                 # GitHub OAuth via browser
 ztna login --google                 # Google OAuth via browser
-ztna login --sso <org-slug>         # SSO (OIDC/SAML) via browser
+ztna login --sso <org-slug>         # SSO (OIDC) via browser
 ztna login --interactive            # email/password in the terminal
 ```
 

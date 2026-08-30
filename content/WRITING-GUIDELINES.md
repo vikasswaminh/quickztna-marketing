@@ -168,10 +168,20 @@ Bad:
 
 ### 2.9 Claims about our own product
 
-Cross-check against `f:/quickztna/quickztna/CLAUDE.md` "Architecture" and `/features` before writing. If the feature is on roadmap but not shipped, say so:
+Cross-check against `f:/quickztna/quickztna/docs/FEATURES.md` (the feature matrix, keyed to
+the handler that implements each one) and `/features` before writing. **If no handler
+implements it, it is not a feature — do not write it.** State shipped facts plainly:
 
-> **Shipped:** X25519 + ML-KEM-768 hybrid on every tunnel.
-> **Roadmap (2026-Q3):** ML-KEM-1024 opt-in for CNSA 2.0 alignment.
+> **Shipped:** WireGuard tunnels (X25519 + ChaCha20-Poly1305) on every plan.
+> **Not shipped:** post-quantum key exchange. Do not describe ML-KEM/PQC as ours.
+
+**Withdrawn capabilities — never claim these.** The 2026 lean pivot removed DLP
+PII-scanning (only file-hash malware detection remains), CASB, workforce analytics,
+session recording, remote desktop, software inventory, user-risk scoring, the AI
+Operator/assistant, and the secrets vault. There is no FIDO2/WebAuthn (TOTP only), no SAML
+login (disabled), no self-host, and no "Workforce" plan — there are exactly two plans,
+Free and Business. `scripts/lint-content.mjs` blocks these at build time; if the linter
+stops you, the copy is wrong, not the linter.
 
 ---
 

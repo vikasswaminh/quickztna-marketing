@@ -1,4 +1,4 @@
----
+﻿---
 title: "Cloudflare Access Alternatives for Teams That Want a Real Agent"
 description: "Cloudflare Access is an edge-native identity proxy, not a device-agent mesh. If you need a real agent, data-plane control, or self-host — these alternatives."
 publishedAt: 2026-04-30
@@ -34,7 +34,7 @@ faq:
 
 Cloudflare Access is an edge-native identity-aware proxy. It is strong for user-to-web-app access with global-edge latency benefits, but it is not the right product for every remote-access pattern. Teams looking for a Cloudflare Access alternative typically want one of four things: a real device agent with mesh connectivity, an audit-able open-protocol data plane (usually WireGuard), a self-hostable coordination plane, or post-quantum key exchange on the tunnel itself rather than only on the Cloudflare edge. The serious alternatives in 2026: Tailscale, NetBird, QuickZTNA, Twingate, Zscaler Private Access, and AWS Verified Access. This post compares each against the typical motivations for leaving Cloudflare Access.
 
-> **Adding up your tool bill?** An access proxy like Cloudflare Access is usually just one line item — most teams also pay separately for a device-agent mesh, remote support, DLP and a monitoring tool. QuickZTNA bundles all of them into one agent and one bill. [See what you'd save →](/savings/) — up to 90% lower.
+> **Adding up your tool bill?** An access proxy like Cloudflare Access is usually just one line item — most teams also pay separately for a device-agent mesh, DNS filtering and a monitoring tool. QuickZTNA folds those into one agent and one bill. [See what you'd save →](/savings/)
 
 ## Who this is for
 
@@ -102,13 +102,13 @@ Cloudflare has shipped post-quantum TLS 1.3 hybrid on its edge. For a team that 
 
 ## 6. Alternative 3 — QuickZTNA
 
-**Model.** Full ZTNA with a WireGuard data plane and a managed coordination plane, plus a workforce-security layer (DLP, device posture, CASB, AI Operator).
+**Model.** Full ZTNA with a WireGuard data plane and a managed coordination plane, plus DNS threat filtering, device posture, and an access-governance layer (JIT, access reviews, evidence bundles).
 
 **Fit against Cloudflare Access motivations.**
 - **Device-to-device mesh:** yes.
 - **Open data-plane protocol:** yes — WireGuard.
 - **Self-host coordination:** no — managed cloud service today.
-- **Tunnel-level post-quantum:** not in the shipped client today (classical WireGuard); on the roadmap. See [our ML-KEM-768 post](/blog/ml-kem-768-explained) for the background.
+- **Tunnel-level post-quantum:** not offered. Tunnels are classical WireGuard and post-quantum key exchange is not planned. See [our ML-KEM-768 post](/blog/ml-kem-768-explained) for background on the algorithm itself.
 - **Data sovereignty:** EU and US infrastructure regions.
 
 **Where it fits.** Teams whose Cloudflare-Access exit is driven by wanting a full ZTNA feature set on a mesh backbone, or by data-sovereignty constraints that Cloudflare's edge cannot meet.
@@ -161,7 +161,7 @@ Snapshot as of April 2026. Always verify against each vendor's current documenta
 | Architecture | Edge proxy | Mesh | Mesh | Mesh + ZTNA | ZTNA proxy | ZTNA proxy | Web-app proxy |
 | Data plane | CF proprietary | WireGuard | WireGuard | WireGuard | Proprietary | Proprietary | AWS-managed |
 | Self-host | No | No (Headscale exists) | Yes | No | Partial | No | No |
-| Free tier | Yes (verify current) | Yes | Yes | Yes (100 dev, 5 users) | Yes (limited) | No | Check AWS pricing |
+| Free tier | Yes (verify current) | Yes | Yes | Yes (5 users, 100 devices) | Yes (limited) | No | Check AWS pricing |
 | Tunnel-level PQ | Edge TLS 1.3 hybrid | Verify | Verify | Roadmap | Verify | Verify | Verify |
 | Mesh P2P | No | Yes | Yes | Yes | No | No | No |
 | Clientless browser | Yes | No | No | Partial (admin UI) | No | Yes | Yes |
@@ -171,7 +171,7 @@ Snapshot as of April 2026. Always verify against each vendor's current documenta
 
 1. **Mesh or proxy?** Mesh: Tailscale, NetBird, QuickZTNA. Proxy: Cloudflare Access, Twingate, Zscaler, AWS Verified Access.
 2. **Self-host required?** Yes: NetBird, Headscale (with Tailscale clients). No (managed): Cloudflare, QuickZTNA, Twingate, Zscaler, AWS.
-3. **Post-quantum on the tunnel?** Cloudflare has edge TLS 1.3 hybrid; QuickZTNA has it on the roadmap (classical WireGuard today); verify others.
+3. **Post-quantum on the tunnel?** Cloudflare has edge TLS 1.3 hybrid; QuickZTNA does not offer it (classical WireGuard today); verify others.
 4. **Data sovereignty?** Self-host: as above. Regional managed: QuickZTNA (EU/US), Zscaler (multiple regions), AWS Verified Access (regions).
 
 ## Further reading

@@ -1,6 +1,6 @@
----
-title: "Top 10 Database Access Control Tools for Zero Trust in 2026"
-description: "Direct database access is the last firewall exception holding your zero-trust architecture together. 10 database access control tools ranked with honest trade-offs."
+﻿---
+title: "The Best Database Access Control Tools for Zero Trust in 2026"
+description: "Direct database access is the last firewall exception holding your zero-trust architecture together. Nine database access control tools ranked with honest trade-offs."
 publishedAt: 2026-05-11
 author:
   name: QuickZTNA Engineering
@@ -26,7 +26,7 @@ faq:
   - q: "Do I still need a database access broker if I use IAM database authentication?"
     a: "IAM database authentication (AWS RDS IAM auth, CloudSQL IAM, Azure AD for PostgreSQL) eliminates static database passwords for managed cloud databases. Users authenticate with their cloud IAM identity, receive a temporary database token. This solves the static credential problem but not the query-logging, per-table access control, or session recording problem. A database access broker adds query audit logging, SQL-level access policies, and human-readable session playback on top of IAM auth."
   - q: "How should database access work for remote developers?"
-    a: "The correct model: remote developer connects to the ZTNA gateway → ZTNA verifies identity and device posture → ZTNA or database access broker issues a short-lived database credential scoped to the developer's permissions → developer connects to the database through the broker → every query is logged with user identity. No static credentials. No direct database network exposure. No long-lived shared passwords. Tools that combine ZTNA + database brokering (QuickZTNA, Teleport) handle this in one architecture."
+    a: "The correct model: remote developer connects to the ZTNA gateway → ZTNA verifies identity and device posture → ZTNA or database access broker issues a short-lived database credential scoped to the developer's permissions → developer connects to the database through the broker → every query is logged with user identity. No static credentials. No direct database network exposure. No long-lived shared passwords. Tools that combine ZTNA + database brokering (QuickZTNA, Teleport) handle the access-grant half in one architecture; note that QuickZTNA brokers the credential but does not sit inline, so query logging comes from your database or a proxy."
   - q: "What database types does zero-trust database access support?"
     a: "Major access brokers support PostgreSQL, MySQL, MariaDB, Microsoft SQL Server, Oracle, MongoDB, Redis, and Elasticsearch. Cloud-native tools (AWS, GCP, Azure) cover their managed equivalents. Some tools extend to NoSQL and analytics databases — Teleport, for example, supports Snowflake, Cassandra, DynamoDB, and CockroachDB. Coverage varies significantly by vendor; verify the specific database versions you use are supported before committing to any tool."
 ---
@@ -196,26 +196,6 @@ The solution architecture:
 
 ---
 
-## 10. QuickZTNA Database Access Broker
-
-**Category.** ZTNA-brokered database access (included on every plan).
-
-**How it works.** QuickZTNA's database access broker provides a ZTNA-gated proxy to PostgreSQL, MySQL, and MSSQL databases. Developers connect through the ZTNA tunnel; the broker verifies their identity and device posture before establishing the database session. Credentials are dynamically issued for the session and logged. SQL query metadata (query type, table name, row count) is captured without logging data content, satisfying audit requirements while respecting data privacy.
-
-**Supported databases.** PostgreSQL, MySQL, Microsoft SQL Server (current). MongoDB and Redis on roadmap.
-
-**Strengths.**
-- Single ZTNA architecture covers both network access and database access control. QuickZTNA runs the control plane (identity, posture, JIT, audit) and drives a lightweight agent you deploy alongside the database — no separate vendor proxy product to license.
-- Device posture check at database session initiation — unmanaged devices are denied database access regardless of credential validity.
-- SQL metadata audit log satisfies PCI-DSS Requirement 10 and SOC 2 database access monitoring without logging customer data.
-- JIT access integration: database sessions can be gated behind an approval workflow with automatic session recording.
-
-**Limitations.** Current database support is PostgreSQL, MySQL, MSSQL. Not yet a replacement for CyberArk or StrongDM for large enterprise environments with diverse database estates.
-
-**Best fit.** Organisations running QuickZTNA Workforce who want database access control integrated with their existing ZTNA posture without deploying a separate tool.
-
----
-
 ## Comparison table
 
 | Tool | Dynamic credentials | Query logging | Session recording | JIT workflow | Self-hosted | Multi-DB |
@@ -228,7 +208,6 @@ The solution architecture:
 | StrongDM | ✅ | ✅ | Query log | ✅ | ❌ | ✅ |
 | Aembit | ✅ (workload) | ❌ | ❌ | ❌ | ❌ | ✅ |
 | Neon Branching | N/A | PostgreSQL native | N/A | N/A | ❌ | PostgreSQL |
-| QuickZTNA DB Broker | ✅ per-session | ✅ metadata | ✅ | ✅ | ❌ (SaaS) | Growing |
 
 ---
 
@@ -237,7 +216,7 @@ The solution architecture:
 1. **Kill static credentials first.** Deploy Vault database secrets engine or cloud-native IAM auth for all databases. This removes the shared static password problem at minimum cost.
 2. **Add a proxy layer.** Deploy Teleport database access or StrongDM. This closes the direct-network-access gap and enables query logging.
 3. **Add JIT for admin sessions.** Gate DBA access (full privileges) behind a JIT approval workflow so routine developer queries and rare admin operations have different access paths.
-4. **Add session recording for compliance.** All three of Teleport, CyberArk, StrongDM, and QuickZTNA can record database sessions. Connect recordings to your SIEM and compliance reports.
+4. **Add session recording for compliance.** Teleport, CyberArk and StrongDM can record database sessions. Connect recordings to your SIEM and compliance reports.
 
 ## Related reading
 
@@ -245,6 +224,6 @@ The solution architecture:
 - [JIT Access Frameworks for Zero Trust](/blog/top-10-jit-access-frameworks)
 - [What Is ZTNA and How Does It Compare to VPN](/blog/what-is-ztna)
 
-## Try QuickZTNA Database Access
+## Where QuickZTNA fits
 
-QuickZTNA Workforce includes a database access broker with ZTNA posture gating, JIT approval, and SQL metadata audit logging. [Contact sales](mailto:sales@quickztna.com) for early access to the database proxy feature.
+QuickZTNA is the ZTNA layer in the architecture above, not a database proxy. Its database broker is **pure control plane**: it manages just-in-time access grants and drives an agent you run next to your database to issue ephemeral credentials. It does not sit inline, does not pool connections, and does not see or log your queries — so pair it with one of the tools above if you need query-level logging or session recording. [Start free](https://login.quickztna.com/auth).

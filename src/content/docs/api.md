@@ -212,7 +212,7 @@ Groups are read-only via the QuickZTNA API; the source of truth is your identity
 - `GET /audit-log` — paginated event stream. Supports `since`, `until`, `event_type`, `actor`, `subject` filters.
 - `GET /audit-log/{event_id}` — single event with full detail.
 
-The audit log retention depends on your plan: 90 days on Free, one year on Business. The events endpoint below can stream events in real time.
+Audit log retention is 90 days on both plans. The events endpoint below can stream events in real time.
 
 ### Real-time events
 

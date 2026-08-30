@@ -1,4 +1,4 @@
----
+﻿---
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import Button from "@/components/ui/Button.astro";
 import { ArrowRight, Check, Zap } from "lucide-astro";
@@ -28,7 +28,7 @@ const plans = [
     ctaHref: AUTH_URL,
     highlight: true,
     blurb: "Identical features to Free. You pay to scale, not to unlock.",
-    limits: ["Unlimited users (billed per seat)", "Up to 10,000 devices", "Priority email support"],
+    limits: ["Unlimited users (billed per seat)", "10 devices per user", "Priority email support"],
   },
 ];
 
@@ -45,19 +45,19 @@ const included = [
   },
   {
     title: "Identity",
-    items: ["SAML / OIDC SSO", "GitHub / Google OAuth", "TOTP MFA + backup codes", "SCIM 2.0 provisioning", "Org groups"],
+    items: ["OIDC SSO", "GitHub / Google OAuth", "TOTP MFA + backup codes", "SCIM 2.0 provisioning", "Org groups"],
   },
   {
-    title: "AI assistant",
-    items: ["AI chat", "Natural-language ACL builder", "Security digest", "Event summarizer", "Policy-drift detection", "Access heatmap"],
+    title: "Admin insights",
+    items: ["Security digest", "Policy-drift detection", "Access heatmap", "Optional written summary (opt-in)"],
   },
   {
     title: "Security & data",
-    items: ["DNS filtering", "Cloud firewall", "Data Loss Prevention (file scan)", "CASB + shadow-IT discovery", "User-risk scoring", "Secrets vault (AES-256-GCM)"],
+    items: ["DNS threat filtering", "Cloud firewall", "Threat-IP blocking", "Malware detection (file-hash)", "Database + Kubernetes access brokers"],
   },
   {
     title: "Remote support & ops",
-    items: ["Remote shell", "Remote desktop", "Session recording", "Compliance reports (SOC 2, ISO, HIPAA)", "Audit logs (90-day)"],
+    items: ["Remote shell", "Access-review campaigns", "Compliance reports (SOC 2, ISO, HIPAA)", "Audit logs (90-day)"],
   },
 ];
 
@@ -73,11 +73,11 @@ const differs = [
 const faqs = [
   {
     q: "What's the difference between Free and Business?",
-    a: "Features are identical — both plans include everything. The difference is scale: Free covers up to 5 users (and up to 100 devices org-wide); Business is $10 per user / month with unlimited seats and up to 10,000 devices. You're billed per user, never per device. You pay to grow, not to unlock features.",
+    a: "Features are identical — both plans include everything. The difference is scale: Free covers up to 5 users and up to 100 devices; Business is $10 per user / month with unlimited seats and up to 10,000 devices. You're billed per user, never per device. You pay to grow, not to unlock features.",
   },
   {
     q: "Is encryption or security different on Free?",
-    a: "No. Every tunnel on both plans uses the same WireGuard cipher suite (X25519 + ChaCha20-Poly1305 + Poly1305), and every security feature — DLP, CASB, posture, SSO, audit logs — is available on Free too. Security is never the upsell.",
+    a: "No. Every tunnel on both plans uses the same WireGuard cipher suite (X25519 + ChaCha20-Poly1305 + Poly1305), and every security feature — DNS threat filtering, edge firewall, posture, SSO, JIT access, audit logs — is available on Free too. Security is never the upsell.",
   },
   {
     q: "Is there a trial?",
@@ -85,7 +85,7 @@ const faqs = [
   },
   {
     q: "What happens when I hit the Free limit?",
-    a: "Free includes a generous org-wide cap of 100 devices; upgrading to Business raises it to 10,000. Devices aren't billed per seat — you only pay for users. Nothing already registered is removed if you change plans, and we never auto-quarantine your machines.",
+    a: "The seat limit is the one you actually hit: Free covers 5 users. Devices are not metered or billed — a generous org-wide ceiling (100 on Free, 10,000 on Business) exists only to stop scripted abuse, and only devices that are online or recently seen count toward it. Nothing already registered is removed if you change plans, and we never auto-quarantine your machines.",
   },
   {
     q: "How does billing work? What about invoice / wire?",
@@ -102,7 +102,7 @@ const productSchema = {
   "@type": "Product",
   name: "QuickZTNA",
   description:
-    "Remote Workforce Security OS pricing. WireGuard ZTNA mesh + ABAC + AI Operator. Free forever for up to 5 users — every feature included.",
+    "QuickZTNA pricing. WireGuard ZTNA mesh + ABAC + DNS threat filtering + access governance. Free forever for up to 5 users — every feature included.",
   brand: { "@type": "Brand", name: "QuickZTNA" },
   category: "Zero Trust Network Access",
   url: "https://www.quickztna.com/pricing/",
@@ -121,7 +121,7 @@ const productSchema = {
     {
       "@type": "Offer",
       name: "Business",
-      description: "Unlimited users billed per seat, up to 10,000 devices, every feature included, priority email support.",
+      description: "Unlimited users billed per seat, 10 devices per user, every feature included, priority email support.",
       price: "10",
       priceCurrency: "USD",
       priceSpecification: {
@@ -159,7 +159,7 @@ const pricingBreadcrumbSchema = {
 ---
 <SiteLayout
   title="Pricing — QuickZTNA: free forever for 5 users, Business at $10 per user"
-  description="Two plans, identical features. Free forever for up to 5 users (up to 100 devices). Business at $10 per user / month to scale. Every feature on every plan — you pay for scale, not unlocks."
+  description="Two plans, identical features. Free forever for up to 5 users and 100 devices. Business at $10 per user / month to scale. Every feature on every plan — you pay for scale, not unlocks."
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(productSchema)} is:inline />
@@ -220,7 +220,7 @@ const pricingBreadcrumbSchema = {
 
           <p class="flex items-start gap-2.5 text-sm text-muted-foreground">
             <Check class="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={2.5} />
-            <span>Every feature below — DLP, CASB, SSO/SCIM, remote desktop, session recording, the AI assistant, the lot.</span>
+            <span>Every feature below — DNS threat filtering, SSO/SCIM, JIT access, remote shell, compliance reports, the lot.</span>
           </p>
 
           <Button

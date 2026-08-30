@@ -1,4 +1,4 @@
----
+﻿---
 title: "Concepts: Zero Trust networking with QuickZTNA"
 description: "The mental model behind QuickZTNA: how Zero Trust replaces the VPN perimeter, why a WireGuard mesh beats hub-and-spoke, and how identity-based access works."
 section: "concepts"
@@ -11,7 +11,7 @@ faq:
   - q: "What encryption does QuickZTNA use?"
     a: "The data plane is WireGuard: Curve25519 (X25519) key exchange, ChaCha20-Poly1305 authenticated encryption, and BLAKE2s hashing, using WireGuard's Noise-based handshake. Device identity uses an on-device Ed25519 keypair held in the OS credential store. The coordination plane never holds data-plane keys and cannot decrypt your traffic."
   - q: "Does QuickZTNA support post-quantum cryptography?"
-    a: "Not in the shipped client today — the data plane is classical WireGuard (Curve25519 + ChaCha20-Poly1305). Post-quantum (hybrid X25519 + ML-KEM) key exchange is on our roadmap; our blog covers the background and the standards timeline. We'll document it as a product feature here only when it ships."
+    a: "No. The data plane is classical WireGuard (Curve25519 + ChaCha20-Poly1305), and post-quantum key exchange is not implemented — it is not on the roadmap either, so please do not plan around it. Our blog covers the background and the standards timeline as vendor-neutral education. We would document it as a product feature here only if it ever shipped."
 ---
 
 This page is the conceptual briefing for QuickZTNA. It assumes you're familiar with networking and security at the level of "I know what TLS does" but doesn't assume you've thought hard about Zero Trust specifically. By the end, you'll know what QuickZTNA does, what mental model it operates under, and why the technical choices are the choices.
@@ -84,7 +84,7 @@ This is the same, well-audited construction used by WireGuard everywhere — fas
 
 Post-quantum cryptography — hybrid key exchange combining classical X25519 with a NIST-standardized KEM such as ML-KEM (FIPS 203) — defends against "harvest now, decrypt later," where traffic captured today is decrypted once a cryptographically-relevant quantum computer exists. It matters for data with long-lived value.
 
-**The shipped QuickZTNA client uses classical WireGuard today.** Hybrid post-quantum key exchange is on our roadmap, not a current product feature. Our [blog](/blog/) covers the background — ML-KEM, hybrid constructions, and the CNSA 2.0 / BSI / ANSSI timelines — and we'll document it here as a product capability only when it ships in the client.
+**The shipped QuickZTNA client uses classical WireGuard today.** Hybrid post-quantum key exchange is NOT on our roadmap, not a current product feature. Our [blog](/blog/) covers the background — ML-KEM, hybrid constructions, and the CNSA 2.0 / BSI / ANSSI timelines — and we'll document it here as a product capability only when it ships in the client.
 
 ## Trust roots
 

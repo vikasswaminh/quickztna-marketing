@@ -1,4 +1,4 @@
----
+﻿---
 title: "Hybrid Key Exchange X25519 + ML-KEM-768: The Complete Guide"
 description: "Hybrid post-quantum key exchange combines X25519 with ML-KEM-768 so a session stays secret if either primitive holds. Construction, code, failure modes."
 publishedAt: 2026-04-25
@@ -325,7 +325,7 @@ If you see the hybrid group in the server temp key line, the endpoint supports h
 
 WireGuard does not have a TLS-style codepoint or negotiation. The protocol is fixed. What it does have is an optional pre-shared key (PSK) field on every peer, mixed into the handshake for additional forward secrecy.
 
-QuickZTNA runs the hybrid X25519 + ML-KEM-768 exchange as a separate protocol at a higher layer, relayed through our coordination server. The resulting 32-byte derived key is installed as the WireGuard PSK for that peer. WireGuard's own Noise handshake then runs as normal, but with the PSK field populated from a post-quantum exchange rather than left empty or statically configured.
+QuickZTNA does not run this exchange; its tunnels are classical WireGuard. A design of this shape would run as a separate protocol at a higher layer, relayed through a coordination server. The resulting 32-byte derived key is installed as the WireGuard PSK for that peer. WireGuard's own Noise handshake then runs as normal, but with the PSK field populated from a post-quantum exchange rather than left empty or statically configured.
 
 A few consequences worth highlighting:
 
@@ -374,13 +374,13 @@ All verified on publication date.
 
 ## Related reading on this blog
 
-- [ML-KEM-768 Explained: The Quantum-Safe Key Exchange on Our Roadmap](/blog/ml-kem-768-explained)
+- [ML-KEM-768 Explained: How the Standard Works (and why we have not shipped it)](/blog/ml-kem-768-explained)
 - [Harvest Now, Decrypt Later: Why Your VPN Traffic Is Already Compromised](/blog/harvest-now-decrypt-later)
 - [Post-Quantum VPN: 6 Questions to Ask Your Current Vendor](/blog/post-quantum-vpn-vendor-questions)
 
 ## Try QuickZTNA
 
-The hybrid X25519 + ML-KEM-768 construction described above is the one QuickZTNA is targeting on its roadmap; the shipped client uses classical WireGuard today. To follow along, [sign up free](https://login.quickztna.com/auth) and connect two devices to try the mesh now.
+The hybrid X25519 + ML-KEM-768 construction described above is not implemented by QuickZTNA, which uses classical WireGuard; the shipped client uses classical WireGuard today. To follow along, [sign up free](https://login.quickztna.com/auth) and connect two devices to try the mesh now.
 
 <!--
 scorecard:

@@ -1,4 +1,4 @@
----
+﻿---
 title: "SOC 2 Controls for Remote Access: 11 You'll Get Audited On"
 description: "SOC 2 is based on AICPA's Trust Services Criteria. The 11 specific Common Criteria auditors test for VPN, ZTNA, and remote-work deployments."
 publishedAt: 2026-05-03
@@ -244,7 +244,7 @@ Not every auditor requests every item. Most requests fall into categories 1–14
 
 ## Try QuickZTNA
 
-QuickZTNA includes audit log export, SSO with FIDO2 MFA, device posture, per-tunnel kex mode logging, and policy-as-code on every plan — the eleven Common Criteria above each have a direct product feature. [Contact sales](mailto:sales@quickztna.com) for the SOC 2 control-mapping worksheet.
+QuickZTNA includes audit log export, OIDC SSO with TOTP MFA, device posture, JIT access approvals, and policy-as-code on every plan — the eleven Common Criteria above each have a direct product feature. [Contact sales](mailto:sales@quickztna.com) for the SOC 2 control-mapping worksheet.
 
 <!--
 scorecard:

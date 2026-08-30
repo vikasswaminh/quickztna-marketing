@@ -1,4 +1,4 @@
----
+﻿---
 title: "Self-Hosting Headscale vs a Managed Coordination Server: Honest Total Cost"
 description: "Headscale is an open-source Tailscale-compatible coordination server. Self-host saves subscription cost but adds operational cost. Honest total-cost model."
 publishedAt: 2026-05-01
@@ -260,7 +260,7 @@ At the end, if the cost math, compliance requirements, and team capability all p
 - [Headscale documentation](https://github.com/juanfont/headscale/tree/main/docs).
 - [Tailscale knowledge base](https://tailscale.com/kb).
 - [NetBird self-host docs](https://docs.netbird.io/selfhosted/selfhosted-quickstart).
-- [QuickZTNA Workforce documentation](https://quickztna.com/docs/).
+- [QuickZTNA documentation](https://quickztna.com/docs/).
 
 ## Related reading on this blog
 

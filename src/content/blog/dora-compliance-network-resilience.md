@@ -1,4 +1,4 @@
----
+﻿---
 title: "DORA Compliance for Financial Entities: Network Resilience in 10 Steps"
 description: "DORA has applied to EU financial entities since January 2025. Articles 5 through 27 translated into ten concrete network-resilience implementation steps."
 publishedAt: 2026-04-27
@@ -238,7 +238,7 @@ How a modern ZTNA product addresses specific DORA articles.
 |---|---|---|
 | Art. 7 Sound ICT | Resilient ICT systems | Multi-region control plane, DERP relay fallback |
 | Art. 8 Identification | Asset inventory | Device registration, tagged machines |
-| Art. 9 Protection | Crypto, MFA, access control | Hybrid PQ kex, FIDO2 SSO, ABAC policies |
+| Art. 9 Protection | Crypto, MFA, access control | WireGuard (X25519 + ChaCha20-Poly1305), TOTP MFA, ABAC policies |
 | Art. 10 Detection | Monitoring | Per-session audit log, SIEM export |
 | Art. 11 Response and recovery | Incident response | Machine quarantine, key revocation |
 | Art. 12 Backup | Data backup policies | Config backup, encrypted org exports |
@@ -268,7 +268,7 @@ Primary sources only. All links verified on the publish date.
 
 ## Try QuickZTNA
 
-QuickZTNA includes the features most relevant to DORA on every plan: per-tenant audit log export, FIDO2/WebAuthn SSO, device posture, and DPAs aligned with Article 30 minimum contractual terms. For financial-entity deployments, [contact sales](mailto:sales@quickztna.com) for an incident-notification SLA, the DORA alignment brief, and a financial-entity evaluation.
+QuickZTNA includes the features most relevant to DORA on every plan: per-tenant audit log export, OIDC SSO with TOTP MFA, device posture, and DPAs aligned with Article 30 minimum contractual terms. For financial-entity deployments, [contact sales](mailto:sales@quickztna.com) for an incident-notification SLA, the DORA alignment brief, and a financial-entity evaluation.
 
 <!--
 scorecard:

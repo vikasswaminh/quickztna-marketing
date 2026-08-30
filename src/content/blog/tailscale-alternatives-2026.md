@@ -1,4 +1,4 @@
----
+﻿---
 title: "The Best Tailscale Alternatives in 2026: A Fair, Factual Comparison"
 description: "Tailscale popularised mesh VPN. Honest comparison of the best Tailscale alternatives in 2026 by architecture, licensing, pricing, and post-quantum posture."
 publishedAt: 2026-04-29
@@ -25,7 +25,7 @@ faq:
   - q: "What is the main architectural difference between Tailscale and most alternatives?"
     a: "Two axes matter. First, where the coordination server is hosted (Tailscale managed, Headscale self-host, NetBird both, QuickZTNA managed). Second, what additional features the product layers on top — ACL model, identity integration, device posture, workforce analytics, session recording. The data-plane engine (WireGuard) is similar across all of them."
   - q: "Which alternative has the best post-quantum posture?"
-    a: "As of April 2026, QuickZTNA has hybrid X25519 + ML-KEM-768 key exchange on its roadmap (classical WireGuard today), on every tier, and exposes the key-exchange mode per tunnel. Several other vendors have announced or are rolling out post-quantum; verify the current status on each vendor's documentation page. Our ML-KEM-768 post covers what to verify."
+    a: "Not QuickZTNA. As of 2026 we do not implement post-quantum key exchange and do not have it planned — tunnels are classical WireGuard on every tier, and the client reports the key-exchange mode per tunnel so you can verify that yourself. Several other vendors have announced or are rolling out post-quantum; check each vendor's own documentation. Our ML-KEM-768 post covers what to verify."
   - q: "Is Headscale a real alternative to Tailscale?"
     a: "Headscale is a third-party open-source implementation of the Tailscale coordination server that works with official Tailscale clients. It is mature and widely used by self-hosters. It is not affiliated with Tailscale the company. It is a good fit for teams that want the Tailscale client experience without depending on Tailscale's managed control plane."
 ---
@@ -34,7 +34,7 @@ faq:
 
 Tailscale is a strong WireGuard-based mesh VPN with broad platform support and a generous free tier. It is not, however, the only option — and for specific use cases, an alternative is a better fit. This post compares the realistic 2026 alternatives — Headscale, NetBird, QuickZTNA, Cloudflare Zero Trust, Twingate, and NetFoundry — across architecture, licensing, self-host capability, pricing model, compliance posture, and post-quantum support. Each product has a real strength and a real trade-off. The goal is not to pick a winner; the goal is to help you match your constraints to the product that fits them. For factual verification of pricing or specific features, we link to each vendor's current documentation — pricing and features can change quickly and a blog post is never the authoritative source.
 
-> **Adding up your tool bill?** A mesh VPN like Tailscale is usually just one line item — most remote teams also pay separately for remote support, a ZTNA gateway, DLP and a monitoring tool. QuickZTNA bundles all of them into one agent and one bill. [See what you'd save →](/savings/) — up to 90% lower.
+> **Adding up your tool bill?** A mesh VPN like Tailscale is usually just one line item — most remote teams also pay separately for a ZTNA gateway, DNS filtering and a monitoring tool. QuickZTNA folds those into one agent and one bill. [See what you'd save →](/savings/)
 
 ## Who this is for
 
@@ -94,22 +94,22 @@ We cover Headscale in more depth in [Self-Hosting Headscale vs a Managed Coordin
 
 **Who it fits.** Teams that prioritise open source and want the flexibility to move between managed and self-host. Teams comfortable with a smaller ecosystem.
 
-## 5. QuickZTNA — full ZTNA + workforce security
+## 5. QuickZTNA — full ZTNA + access governance
 
-**What it is.** QuickZTNA is a full ZTNA product built on WireGuard. Beyond the mesh VPN, it adds ABAC ACLs, device posture, file-scan DLP, a CASB approval workflow, workforce analytics (opt-in), software inventory, user-risk scoring, an AI Operator for policy changes, SSO with FIDO2, and SCIM provisioning. The data plane is classical WireGuard today; hybrid post-quantum key exchange is on the roadmap (see [ML-KEM-768 Explained](/blog/ml-kem-768-explained)).
+**What it is.** QuickZTNA is a full ZTNA product built on WireGuard. Beyond the mesh VPN, it adds ABAC ACLs, device posture with auto-quarantine, DNS threat filtering, a per-org edge firewall, JIT access requests with approvals, access-review campaigns, policy version rollback, signed compliance evidence, SSO (OIDC/Google/GitHub) with TOTP MFA, and SCIM provisioning. The data plane is classical WireGuard — post-quantum key exchange is not implemented.
 
 **Strengths.**
-- **Deepest workforce-security layer.** ACLs, device posture, DLP, CASB, audit logs, compliance reports — beyond a basic mesh.
+- **Access governance depth.** ACLs, device posture, JIT access with approvals, access-review campaigns, audit logs and exportable compliance evidence — beyond a basic mesh.
 - **Free SSH on every tier.** Remote shell over the mesh is on the Free plan.
-- **Honest tier boundaries.** Free includes ACLs, SSO, FIDO2, device posture, and remote SSH; Business adds DLP, CASB, continuous posture, remote desktop, and workforce analytics.
-- **EU + US infrastructure options.** For teams with data-residency requirements.
+- **Honest tier boundaries.** There are none to speak of: both plans include every feature. Free covers 5 users and up to 100 devices; Business is $10 per user / month for more seats. You pay for scale, not to unlock capabilities.
+- **Malware detection without content inspection.** Agents report file hashes only — file contents are never uploaded.
 
 **Trade-offs.**
 - **Younger ecosystem.** Compared to Tailscale's multi-year community, QuickZTNA's ecosystem is newer.
 - **Pricing model is per-user on Business, not per-device.** This may or may not match your usage shape.
 - **Managed cloud only.** No self-host or air-gapped option today.
 
-**Who it fits.** Teams that need a full ZTNA + workforce-security feature set (ACLs, device posture, DLP, CASB, audit logs) beyond a basic mesh. Teams that find Tailscale's per-user pricing either too high or too limiting for their specific workload.
+**Who it fits.** Teams that need governance around the mesh (ACLs, device posture, JIT approvals, access reviews, audit depth) rather than the mesh alone. Teams that find Tailscale's per-user pricing either too high or too limiting for their specific workload.
 
 ## 6. Cloudflare Zero Trust — edge-native identity proxy
 
@@ -170,8 +170,8 @@ Snapshot as of April 2026 from each product's own documentation. Always confirm 
 | Data plane | WireGuard | WireGuard (Tailscale clients) | WireGuard | WireGuard | Cloudflare edge | Proprietary | Ziti overlay |
 | Coordination | Managed | Self-host | Both | Managed | Managed | Managed | Both |
 | Licence | Proprietary | BSD-3-Clause | BSD-3-Clause | Proprietary | Proprietary | Proprietary | Apache 2.0 |
-| Free tier | Yes | N/A (DIY) | Yes | Yes (100 devices, 5 users) | Yes (up to 50 users historically — verify) | Yes (limited) | Open source |
-| Post-quantum default | Verify current | N/A (depends on clients) | Verify current | Roadmap | Partial, TLS 1.3 hybrid on edge | Verify current | Verify current |
+| Free tier | Yes | N/A (DIY) | Yes | Yes (5 users, 100 devices) | Yes (up to 50 users historically — verify) | Yes (limited) | Open source |
+| Post-quantum tunnel KEX | Verify current | N/A (depends on clients) | Verify current | Not implemented | Partial, TLS 1.3 hybrid on edge | Verify current | Verify current |
 | Session recording | Enterprise-tier | No | Verify current | No | Via other CF products | Verify current | Via integrations |
 | Device posture | Yes | No | Yes | Yes | Yes | Yes | Policy-based |
 | SSO + SCIM | Yes | Limited | Yes | Yes | Yes | Yes | Depends on deployment |
