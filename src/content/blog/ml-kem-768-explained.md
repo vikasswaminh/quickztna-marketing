@@ -154,27 +154,19 @@ The combined secret is then used as the WireGuard pre-shared key. This gives you
 
 The same structure — ephemeral classical, ephemeral post-quantum, hybrid combiner — is what the IETF is standardising for TLS 1.3 in [draft-ietf-tls-hybrid-design](https://datatracker.ietf.org/doc/draft-ietf-tls-hybrid-design/) and what Cloudflare and AWS have already shipped on the public internet for their respective edge networks.
 
-## 8. How ML-KEM-768 is wired into QuickZTNA
+## 8. How you would wire ML-KEM-768 into a WireGuard mesh
 
-QuickZTNA is a ZTNA mesh built on WireGuard. Every peer-to-peer tunnel is a standard WireGuard session, with the twist that the pre-shared key field is populated from a hybrid X25519 + ML-KEM-768 handshake rather than left empty or statically configured.
+**QuickZTNA has not built this.** Our tunnels are classical WireGuard and post-quantum key exchange is not implemented or planned, so what follows is the shape the integration takes in general — useful if you are evaluating a vendor that claims it, or building it yourself.
 
-The flow in production:
+WireGuard's protocol is fixed and has no negotiation, but every peer has an optional pre-shared key (PSK) field mixed into the handshake. That field is where a post-quantum layer attaches:
 
 1. When a new peer relationship is established, both sides generate ephemeral X25519 keys and ephemeral ML-KEM-768 keys.
-2. The coordination server relays the public halves between peers. It never sees the private halves.
-3. Each peer runs the hybrid derivation above and stores the resulting 32-byte value as the WireGuard PSK for that tunnel.
-4. The WireGuard engine uses the PSK as part of its existing Noise handshake, layered on top of its own Curve25519 static-key exchange.
-5. Every two minutes, WireGuard rekeys. QuickZTNA re-runs the hybrid handshake on a configurable cadence so the PSK itself rotates rather than becoming stale.
+2. A coordination server relays the public halves between peers; it never sees the private halves.
+3. Each peer runs the hybrid derivation described above and installs the resulting 32-byte value as the WireGuard PSK for that tunnel.
+4. The WireGuard engine uses that PSK as part of its existing Noise handshake, layered on top of its own Curve25519 static-key exchange.
+5. WireGuard rekeys roughly every two minutes, so the PSK derivation has to re-run on a comparable cadence or the post-quantum contribution goes stale.
 
-Because the PQC PSK is layered under the normal WireGuard handshake, a peer that does not support post-quantum (older client, third-party WireGuard) still connects; it just falls back to classical-only security. That degradation is explicit and visible in the peer's status line. You can see the mixed state on the dashboard at [login.quickztna.com](https://login.quickztna.com/) when a tunnel is marked "classical-only".
-
-For code, the relevant packages in the client are:
-
-- `pkg/crypto/pqc.go` — ML-KEM-768 keygen, encap, decap, and PSK derivation. Uses the `crypto/mlkem` standard library type.
-- `pkg/agent/pqc.go` — per-peer state machine. Caches derived PSKs. Handles rekey.
-- `pkg/wireguard/engine.go` — injects the PSK into the WireGuard IPC. The `PresharedKeyHex` field on the peer struct is how it crosses into wireguard-go.
-
-The [post-quantum section of the QuickZTNA docs](/docs/security/#post-quantum) describes the exact packet layout for anyone implementing a compatible client.
+Because the PSK sits under the normal WireGuard handshake, a peer without the post-quantum layer still connects — it just falls back to classical-only security. That is the critical detail to check in any product claiming hybrid PQ: **ask how a downgraded tunnel is surfaced**, because silent fallback means you cannot tell which sessions were actually protected.
 
 ## 9. Benchmarks: CPU and wire time
 
@@ -244,7 +236,7 @@ If a vendor says their product is "quantum-safe" or "post-quantum ready", these 
 9. **Is it on by default or opt-in?** Opt-in is a red flag. The whole point of a harvest-now-decrypt-later defence is that it is on when the attacker is capturing.
 10. **How is the configuration exposed?** Can operators disable it in an emergency? Is that change logged and audited?
 
-QuickZTNA answers: ML-KEM-768, hybrid with X25519, FIPS 203 conformant via Go 1.24 stdlib, PSK from HKDF of both shared secrets with transcript binding, rotated every two minutes, visible per-tunnel in the dashboard, hard-requires one end of the conversation to be a compatible client, on by default on every plan including Free, disable only via org-policy with audit event. We are happy to be asked any of these questions — and we encourage you to ask our competitors too.
+QuickZTNA's answer to all ten is the same: we do not implement post-quantum key exchange, so there is nothing to audit, no parameter set to disclose, and no default to check. Our tunnels are classical WireGuard. We would rather say that plainly than score well on a checklist we have not earned — and we encourage you to put these ten questions to any vendor that does claim it.
 
 ## 13. Further reading
 

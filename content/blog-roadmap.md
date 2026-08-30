@@ -71,7 +71,7 @@ Hub pages, topical authority, start climbing the head terms.
 | 41 | Kubernetes Zero Trust: Replacing kubectl proxy With a Mesh | kubernetes zero trust | Med | MOFU |
 | 47 | 17 ZTNA Statistics CISOs Will Cite in 2026 Board Decks | ztna statistics | Low-Med | TOFU |
 | 48 | The 2026 Post-Quantum Migration Timeline | post quantum migration timeline | Low | TOFU |
-| 50 | Why We Ship Post-Quantum on the Free Tier (Pricing Manifesto) | quantum safe free vpn | Low | BOFU/brand |
+| 50 | What We Do Not Ship, and Why (Free-Tier Pricing Manifesto) | zero trust free tier | Low | BOFU/brand |
 
 ## Future roadmap — queued, not scheduled
 

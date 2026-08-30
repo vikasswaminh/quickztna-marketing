@@ -39,8 +39,8 @@ Reference documentation. The "I am building automation against QuickZTNA or eval
 - [Concepts: Zero Trust and post-quantum cryptography](https://quickztna.com/docs/concepts/): The mental model. Zero Trust origin (NIST SP 800-207), mesh vs hub-and-spoke, identity-based authorization, harvest-now-decrypt-later threat, why hybrid PQ, exact construction, performance characteristics.
 - [CLI reference](https://quickztna.com/docs/cli/): Every command, every flag, every exit code. Authentication (up/logout), networking (ping/ssh/nc), devices, policies, keys, doctor, bug-report, service management, configuration, updates, environment variables.
 - [REST API overview](https://quickztna.com/docs/api/): Auth, versioning, pagination, filtering, error format (RFC 7807), rate limits, endpoint catalogue (devices/users/groups/policy/keys/audit/posture), webhooks, OpenAPI 3.1 spec at login.quickztna.com/api/openapi.json.
-- [Security model](https://quickztna.com/docs/security/): Threat model, cryptographic primitives in detail, trust roots, posture engine, audit logging (with hash chaining), compliance posture (SOC 2 Type II, FIPS 203, GDPR, NIS2, DORA, HIPAA, ISO 27001 in progress), reproducible builds, coordinated-disclosure policy.
-- [SSO integrations: OIDC, Google, GitHub, Microsoft, Okta, Authentik](https://quickztna.com/docs/integrations/): Per-IdP setup, SAML on Business/Workforce, SCIM provisioning, multi-IdP patterns, troubleshooting.
+- [Security model](https://quickztna.com/docs/security/): Threat model, cryptographic primitives in detail, trust roots, posture engine, audit logging, compliance posture (GDPR DPA and HIPAA BAA offered; SOC 2 and ISO 27001 in progress, not certified), coordinated-disclosure policy.
+- [SSO integrations: OIDC, Google, GitHub, Microsoft, Okta, Authentik](https://quickztna.com/docs/integrations/): Per-IdP setup, SCIM provisioning, multi-IdP patterns, troubleshooting. SAML login is disabled product-wide — OIDC is the path for every IdP.
 
 ## Blog
 

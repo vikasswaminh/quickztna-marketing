@@ -210,16 +210,12 @@ Ten specific questions to put to any ZTNA, VPN, or remote-access vendor selling 
 - The data plane is classical WireGuard (Curve25519 + ChaCha20-Poly1305) — secure against current adversaries.
 - Releases are published with SHA-256 checksums the installer verifies before install.
 
-**Near-term roadmap (hybrid post-quantum):**
+**What is not planned:**
 
-- Hybrid X25519 + ML-KEM-768 (FIPS 203, NIST category 3) key exchange on every tunnel.
-- The construction targets the Go standard library's `crypto/mlkem`; FIPS validation (CMVP) is a separate, later step.
+- Hybrid X25519 + ML-KEM-768 key exchange. Not implemented, not scheduled.
+- ML-KEM-1024 / CNSA 2.0 parameter sets, LMS software signing, and per-tunnel policy forbidding classical fallback. None of these are on our roadmap.
 
-**2026-Q3 roadmap:**
-
-- ML-KEM-1024 opt-in per org, switching the key exchange to the CNSA 2.0 parameter set.
-- LMS software signing on Windows MSI and Linux installer packages.
-- Per-tunnel policy forbidding classical fallback.
+If your programme has a CNSA 2.0 deadline, QuickZTNA does not currently meet it, and we would rather you learn that here than from a procurement questionnaire.
 
 **2026-Q4 to 2027 roadmap:**
 

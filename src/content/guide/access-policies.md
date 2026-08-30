@@ -154,7 +154,7 @@ When a connection is denied, the action is logged with three pieces of informati
 
 When a user reports "I can't reach X," the answer is almost always in the audit log within seconds. Look up the user's last connection attempts to X; the matching rule is right there. Either the rule is correct and the user shouldn't have access (and your job is to explain why), or the rule is wrong (and your job is to fix it). Either way you have a concrete answer, not a guess.
 
-On Business plans the audit log is queryable via the API and exportable to your SIEM. On Workforce the log can be streamed to your own log infrastructure in real time. Free plans retain the audit log for 90 days, queryable from the dashboard.
+The audit log is retained for 90 days on both plans, queryable from the dashboard and via the API, and exportable to your SIEM. Retention is not a paid upgrade — export on a schedule if you need a longer archive.
 
 ## Policy as code
 

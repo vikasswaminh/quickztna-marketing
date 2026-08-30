@@ -61,15 +61,56 @@ const OURS = String.raw`\b(quickztna|our|we)\b`;
 const SUBJ = String.raw`\b(quickztna)\b`;
 
 // Negated framing is allowed — "QuickZTNA does not offer X" must be publishable,
-// since saying so is the whole point of the correction. Scoped to one clause.
-const NEGATION = /\b(no|not|never|without|removed|withdrawn|doesn't|don't|isn't|deliberately|instead of|rather than)\b/i;
+// since saying so is the whole point of the correction.
+//
+// This is a whitelist of DENIAL CONSTRUCTIONS, not a bare list of negative words.
+// Matching any stray "no"/"not"/"without" was the hole: "Organisations using
+// QuickZTNA Workforce who need JIT access WITHOUT a separate PAM deployment"
+// exempted itself on a "without" that negates nothing, and a marketing line
+// ending "No card." excused every claim before it. A denial has to actually deny.
+// NOTE: markdown emphasis is stripped before these run ("does **not** ship"),
+// so patterns need not tolerate * or _ themselves.
+const DENIAL = [
+  /\b(?:does|do|did|is|are|was|were|has|have|will|would|can|could)\s+not\b/i,
+  // Active voice: "The 2026 lean pivot removed DLP content scanning, CASB, ..."
+  // Only counts when a withdrawn-capability noun follows close behind, so a bare
+  // "removed" in unrelated prose does not become a blanket exemption.
+  /\b(?:removed|withdrew|deleted|retired|dropped)\b(?=[^.\n]{0,60}\b(?:dlp|casb|workforce|session|remote|software|inventory|scoring|analytics|vault|operator|assistant|recording|desktop|post-quantum|ml-?kem|fido2|webauthn)\b)/i,
+  /\b(?:doesn't|don't|didn't|isn't|aren't|wasn't|weren't|won't|can't|cannot|hasn't|haven't)\b/i,
+  /\bnever\b|\bno longer\b/i,
+  /\bnot\s+(?:implemented|shipped|offered|supported|planned|available|certified|on the roadmap|a\b|one of)/i,
+  // Explicitly hypothetical framing — "we would document it only if it ever shipped"
+  // is the opposite of a claim, but names the capability and a ship-verb.
+  /\b(?:only\s+)?if\s+it\s+ever\s+(?:ships|shipped)\b|\bwould\s+(?:document|ship|add)\b/i,
+  /\bthere\s+(?:is|are|'s)\s+no\b/i,
+  /\b(?:was|were|has been|have been|are|is)\s+(?:removed|withdrawn|deleted|retired)\b/i,
+  /\b(?:we|quickztna)\s+(?:removed|withdrew|deleted|dropped)\b/i,
+  /\bremoved\s+in\s+\d{4}\b|\bremoved\s+(?:from|in)\s+the\b/i,
+  /\bdeliberately\s+(?:no|not|has no)\b/i,
+  // "no session recording", "no secrets vault", "no content inspection" — a bare
+  // "no" counts only when a withdrawn-capability noun follows close behind.
+  /\bno\b(?=[^.\n]{0,40}\b(?:recording|vault|desktop|analytics|inspection|scanning|inventory|scoring|casb|dlp|fido2|webauthn|workforce|post-quantum|ml-?kem|assistant|operator)\b)/i,
+];
+// Strip markdown emphasis first: "QuickZTNA does **not** implement PQC" must read
+// as a denial, and "*never* collected" likewise.
+const denied = (s) => {
+  const flat = s.replace(/[*_`]/g, "");
+  return DENIAL.some((re) => re.test(flat));
+};
 
 // Split text into clauses at sentence terminators and semicolons.
 // Deliberately NOT split on em dashes or colons: "Every feature is included:
 // mesh, ..., secrets vault" and "Free plan covers X — the mesh, ..., CASB" both
 // carry the subject on the far side of that punctuation, and splitting there
 // would strip the very attribution the rules depend on.
-const splitClauses = (text) => text.split(/(?<=[.!?])\s+|\s*;\s*/).filter(Boolean);
+// Also split at HTML tag boundaries. In .astro files a sentence often ends
+// directly against a tag ("...+ AI Operator.</p>") with no whitespace, so a
+// whitespace-only sentence split left whole markup blocks coalesced into one
+// giant clause — which then inherited any denial or allowlisted phrase in it.
+const splitClauses = (text) =>
+  text
+    .split(/(?<=[.!?])\s+|(?<=[.!?])(?=<)|\s*;\s*|(?<=>)\s*(?=<)|<br\s*\/?>/i)
+    .filter(Boolean);
 
 // Group physical lines into SENTENCE units before splitting into clauses.
 // Prose wraps across lines, so a sentence's own qualifier and its terms can land
@@ -159,6 +200,9 @@ const PRODUCT_RULES = [
   {
     re: new RegExp(String.raw`(ml-?kem|post-quantum)[^.\n]{0,40}(is |are )?on[^.\n]{0,15}(the |our )?roadmap`, "i"),
     msg: "PQC-roadmap claim — PQC was withdrawn, not deferred; do not promise it",
+    // Third parties legitimately have PQC roadmaps — the EU's coordinated
+    // transition roadmap, NIST's, a competitor's. Only OUR roadmap is forbidden.
+    unless: /\b(EU|EU's|European|Commission|NIST|NSA|BSI|ANSSI|NCSC|industry|vendor|their|Tailscale|Cloudflare)\b[^.\n]{0,40}roadmap|roadmap\]\(http/i,
   },
   {
     re: /(self-host(ed|ing)?[^.\n|]{0,30}workforce|workforce[^.\n|]{0,25}self-host)/i,
@@ -178,6 +222,23 @@ const REMOVED = [
   { re: /user[- ]risk scor/i, msg: "user-risk scoring was removed in the 2026 lean pivot" },
   { re: /secrets vault/i, msg: "there is no secrets vault — no handler exists" },
   { re: /\b(fido2|webauthn)\b/i, msg: "no FIDO2/WebAuthn in the product — MFA is TOTP only" },
+  // PQC-as-shipped, matched by CO-OCCURRENCE inside an attributed clause rather
+  // than by character distance. The old rules used 40-60 char windows, so an
+  // assertion separated from the product name by a feature preamble slipped
+  // through ("...QuickZTNA ... implements hybrid post-quantum key exchange").
+  // `also` means: both patterns must appear in the same clause, in any order.
+  {
+    re: /\b(ml-?kem|post-quantum|quantum-safe|hybrid pq)\b/i,
+    also: /\b(ships?|shipped|uses?|using|runs?|implements?|implemented|provides?|includes?|included|enabled|by default|on every tunnel|in every[^.\n]{0,20}tunnel)\b/i,
+    msg: "PQC-as-shipped claim — PQC was WITHDRAWN; tunnels are classical WireGuard",
+  },
+  // "We use this construction in every QuickZTNA tunnel" names no PQC term at all,
+  // so the co-occurrence rule above cannot see it — the referent is anaphoric.
+  {
+    re: /\b(this|the) (construction|exchange|handshake|scheme|mode)\b/i,
+    also: /\b(in|on) every[^.\n]{0,25}tunnel\b|every quickztna tunnel/i,
+    msg: "anaphoric PQC-as-shipped claim — name the crypto explicitly; PQC is not shipped",
+  },
   {
     re: /(file[- ]scan|content[- ]scan|inline)[^.\n]{0,20}dlp|dlp[^.\n]{0,40}(pii|credit card|ssn|secrets)|(text|content|clipboard)[- ]scanning|content inspection/i,
     msg: "DLP content scanning was removed — only file-hash malware detection remains",
@@ -257,11 +318,20 @@ const ALLOW = [
   ["For 100 devices via Ansible", "fleet-rollout example, not a plan cap"],
   ["Threat model, cryptographic primitives in detail", "link description for the security-model page"],
 ];
-// A clause is exempt if it contains an allowlisted snippet, or is itself wholly
-// contained within one (so clause-splitting can't orphan a legitimate exception).
-const allowed = (clause) => {
-  const t = clause.trim();
-  return ALLOW.some(([snip]) => t.includes(snip) || snip.includes(t));
+// REDACT the allowlisted phrase rather than exempting the clause that contains it.
+// Skipping the whole clause was a hole: public/llms.txt's security-model entry opens
+// with the allowlisted "Threat model, cryptographic primitives in detail" and then
+// goes on to claim hash-chained audit logs, FIPS 203 and reproducible builds — all
+// of which the guard silently skipped, in the very file written for AI crawlers.
+// Redaction exempts exactly the text that earned the exception and nothing else.
+const redactAllowed = (clause) => {
+  let out = clause;
+  for (const [snip] of ALLOW) {
+    if (out.includes(snip)) out = out.split(snip).join(" ");
+    // A clause wholly inside an allowed snippet is itself the exception.
+    else if (snip.includes(out.trim()) && out.trim().length > 20) return "";
+  }
+  return out;
 };
 
 const SKIP_DIRS = new Set(["node_modules", "dist", ".astro"]);
@@ -303,9 +373,10 @@ for (const file of ROOTS.flatMap((r) => walk(r))) {
     const heading = text.match(/^#{2,6}\s+(.*)$/);
     if (heading) sectionOurs = SUBJ_RE.test(heading[1]);
 
-    for (const clause of splitClauses(text)) {
-      if (allowed(clause)) continue;
-      const negated = NEGATION.test(clause);
+    for (const rawClause of splitClauses(text)) {
+      const clause = redactAllowed(rawClause);
+      if (!clause.trim()) continue;
+      const negated = denied(clause);
 
       // Attribution: surfaces describe our product by definition; the blog needs
       // the product name in the clause or in the enclosing heading.
@@ -318,9 +389,10 @@ for (const file of ROOTS.flatMap((r) => walk(r))) {
         ...(isBlog ? [] : SURFACE_RULES),
       ];
 
-      for (const { re, msg, noExempt, unless } of rules) {
+      for (const { re, msg, noExempt, unless, also } of rules) {
         if (negated && !noExempt) continue;
         if (unless && unless.test(clause)) continue;
+        if (also && !also.test(clause)) continue;
         if (re.test(clause)) {
           console.error(`  ${file}:${i + 1}  ${msg}`);
           console.error(`    > ${clause.trim().slice(0, 130)}`);

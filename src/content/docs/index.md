@@ -40,7 +40,7 @@ Every page has a table of contents on the right rail (desktop) or inline at the 
 
 For people scanning to confirm the technical particulars before reading further:
 
-**Cryptographic primitives.** WireGuard data plane: Curve25519 (X25519) key exchange, ChaCha20-Poly1305 AEAD, BLAKE2s hashing. Ed25519 for device identity signatures. SHA-256 for content/integrity hashing. (Post-quantum hybrid key exchange is on the roadmap, not in the shipped client.)
+**Cryptographic primitives.** WireGuard data plane: Curve25519 (X25519) key exchange, ChaCha20-Poly1305 AEAD, BLAKE2s hashing. Ed25519 for device identity signatures. SHA-256 for content/integrity hashing. (Post-quantum key exchange is not implemented and is not planned.)
 
 **Identity.** OIDC primary; SAML login is currently disabled pending a security fix; SCIM 2.0 for user/group sync — available on every plan. Per-user MFA enforced through your IdP — QuickZTNA does not maintain a separate password.
 

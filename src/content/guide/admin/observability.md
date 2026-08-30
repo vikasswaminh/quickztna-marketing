@@ -95,7 +95,7 @@ Scrape these into your Prometheus/Grafana stack to chart connectivity, peer coun
 
 ## 7. Limits & honest scope
 
-- **Retention is plan-dependent**; Free is the shortest window.
+- **Retention is 90 days on both plans** — it is not a paid upgrade, and not longer on Business. Export on a schedule if you need a longer archive.
 - **Audit reads need membership; writes need admin.**
 - **Compliance evaluation reflects current config** — re-run after changes; reports are point-in-time.
 - **Client metrics are per-node** — aggregate them in your own monitoring stack.

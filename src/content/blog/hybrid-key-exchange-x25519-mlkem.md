@@ -32,7 +32,7 @@ faq:
 
 ## TL;DR
 
-A hybrid post-quantum key exchange combines two key-agreement primitives — one classical, one post-quantum — so the resulting session key is secure if either primitive alone is secure. The production default in 2026 is X25519 paired with ML-KEM-768. The correct combiner is to run both key exchanges in parallel, concatenate the two shared secrets, fold the handshake transcript into a salt, and derive the session key through HKDF. This post spells out the construction, the gotchas, and a minimal Go implementation you can read in full. We use this construction in every QuickZTNA tunnel. Every major standards body — NIST, IETF, NSA, BSI, ANSSI — recommends hybrid for the transition window.
+A hybrid post-quantum key exchange combines two key-agreement primitives — one classical, one post-quantum — so the resulting session key is secure if either primitive alone is secure. The production default in 2026 is X25519 paired with ML-KEM-768. The correct combiner is to run both key exchanges in parallel, concatenate the two shared secrets, fold the handshake transcript into a salt, and derive the session key through HKDF. This post spells out the construction, the gotchas, and a minimal Go implementation you can read in full. To be clear about our own product: QuickZTNA does not run this exchange — its tunnels are classical WireGuard — so read this as an engineering guide, not a description of what we ship. Every major standards body — NIST, IETF, NSA, BSI, ANSSI — recommends hybrid for the transition window.
 
 ## Who this is for
 
@@ -321,20 +321,20 @@ openssl s_client -curves X25519MLKEM768 -connect example.com:443 < /dev/null
 
 If you see the hybrid group in the server temp key line, the endpoint supports hybrid. If not, it falls back to classical.
 
-## 8. How this lands in WireGuard and QuickZTNA
+## 8. How a design like this would land in WireGuard
 
-WireGuard does not have a TLS-style codepoint or negotiation. The protocol is fixed. What it does have is an optional pre-shared key (PSK) field on every peer, mixed into the handshake for additional forward secrecy.
+**QuickZTNA does not run this exchange.** Our tunnels are classical WireGuard, and post-quantum key exchange is neither implemented nor planned. This section is a design sketch for anyone building it — not a description of our product.
 
-QuickZTNA does not run this exchange; its tunnels are classical WireGuard. A design of this shape would run as a separate protocol at a higher layer, relayed through a coordination server. The resulting 32-byte derived key is installed as the WireGuard PSK for that peer. WireGuard's own Noise handshake then runs as normal, but with the PSK field populated from a post-quantum exchange rather than left empty or statically configured.
+WireGuard does not have a TLS-style codepoint or negotiation. The protocol is fixed. What it does have is an optional pre-shared key (PSK) field on every peer, mixed into the handshake for additional forward secrecy. That field is the seam: a design of this shape runs the hybrid exchange as a separate protocol at a higher layer, then installs the resulting 32-byte derived key as the WireGuard PSK for that peer. WireGuard's own Noise handshake then proceeds as normal, with the PSK populated from a post-quantum exchange rather than left empty or statically configured.
 
-A few consequences worth highlighting:
+A few consequences worth planning for if you build it:
 
-- **Classical-capable WireGuard kernel modules continue to work.** If one side does not support QuickZTNA's PQ layer, the tunnel establishes classical-only. This is visible in the dashboard.
-- **The PSK rotates on every WireGuard rekey.** WireGuard rekeys every 120 seconds by default. QuickZTNA re-runs the hybrid derivation on that cadence.
-- **Handshake cost is amortised.** On the first establishment, you pay for ephemeral key generation on both sides plus the relay round-trip. On subsequent rekeys, only the ML-KEM encap/decap operations are re-run; classical Curve25519 is already in a fast path.
-- **Audit log carries the mode.** Every established and renewed session records `kex=hybrid-x25519-mlkem768` or `kex=classical-only` along with the peer identity and timestamp.
+- **Classical-capable WireGuard kernel modules keep working.** If one side lacks the PQ layer, the tunnel establishes classical-only — so you need a way to surface which mode a given session actually used.
+- **The PSK should rotate on every WireGuard rekey.** WireGuard rekeys roughly every 120 seconds by default, so the derivation runs on that cadence.
+- **Handshake cost is amortised.** First establishment pays for ephemeral key generation on both sides plus a relay round-trip; subsequent rekeys need only the ML-KEM encap/decap, since classical Curve25519 is already in a fast path.
+- **Log the mode.** Record something like `kex=hybrid-x25519-mlkem768` or `kex=classical-only` per session alongside peer identity and timestamp, so you can later prove what protected which session.
 
-Our detailed walkthrough of the implementation is in the [ML-KEM-768 explained post](/blog/ml-kem-768-explained#8-how-ml-kem-768-is-wired-into-quickztna) and the [post-quantum section of the docs](/docs/security/#post-quantum).
+For the algorithm itself, see the [ML-KEM-768 explained post](/blog/ml-kem-768-explained); for what QuickZTNA actually ships, see the [security model](/docs/security/).
 
 ## 9. Testing and interoperability
 

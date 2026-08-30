@@ -100,7 +100,7 @@ If you want to **lock down what each person can reach**, jump to the [access pol
 
 If you want to **connect a server** (a database, a build agent, a Kubernetes node), the install command is the same as for a laptop. Tag the device as `server` and write a policy that lets only the right humans reach it. The [installation page](/guide/installation/) covers headless installs and containers in detail.
 
-If you want to understand **how the encryption actually works**, the [security model](/docs/security/) page in the developer docs is where to go. Short version: every tunnel is WireGuard — Curve25519 (X25519) key exchange and ChaCha20-Poly1305 — with no central decryption point. (Post-quantum hybrid key exchange is on the roadmap, not the shipped client.)
+If you want to understand **how the encryption actually works**, the [security model](/docs/security/) page in the developer docs is where to go. Short version: every tunnel is WireGuard — Curve25519 (X25519) key exchange and ChaCha20-Poly1305 — with no central decryption point. (Post-quantum key exchange is not implemented and is not planned.)
 
 If you hit a problem, the [troubleshooting page](/guide/troubleshooting/) covers the issues we see most often. Run `ztna netcheck` (and `ztna status`) on a stuck device before opening a ticket — they'll usually surface the cause.
 
