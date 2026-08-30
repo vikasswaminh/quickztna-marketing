@@ -5,7 +5,7 @@ import {
   ShieldCheck,
   Network,
   KeyRound,
-  Sparkles,
+  Gavel,
   Globe2,
   Lock,
   Activity,
@@ -46,6 +46,7 @@ const proofPoints = [
   "2 global DERP regions (BLR + FRA)",
   "Dodo Payments · custom invoicing",
   "Open-source Go client",
+  "Free SSH on every tier",
 ];
 
 // Homepage FAQ — eight questions optimized for AEO retrieval. These are the
@@ -55,15 +56,15 @@ const proofPoints = [
 const homepageFaq = [
   {
     q: "What is QuickZTNA?",
-    a: "QuickZTNA is the Remote Workforce Security OS — a Zero Trust Network Access platform that connects laptops, servers, and containers into a single encrypted private mesh network. Every connection is authenticated against your identity provider, authorized against ABAC policies + continuous device posture, and encrypted by WireGuard. An AI Operator previews, applies, and reverts ACL + firewall + policy changes. Free for up to 5 users, forever — every feature included.",
+    a: "QuickZTNA is a Zero Trust Network Access platform that connects laptops, servers, and containers into a single encrypted private mesh network. Every connection is authenticated against your identity provider, authorized against ABAC policies + continuous device posture, and encrypted by WireGuard. It adds DNS threat filtering, a per-org edge firewall, JIT access with approvals, access-review campaigns, and one-click compliance evidence bundles. Free for up to 5 users, forever — every feature included.",
   },
   {
     q: "How is QuickZTNA different from Tailscale?",
-    a: "Both are mesh VPN products built on WireGuard. Tailscale focuses on the mesh-VPN primitive; QuickZTNA ships a fuller workforce-security suite in-product: DLP (filesystem file scanning), CASB with approval workflow, workforce analytics, software inventory, user-risk scoring, continuous device posture, and an AI Operator that previews/applies/reverts ACL + firewall + policy changes. Tailscale has greater client ecosystem maturity; QuickZTNA has broader ZTNA + workforce-security depth and free-tier SSH.",
+    a: "Both are mesh VPN products built on WireGuard, and Tailscale has the more mature client ecosystem. QuickZTNA's depth is in governance and threat control rather than the mesh primitive: JIT access requests with approval and auto-revoke, periodic access-review campaigns, versioned ACLs with one-click rollback, exportable SOC 2 / ISO 27001 / HIPAA evidence bundles, multi-feed DNS threat filtering enforced per organization, a per-org edge firewall, and remote SSH included on the free tier rather than gated behind an enterprise plan.",
   },
   {
     q: "Is QuickZTNA really free, forever?",
-    a: "Yes. The Free plan covers up to 5 users (and up to 100 devices) with no trial timer, no credit card requirement — and it includes every feature: WireGuard-encrypted mesh, MagicDNS, ABAC policies, device posture, DNS filtering, AI assistant, remote shell, DLP, CASB, SCIM, remote desktop, and more. The plan never expires; upgrade to Business only when you need more seats — billing is per user, never per device, and never to unlock features.",
+    a: "Yes. The Free plan covers up to 5 users and 5 devices per user (25 devices) with no trial timer and no credit card requirement — and it includes every feature: WireGuard-encrypted mesh, MagicDNS, ABAC policies, device posture, DNS threat filtering, edge firewall, JIT access, access reviews, compliance reports, SSO, SCIM, and remote shell. The plan never expires; upgrade to Business only when you need more seats — billing is per user, never per device, and never to unlock features.",
   },
   {
     q: "How fast can I deploy QuickZTNA across my team?",
@@ -75,11 +76,11 @@ const homepageFaq = [
   },
   {
     q: "What identity providers does QuickZTNA integrate with?",
-    a: "Every major IdP that speaks OIDC or SAML 2.0: Google Workspace, Microsoft Entra (Azure AD), Okta, Authentik, GitHub, plus generic OIDC for any standards-compliant provider. SCIM 2.0 provisioning for proactive user lifecycle is included on every plan. Multiple IdPs can be active simultaneously for organizations that use different identity sources for employees vs contractors.",
+    a: "Any IdP that speaks OIDC: Google Workspace, Microsoft Entra (Azure AD), Okta, Authentik, plus generic OIDC for any standards-compliant provider, and direct Google and GitHub sign-in. SCIM 2.0 provisioning for proactive user lifecycle is included on every plan, as is TOTP multi-factor authentication. SAML login is currently disabled pending a security fix — use OIDC with the same providers in the meantime.",
   },
   {
     q: "Is QuickZTNA SOC 2 compliant?",
-    a: "We offer a GDPR-aligned DPA and sign HIPAA Business Associate Agreements on the Business plan. SOC 2 Type II and ISO 27001 certifications are in progress with target completion in 2026.",
+    a: "Not yet — we hold no certification today, and we won't imply otherwise. We offer a GDPR-aligned DPA and sign HIPAA Business Associate Agreements on the Business plan, and the platform generates SOC 2 / ISO 27001 / HIPAA evidence bundles to support your own audit. Our SOC 2 Type II and ISO 27001 audits are in progress, targeting 2026.",
   },
   {
     q: "Can QuickZTNA be self-hosted?",
@@ -101,7 +102,7 @@ const softwareApplicationSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "QuickZTNA",
-  description: "Remote Workforce Security OS. WireGuard mesh + ABAC policies + continuous device posture + DLP + AI Operator. Free for up to 5 users forever.",
+  description: "Zero Trust Network Access on WireGuard. Encrypted mesh + ABAC policies + continuous device posture + DNS threat filtering + JIT access governance. Free for up to 5 users forever.",
   applicationCategory: "SecurityApplication",
   applicationSubCategory: "Zero Trust Network Access",
   operatingSystem: "Linux, macOS, Windows",
@@ -132,18 +133,19 @@ const softwareApplicationSchema = {
   publisher: { "@id": "https://www.quickztna.com/#organization" },
   featureList: [
     "WireGuard mesh data plane with global DERP relay fleet (Bangalore + Frankfurt today)",
-    "Identity-based ACL policies (ABAC) with continuous device posture",
-    "SSO via OIDC, SAML, Google, GitHub, Microsoft Entra, Okta",
-    "SCIM 2.0 provisioning",
-    "AI Operator: preview, apply, revert ACL + policy + firewall changes",
-    "Audit log retention (90 days)",
-    "Secrets vault, DLP, CASB, workforce analytics, software inventory, user-risk scoring",
+    "Identity-based ACL policies (ABAC) with continuous device posture and auto-quarantine",
+    "SSO via OIDC, Google, GitHub, Microsoft Entra, Okta; SCIM 2.0 provisioning; TOTP MFA",
+    "DNS threat filtering with multi-feed blocklists, plus a per-organization edge firewall",
+    "JIT access requests with approval and auto-revoke; periodic access-review campaigns",
+    "Versioned ACLs with one-click rollback; SOC 2 / ISO 27001 / HIPAA evidence bundles",
+    "Audit log retention (90 days); remote shell included on every plan",
+    "Terraform provider and REST API for GitOps-managed network state",
   ],
 };
 ---
 <SiteLayout
-  title="QuickZTNA — Remote Workforce Security OS · ZTNA mesh + DLP + AI Operator"
-  description="The Remote Workforce Security OS. WireGuard mesh ZTNA + workforce DLP + continuous device posture + analytics + an AI Operator that previews, applies, and reverts ACL/firewall/policy changes. Free forever for up to 5 users."
+  title="QuickZTNA — Zero Trust Network Access on WireGuard · mesh + ABAC + DNS filtering"
+  description="Zero Trust Network Access built on WireGuard. Encrypted mesh, ABAC policies with continuous device posture, DNS threat filtering, JIT access and access reviews. Free forever for up to 5 users."
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(softwareApplicationSchema)} is:inline />
@@ -156,18 +158,18 @@ const softwareApplicationSchema = {
       <div class="mx-auto max-w-3xl text-center">
         <div class="inline-flex items-center gap-2 rounded-full border border-border bg-surface-elevated px-3 py-1 text-xs font-medium text-muted-foreground shadow-soft">
           <span class="flex h-1.5 w-1.5 rounded-full bg-success"></span>
-          AI Operator · live · previews policy changes before they ship
+          Remote SSH · free on every tier · not gated behind enterprise
           <span class="text-border">·</span>
           <a href={"/features/"} class="text-primary hover:underline">See it</a>
         </div>
         <h1 class="mt-6 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-          The <span class="text-gradient">Remote Workforce</span>
-          <br class="hidden sm:block" /> Security OS.
+          Zero Trust access,
+          <br class="hidden sm:block" /> <span class="text-gradient">two minutes</span> to deploy.
         </h1>
         <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-          WireGuard mesh ZTNA + ABAC. Workforce DLP, device posture, software
-          inventory, user-risk scoring. AI Operator previews, applies, and reverts
-          ACL + firewall + policy changes. Free forever for up to 5 users.
+          A WireGuard-encrypted mesh with identity-based ABAC policies and continuous
+          device posture. DNS threat filtering, a per-org edge firewall, JIT access with
+          approvals, and audit-ready evidence bundles. Free forever for up to 5 users.
         </p>
         <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Button size="lg" href={AUTH_URL} class="h-11 px-6 font-medium">
@@ -200,7 +202,7 @@ const softwareApplicationSchema = {
           <div class="bg-foreground/[0.02] p-5 font-mono text-[13px] leading-relaxed">
             <div><span class="text-primary">$</span> <span class="text-foreground">ansible all -m shell -a "curl -fsSL .../install.sh | ZTNA_AUTH_KEY=$KEY sh"</span></div>
             <div class="text-muted-foreground">→ 100 hosts · detecting OS/arch...</div>
-            <div class="text-muted-foreground">→ Downloading ztna v3.2.0 (linux-amd64, darwin-arm64, windows-amd64)</div>
+            <div class="text-muted-foreground">→ Downloading ztna v3.3.41 (linux-amd64, darwin-arm64, windows-amd64)</div>
             <div class="text-muted-foreground">→ Installing service · starting daemon · ztna up</div>
             <div class="text-muted-foreground">→ WireGuard keypair generated per host</div>
             <div class="text-muted-foreground">→ Tailnet IPs allocated · MagicDNS registered · ABAC policies pushed</div>
@@ -211,7 +213,7 @@ const softwareApplicationSchema = {
               <div><span class="text-success">●</span> laptop-prod-01 100.64.1.7 · tag:laptop · direct</div>
               <div><span class="text-success">●</span> db-primary 100.64.1.12 · tag:prod-server · 4.2ms</div>
               <div><span class="text-success">●</span> ci-runner-03 100.64.1.18 · tag:ci · 38ms direct</div>
-              <div><span class="text-warning">●</span> eu-edge-07 100.64.1.31 · tag:edge · derp-lon</div>
+              <div><span class="text-warning">●</span> eu-edge-07 100.64.1.31 · tag:edge · derp-fra1</div>
             </div>
           </div>
         </div>
@@ -223,7 +225,7 @@ const softwareApplicationSchema = {
   <section class="border-y border-border bg-surface">
     <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <p class="text-center font-mono text-xs uppercase tracking-wider text-muted-foreground">
-        Built on open standards · Verifiable crypto · No harvest-now-decrypt-later
+        Built on open standards · Audited WireGuard crypto · No proprietary tunnel protocol
       </p>
       <div class="mt-6 grid grid-cols-2 items-center justify-items-center gap-6 sm:grid-cols-3 lg:grid-cols-6">
         {proofPoints.map((p) => (
@@ -241,36 +243,37 @@ const softwareApplicationSchema = {
         One control plane. Every layer of access.
       </h2>
       <p class="mt-3 text-muted-foreground">
-        Mesh networking, identity, ZTNA policy, AI assistance, and workforce analytics — unified in a single agent.
+        Mesh networking, identity, ZTNA policy, threat filtering, and access governance — unified in a single agent.
       </p>
     </div>
 
     <div class="mt-14 grid gap-4 lg:grid-cols-6 lg:grid-rows-2">
-      <!-- AI Operator card - large accent -->
+      <!-- Access governance card - large accent -->
       <div class="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated bg-gradient-to-br from-surface-elevated via-surface-elevated to-accent/40 lg:col-span-3 lg:row-span-2">
         <div class="absolute -right-20 -top-20 h-60 w-60 rounded-full bg-primary/10 blur-3xl"></div>
         <div class="relative flex h-full flex-col">
           <span class="inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-wider text-primary">
-            <Sparkles class="h-3.5 w-3.5" />AI Operator
+            <Gavel class="h-3.5 w-3.5" />Access governance
           </span>
-          <h3 class="mt-4 text-2xl font-semibold tracking-tight">Previews policy changes before they ship</h3>
+          <h3 class="mt-4 text-2xl font-semibold tracking-tight">Prove who had access, and why</h3>
           <p class="mt-2 text-sm text-muted-foreground">
-            Ask in natural language: "Block all 0.0.0.0/0 egress from contractors." The AI Operator
-            generates the rule, shows you which machines + users it impacts, snapshots the current
-            state, applies on confirm, and lets you revert with one click. Every step audit-logged.
+            Standing access is the audit finding. Engineers request time-bounded elevation, an
+            approver signs off, and the grant auto-revokes — every step in the audit log. Run
+            periodic access-review campaigns, roll any ACL back to a prior version in one click,
+            and export the evidence bundle your auditor asks for.
           </p>
           <div class="mt-6 grid flex-1 grid-cols-2 gap-3">
             <div class="rounded-xl border border-border bg-surface p-4">
-              <div class="font-mono text-2xl font-semibold tracking-tight text-foreground">Preview</div>
-              <div class="mt-0.5 text-xs text-muted-foreground">impact before apply</div>
+              <div class="font-mono text-2xl font-semibold tracking-tight text-foreground">JIT</div>
+              <div class="mt-0.5 text-xs text-muted-foreground">request · approve · expire</div>
             </div>
             <div class="rounded-xl border border-border bg-surface p-4">
-              <div class="font-mono text-2xl font-semibold tracking-tight text-foreground">Snapshot</div>
-              <div class="mt-0.5 text-xs text-muted-foreground">auto, every change</div>
+              <div class="font-mono text-2xl font-semibold tracking-tight text-foreground">Reviews</div>
+              <div class="mt-0.5 text-xs text-muted-foreground">periodic campaigns</div>
             </div>
             <div class="rounded-xl border border-border bg-surface p-4">
               <div class="font-mono text-2xl font-semibold tracking-tight text-foreground">1-click</div>
-              <div class="mt-0.5 text-xs text-muted-foreground">revert any change</div>
+              <div class="mt-0.5 text-xs text-muted-foreground">roll back any policy</div>
             </div>
             <div class="rounded-xl border border-border bg-surface p-4">
               <div class="font-mono text-2xl font-semibold tracking-tight text-foreground">Audited</div>
@@ -278,10 +281,10 @@ const softwareApplicationSchema = {
             </div>
           </div>
           <div class="mt-6 flex flex-wrap items-center gap-2 font-mono text-xs text-muted-foreground">
-            <span class="rounded bg-muted px-2 py-1">NL-ACL</span>
-            <span class="rounded bg-muted px-2 py-1">Policy Drift</span>
-            <span class="rounded bg-muted px-2 py-1">Incident Response</span>
-            <span class="rounded bg-muted px-2 py-1">JIT Recs</span>
+            <span class="rounded bg-muted px-2 py-1">JIT grants</span>
+            <span class="rounded bg-muted px-2 py-1">Access reviews</span>
+            <span class="rounded bg-muted px-2 py-1">Policy rollback</span>
+            <span class="rounded bg-muted px-2 py-1">Evidence bundles</span>
           </div>
         </div>
       </div>
@@ -298,11 +301,11 @@ const softwareApplicationSchema = {
 
       <div class="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated lg:col-span-2">
         <span class="inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-wider text-primary">
-          <Sparkles class="h-3.5 w-3.5" />AI policy
+          <ShieldCheck class="h-3.5 w-3.5" />Threat filtering
         </span>
-        <h3 class="mt-3 text-lg font-semibold">Natural-language ACLs</h3>
+        <h3 class="mt-3 text-lg font-semibold">DNS blocking that stays fresh</h3>
         <p class="mt-1.5 text-sm text-muted-foreground">
-          "Laptops can SSH to prod 9–6 IST." Done. Powered by Claude.
+          Multi-feed phishing and malware blocklists, refreshed every 6 hours, enforced only for the feeds your org enabled.
         </p>
       </div>
 
@@ -330,9 +333,9 @@ const softwareApplicationSchema = {
       </div>
       <div class="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated">
         <Activity class="h-5 w-5 text-primary" />
-        <h3 class="mt-3 text-base font-semibold">Workforce analytics</h3>
+        <h3 class="mt-3 text-base font-semibold">Edge firewall & remote shell</h3>
         <p class="mt-1 text-sm text-muted-foreground">
-          Workforce analytics, software inventory, user-risk scoring, DLP, CASB, DEM, anomaly detection, remote desktop, remote shell — all from the same agent.
+          Per-org firewall rules and threat-IP blocking pushed to every endpoint, plus browser-based remote shell for diagnostics — from the same agent, on every plan.
         </p>
       </div>
     </div>
@@ -342,14 +345,14 @@ const softwareApplicationSchema = {
         <Fingerprint class="h-5 w-5 text-primary" />
         <h3 class="mt-3 text-base font-semibold">SSO + SCIM 2.0</h3>
         <p class="mt-1 text-sm text-muted-foreground">
-          Google, GitHub, OIDC, SAML. SCIM provisioning for Okta, Azure AD. TOTP MFA. Device-bound refresh tokens.
+          Google, GitHub, OIDC. SCIM provisioning for Okta, Azure AD. TOTP MFA. Device-bound refresh tokens.
         </p>
       </div>
       <div class="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated">
         <Lock class="h-5 w-5 text-primary" />
-        <h3 class="mt-3 text-base font-semibold">Secrets vault</h3>
+        <h3 class="mt-3 text-base font-semibold">Private app & data access</h3>
         <p class="mt-1 text-sm text-muted-foreground">
-          AES-256-GCM encrypted secrets with rotation policies. Integrated with the agent — no second tool to deploy.
+          Reach internal web apps, PostgreSQL/MySQL/Mongo, and Kubernetes through the mesh — brokered, identity-scoped, audited.
         </p>
       </div>
       <div class="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-soft transition-all hover:border-primary/30 hover:shadow-elevated">
