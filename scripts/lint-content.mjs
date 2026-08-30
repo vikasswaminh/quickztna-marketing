@@ -77,11 +77,14 @@ const DENIAL = [
   // "removed" in unrelated prose does not become a blanket exemption.
   /\b(?:removed|withdrew|deleted|retired|dropped)\b(?=[^.\n]{0,60}\b(?:dlp|casb|workforce|session|remote|software|inventory|scoring|analytics|vault|operator|assistant|recording|desktop|post-quantum|ml-?kem|fido2|webauthn)\b)/i,
   /\b(?:doesn't|don't|didn't|isn't|aren't|wasn't|weren't|won't|can't|cannot|hasn't|haven't)\b/i,
-  /\bnever\b|\bno longer\b/i,
+  /\bnever\b|\bno longer\b|\bneither\b/i,
   /\bnot\s+(?:implemented|shipped|offered|supported|planned|available|certified|on the roadmap|a\b|one of)/i,
   // Explicitly hypothetical framing — "we would document it only if it ever shipped"
   // is the opposite of a claim, but names the capability and a ship-verb.
-  /\b(?:only\s+)?if\s+it\s+ever\s+(?:ships|shipped)\b|\bwould\s+(?:document|ship|add)\b/i,
+  // Deliberately NOT a bare "would ship/add": that would exempt a positive
+  // conditional promise like "QuickZTNA would add CASB for enterprise customers".
+  // The "if it ever ships" construction is what makes it a denial.
+  /\b(?:only\s+)?if\s+it\s+ever\s+(?:ships|shipped)\b/i,
   /\bthere\s+(?:is|are|'s)\s+no\b/i,
   /\b(?:was|were|has been|have been|are|is)\s+(?:removed|withdrawn|deleted|retired)\b/i,
   /\b(?:we|quickztna)\s+(?:removed|withdrew|deleted|dropped)\b/i,
@@ -202,7 +205,11 @@ const PRODUCT_RULES = [
     msg: "PQC-roadmap claim — PQC was withdrawn, not deferred; do not promise it",
     // Third parties legitimately have PQC roadmaps — the EU's coordinated
     // transition roadmap, NIST's, a competitor's. Only OUR roadmap is forbidden.
-    unless: /\b(EU|EU's|European|Commission|NIST|NSA|BSI|ANSSI|NCSC|industry|vendor|their|Tailscale|Cloudflare)\b[^.\n]{0,40}roadmap|roadmap\]\(http/i,
+    // The roadmap must be POSSESSED by the third party, and the leading lookahead
+    // makes sure a nearby third-party name can't launder a claim about ours:
+    // "NIST's ML-KEM is on QuickZTNA's roadmap" must still fail.
+    unless:
+      /^(?!.*\b(?:our|quickztna['’]s|we)\s+roadmap\b)(?=.*(?:\b(?:EU|European Commission|NIST|NSA|BSI|ANSSI|NCSC|IBM|Tailscale|Cloudflare|industry|vendor|their)(?:['’]s)?\s[^.\n]{0,40}roadmap\b|roadmap\]\(http))/i,
   },
   {
     re: /(self-host(ed|ing)?[^.\n|]{0,30}workforce|workforce[^.\n|]{0,25}self-host)/i,
@@ -234,9 +241,14 @@ const REMOVED = [
   },
   // "We use this construction in every QuickZTNA tunnel" names no PQC term at all,
   // so the co-occurrence rule above cannot see it — the referent is anaphoric.
+  // Deliberately narrow to "this construction": widening it to handshake/exchange
+  // rejected accurate classical prose ("This handshake runs in every QuickZTNA
+  // tunnel"), and since lint runs in `prebuild` a false positive BLOCKS THE BUILD.
+  // The `unless` lets a clause that names the classical primitives through.
   {
-    re: /\b(this|the) (construction|exchange|handshake|scheme|mode)\b/i,
+    re: /\bthis construction\b/i,
     also: /\b(in|on) every[^.\n]{0,25}tunnel\b|every quickztna tunnel/i,
+    unless: /\b(classical|x25519 \+ chacha|chacha20|curve25519|noise)\b/i,
     msg: "anaphoric PQC-as-shipped claim — name the crypto explicitly; PQC is not shipped",
   },
   {

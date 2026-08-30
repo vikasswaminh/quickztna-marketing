@@ -23,9 +23,9 @@ faq:
   - q: "Why use X25519 + ML-KEM-768 as a hybrid instead of ML-KEM-768 alone?"
     a: "Defence in depth. ML-KEM is a new standard and the body of cryptanalysis against it is a few years old. Pairing it with X25519 means an attacker has to break both a lattice-based scheme and an elliptic-curve scheme to recover the session key. If either holds, you are safe. Hybrid is also what the NSA CNSA 2.0 transition guidance, the German BSI, and the French ANSSI all recommend for the migration window."
   - q: "How much does ML-KEM-768 slow down a WireGuard handshake?"
-    a: "On a 2022-era laptop, ML-KEM-768 keygen, encap, and decap each complete in well under a millisecond. The dominant cost is the 1,088-byte ciphertext that now travels in the handshake, not the CPU. On a 100 Mbit link, the extra bytes add roughly 100 microseconds of wire time. In QuickZTNA we measure total hybrid handshake overhead at under 5 ms end-to-end."
+    a: "On a 2022-era laptop, ML-KEM-768 keygen, encap, and decap each complete in well under a millisecond. The dominant cost is the 1,088-byte ciphertext that now travels in the handshake, not the CPU. On a 100 Mbit link, the extra bytes add roughly 100 microseconds of wire time, which puts total hybrid handshake overhead in the low milliseconds. Measure it on your own hardware — QuickZTNA does not implement hybrid key exchange, so we have no product figure to quote here."
   - q: "Is ML-KEM-768 FIPS 140-3 certified?"
-    a: "ML-KEM is standardised as FIPS 203. Individual implementations need separate FIPS 140-3 validation through the CMVP programme. As of April 2026 several vendors have submitted ML-KEM modules for validation; NIST maintains the current list on the Cryptographic Module Validation Program site. QuickZTNA uses the Go 1.24 standard library implementation, which is not FIPS-validated on its own."
+    a: "ML-KEM is standardised as FIPS 203. Individual implementations need separate FIPS 140-3 validation through the CMVP programme. As of April 2026 several vendors have submitted ML-KEM modules for validation; NIST maintains the current list on the Cryptographic Module Validation Program site. Note that the Go standard library's implementation is not FIPS-validated on its own, so 'uses FIPS 203' and 'is FIPS 140-3 validated' are different claims worth separating when you evaluate a vendor."
   - q: "When will NIST require ML-KEM for federal systems?"
     a: "There is no single switch. The NSA's CNSA 2.0 roadmap sets transition deadlines per technology class, with the latest dates falling between 2030 and 2035 depending on system type. Non-federal organisations are not required to switch, but regulators in the EU, Germany, and France have all published guidance recommending that long-lived data be protected with post-quantum cryptography starting now."
 ---
@@ -111,7 +111,7 @@ You rarely have to agonise over the choice.
 - **ML-KEM-768** is the sensible default for commercial use. It is the level specified in TLS 1.3 hybrid drafts, the level shipped by default in most browser-to-cloud deployments, and the level chosen in QuickZTNA.
 - **ML-KEM-1024** is what the NSA's CNSA 2.0 guidance picks for US national security systems. If you are specifically targeting NSS compliance, use it. For everyone else, the marginal security gain over 768 is not worth the bandwidth and CPU, given that 768 already exceeds AES-192 classical strength.
 
-Note: CNSA 2.0 specifies ML-KEM-1024 rather than 768. QuickZTNA ships 768 as the default and plans to add a 1024 opt-in for customers with CNSA-aligned policies as part of a 2026-Q3 release. We will not describe that release as "CNSA 2.0 compliant" until the full algorithm suite is in place and validated.
+Note: CNSA 2.0 specifies ML-KEM-1024 rather than 768. QuickZTNA ships neither — our tunnels are classical WireGuard — so a CNSA-aligned programme needs a vendor that implements ML-KEM-1024. We will not describe that release as "CNSA 2.0 compliant" until the full algorithm suite is in place and validated.
 
 ## 6. ML-KEM vs Kyber: what changed during standardisation
 
@@ -127,7 +127,7 @@ Practical implication: if you have code that uses a pre-standard Kyber library f
 
 You do not have to choose between classical and post-quantum. The industry consensus during the transition is to use a hybrid key exchange that combines both, so that the resulting session key is secure if either underlying primitive holds.
 
-In QuickZTNA the construction is:
+A hybrid construction of this shape looks like:
 
 ```text
 (classical_pk, classical_sk) = X25519_KeyGen()
@@ -229,8 +229,8 @@ If a vendor says their product is "quantum-safe" or "post-quantum ready", these 
 2. **Is it hybrid or PQ-only?** Hybrid is the right answer today. PQ-only means the vendor has not thought about unknown future lattice cryptanalysis.
 3. **Pre-standard Kyber or ML-KEM?** If the vendor has not updated their crypto library since the 2024 standard, they are shipping something that will not interoperate.
 4. **What is the PSK source?** If the vendor just mixes a PQC secret into a key derivation step without rotating it, their forward secrecy claim is weaker than it sounds.
-5. **How often does the PQ key rotate?** We rotate every WireGuard rekey, i.e. every two minutes. If they do not rotate, ask why.
-6. **Can you see the mode on the wire?** We log it. An operator should be able to prove which sessions were protected by which key exchange.
+5. **How often does the PQ key rotate?** Rotating on every WireGuard rekey — roughly every two minutes — is the right answer. If they do not rotate, ask why.
+6. **Can you see the mode on the wire?** An operator should be able to prove which sessions were protected by which key exchange, so ask to see that log.
 7. **What happens if a peer does not support PQC?** Hard failure? Silent downgrade? Logged downgrade? Silent downgrade is the worst answer.
 8. **Has the implementation been independently audited?** Not "self-audited". An external firm or a published peer-reviewed paper. Bonus points for in-scope implementation fuzzing.
 9. **Is it on by default or opt-in?** Opt-in is a red flag. The whole point of a harvest-now-decrypt-later defence is that it is on when the attacker is capturing.
@@ -247,7 +247,7 @@ Primary sources first, secondary reading after. All links verified on the publis
 - [IETF draft-ietf-tls-hybrid-design](https://datatracker.ietf.org/doc/draft-ietf-tls-hybrid-design/). How the industry is wiring hybrid KEMs into TLS 1.3.
 - [NSA CSI, "Announcing the Commercial National Security Algorithm Suite 2.0"](https://media.defense.gov/2022/Sep/07/2003071834/-1/-1/0/CSA_CNSA_2.0_ALGORITHMS_.PDF). The US defence roadmap.
 - [Go `crypto/mlkem` documentation](https://pkg.go.dev/crypto/mlkem). The API we use.
-- [QuickZTNA security docs](/docs/security/). Exact packet layout and test vectors for our hybrid scheme.
+- [QuickZTNA security docs](/docs/security/). What our tunnels actually use, and our post-quantum position.
 
 ## Related reading on this blog
 
