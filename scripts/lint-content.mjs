@@ -290,6 +290,10 @@ const REMOVED = [
   {
     re: /\bthe (level|parameter set|variant|algorithm|suite)\b/i,
     also: /\b(chosen|selected|used|adopted|shipped|standard)\b[^.\n]{0,30}\bin quickztna\b|\bquickztna\b[^.\n]{0,30}\b(chose|selected|uses|adopted)\b/i,
+    // Without a PQC antecedent this rejects accurate classical prose
+    // ("Curve25519 is the algorithm used in QuickZTNA tunnels") — and since lint
+    // runs in `prebuild`, that would block the build on correct content.
+    needsPqcContext: true,
     msg: "anaphoric PQC selection claim — QuickZTNA implements no ML-KEM parameter set",
   },
   // "We use this construction in every QuickZTNA tunnel" names no PQC term at all,
@@ -445,10 +449,19 @@ for (const file of ROOTS.flatMap((r) => walk(r))) {
   // Markdown section scope: everything under "## 5. QuickZTNA — ..." is about
   // us, even when individual sentences omit the name.
   let sectionOurs = false;
+  // Anaphoric rules refer back to a PQC term in an EARLIER clause ("…the level
+  // chosen in QuickZTNA"). Without requiring that antecedent they fire on
+  // accurate classical prose. Reset at each heading so context cannot leak
+  // across sections.
+  let pqcContext = false;
+  const PQC_TERM = /\b(ml-?kem|post-quantum|quantum-safe|kyber|hybrid pq)\b/i;
 
   for (const { text, line: i } of units(lines)) {
     const heading = text.match(/^#{2,6}\s+(.*)$/);
-    if (heading) sectionOurs = SUBJ_RE.test(heading[1]);
+    if (heading) {
+      sectionOurs = SUBJ_RE.test(heading[1]);
+      pqcContext = PQC_TERM.test(heading[1]);
+    }
 
     for (const rawClause of splitClauses(text)) {
       const clause = redactAllowed(rawClause);
@@ -466,18 +479,31 @@ for (const file of ROOTS.flatMap((r) => walk(r))) {
         ...(isBlog ? [] : SURFACE_RULES),
       ];
 
-      for (const { re, msg, noExempt, unless, also } of rules) {
+      for (const { re, msg, noExempt, unless, also, needsPqcContext } of rules) {
+        if (needsPqcContext && !pqcContext) continue;
         if (unless && unless.test(clause)) continue;
         if (also && !also.test(clause)) continue;
-        const m = clause.match(re);
+        // Iterate EVERY match: taking only the first meant a denied first
+        // assertion skipped the rule entirely, so "QuickZTNA does not offer CASB
+        // today, but QuickZTNA will offer CASB next quarter" passed clean.
+        const gre = new RegExp(re.source, re.flags.includes("g") ? re.flags : re.flags + "g");
+        let m = null;
+        for (let hit; (hit = gre.exec(clause)); ) {
+          if (hit[0].length === 0) gre.lastIndex++; // never loop on a zero-width match
+          if (noExempt || !denied(clause, hit.index)) {
+            m = hit;
+            break;
+          }
+        }
         if (m) {
-          // Scope the denial to THIS assertion rather than the whole clause.
-          if (!noExempt && denied(clause, m.index)) continue;
           console.error(`  ${file}:${i + 1}  ${msg}`);
           console.error(`    > ${clause.trim().slice(0, 130)}`);
           problems++;
         }
       }
+      // Carry PQC context forward to the NEXT clause, so an anaphor can resolve
+      // against an antecedent in the sentence before it.
+      if (PQC_TERM.test(clause)) pqcContext = true;
     }
   }
 }

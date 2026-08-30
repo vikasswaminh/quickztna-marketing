@@ -111,7 +111,7 @@ You rarely have to agonise over the choice.
 - **ML-KEM-768** is the sensible default for commercial use. It is the level specified in TLS 1.3 hybrid drafts and the level shipped by default in most browser-to-cloud deployments. QuickZTNA implements no ML-KEM parameter set at all.
 - **ML-KEM-1024** is what the NSA's CNSA 2.0 guidance picks for US national security systems. If you are specifically targeting NSS compliance, use it. For everyone else, the marginal security gain over 768 is not worth the bandwidth and CPU, given that 768 already exceeds AES-192 classical strength.
 
-Note: CNSA 2.0 specifies ML-KEM-1024 rather than 768. QuickZTNA ships neither — our tunnels are classical WireGuard — so a CNSA-aligned programme needs a vendor that implements ML-KEM-1024. We will not describe that release as "CNSA 2.0 compliant" until the full algorithm suite is in place and validated.
+Note: CNSA 2.0 specifies ML-KEM-1024 rather than 768. QuickZTNA ships neither — our tunnels are classical WireGuard — so a CNSA-aligned programme needs a vendor that implements ML-KEM-1024. We will not describe QuickZTNA as "CNSA 2.0 compliant" until the full algorithm suite is in place and validated.
 
 ## 6. ML-KEM vs Kyber: what changed during standardisation
 
@@ -186,7 +186,7 @@ Translated: ML-KEM-768 keygen is about 91 microseconds, encap is 100 microsecond
 - An always-on mesh generates roughly one handshake per peer per 120 seconds.
 - Even 100 peers rekeying simultaneously is 100 × 91µs = 9.1 ms of aggregate CPU time per cycle.
 
-On the wire, the extra 2,272 bytes of hybrid handshake traffic cost 0.18 ms on a 100 Mbit link and 18 microseconds on a 1 Gbit link. In practice we have never seen a measurable user-visible latency from the PQC component on any production network.
+On the wire, the extra 2,272 bytes of hybrid handshake traffic cost 0.18 ms on a 100 Mbit link and 18 microseconds on a 1 Gbit link. In practice the added latency is not user-visible from the PQC component on any production network.
 
 ## 10. Implementation choices and common pitfalls
 
@@ -197,7 +197,7 @@ Ten things to verify when you ship ML-KEM-768 yourself.
 3. **Encapsulation randomness must come from a strong CSPRNG.** ML-KEM's IND-CCA2 proof depends on good randomness at encapsulation time. On Linux use `getrandom(2)`. Never use `rand()`.
 4. **Feed the full public key into the KEM, not a hash.** Some hobbyist libraries hash the public key first to save space. This breaks standard compliance and interoperability.
 5. **Compose the hybrid secret by concatenation, then KDF.** Simple XOR is wrong because it leaks structure. Full-length concatenation of both shared secrets, followed by HKDF with a fixed info string, is the documented construction.
-6. **Include a transcript in the KDF.** We fold the handshake transcript into the HKDF salt. Without it you are vulnerable to a class of re-routing attacks.
+6. **Include a transcript in the KDF.** Fold the handshake transcript into the HKDF salt. Without it you are vulnerable to a class of re-routing attacks.
 7. **Validate public keys at the deserialisation boundary.** FIPS 203 specifies that encapsulators must check that the public key decodes to valid polynomial coefficients. A buggy decoder can be used as an oracle.
 8. **Do not reuse nonces across rekey.** ML-KEM itself has no nonces; this is about the AEAD used afterwards. But a common mistake is to keep the AEAD key constant across rekey; rotate it.
 9. **Keep a compile-time flag for classical-only fallback.** Operators sometimes have to disable PQC to interoperate with stale peers. Make it loud and logged, not silent.
@@ -246,7 +246,7 @@ Primary sources first, secondary reading after. All links verified on the publis
 - [NIST IR 8528 — Analysis of the Quantum-Resistant Algorithms](https://csrc.nist.gov/pubs/ir/8528/final). Background on the selection process.
 - [IETF draft-ietf-tls-hybrid-design](https://datatracker.ietf.org/doc/draft-ietf-tls-hybrid-design/). How the industry is wiring hybrid KEMs into TLS 1.3.
 - [NSA CSI, "Announcing the Commercial National Security Algorithm Suite 2.0"](https://media.defense.gov/2022/Sep/07/2003071834/-1/-1/0/CSA_CNSA_2.0_ALGORITHMS_.PDF). The US defence roadmap.
-- [Go `crypto/mlkem` documentation](https://pkg.go.dev/crypto/mlkem). The API we use.
+- [Go `crypto/mlkem` documentation](https://pkg.go.dev/crypto/mlkem). The standard-library API for it.
 - [QuickZTNA security docs](/docs/security/). What our tunnels actually use, and our post-quantum position.
 
 ## Related reading on this blog

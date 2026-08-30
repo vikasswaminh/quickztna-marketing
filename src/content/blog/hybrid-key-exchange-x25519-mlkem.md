@@ -117,10 +117,10 @@ key_material = HKDF(
 
 Some design choices worth flagging:
 
-- **Concatenation order matters for determinism.** Both sides must agree on the order (classical first, then post-quantum). We fix it in the protocol spec.
+- **Concatenation order matters for determinism.** Both sides must agree on the order (classical first, then post-quantum). Fix it in the protocol spec.
 - **Each side computes `combined` independently.** The order is deterministic from the fixed spec, not from any random nonce.
 - **`salt` is the transcript hash.** Not a counter, not a nonce, not a fixed value. This is what binds the combined key to the specific handshake messages.
-- **`info` is a fixed ASCII string.** This provides domain separation from any other KDF step in the protocol. We version it (`-v1`) so future revisions are explicit.
+- **`info` is a fixed ASCII string.** This provides domain separation from any other KDF step in the protocol. Version it (`-v1`) so future revisions are explicit.
 - **Output length is the symmetric key length you need.** For WireGuard's pre-shared key field, 32 bytes is enough.
 
 ### 3.5 Zero out the temporaries
@@ -141,7 +141,7 @@ Consider a man-in-the-middle who can observe both halves of the handshake but ca
 
 Binding the transcript fixes this. Any rewrite of auxiliary fields changes the transcript, which changes the salt, which changes the derived session key. The two sides end up with different keys and the next message fails AEAD authentication. The attacker has nothing useful.
 
-The specific hash we use is SHA-256 of the concatenated handshake messages, in the order they were sent, with unambiguous length prefixes. Unambiguous length prefixes matter: if the transcript is just a plain concatenation, an attacker can sometimes move bytes between fields without changing the concatenation.
+A good choice is SHA-256 of the concatenated handshake messages, in the order they were sent, with unambiguous length prefixes. Unambiguous length prefixes matter: if the transcript is just a plain concatenation, an attacker can sometimes move bytes between fields without changing the concatenation.
 
 ## 5. Minimal Go implementation
 
@@ -252,11 +252,11 @@ func Finalise(st InitiatorState, rm ResponderMessage, transcript []byte) ([]byte
 }
 ```
 
-The actual QuickZTNA implementation is more careful about zeroisation, uses structured error types, serialises the transcript with explicit length prefixes, and handles negotiation of PQ support. But this is the shape.
+A production implementation would be more careful about zeroisation, use structured error types, serialise the transcript with explicit length prefixes, and handle negotiation of PQ support. But this is the shape.
 
 ## 6. Common mistakes and how to avoid them
 
-Ten specific mistakes we have seen in reviewed implementations — ours and others'.
+Ten specific mistakes that recur in reviewed implementations.
 
 ### 6.1 Hashing inputs before handing them to HKDF
 
@@ -296,7 +296,7 @@ Your abstraction should have an algorithm identifier in the protocol that names 
 
 ### 6.10 Silent fallback
 
-If a peer does not support PQ, a silent drop to classical-only is the worst behaviour because it masks the regression. Either fall back with a loud audit event, or fail closed. QuickZTNA defaults to the former; strict compliance policies can switch to the latter.
+If a peer does not support PQ, a silent drop to classical-only is the worst behaviour because it masks the regression. Either fall back with a loud audit event, or fail closed. Ask any vendor claiming hybrid which it does; QuickZTNA implements no PQ layer at all, so every tunnel is classical policies can switch to the latter.
 
 ## 7. How this lands in TLS 1.3
 
