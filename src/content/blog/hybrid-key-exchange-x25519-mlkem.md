@@ -331,7 +331,7 @@ A few consequences worth planning for if you build it:
 
 - **Classical-capable WireGuard kernel modules keep working.** If one side lacks the PQ layer, the tunnel establishes classical-only — so you need a way to surface which mode a given session actually used.
 - **The PSK should rotate on every WireGuard rekey.** WireGuard rekeys roughly every 120 seconds by default, so the derivation runs on that cadence.
-- **Handshake cost is amortised.** First establishment pays for ephemeral key generation on both sides plus a relay round-trip; subsequent rekeys need only the ML-KEM encap/decap, since classical Curve25519 is already in a fast path.
+- **Handshake cost is amortised.** First establishment pays for ephemeral key generation on both sides plus a relay round-trip. Rerun the FULL hybrid derivation on each rekey — both legs, not just ML-KEM — or the X25519 half stops contributing fresh entropy and forward secrecy degrades. Curve25519 is cheap enough that this is not the bottleneck.
 - **Log the mode.** Record something like `kex=hybrid-x25519-mlkem768` or `kex=classical-only` per session alongside peer identity and timestamp, so you can later prove what protected which session.
 
 For the algorithm itself, see the [ML-KEM-768 explained post](/blog/ml-kem-768-explained); for what QuickZTNA actually ships, see the [security model](/docs/security/).

@@ -1,13 +1,13 @@
 ---
 title: "Identity & onboarding"
-description: "Connect your identity provider (OIDC, SAML, Google, GitHub), provision users with SCIM, issue auth keys for headless onboarding, and approve and retire devices."
+description: "Connect your identity provider (OIDC, Google, GitHub), provision users with SCIM, issue auth keys for headless onboarding, and approve and retire devices."
 section: "admin"
 order: 2
 updatedAt: 2026-06-16
 primaryKeyword: "QuickZTNA SSO SCIM auth keys"
 faq:
   - q: "Which identity providers does QuickZTNA support?"
-    a: "Any OIDC or SAML 2.0 provider — Google Workspace, Microsoft Entra (Azure AD), Okta, Authentik, and generic OIDC — plus GitHub and Google sign-in. Users authenticate against your IdP; QuickZTNA never stores passwords. SCIM 2.0 provisioning is available on paid plans."
+    a: "Any OIDC provider — Google Workspace, Microsoft Entra (Azure AD), Okta, Authentik, and generic OIDC — plus GitHub and Google sign-in. SAML login is disabled product-wide, so SAML-only IdPs must be connected over OIDC. Users authenticate against your IdP; QuickZTNA never stores passwords. SCIM 2.0 provisioning is available on paid plans."
   - q: "How does SCIM authenticate, and what does it sync?"
     a: "SCIM uses an API key that carries the 'scim' scope as its Bearer token — not an ordinary auth key. With it, your IdP can list, create, update, and deactivate org members against /api/scim/Users (PATCH is supported; bulk and filter are not). Provision a user upstream and they can onboard; deprovision them and QuickZTNA removes them."
   - q: "What's the difference between an auth key and an API key?"
@@ -22,7 +22,7 @@ Identity is the foundation of a Zero Trust deployment: every **user** authentica
 
 ## 1. What it is
 
-- **User identity** comes from your IdP via OIDC or SAML; QuickZTNA issues a short-lived signed session (ES256 JWT, `iss: quickztna`, `aud: quickztna-api`) after a successful sign-in.
+- **User identity** comes from your IdP via OIDC (SAML login is disabled); QuickZTNA issues a short-lived signed session (ES256 JWT, `iss: quickztna`, `aud: quickztna-api`) after a successful sign-in.
 - **Device identity** is a per-device node key minted at registration; the device proves itself with it on every server call (posture, heartbeat, ACL probe).
 - **SCIM 2.0** keeps users/groups in lockstep with your IdP automatically (paid plans).
 - **Auth keys** onboard servers, containers, and fleets without a browser.
@@ -30,7 +30,7 @@ Identity is the foundation of a Zero Trust deployment: every **user** authentica
 ## 2. How it works
 
 ```
-  Person          ztna login --sso → IdP (OIDC/SAML) → ES256 JWT session
+  Person          ztna login --sso → IdP (OIDC) → ES256 JWT session
   Device          ztna up → register → node_key (per-device identity)
   Automation      API key (Bearer) → REST API   [scope: scim, terraform, …]
   Headless fleet  auth key (tskey-auth-…) → ztna up consumes it → device joins
@@ -39,10 +39,10 @@ Identity is the foundation of a Zero Trust deployment: every **user** authentica
 
 ## 3. Connect your identity provider
 
-QuickZTNA authenticates users against your IdP. Supported: **OIDC** (Google Workspace, Microsoft Entra/Azure AD, Okta, Authentik, generic OIDC), **SAML 2.0**, and **GitHub**/**Google** sign-in for quick starts. Per-provider setup (redirect URIs, client IDs, claim mapping) is in the [SSO integrations doc](/docs/integrations/). Users sign in with:
+QuickZTNA authenticates users against your IdP. Supported: **OIDC** (Google Workspace, Microsoft Entra/Azure AD, Okta, Authentik, generic OIDC) and **GitHub**/**Google** sign-in. **SAML login is disabled product-wide** — connect SAML-capable IdPs over OIDC instead for quick starts. Per-provider setup (redirect URIs, client IDs, claim mapping) is in the [SSO integrations doc](/docs/integrations/). Users sign in with:
 
 ```bash
-ztna login --sso <org-slug>     # OIDC/SAML via browser
+ztna login --sso <org-slug>     # OIDC via browser
 ztna login --google             # Google
 ztna login --github             # GitHub
 ```

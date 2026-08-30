@@ -519,10 +519,13 @@ for (const file of ROOTS.flatMap((r) => walk(r))) {
 
       // Attribution: surfaces describe our product by definition; the blog needs
       // the product name in the clause or in the enclosing heading.
-      const attributed = isBlog
-        ? SUBJ_RE.test(clause) || sectionOurs || (afterColon && prevAttributed)
-        : true;
-      prevAttributed = attributed;
+      // Attribution carries ONE hop across a colon. Propagating the inherited
+      // value would chain through consecutive colons — "QuickZTNA comparison:
+      // Cloudflare Access includes: CASB" would mark the competitor's clause as
+      // ours — so only a clause with its OWN subject seeds the next hop.
+      const ownAttribution = SUBJ_RE.test(clause) || sectionOurs;
+      const attributed = isBlog ? ownAttribution || (afterColon && prevAttributed) : true;
+      prevAttributed = ownAttribution;
 
       const rules = [
         ...PRODUCT_RULES,

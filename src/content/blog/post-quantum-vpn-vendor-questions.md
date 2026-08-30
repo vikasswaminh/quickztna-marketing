@@ -135,7 +135,7 @@ The deliberate exception: **an admin-controlled policy to forbid PQ fallback** i
 
 Homegrown cryptography is an anti-pattern. The right answer names a well-known implementation:
 
-- **Go standard library `crypto/mlkem`** (Go 1.24+). Used by QuickZTNA. Reviewed by the Go security team.
+- **Go standard library `crypto/mlkem`** (Go 1.24+). Reviewed by the Go security team. (QuickZTNA does not use it — we implement no ML-KEM.)
 - **OpenSSL 3.5** or newer. Widely reviewed.
 - **BoringSSL** main branch.
 - **AWS-LC**. Amazon's fork of BoringSSL.
