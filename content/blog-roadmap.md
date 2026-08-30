@@ -8,7 +8,12 @@
 
 ## Strategy in 4 bullets
 
-1. **Win the PQC wedge first.** Almost nobody has real post-quantum in a ZTNA product. We do. Rank posts 17–22 before AWS/Cloudflare publish.
+1. **PQC topic authority — as educators, not as a vendor claim.** ⚠️ **This strategy was
+   revised 2026-08-30.** It originally read "we have real post-quantum in a ZTNA product —
+   we do." **We do not**: PQC was never wired into the data plane and has been withdrawn.
+   Posts 17–22 stay as vendor-neutral explainers of NIST/BSI/ANSSI/CNSA material — they
+   rank on the topic without any product claim. **Never write that a QuickZTNA tunnel uses
+   ML-KEM or is post-quantum.**
 2. **Compete on "alternative" queries.** Highest buyer intent. Build fair, factual comparisons — not hit pieces.
 3. **Own EU compliance.** NIS2 (effective Oct 2024) and DORA (effective Jan 2025) are still under-covered relative to US CMMC/HIPAA. Huge demand.
 4. **Avoid head terms for the first 90 days.** "Zero trust network access" (KD ~75) is owned by Cisco/Zscaler. Long tail first, climb the graph.
@@ -25,7 +30,7 @@ Low-competition, high-authority wedge. We should rank page 1 in ~60 days because
 
 | # | Title | Primary keyword | Difficulty | Stage |
 |---|---|---|---|---|
-| 17 | ML-KEM-768 Explained: The Quantum-Safe Algorithm in Every QuickZTNA Tunnel | ml-kem-768 | Low | TOFU |
+| 17 | ML-KEM-768 Explained: The NIST Quantum-Safe KEM (FIPS 203) | ml-kem-768 | Low | TOFU |
 | 18 | Harvest Now, Decrypt Later: Why Your VPN Traffic Is Already Compromised | harvest now decrypt later | Low | TOFU |
 | 19 | Hybrid Key Exchange: X25519 + ML-KEM-768 in 800 Words | hybrid post quantum key exchange | Low | TOFU |
 | 20 | NSA CNSA 2.0: Every Deadline Every DoD Contractor Needs to Know | cnsa 2.0 | Low | TOFU |
