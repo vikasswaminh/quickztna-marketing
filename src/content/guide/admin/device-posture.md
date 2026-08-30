@@ -1,4 +1,4 @@
----
+﻿---
 title: "Device posture & compliance"
 description: "Require a device security baseline — disk encryption, firewall, antivirus, patch age — in enforce, monitor, or disabled mode, with auto-quarantine of failing devices."
 section: "admin"
@@ -124,4 +124,4 @@ A user can check their own device with `ztna posture` from the CLI.
 - **No reports** → device not on the workforce build, or mode is `disabled` and you're not looking at stored reports.
 - **Device won't leave quarantine** → it must send a *fresh compliant* report; have it re-evaluate posture.
 - **Monitor shows violations but nothing's blocked** → expected; that's monitor mode. Flip to enforce when ready.
-- **Want auto-fix** → enable the [AI Operator](/guide/admin/ai-operator/) with `auto_remediate_firewall` / `auto_remediate_encryption` rules.
+- **Want automatic isolation** → enable auto-quarantine so a failed posture check removes the device from the mesh until it complies.

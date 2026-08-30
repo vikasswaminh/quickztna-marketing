@@ -1,4 +1,4 @@
----
+﻿---
 title: "Plans & billing"
 description: "QuickZTNA's two plans — Free and Business — with full feature parity, per-seat pricing, an org-wide device cap, and billing via Dodo Payments."
 section: "admin"
@@ -43,16 +43,12 @@ Every capability below ships on **both** Free and Business — there are no paid
 | Capability | Page |
 | --- | --- |
 | DNS threat/category filtering | [DNS filtering](/guide/admin/dns-filtering/) |
-| Shadow-IT discovery & app policy (CASB) | [CASB](/guide/admin/casb/) |
 | File-scan data-loss detection (DLP) | [DLP](/guide/admin/dlp/) |
 | SCIM 2.0 provisioning | [Identity](/guide/admin/identity/) |
-| Workforce analytics (sessions, schedule, productivity, inventory) | [Workforce analytics](/guide/admin/workforce-analytics/) |
-| Seven-factor user-risk scoring | [Workforce analytics](/guide/admin/workforce-analytics/) |
 | Remote SSH/shell | [Remote access](/guide/admin/remote-access/) |
 | WebRTC remote desktop | [Remote access](/guide/admin/remote-access/) |
 | Encrypted secrets vault | [Observability](/guide/admin/observability/) |
 | Drift evaluation + signed compliance reports | [Observability](/guide/admin/observability/) |
-| AI Operator (NL ACL builder, event summarizer, security digest, AI chat, policy-drift) | [AI Operator](/guide/admin/ai-operator/) |
 
 Posture, ACLs, and the mesh are part of the baseline on both plans.
 

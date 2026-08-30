@@ -1,4 +1,4 @@
-# Cloudflare Pages _redirects
+﻿# Cloudflare Pages _redirects
 #
 # Goals (root cause of GSC "duplicate without user-selected canonical" on
 # 2026-05-10 was that every random URL returned HTTP 200 + the homepage HTML):
@@ -46,5 +46,12 @@
 /blog/post-quantum-free-tier-manifesto/  /blog/    301
 /blog/only-pqc-ready-ztna-solution-2026/ /blog/    301
 
+# Guide pages for capabilities removed in the 2026 lean pivot (claims re-sync).
+# 301 so indexed URLs and bookmarks land on the nearest live page.
+/guide/admin/casb/                 /guide/admin/dns-filtering/  301
+/guide/admin/ai-operator/          /guide/admin/                301
+/guide/admin/workforce-analytics/  /guide/admin/                301
+
 # Everything else (real 404, not duplicate-home 200)
 /*           /404.html                              404
+

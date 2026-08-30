@@ -1,4 +1,4 @@
----
+﻿---
 title: "QuickZTNA Admin Guide"
 description: "Run a QuickZTNA organization: SSO and SCIM, auth keys, device approval, ACL and posture policies, the workforce-security features, audit, and billing — per feature."
 section: "admin"
@@ -27,18 +27,18 @@ QuickZTNA is a managed cloud service. You administer your organization through t
 ## Network security
 
 - **[DNS filtering & threat feeds](/guide/admin/dns-filtering/)** — block malware/phishing/C2 and content categories with free feeds plus custom allow/blocklists.
-- **[CASB & Shadow IT discovery](/guide/admin/casb/)** — discover SaaS from DNS logs, score risk, enforce per-app policy, and run an approval workflow.
 
-## Workforce security
 
-- **[Workforce security overview](/guide/admin/workforce/)** — the map of the optional workforce layer and what ships today.
-- **[Data Loss Prevention (DLP)](/guide/admin/dlp/)** — file-content scanning for secrets/PII, masked events, SIEM emission (detect-and-alert).
-- **[Workforce analytics & user-risk](/guide/admin/workforce-analytics/)** — opt-in, consent-gated session/productivity analytics, software inventory and patches, seven-factor user-risk.
-- **[Remote access: shell & desktop](/guide/admin/remote-access/)** — free consent-aware SSH/shell over the mesh, and paid WebRTC remote desktop.
+## Endpoint security
+
+- **[Security overview](/guide/admin/workforce/)** — the map of the endpoint-security layer and what ships today.
+- **[Malware detection (file-hash)](/guide/admin/dlp/)** — agents report SHA-256 file hashes; confirmed-malicious hits are recorded and can quarantine the device.
+
+- **[Remote shell access](/guide/admin/remote-access/)** — consent-aware shell over the mesh, included on every plan.
 
 ## Operate
 
-- **[AI Operator](/guide/admin/ai-operator/)** — natural-language ACLs, event summaries, incident response, and tool-calling chat — every write goes through preview → confirm → revert.
+
 - **[Observability: audit, compliance, metrics](/guide/admin/observability/)** — audit log and SIEM export, compliance drift + signed reports, threat intel, Prometheus metrics, secrets vault.
 - **[Plans & billing](/guide/admin/billing/)** — the two tiers, what's included (full feature parity), how seat + device limits are enforced, and billing.
 
