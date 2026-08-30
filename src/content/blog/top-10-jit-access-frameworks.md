@@ -225,21 +225,21 @@ The result is a dense mesh of persistent high-privilege accounts, any one of whi
 
 ## 10. QuickZTNA JIT Access
 
-**Category.** ZTNA-native JIT access with session recording integration (included on every plan).
+**Category.** ZTNA-native JIT access with approval workflow and audit evidence (included on every plan).
 
-**How it works.** QuickZTNA's JIT access feature applies time-limited access grants to ZTNA-protected resources. A developer or administrator requests access to a resource through the QuickZTNA admin portal or Slack. The request is routed to the configured approver. Approved access creates a time-limited resource ACL entry that expires automatically at the approved duration. The session during the approved window is automatically recorded.
+**How it works.** QuickZTNA's JIT access feature applies time-limited access grants to ZTNA-protected resources. A developer or administrator requests access to a resource through the QuickZTNA dashboard or API, and the request is routed to the configured approver. Request and approval events can be forwarded to Slack via webhook for visibility, though the approval itself happens in QuickZTNA. Approved access creates a time-limited resource ACL entry that expires automatically at the approved duration. QuickZTNA does not record the session itself — it records the grant, the approval and the expiry.
 
 **Compliance integration.**
-- Approval context, approver identity, and session recording are linked in the audit log.
+- Approval context, approver identity, and expiry are linked in the audit log.
 - Access event includes device posture state at the time of access — compliance reviewers can verify the requesting device was compliant.
 - JIT expiry events generate audit log entries automatically.
 - SOC 2 CC6.3, PCI-DSS Requirement 7, and HIPAA 164.312(a)(2)(ii) mapping statements available in the compliance report export.
 
-**Strengths.** Integrated with the ZTNA access layer — JIT approval immediately controls whether the network-layer access is possible. No synchronisation between a JIT tool and a separate VPN/ZTNA system. Single source of truth for access grants, session recordings, and audit evidence.
+**Strengths.** Integrated with the ZTNA access layer — JIT approval immediately controls whether the network-layer access is possible. No synchronisation between a JIT tool and a separate VPN/ZTNA system. Single source of truth for access grants, approvals, and audit evidence.
 
-**Limitations.** Applies to resources protected by QuickZTNA. Resources accessed outside the ZTNA tunnel are not covered. Approval workflow is currently Slack and email — MS Teams integration in roadmap.
+**Limitations.** Applies to resources protected by QuickZTNA. Resources accessed outside the ZTNA tunnel are not covered. There is no session recording — if your control requires a replayable session, pair this with a PAM or bastion tool from the list above.
 
-**Best fit.** Organisations using QuickZTNA Workforce who need JIT access for compliance without a separate PAM deployment.
+**Best fit.** Organisations already running QuickZTNA that need JIT access and approval evidence without a separate PAM deployment.
 
 ---
 
@@ -256,7 +256,7 @@ The result is a dense mesh of persistent high-privilege accounts, any one of whi
 | Opal Security | Cloud + SaaS + Code | ✅ Slack | ✅ | No | ✅ |
 | SGNL | Identity context-driven | Continuous | ✅ Continuous | No | Via integrations |
 | Indent | Okta + AWS + GitHub | ✅ Slack | ✅ | No | ✅ |
-| QuickZTNA JIT | ZTNA resources | ✅ Slack/email | ✅ | ✅ Linked | ❌ |
+| QuickZTNA JIT | ZTNA resources | ✅ Dashboard/API | ✅ | ❌ | ❌ |
 
 ---
 
@@ -276,4 +276,4 @@ The result is a dense mesh of persistent high-privilege accounts, any one of whi
 
 ## Try QuickZTNA JIT Access
 
-QuickZTNA includes built-in JIT access with approval workflow and audit export supporting SOC 2 evidence — shipping Q3 2026. [Join the early access list](mailto:sales@quickztna.com).
+QuickZTNA includes built-in JIT access with an approval workflow and audit export supporting SOC 2 evidence, on every plan including Free. It does not record sessions — pair it with a PAM or bastion tool if you need replay. [Start free](https://login.quickztna.com/auth).

@@ -195,14 +195,14 @@ Most Kubernetes security posture problems are access control problems. ClusterAd
 **Key capabilities.**
 - Kubernetes API server hidden behind ZTNA — not exposed to the internet, reachable only through the ZTNA tunnel.
 - Device posture gating: a developer with an unmanaged or non-compliant laptop cannot reach the Kubernetes API at all.
-- JIT access for production exec: kubectl exec to production pods requires a time-limited JIT approval, recorded.
+- JIT access for production exec: kubectl exec to production pods requires a time-limited JIT approval, with the grant and approver captured in the audit log.
 - Audit trail for all Kubernetes API calls linked to the user's ZTNA identity (not just the Kubernetes service account).
 
 **Strengths.** Adding ZTNA gating to Kubernetes access is high-value for organisations that currently expose the API server publicly or through a VPN without posture checks. The JIT exec workflow directly addresses the kubectl exec gap (Gap 3) without requiring a separate Teleport deployment.
 
-**Limitations.** Does not replace native Kubernetes RBAC — QuickZTNA gates network access and adds posture checks, but Kubernetes-level role definitions still need to be managed. Session recording for exec is less comprehensive than Teleport native.
+**Limitations.** Does not replace native Kubernetes RBAC — QuickZTNA gates network access and adds posture checks, but Kubernetes-level role definitions still need to be managed. There is no session recording for exec; if you need replayable exec sessions, Teleport remains the fit.
 
-**Best fit.** Organisations using QuickZTNA Workforce who want Kubernetes API access gated behind ZTNA posture checks and JIT exec approval, without a full Teleport migration.
+**Best fit.** Organisations already running QuickZTNA that want Kubernetes API access gated behind ZTNA posture checks and JIT exec approval, without a full Teleport migration.
 
 ---
 
@@ -230,4 +230,4 @@ No single tool covers all Kubernetes access control concerns. The recommended la
 
 ## Try QuickZTNA for Kubernetes
 
-QuickZTNA gates Kubernetes API server access behind device posture and ZTNA identity, with JIT exec approval for production access. [Contact sales](mailto:sales@quickztna.com) to see the Kubernetes integration.
+QuickZTNA gates Kubernetes API server access behind device posture and ZTNA identity, with JIT exec approval for production access, on every plan including Free. [Start free](https://login.quickztna.com/auth).

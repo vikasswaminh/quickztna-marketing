@@ -193,6 +193,12 @@ const FACT_RULES = [
     // survived in docs/security.md's retention list.
     re: /(\bquickztna workforce\b|workforce (plan|tier)\b|\*\*workforce\*\*\s*:)/i,
     msg: "there is no Workforce plan — exactly two plans, Free and Business",
+    // A phantom plan name is wrong regardless of an unrelated negation elsewhere
+    // in the sentence: "Organisations using QuickZTNA Workforce who need JIT
+    // access WITHOUT a separate PAM deployment" was exempting itself on the
+    // "without". Only an actual denial of the plan's existence is allowed.
+    noExempt: true,
+    unless: /\b(no|not a|never a|there is no)\s+(quickztna\s+)?workforce\b/i,
   },
   {
     // The ENFORCED ceiling is org-wide: Free 100, Business 10,000
@@ -283,7 +289,11 @@ const SUBJ_RE = new RegExp(SUBJ, "i");
 let problems = 0;
 for (const file of ROOTS.flatMap((r) => walk(r))) {
   const isBlog = /[\\/]blog[\\/]/.test(file);
-  const lines = readFileSync(file, "utf8").split("\n");
+  // Split on \r?\n, not \n. A trailing \r breaks heading detection, because JS
+  // treats \r as a line terminator that `.` will not match — so /^#{2,6}\s+(.*)$/
+  // failed on every CRLF file and blog section attribution silently never fired.
+  // That made the guard pass on Windows and fail on Linux CI for the same tree.
+  const lines = readFileSync(file, "utf8").split(/\r?\n/);
 
   // Markdown section scope: everything under "## 5. QuickZTNA — ..." is about
   // us, even when individual sentences omit the name.
@@ -308,8 +318,9 @@ for (const file of ROOTS.flatMap((r) => walk(r))) {
         ...(isBlog ? [] : SURFACE_RULES),
       ];
 
-      for (const { re, msg, noExempt } of rules) {
+      for (const { re, msg, noExempt, unless } of rules) {
         if (negated && !noExempt) continue;
+        if (unless && unless.test(clause)) continue;
         if (re.test(clause)) {
           console.error(`  ${file}:${i + 1}  ${msg}`);
           console.error(`    > ${clause.trim().slice(0, 130)}`);
