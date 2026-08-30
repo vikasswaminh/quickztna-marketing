@@ -13,7 +13,7 @@ faq:
   - q: "Can I scrape QuickZTNA client metrics into Prometheus?"
     a: "Yes. 'ztna metrics print' emits Prometheus-format metrics to stdout, and 'ztna metrics write <path>' writes them for the node_exporter textfile collector. The daemon also exposes diagnostics via 'ztna debug metrics'. Scrape them to dashboard peer counts, relay-vs-direct ratios, and connectivity."
   - q: "How do I get events into my SIEM?"
-    a: "Two paths: webhooks (security events such as malware-hash detections and auto-quarantines are pushed to your configured HTTPS endpoint via the forwarding pipeline), and the data export endpoint (/api/export) for bulk pulls. On paid plans the audit log itself is API-queryable for scheduled SIEM ingestion."
+    a: "Two paths: webhooks (security events such as malware-hash detections and auto-quarantines are pushed to your configured HTTPS endpoint via the forwarding pipeline), and the data export endpoint (/api/export) for bulk pulls. The audit log is API-queryable for scheduled SIEM ingestion on both plans."
 ---
 
 Once QuickZTNA is enforcing access, the questions become observability ones: *what happened, did it meet a control, and how is the fleet doing?* This page covers the audit log, compliance evaluation and signed reports, threat intelligence, and client metrics.
@@ -81,7 +81,7 @@ Scrape these into your Prometheus/Grafana stack to chart connectivity, peer coun
 
 - **Webhooks** — security events (e.g. a malware-hash detection or an auto-quarantine) are pushed to your configured HTTPS endpoint by the forwarding pipeline.
 - **Bulk export** — `/api/export` pulls org data for archival or SIEM ingestion.
-- **Audit query** — on paid plans, `/api/audit` is API-queryable for scheduled ingestion.
+- **Audit query** — `/api/audit` is API-queryable for scheduled ingestion on both plans; access is governed by org membership and role, not by plan.
 
 ## 6. Audit event taxonomy (selected)
 
@@ -95,7 +95,7 @@ Scrape these into your Prometheus/Grafana stack to chart connectivity, peer coun
 
 ## 7. Limits & honest scope
 
-- **Retention is plan-dependent**; Free is the shortest window.
+- **Retention is 90 days on both plans** — it is not a paid upgrade, and not longer on Business. Export on a schedule if you need a longer archive.
 - **Audit reads need membership; writes need admin.**
 - **Compliance evaluation reflects current config** — re-run after changes; reports are point-in-time.
 - **Client metrics are per-node** — aggregate them in your own monitoring stack.

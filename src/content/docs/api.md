@@ -264,7 +264,7 @@ A few quick reference patterns for common automation.
 ztna audit list
 ```
 
-For automation, query the audit-log API endpoint with the cursor-pagination pattern and stream the JSON to your SIEM. On paid plans the audit log is exportable via the API.
+For automation, query the audit-log API endpoint with the cursor-pagination pattern and stream the JSON to your SIEM. The audit log is API-queryable and exportable on both plans — it is not a paid upgrade.
 
 **Cleaning up stale devices in CI:**
 

@@ -72,7 +72,7 @@ Why teams choose self-host.
 
 - **Data sovereignty.** The coordination plane never leaves your infrastructure.
 - **No per-user pricing.** Costs scale with infrastructure, not seat count.
-- **Licence flexibility.** Headscale is BSD-3-Clause; NetBird is BSD-3-Clause; QuickZTNA self-host is the same managed codebase shipped to your infrastructure.
+- **Licence flexibility.** Headscale is BSD-3-Clause; NetBird is BSD-3-Clause; QuickZTNA is proprietary and managed cloud only — there is no self-host option.
 - **Customisation.** Fork-friendly for open-source options. API hooks for specific workflows.
 - **Air-gapped capability.** Isolated environments where managed SaaS is not reachable.
 - **Long-term cost predictability.** Known infrastructure line items over years.
@@ -271,7 +271,7 @@ At the end, if the cost math, compliance requirements, and team capability all p
 
 ## Try QuickZTNA
 
-QuickZTNA is managed by default, managed cloud only (no self-host today). If the cost math above tips toward managed for your team and post-quantum is a requirement, [start on Free](https://login.quickztna.com/auth). If self-host is non-negotiable and open source is not required, [contact sales](mailto:sales@quickztna.com) for a self-host evaluation brief.
+QuickZTNA is managed cloud only — there is no self-host option, and none is planned. If the cost math above tips toward managed for your team, [start on Free](https://login.quickztna.com/auth). If self-host is non-negotiable, QuickZTNA is not your product: Headscale and NetBird are the options in this comparison that actually run on your own infrastructure.
 
 <!--
 scorecard:

@@ -162,7 +162,7 @@ Snapshot as of April 2026. Always verify against each vendor's current documenta
 | Data plane | CF proprietary | WireGuard | WireGuard | WireGuard | Proprietary | Proprietary | AWS-managed |
 | Self-host | No | No (Headscale exists) | Yes | No | Partial | No | No |
 | Free tier | Yes (verify current) | Yes | Yes | Yes (5 users, 100 devices) | Yes (limited) | No | Check AWS pricing |
-| Tunnel-level PQ | Edge TLS 1.3 hybrid | Verify | Verify | Roadmap | Verify | Verify | Verify |
+| Tunnel-level PQ | Edge TLS 1.3 hybrid | Verify | Verify | Not implemented | Verify | Verify | Verify |
 | Mesh P2P | No | Yes | Yes | Yes | No | No | No |
 | Clientless browser | Yes | No | No | Partial (admin UI) | No | Yes | Yes |
 | Best fit | User-to-web-app w/ CF | Developer mesh | OSS mesh + self-host | Full ZTNA + workforce | Proxy ZTNA | Enterprise ZTNA | AWS-native web |

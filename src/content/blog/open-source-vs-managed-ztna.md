@@ -203,7 +203,7 @@ New features land in the managed product first. Open-source tends to lag — som
 - **If you are willing to wait**, self-host works.
 - **If you need a feature not yet in either**, open source lets you build it; managed forces you to wait for the vendor.
 
-For post-quantum specifically, managed QuickZTNA is ahead of the open-source alternatives on default-on hybrid PQ tunnel encryption as of April 2026; this gap may close over time as NetBird, Headscale, and OpenZiti roll out their own PQ support.
+For post-quantum specifically, no option here has an advantage worth choosing on: QuickZTNA does not implement post-quantum key exchange, and NetBird, Headscale and OpenZiti each need to be checked against their current documentation rather than a comparison table.
 
 **Score.**
 - Feature-velocity priority: managed +1.

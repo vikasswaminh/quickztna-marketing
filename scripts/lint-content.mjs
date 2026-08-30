@@ -45,6 +45,24 @@
 //     clause-local subject test can catch. Vendor-neutral education elsewhere
 //     in the same post stays publishable.
 //
+// ── Known limits (do not mistake a green run for proof) ─────────────────────
+// This is a regex backstop against regressions, not a proof of accuracy. Two
+// limits are inherent and known:
+//
+//   1. DENIAL BINDING IS PROXIMITY, NOT PARSING. A denial is associated with an
+//      assertion by a character window, so "QuickZTNA does not offer CASB today,
+//      but QuickZTNA will offer CASB next quarter" is not reliably caught — the
+//      second assertion sits inside the first denial's window. Splitting on ':'
+//      and ';' narrows this, but a contrastive "but" clause in one sentence can
+//      still hide a claim. Real coverage needs a parser, not a window.
+//   2. CO-OCCURRENCE IS NOT ATTACHMENT. `re` + `also` only need to appear in the
+//      same clause, so "QuickZTNA ships classical WireGuard while this article
+//      discusses post-quantum cryptography" can flag even though the verb belongs
+//      to WireGuard. Prefer rewording over widening the exemptions.
+//
+// Both were reported by review and are recorded here deliberately. When the guard
+// passes, that means no KNOWN pattern matched — a human still has to read the copy.
+//
 // Run: node scripts/lint-content.mjs   (wired into `prebuild`)
 
 import { readdirSync, readFileSync, statSync } from "node:fs";
@@ -61,15 +79,117 @@ const OURS = String.raw`\b(quickztna|our|we)\b`;
 const SUBJ = String.raw`\b(quickztna)\b`;
 
 // Negated framing is allowed — "QuickZTNA does not offer X" must be publishable,
-// since saying so is the whole point of the correction. Scoped to one clause.
-const NEGATION = /\b(no|not|never|without|removed|withdrawn|doesn't|don't|isn't|deliberately|instead of|rather than)\b/i;
+// since saying so is the whole point of the correction.
+//
+// This is a whitelist of DENIAL CONSTRUCTIONS, not a bare list of negative words.
+// Matching any stray "no"/"not"/"without" was the hole: "Organisations using
+// QuickZTNA Workforce who need JIT access WITHOUT a separate PAM deployment"
+// exempted itself on a "without" that negates nothing, and a marketing line
+// ending "No card." excused every claim before it. A denial has to actually deny.
+// NOTE: markdown emphasis is stripped before these run ("does **not** ship"),
+// so patterns need not tolerate * or _ themselves.
+const DENIAL = [
+  /\b(?:does|do|did|is|are|was|were|has|have|will|would|can|could)\s+not\b/i,
+  // Active voice: "The 2026 lean pivot removed DLP content scanning, CASB, ..."
+  // Only counts when a withdrawn-capability noun follows close behind, so a bare
+  // "removed" in unrelated prose does not become a blanket exemption.
+  /\b(?:removed|withdrew|deleted|retired|dropped)\b(?=[^.\n]{0,60}\b(?:dlp|casb|workforce|session|remote|software|inventory|scoring|analytics|vault|operator|assistant|recording|desktop|post-quantum|ml-?kem|fido2|webauthn)\b)/i,
+  /\b(?:doesn't|don't|didn't|isn't|aren't|wasn't|weren't|won't|can't|cannot|hasn't|haven't)\b/i,
+  /\bnever\b|\bno longer\b|\bneither\b/i,
+  // Adjectival absence: "QuickZTNA CASB is unsupported / unavailable / unimplemented".
+  /\b(?:un(?:supported|available|implemented|shipped)|absent|non-existent|nonexistent)\b/i,
+  /\bnot\s+(?:implemented|shipped|offered|supported|planned|available|certified|on the roadmap|a\b|one of)/i,
+  // Explicitly hypothetical framing — "we would document it only if it ever shipped"
+  // is the opposite of a claim, but names the capability and a ship-verb.
+  // Deliberately NOT a bare "would ship/add": that would exempt a positive
+  // conditional promise like "QuickZTNA would add CASB for enterprise customers".
+  // The FULL construction is required: "would <verb> … only if it ever ship(ped)".
+  // A bare "if it ever ships" still let a positive promise through
+  // ("QuickZTNA will ship ML-KEM if it ever ships version 2").
+  /\bwould\s+\w+[^.\n]{0,60}\bonly\s+if\s+it\s+ever\s+(?:ships|shipped)\b/i,
+  /\bthere\s+(?:is|are|'s)\s+no\b/i,
+  /\b(?:was|were|has been|have been|are|is)\s+(?:removed|withdrawn|deleted|retired)\b/i,
+  /\b(?:we|quickztna)\s+(?:removed|withdrew|deleted|dropped)\b/i,
+  /\bremoved\s+in\s+\d{4}\b|\bremoved\s+(?:from|in)\s+the\b/i,
+  /\bdeliberately\s+(?:no|not|has no)\b/i,
+  // The writing guidelines' own forbidden list, and any prose that labels the
+  // enumeration that follows as withdrawn.
+  /\bnever\s+claim\b|\bwithdrawn capabilities\b|\bdo not claim\b/i,
+  // "no session recording", "no secrets vault", "no content inspection" — a bare
+  // "no" counts only when a withdrawn-capability noun follows close behind.
+  /\bno\b(?=[^.\n]{0,40}\b(?:recording|vault|desktop|analytics|inspection|scanning|inventory|scoring|casb|dlp|fido2|webauthn|workforce|post-quantum|ml-?kem|assistant|operator)\b)/i,
+];
+// Strip markdown emphasis first: "QuickZTNA does **not** implement PQC" must read
+// as a denial, and "*never* collected" likewise.
+//
+// `upto` scopes the denial to the text PRECEDING the assertion it supposedly
+// negates, within a short window. A clause-wide boolean let a denial at the start
+// excuse an unrelated positive claim later in the same clause.
+const denied = (s, matchIndex = null) => {
+  let text = s;
+  if (matchIndex !== null) {
+    // Window around the assertion. Symmetric because a removal enumeration can
+    // put the denial after the list ("DLP, CASB, ... were all removed") as well as
+    // before it. The window is what stops a denial at one end of a long clause
+    // from excusing an unrelated claim at the other; the ':' clause split handles
+    // the "What will not move: <positive promise>" shape.
+    // 350 chars: long enough to span a full withdrawn-capability enumeration
+    // ("… removed DLP PII-scanning, CASB, workforce analytics, … and the secrets
+    // vault"), short enough that a denial cannot reach across a whole paragraph.
+    text = s.slice(Math.max(0, matchIndex - 350), matchIndex + 350);
+  }
+  // Strip HTML tags as well as markdown emphasis: on an .astro surface the
+  // accurate "QuickZTNA does <strong>not</strong> offer CASB" would otherwise not
+  // read as a denial, because the tag sits between the auxiliary and "not".
+  const flat = text.replace(/<[^>]*>/g, "").replace(/[*_`]/g, "");
+  return DENIAL.some((re) => re.test(flat));
+};
 
 // Split text into clauses at sentence terminators and semicolons.
 // Deliberately NOT split on em dashes or colons: "Every feature is included:
 // mesh, ..., secrets vault" and "Free plan covers X — the mesh, ..., CASB" both
 // carry the subject on the far side of that punctuation, and splitting there
 // would strip the very attribution the rules depend on.
-const splitClauses = (text) => text.split(/(?<=[.!?])\s+|\s*;\s*/).filter(Boolean);
+// Also split at HTML tag boundaries. In .astro files a sentence often ends
+// directly against a tag ("...+ AI Operator.</p>") with no whitespace, so a
+// whitespace-only sentence split left whole markup blocks coalesced into one
+// giant clause — which then inherited any denial or allowlisted phrase in it.
+// A colon is a clause boundary too. "What will not move: our commitment that every
+// tunnel ships with hybrid PQ by default" put a denial and the claim it does NOT
+// negate in one clause, and the clause-wide exemption hid the claim. Splitting on
+// ':' is safe now that attribution is scope-based rather than proximity-based —
+// a surface needs no subject, so "Every feature is included: mesh, ..., vault"
+// is still caught after the split.
+// The ':' branch deliberately excludes object-literal keys (`job: "…"`), which
+// would otherwise separate a savings-page entry from the `note:` explaining it.
+const CLAUSE_SPLIT =
+  // The lookbehind allows digits and closing emphasis too, so a colon after a
+  // numeric or formatted prefix still splits ("What will not move in 2026:",
+  // "**Not planned**:") — previously only a lowercase letter or ')' qualified.
+  /(?<=[.!?])\s+|(?<=[.!?])(?=<)|\s*;\s+|(?<=[a-z0-9)*_`\]])\s*:\s+(?!["'])|(?<=>)\s*(?=<)|<br\s*\/?>/i;
+
+const splitClauses = (text) =>
+  text
+    .split(CLAUSE_SPLIT)
+    .filter(Boolean);
+
+// Same split, but reports whether each clause followed a COLON. A colon keeps the
+// subject in the prefix ("QuickZTNA includes: CASB, …"), so blog attribution has
+// to carry across that one boundary — but NOT across sentence boundaries, which
+// would attribute vendor-neutral sentences in any paragraph that names us.
+const splitClausesMeta = (text) => {
+  const parts = text.split(new RegExp(`(${CLAUSE_SPLIT.source})`, "i"));
+  const out = [];
+  let afterColon = false;
+  for (let k = 0; k < parts.length; k++) {
+    if (k % 2 === 0) {
+      if (parts[k]) out.push({ text: parts[k], afterColon });
+    } else {
+      afterColon = (parts[k] || "").includes(":");
+    }
+  }
+  return out;
+};
 
 // Group physical lines into SENTENCE units before splitting into clauses.
 // Prose wraps across lines, so a sentence's own qualifier and its terms can land
@@ -159,10 +279,41 @@ const PRODUCT_RULES = [
   {
     re: new RegExp(String.raw`(ml-?kem|post-quantum)[^.\n]{0,40}(is |are )?on[^.\n]{0,15}(the |our )?roadmap`, "i"),
     msg: "PQC-roadmap claim — PQC was withdrawn, not deferred; do not promise it",
+    // Third parties legitimately have PQC roadmaps — the EU's coordinated
+    // transition roadmap, NIST's, a competitor's. Only OUR roadmap is forbidden.
+    // The roadmap must be POSSESSED by the third party, and the leading lookahead
+    // makes sure a nearby third-party name can't launder a claim about ours:
+    // "NIST's ML-KEM is on QuickZTNA's roadmap" must still fail.
+    // The possessive is REQUIRED — "NIST ML-KEM is on the roadmap" must still fail,
+    // because an unqualified roadmap on our own surface means ours.
+    // The third-party roadmap must be the ONLY roadmap in the clause. Previously a
+    // trailing possessive laundered a claim about ours: "ML-KEM is on the roadmap,
+    // following NIST's post-quantum roadmap" passed because the NIST reference
+    // satisfied the exception even though the first roadmap is unqualified (= ours).
+    unless: (clause) => {
+      // Strip link targets and bare URLs first: the EU's roadmap link contains
+      // "roadmap" inside its slug, which is not a claim about anyone's roadmap.
+      const text = clause.replace(/\]\([^)]*\)/g, "]").replace(/https?:\/\/\S+/g, "");
+      const roadmaps = [...text.matchAll(/roadmap/gi)];
+      if (roadmaps.length === 0) return false;
+      return roadmaps.every((m) => {
+        const before = text.slice(Math.max(0, m.index - 60), m.index);
+        return /(?:EU|European Commission|NIST|NSA|BSI|ANSSI|NCSC|IBM|Tailscale|Cloudflare|industry|vendor|their)(?:['’]s)?\s[^.\n]{0,40}$/i.test(
+          before,
+        );
+      });
+    },
   },
   {
-    re: /(self-host(ed|ing)?[^.\n|]{0,30}workforce|workforce[^.\n|]{0,25}self-host)/i,
-    msg: "self-host-on-Workforce claim — QuickZTNA is managed cloud only",
+    // Any self-host claim about us, not just the Workforce-tier variant. The old
+    // rule needed "Workforce" within a short window, so a direct claim
+    // ("QuickZTNA self-host is the same managed codebase shipped to your
+    // infrastructure") went unchecked.
+    // Subject-verb, not proximity. A bare window flagged accurate comparison prose
+    // that lists OTHER vendors' self-host status beside our "managed cloud"
+    // ("NetBird managed or self-host, QuickZTNA managed cloud").
+    re: /(self-host(ed|ing|able)?[^.\n|]{0,30}workforce|workforce[^.\n|]{0,25}self-host|\bquickztna\s+(self-host\w*|(can\s+be\s+|is\s+|offers?\s+)self-host\w*)|self-host\w*\s+(is\s+)?(available|offered|supported)[^.\n|]{0,20}quickztna)/i,
+    msg: "self-host claim — QuickZTNA is managed cloud only; there is no self-host option",
   },
 ];
 
@@ -178,6 +329,59 @@ const REMOVED = [
   { re: /user[- ]risk scor/i, msg: "user-risk scoring was removed in the 2026 lean pivot" },
   { re: /secrets vault/i, msg: "there is no secrets vault — no handler exists" },
   { re: /\b(fido2|webauthn)\b/i, msg: "no FIDO2/WebAuthn in the product — MFA is TOTP only" },
+  // PQC-as-shipped, matched by CO-OCCURRENCE inside an attributed clause rather
+  // than by character distance. The old rules used 40-60 char windows, so an
+  // assertion separated from the product name by a feature preamble slipped
+  // through ("...QuickZTNA ... implements hybrid post-quantum key exchange").
+  // `also` means: both patterns must appear in the same clause, in any order.
+  {
+    re: /\b(ml-?kem|post-quantum|quantum-safe|hybrid pq)\b/i,
+    // Assertion forms, not just shipping verbs. Declarative promises evade a
+    // verb-only list: "an ML-KEM-1024 opt-in", "hybrid PQ encryption default-on",
+    // "uses ML-KEM on every tier", and bare table cells reading "Yes".
+    // The table-cell alternative lives OUTSIDE the \b(...)\b wrapper: "|" is not a
+    // word character, so a leading \b can never match at a cell boundary. That is
+    // why "| QuickZTNA | ML-KEM-768 | Yes (X25519) | Yes, all tiers |" passed.
+    also: /\b(ships?|shipped|uses?|using|runs?|implements?|implemented|provides?|includes?|included|enabled|enables?|adds?|offers?|opt-in|scheduled|planned|commitment|default-on|by default|on every|in every|every tier|every plan)\b|\|\s*yes\b/i,
+    msg: "PQC-as-shipped claim — PQC was WITHDRAWN; tunnels are classical WireGuard",
+  },
+  // "QuickZTNA ships it on every tunnel" after an allowlisted definition: the
+  // definition is redacted, so no PQC term survives for the co-occurrence rule.
+  // Catch the anaphor itself.
+  {
+    re: /\b(ships?|uses?|runs?|implements?|enables?)\s+(it|them|this|that)\b/i,
+    also: /\bevery[^.\n]{0,25}(tunnel|tier|plan)\b|by default/i,
+    msg: "anaphoric shipped claim — name what is shipped; PQC is not shipped",
+  },
+  // A third anaphor: the PQC term sits in the PREVIOUS clause and this one refers
+  // back by category noun — "…the level chosen in QuickZTNA", where "the level"
+  // means ML-KEM-768. Requires our name, so vendor-neutral prose is unaffected.
+  {
+    re: /\bthe (level|parameter set|variant|algorithm|suite)\b/i,
+    also: /\b(chosen|selected|used|adopted|shipped|standard)\b[^.\n]{0,30}\bin quickztna\b|\bquickztna\b[^.\n]{0,30}\b(chose|selected|uses|adopted)\b/i,
+    // Without a PQC antecedent this rejects accurate classical prose
+    // ("Curve25519 is the algorithm used in QuickZTNA tunnels") — and since lint
+    // runs in `prebuild`, that would block the build on correct content.
+    needsPqcContext: true,
+    msg: "anaphoric PQC selection claim — QuickZTNA implements no ML-KEM parameter set",
+  },
+  // "We use this construction in every QuickZTNA tunnel" names no PQC term at all,
+  // so the co-occurrence rule above cannot see it — the referent is anaphoric.
+  // Deliberately narrow to "this construction": widening it to handshake/exchange
+  // rejected accurate classical prose ("This handshake runs in every QuickZTNA
+  // tunnel"), and since lint runs in `prebuild` a false positive BLOCKS THE BUILD.
+  // The `unless` lets a clause that names the classical primitives through.
+  {
+    re: /\bthis construction\b/i,
+    also: /\b(in|on) every[^.\n]{0,25}tunnel\b|every quickztna tunnel/i,
+    // The exception must POSITIVELY identify the construction as classical.
+    // A contrastive mention ("Unlike classical WireGuard, this construction runs
+    // in every QuickZTNA tunnel") names a classical primitive while asserting the
+    // opposite, so contrastive connectives disqualify the exemption.
+    unless:
+      /^(?!.*\b(unlike|rather than|instead of|whereas|as opposed to|not just)\b).*\b(classical|x25519 \+ chacha|chacha20|curve25519|noise)\b/i,
+    msg: "anaphoric PQC-as-shipped claim — name the crypto explicitly; PQC is not shipped",
+  },
   {
     re: /(file[- ]scan|content[- ]scan|inline)[^.\n]{0,20}dlp|dlp[^.\n]{0,40}(pii|credit card|ssn|secrets)|(text|content|clipboard)[- ]scanning|content inspection/i,
     msg: "DLP content scanning was removed — only file-hash malware detection remains",
@@ -257,11 +461,20 @@ const ALLOW = [
   ["For 100 devices via Ansible", "fleet-rollout example, not a plan cap"],
   ["Threat model, cryptographic primitives in detail", "link description for the security-model page"],
 ];
-// A clause is exempt if it contains an allowlisted snippet, or is itself wholly
-// contained within one (so clause-splitting can't orphan a legitimate exception).
-const allowed = (clause) => {
-  const t = clause.trim();
-  return ALLOW.some(([snip]) => t.includes(snip) || snip.includes(t));
+// REDACT the allowlisted phrase rather than exempting the clause that contains it.
+// Skipping the whole clause was a hole: public/llms.txt's security-model entry opens
+// with the allowlisted "Threat model, cryptographic primitives in detail" and then
+// goes on to claim hash-chained audit logs, FIPS 203 and reproducible builds — all
+// of which the guard silently skipped, in the very file written for AI crawlers.
+// Redaction exempts exactly the text that earned the exception and nothing else.
+const redactAllowed = (clause) => {
+  let out = clause;
+  for (const [snip] of ALLOW) {
+    if (out.includes(snip)) out = out.split(snip).join(" ");
+    // A clause wholly inside an allowed snippet is itself the exception.
+    else if (snip.includes(out.trim()) && out.trim().length > 20) return "";
+  }
+  return out;
 };
 
 const SKIP_DIRS = new Set(["node_modules", "dist", ".astro"]);
@@ -288,7 +501,14 @@ const SUBJ_RE = new RegExp(SUBJ, "i");
 
 let problems = 0;
 for (const file of ROOTS.flatMap((r) => walk(r))) {
-  const isBlog = /[\\/]blog[\\/]/.test(file);
+  // Blog POSTS are vendor-neutral-ish and need explicit attribution. The blog
+  // INDEX and its layouts/templates are product surfaces — they carry sidebars and
+  // CTAs written in our voice. Treating src/pages/blog/index.astro as a "post" made
+  // its CTA ("WireGuard mesh + DLP + AI Operator.") unattributed and unchecked.
+  const isBlog =
+    /[\\/]blog[\\/]/.test(file) &&
+    /[\\/]content[\\/]/.test(file) &&
+    !/[\\/](index|_)[^\\/]*$/.test(file);
   // Split on \r?\n, not \n. A trailing \r breaks heading detection, because JS
   // treats \r as a line terminator that `.` will not match — so /^#{2,6}\s+(.*)$/
   // failed on every CRLF file and blog section attribution silently never fired.
@@ -298,18 +518,44 @@ for (const file of ROOTS.flatMap((r) => walk(r))) {
   // Markdown section scope: everything under "## 5. QuickZTNA — ..." is about
   // us, even when individual sentences omit the name.
   let sectionOurs = false;
+  // Anaphoric rules refer back to a PQC term in an EARLIER clause ("…the level
+  // chosen in QuickZTNA"). Without requiring that antecedent they fire on
+  // accurate classical prose. Reset at each heading so context cannot leak
+  // across sections.
+  let pqcContext = false;
+  const PQC_TERM = /\b(ml-?kem|post-quantum|quantum-safe|kyber|hybrid pq)\b/i;
 
   for (const { text, line: i } of units(lines)) {
     const heading = text.match(/^#{2,6}\s+(.*)$/);
-    if (heading) sectionOurs = SUBJ_RE.test(heading[1]);
+    if (heading) {
+      sectionOurs = SUBJ_RE.test(heading[1]);
+      pqcContext = PQC_TERM.test(heading[1]);
+    }
 
-    for (const clause of splitClauses(text)) {
-      if (allowed(clause)) continue;
-      const negated = NEGATION.test(clause);
+    // Blog attribution carries across a COLON only — see splitClausesMeta.
+    let prevAttributed = false;
+
+    for (const { text: rawClause, afterColon } of splitClausesMeta(text)) {
+      // PQC context is taken from the RAW clause, before redaction — otherwise an
+      // allowlisted definition ("ML-KEM-768 is the NIST-standardised …") has its
+      // PQC term removed and the anaphor in the next clause loses its antecedent.
+      const rawHasPqc = PQC_TERM.test(rawClause);
+      const clause = redactAllowed(rawClause);
+      if (!clause.trim()) {
+        if (rawHasPqc) pqcContext = true;
+        continue;
+      }
+      // Denial is evaluated per MATCH below, not once per clause.
 
       // Attribution: surfaces describe our product by definition; the blog needs
       // the product name in the clause or in the enclosing heading.
-      const attributed = isBlog ? SUBJ_RE.test(clause) || sectionOurs : true;
+      // Attribution carries ONE hop across a colon. Propagating the inherited
+      // value would chain through consecutive colons — "QuickZTNA comparison:
+      // Cloudflare Access includes: CASB" would mark the competitor's clause as
+      // ours — so only a clause with its OWN subject seeds the next hop.
+      const ownAttribution = SUBJ_RE.test(clause) || sectionOurs;
+      const attributed = isBlog ? ownAttribution || (afterColon && prevAttributed) : true;
+      prevAttributed = ownAttribution;
 
       const rules = [
         ...PRODUCT_RULES,
@@ -318,15 +564,33 @@ for (const file of ROOTS.flatMap((r) => walk(r))) {
         ...(isBlog ? [] : SURFACE_RULES),
       ];
 
-      for (const { re, msg, noExempt, unless } of rules) {
-        if (negated && !noExempt) continue;
-        if (unless && unless.test(clause)) continue;
-        if (re.test(clause)) {
+      for (const { re, msg, noExempt, unless, also, needsPqcContext } of rules) {
+        if (needsPqcContext && !pqcContext) continue;
+        // `unless` may be a regex or a predicate — some exceptions need to inspect
+        // every occurrence, not just find one match somewhere in the clause.
+        if (unless && (typeof unless === "function" ? unless(clause) : unless.test(clause))) continue;
+        if (also && !also.test(clause)) continue;
+        // Iterate EVERY match: taking only the first meant a denied first
+        // assertion skipped the rule entirely, so "QuickZTNA does not offer CASB
+        // today, but QuickZTNA will offer CASB next quarter" passed clean.
+        const gre = new RegExp(re.source, re.flags.includes("g") ? re.flags : re.flags + "g");
+        let m = null;
+        for (let hit; (hit = gre.exec(clause)); ) {
+          if (hit[0].length === 0) gre.lastIndex++; // never loop on a zero-width match
+          if (noExempt || !denied(clause, hit.index)) {
+            m = hit;
+            break;
+          }
+        }
+        if (m) {
           console.error(`  ${file}:${i + 1}  ${msg}`);
           console.error(`    > ${clause.trim().slice(0, 130)}`);
           problems++;
         }
       }
+      // Carry PQC context forward to the NEXT clause, so an anaphor can resolve
+      // against an antecedent in the sentence before it.
+      if (rawHasPqc) pqcContext = true;
     }
   }
 }

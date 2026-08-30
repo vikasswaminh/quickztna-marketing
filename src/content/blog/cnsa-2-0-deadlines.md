@@ -203,30 +203,16 @@ Ten specific questions to put to any ZTNA, VPN, or remote-access vendor selling 
 9. **Audit logging of mode?** Are sessions logged with algorithm identifiers for audit evidence?
 10. **Validated implementation sources?** Self-built crypto is a red flag; Go stdlib, OpenSSL 3.5, AWS-LC, or similar is a green flag.
 
-## 9. What QuickZTNA does today and what is on the roadmap
+## 9. Where QuickZTNA stands against CNSA 2.0
 
 **Today:**
 
-- The data plane is classical WireGuard (Curve25519 + ChaCha20-Poly1305) — secure against current adversaries.
+- The data plane is classical WireGuard (Curve25519 + ChaCha20-Poly1305) — secure against current adversaries, and **not** CNSA 2.0 key establishment.
 - Releases are published with SHA-256 checksums the installer verifies before install.
 
-**Near-term roadmap (hybrid post-quantum):**
+**Not planned.** None of the following is implemented or scheduled, and none should be planned around: hybrid X25519 + ML-KEM-768 key exchange, ML-KEM-1024 for CNSA 2.0 alignment, ML-DSA-87 signatures on control-plane paths, LMS software signing, FIPS 140-3 CMVP submission, or a policy option refusing classical-only fallback.
 
-- Hybrid X25519 + ML-KEM-768 (FIPS 203, NIST category 3) key exchange on every tunnel.
-- The construction targets the Go standard library's `crypto/mlkem`; FIPS validation (CMVP) is a separate, later step.
-
-**2026-Q3 roadmap:**
-
-- ML-KEM-1024 opt-in per org, switching the key exchange to the CNSA 2.0 parameter set.
-- LMS software signing on Windows MSI and Linux installer packages.
-- Per-tunnel policy forbidding classical fallback.
-
-**2026-Q4 to 2027 roadmap:**
-
-- ML-DSA-87 signature support on internal control-plane paths.
-- FIPS 140-3 CMVP submission of the crypto module.
-
-We will not describe QuickZTNA as "CNSA 2.0 compliant," or as shipping post-quantum, until it's actually in the client and tested. The honest framing today: classical WireGuard, and no post-quantum key exchange in the product.
+If your programme has a CNSA 2.0 deadline, QuickZTNA does not meet it, and we would rather you learn that here than from a procurement questionnaire. We will not describe QuickZTNA as "CNSA 2.0 compliant," or as shipping post-quantum, unless it is actually in the client and tested. What QuickZTNA does provide is the access-control layer — ABAC policy, device posture, JIT access and audit evidence — alongside whatever CNSA-compliant tunnel technology your programme mandates.
 
 ## 10. Further reading
 

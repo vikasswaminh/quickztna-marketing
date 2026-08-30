@@ -23,9 +23,9 @@ faq:
   - q: "Why use X25519 + ML-KEM-768 as a hybrid instead of ML-KEM-768 alone?"
     a: "Defence in depth. ML-KEM is a new standard and the body of cryptanalysis against it is a few years old. Pairing it with X25519 means an attacker has to break both a lattice-based scheme and an elliptic-curve scheme to recover the session key. If either holds, you are safe. Hybrid is also what the NSA CNSA 2.0 transition guidance, the German BSI, and the French ANSSI all recommend for the migration window."
   - q: "How much does ML-KEM-768 slow down a WireGuard handshake?"
-    a: "On a 2022-era laptop, ML-KEM-768 keygen, encap, and decap each complete in well under a millisecond. The dominant cost is the 1,088-byte ciphertext that now travels in the handshake, not the CPU. On a 100 Mbit link, the extra bytes add roughly 100 microseconds of wire time. In QuickZTNA we measure total hybrid handshake overhead at under 5 ms end-to-end."
+    a: "On a 2022-era laptop, ML-KEM-768 keygen, encap, and decap each complete in well under a millisecond. The dominant cost is the 1,088-byte ciphertext that now travels in the handshake, not the CPU. On a 100 Mbit link, the extra bytes add roughly 100 microseconds of wire time, which puts total hybrid handshake overhead in the low milliseconds. Measure it on your own hardware — QuickZTNA does not implement hybrid key exchange, so we have no product figure to quote here."
   - q: "Is ML-KEM-768 FIPS 140-3 certified?"
-    a: "ML-KEM is standardised as FIPS 203. Individual implementations need separate FIPS 140-3 validation through the CMVP programme. As of April 2026 several vendors have submitted ML-KEM modules for validation; NIST maintains the current list on the Cryptographic Module Validation Program site. QuickZTNA uses the Go 1.24 standard library implementation, which is not FIPS-validated on its own."
+    a: "ML-KEM is standardised as FIPS 203. Individual implementations need separate FIPS 140-3 validation through the CMVP programme. As of April 2026 several vendors have submitted ML-KEM modules for validation; NIST maintains the current list on the Cryptographic Module Validation Program site. Note that the Go standard library's implementation is not FIPS-validated on its own, so 'uses FIPS 203' and 'is FIPS 140-3 validated' are different claims worth separating when you evaluate a vendor."
   - q: "When will NIST require ML-KEM for federal systems?"
     a: "There is no single switch. The NSA's CNSA 2.0 roadmap sets transition deadlines per technology class, with the latest dates falling between 2030 and 2035 depending on system type. Non-federal organisations are not required to switch, but regulators in the EU, Germany, and France have all published guidance recommending that long-lived data be protected with post-quantum cryptography starting now."
 ---
@@ -108,10 +108,10 @@ NIST defined five security categories for the post-quantum competition, anchored
 You rarely have to agonise over the choice.
 
 - **ML-KEM-512** is defensible where bandwidth is very scarce, such as some IoT links, and when the data being protected has a short lifetime.
-- **ML-KEM-768** is the sensible default for commercial use. It is the level specified in TLS 1.3 hybrid drafts, the level shipped by default in most browser-to-cloud deployments, and the level chosen in QuickZTNA.
+- **ML-KEM-768** is the sensible default for commercial use. It is the level specified in TLS 1.3 hybrid drafts and the level shipped by default in most browser-to-cloud deployments. QuickZTNA implements no ML-KEM parameter set at all.
 - **ML-KEM-1024** is what the NSA's CNSA 2.0 guidance picks for US national security systems. If you are specifically targeting NSS compliance, use it. For everyone else, the marginal security gain over 768 is not worth the bandwidth and CPU, given that 768 already exceeds AES-192 classical strength.
 
-Note: CNSA 2.0 specifies ML-KEM-1024 rather than 768. QuickZTNA ships 768 as the default and plans to add a 1024 opt-in for customers with CNSA-aligned policies as part of a 2026-Q3 release. We will not describe that release as "CNSA 2.0 compliant" until the full algorithm suite is in place and validated.
+Note: CNSA 2.0 specifies ML-KEM-1024 rather than 768. QuickZTNA ships neither — our tunnels are classical WireGuard — so a CNSA-aligned programme needs a vendor that implements ML-KEM-1024. We will not describe QuickZTNA as "CNSA 2.0 compliant" until the full algorithm suite is in place and validated.
 
 ## 6. ML-KEM vs Kyber: what changed during standardisation
 
@@ -127,7 +127,7 @@ Practical implication: if you have code that uses a pre-standard Kyber library f
 
 You do not have to choose between classical and post-quantum. The industry consensus during the transition is to use a hybrid key exchange that combines both, so that the resulting session key is secure if either underlying primitive holds.
 
-In QuickZTNA the construction is:
+A hybrid construction of this shape looks like:
 
 ```text
 (classical_pk, classical_sk) = X25519_KeyGen()
@@ -154,27 +154,19 @@ The combined secret is then used as the WireGuard pre-shared key. This gives you
 
 The same structure — ephemeral classical, ephemeral post-quantum, hybrid combiner — is what the IETF is standardising for TLS 1.3 in [draft-ietf-tls-hybrid-design](https://datatracker.ietf.org/doc/draft-ietf-tls-hybrid-design/) and what Cloudflare and AWS have already shipped on the public internet for their respective edge networks.
 
-## 8. How ML-KEM-768 is wired into QuickZTNA
+## 8. How you would wire ML-KEM-768 into a WireGuard mesh
 
-QuickZTNA is a ZTNA mesh built on WireGuard. Every peer-to-peer tunnel is a standard WireGuard session, with the twist that the pre-shared key field is populated from a hybrid X25519 + ML-KEM-768 handshake rather than left empty or statically configured.
+**QuickZTNA has not built this.** Our tunnels are classical WireGuard and post-quantum key exchange is not implemented or planned, so what follows is the shape the integration takes in general — useful if you are evaluating a vendor that claims it, or building it yourself.
 
-The flow in production:
+WireGuard's protocol is fixed and has no negotiation, but every peer has an optional pre-shared key (PSK) field mixed into the handshake. That field is where a post-quantum layer attaches:
 
 1. When a new peer relationship is established, both sides generate ephemeral X25519 keys and ephemeral ML-KEM-768 keys.
-2. The coordination server relays the public halves between peers. It never sees the private halves.
-3. Each peer runs the hybrid derivation above and stores the resulting 32-byte value as the WireGuard PSK for that tunnel.
-4. The WireGuard engine uses the PSK as part of its existing Noise handshake, layered on top of its own Curve25519 static-key exchange.
-5. Every two minutes, WireGuard rekeys. QuickZTNA re-runs the hybrid handshake on a configurable cadence so the PSK itself rotates rather than becoming stale.
+2. A coordination server relays the public halves between peers; it never sees the private halves.
+3. Each peer runs the hybrid derivation described above and installs the resulting 32-byte value as the WireGuard PSK for that tunnel.
+4. The WireGuard engine uses that PSK as part of its existing Noise handshake, layered on top of its own Curve25519 static-key exchange.
+5. WireGuard rekeys roughly every two minutes, so the PSK derivation has to re-run on a comparable cadence or the post-quantum contribution goes stale.
 
-Because the PQC PSK is layered under the normal WireGuard handshake, a peer that does not support post-quantum (older client, third-party WireGuard) still connects; it just falls back to classical-only security. That degradation is explicit and visible in the peer's status line. You can see the mixed state on the dashboard at [login.quickztna.com](https://login.quickztna.com/) when a tunnel is marked "classical-only".
-
-For code, the relevant packages in the client are:
-
-- `pkg/crypto/pqc.go` — ML-KEM-768 keygen, encap, decap, and PSK derivation. Uses the `crypto/mlkem` standard library type.
-- `pkg/agent/pqc.go` — per-peer state machine. Caches derived PSKs. Handles rekey.
-- `pkg/wireguard/engine.go` — injects the PSK into the WireGuard IPC. The `PresharedKeyHex` field on the peer struct is how it crosses into wireguard-go.
-
-The [post-quantum section of the QuickZTNA docs](/docs/security/#post-quantum) describes the exact packet layout for anyone implementing a compatible client.
+Because the PSK sits under the normal WireGuard handshake, a peer without the post-quantum layer still connects — it just falls back to classical-only security. That is the critical detail to check in any product claiming hybrid PQ: **ask how a downgraded tunnel is surfaced**, because silent fallback means you cannot tell which sessions were actually protected.
 
 ## 9. Benchmarks: CPU and wire time
 
@@ -194,7 +186,7 @@ Translated: ML-KEM-768 keygen is about 91 microseconds, encap is 100 microsecond
 - An always-on mesh generates roughly one handshake per peer per 120 seconds.
 - Even 100 peers rekeying simultaneously is 100 × 91µs = 9.1 ms of aggregate CPU time per cycle.
 
-On the wire, the extra 2,272 bytes of hybrid handshake traffic cost 0.18 ms on a 100 Mbit link and 18 microseconds on a 1 Gbit link. In practice we have never seen a measurable user-visible latency from the PQC component on any production network.
+On the wire, the extra 2,272 bytes of hybrid handshake traffic cost 0.18 ms on a 100 Mbit link and 18 microseconds on a 1 Gbit link. In practice the added latency is not user-visible from the PQC component on any production network.
 
 ## 10. Implementation choices and common pitfalls
 
@@ -205,7 +197,7 @@ Ten things to verify when you ship ML-KEM-768 yourself.
 3. **Encapsulation randomness must come from a strong CSPRNG.** ML-KEM's IND-CCA2 proof depends on good randomness at encapsulation time. On Linux use `getrandom(2)`. Never use `rand()`.
 4. **Feed the full public key into the KEM, not a hash.** Some hobbyist libraries hash the public key first to save space. This breaks standard compliance and interoperability.
 5. **Compose the hybrid secret by concatenation, then KDF.** Simple XOR is wrong because it leaks structure. Full-length concatenation of both shared secrets, followed by HKDF with a fixed info string, is the documented construction.
-6. **Include a transcript in the KDF.** We fold the handshake transcript into the HKDF salt. Without it you are vulnerable to a class of re-routing attacks.
+6. **Include a transcript in the KDF.** Fold the handshake transcript into the HKDF salt. Without it you are vulnerable to a class of re-routing attacks.
 7. **Validate public keys at the deserialisation boundary.** FIPS 203 specifies that encapsulators must check that the public key decodes to valid polynomial coefficients. A buggy decoder can be used as an oracle.
 8. **Do not reuse nonces across rekey.** ML-KEM itself has no nonces; this is about the AEAD used afterwards. But a common mistake is to keep the AEAD key constant across rekey; rotate it.
 9. **Keep a compile-time flag for classical-only fallback.** Operators sometimes have to disable PQC to interoperate with stale peers. Make it loud and logged, not silent.
@@ -237,14 +229,14 @@ If a vendor says their product is "quantum-safe" or "post-quantum ready", these 
 2. **Is it hybrid or PQ-only?** Hybrid is the right answer today. PQ-only means the vendor has not thought about unknown future lattice cryptanalysis.
 3. **Pre-standard Kyber or ML-KEM?** If the vendor has not updated their crypto library since the 2024 standard, they are shipping something that will not interoperate.
 4. **What is the PSK source?** If the vendor just mixes a PQC secret into a key derivation step without rotating it, their forward secrecy claim is weaker than it sounds.
-5. **How often does the PQ key rotate?** We rotate every WireGuard rekey, i.e. every two minutes. If they do not rotate, ask why.
-6. **Can you see the mode on the wire?** We log it. An operator should be able to prove which sessions were protected by which key exchange.
+5. **How often does the PQ key rotate?** Rotating on every WireGuard rekey — roughly every two minutes — is the right answer. If they do not rotate, ask why.
+6. **Can you see the mode on the wire?** An operator should be able to prove which sessions were protected by which key exchange, so ask to see that log.
 7. **What happens if a peer does not support PQC?** Hard failure? Silent downgrade? Logged downgrade? Silent downgrade is the worst answer.
 8. **Has the implementation been independently audited?** Not "self-audited". An external firm or a published peer-reviewed paper. Bonus points for in-scope implementation fuzzing.
 9. **Is it on by default or opt-in?** Opt-in is a red flag. The whole point of a harvest-now-decrypt-later defence is that it is on when the attacker is capturing.
 10. **How is the configuration exposed?** Can operators disable it in an emergency? Is that change logged and audited?
 
-QuickZTNA answers: ML-KEM-768, hybrid with X25519, FIPS 203 conformant via Go 1.24 stdlib, PSK from HKDF of both shared secrets with transcript binding, rotated every two minutes, visible per-tunnel in the dashboard, hard-requires one end of the conversation to be a compatible client, on by default on every plan including Free, disable only via org-policy with audit event. We are happy to be asked any of these questions — and we encourage you to ask our competitors too.
+QuickZTNA's answer to all ten is the same: we do not implement post-quantum key exchange, so there is nothing to audit, no parameter set to disclose, and no default to check. Our tunnels are classical WireGuard. We would rather say that plainly than score well on a checklist we have not earned — and we encourage you to put these ten questions to any vendor that does claim it.
 
 ## 13. Further reading
 
@@ -254,8 +246,8 @@ Primary sources first, secondary reading after. All links verified on the publis
 - [NIST IR 8528 — Analysis of the Quantum-Resistant Algorithms](https://csrc.nist.gov/pubs/ir/8528/final). Background on the selection process.
 - [IETF draft-ietf-tls-hybrid-design](https://datatracker.ietf.org/doc/draft-ietf-tls-hybrid-design/). How the industry is wiring hybrid KEMs into TLS 1.3.
 - [NSA CSI, "Announcing the Commercial National Security Algorithm Suite 2.0"](https://media.defense.gov/2022/Sep/07/2003071834/-1/-1/0/CSA_CNSA_2.0_ALGORITHMS_.PDF). The US defence roadmap.
-- [Go `crypto/mlkem` documentation](https://pkg.go.dev/crypto/mlkem). The API we use.
-- [QuickZTNA security docs](/docs/security/). Exact packet layout and test vectors for our hybrid scheme.
+- [Go `crypto/mlkem` documentation](https://pkg.go.dev/crypto/mlkem). The standard-library API for it.
+- [QuickZTNA security docs](/docs/security/). What our tunnels actually use, and our post-quantum position.
 
 ## Related reading on this blog
 

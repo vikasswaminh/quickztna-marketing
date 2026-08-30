@@ -84,7 +84,7 @@ This is the same, well-audited construction used by WireGuard everywhere — fas
 
 Post-quantum cryptography — hybrid key exchange combining classical X25519 with a NIST-standardized KEM such as ML-KEM (FIPS 203) — defends against "harvest now, decrypt later," where traffic captured today is decrypted once a cryptographically-relevant quantum computer exists. It matters for data with long-lived value.
 
-**The shipped QuickZTNA client uses classical WireGuard today.** Hybrid post-quantum key exchange is NOT on our roadmap, not a current product feature. Our [blog](/blog/) covers the background — ML-KEM, hybrid constructions, and the CNSA 2.0 / BSI / ANSSI timelines — and we'll document it here as a product capability only when it ships in the client.
+**The shipped QuickZTNA client uses classical WireGuard today.** Hybrid post-quantum key exchange is NOT on our roadmap, not a current product feature. Our [blog](/blog/) covers the background — ML-KEM, hybrid constructions, and the CNSA 2.0 / BSI / ANSSI timelines — and we would document it here as a product capability only if it ever shipped in the client.
 
 ## Trust roots
 

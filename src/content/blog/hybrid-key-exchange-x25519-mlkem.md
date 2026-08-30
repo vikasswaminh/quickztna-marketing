@@ -19,20 +19,20 @@ faq:
   - q: "Why concatenate the two shared secrets instead of XOR-ing them?"
     a: "XOR combiners can leak structure if either input has biased bits or if an attacker gains partial information about one of the shared secrets. Concatenation followed by a KDF preserves all entropy from both inputs and is the construction recommended in NIST SP 800-56C and the IETF hybrid key exchange draft. Do not invent a custom combiner."
   - q: "Is hybrid slower than classical?"
-    a: "Only marginally. On commodity hardware, the ML-KEM-768 operations add roughly 250 microseconds of CPU per handshake on top of X25519's 7 microseconds. The larger hit is the 2,272 extra bytes of handshake traffic, which adds roughly 100 microseconds on a 100 Mbit link. Total hybrid handshake overhead in production QuickZTNA deployments is under 5 milliseconds."
+    a: "Only marginally. On commodity hardware, the ML-KEM-768 operations add roughly 250 microseconds of CPU per handshake on top of X25519's 7 microseconds. The larger hit is the 2,272 extra bytes of handshake traffic, which adds roughly 100 microseconds on a 100 Mbit link. In practice total hybrid handshake overhead lands in the low milliseconds — measure it on your own hardware rather than trusting a vendor figure."
   - q: "Can I use a hybrid key exchange for signatures too?"
     a: "Yes. The signature analogue is a hybrid signature: sign with a classical signature algorithm and a post-quantum signature algorithm in parallel and verify both. But signatures and key exchange are separate problems and the migrations run on different timelines. This post covers key exchange only."
   - q: "What happens if one peer speaks hybrid and the other does not?"
-    a: "Either the handshake falls back to classical-only or it fails, depending on policy. In QuickZTNA the default is graceful fallback with an audit log entry. In strict compliance deployments you can set a policy that refuses classical-only tunnels entirely, at the cost of interoperability with stock WireGuard peers."
+    a: "Either the handshake falls back to classical-only or it fails, depending on policy. Graceful fallback with an audit entry is the common default; strict deployments refuse classical-only tunnels entirely, at the cost of interoperability with stock WireGuard peers. This is a question to put to any vendor claiming hybrid — QuickZTNA does not implement it, so for us every tunnel is classical WireGuard."
   - q: "Does hybrid preserve forward secrecy?"
-    a: "Yes, provided both key pairs are ephemeral per handshake. Forward secrecy is a property of the protocol using the key exchange, not of the key exchange primitives themselves. The QuickZTNA construction re-runs the full hybrid derivation on every WireGuard rekey (every two minutes by default), so each session key is derived from fresh ephemeral material on both legs."
+    a: "Yes, provided both key pairs are ephemeral per handshake. Forward secrecy is a property of the protocol using the key exchange, not of the key exchange primitives themselves. A correct implementation re-runs the full hybrid derivation on every WireGuard rekey (every two minutes by default), so each session key is derived from fresh ephemeral material on both legs — worth confirming with any vendor, since a PSK derived once and cached indefinitely quietly loses that property."
   - q: "Is hybrid TLS 1.3 already in common browsers?"
     a: "Yes. Chrome, Edge, and Firefox have all shipped hybrid post-quantum TLS 1.3 key exchange by default for connections to servers that advertise it, using the X25519 + ML-KEM-768 group (TLS codepoint 0x11EC). As of 2026, Cloudflare, Google, and several major CDNs also advertise it on their edges. Chromium's rollout timeline is documented on the Chromium blog and the status can be inspected at chrome://flags for debugging."
 ---
 
 ## TL;DR
 
-A hybrid post-quantum key exchange combines two key-agreement primitives — one classical, one post-quantum — so the resulting session key is secure if either primitive alone is secure. The production default in 2026 is X25519 paired with ML-KEM-768. The correct combiner is to run both key exchanges in parallel, concatenate the two shared secrets, fold the handshake transcript into a salt, and derive the session key through HKDF. This post spells out the construction, the gotchas, and a minimal Go implementation you can read in full. We use this construction in every QuickZTNA tunnel. Every major standards body — NIST, IETF, NSA, BSI, ANSSI — recommends hybrid for the transition window.
+A hybrid post-quantum key exchange combines two key-agreement primitives — one classical, one post-quantum — so the resulting session key is secure if either primitive alone is secure. The production default in 2026 is X25519 paired with ML-KEM-768. The correct combiner is to run both key exchanges in parallel, concatenate the two shared secrets, fold the handshake transcript into a salt, and derive the session key through HKDF. This post spells out the construction, the gotchas, and a minimal Go implementation you can read in full. To be clear about our own product: QuickZTNA does not run this exchange — its tunnels are classical WireGuard — so read this as an engineering guide, not a description of what we ship. Every major standards body — NIST, IETF, NSA, BSI, ANSSI — recommends hybrid for the transition window.
 
 ## Who this is for
 
@@ -117,10 +117,10 @@ key_material = HKDF(
 
 Some design choices worth flagging:
 
-- **Concatenation order matters for determinism.** Both sides must agree on the order (classical first, then post-quantum). We fix it in the protocol spec.
+- **Concatenation order matters for determinism.** Both sides must agree on the order (classical first, then post-quantum). Fix it in the protocol spec.
 - **Each side computes `combined` independently.** The order is deterministic from the fixed spec, not from any random nonce.
 - **`salt` is the transcript hash.** Not a counter, not a nonce, not a fixed value. This is what binds the combined key to the specific handshake messages.
-- **`info` is a fixed ASCII string.** This provides domain separation from any other KDF step in the protocol. We version it (`-v1`) so future revisions are explicit.
+- **`info` is a fixed ASCII string.** This provides domain separation from any other KDF step in the protocol. Version it (`-v1`) so future revisions are explicit.
 - **Output length is the symmetric key length you need.** For WireGuard's pre-shared key field, 32 bytes is enough.
 
 ### 3.5 Zero out the temporaries
@@ -141,7 +141,7 @@ Consider a man-in-the-middle who can observe both halves of the handshake but ca
 
 Binding the transcript fixes this. Any rewrite of auxiliary fields changes the transcript, which changes the salt, which changes the derived session key. The two sides end up with different keys and the next message fails AEAD authentication. The attacker has nothing useful.
 
-The specific hash we use is SHA-256 of the concatenated handshake messages, in the order they were sent, with unambiguous length prefixes. Unambiguous length prefixes matter: if the transcript is just a plain concatenation, an attacker can sometimes move bytes between fields without changing the concatenation.
+A good choice is SHA-256 of the concatenated handshake messages, in the order they were sent, with unambiguous length prefixes. Unambiguous length prefixes matter: if the transcript is just a plain concatenation, an attacker can sometimes move bytes between fields without changing the concatenation.
 
 ## 5. Minimal Go implementation
 
@@ -252,11 +252,11 @@ func Finalise(st InitiatorState, rm ResponderMessage, transcript []byte) ([]byte
 }
 ```
 
-The actual QuickZTNA implementation is more careful about zeroisation, uses structured error types, serialises the transcript with explicit length prefixes, and handles negotiation of PQ support. But this is the shape.
+A production implementation would be more careful about zeroisation, use structured error types, serialise the transcript with explicit length prefixes, and handle negotiation of PQ support. But this is the shape.
 
 ## 6. Common mistakes and how to avoid them
 
-Ten specific mistakes we have seen in reviewed implementations — ours and others'.
+Ten specific mistakes that recur in reviewed implementations.
 
 ### 6.1 Hashing inputs before handing them to HKDF
 
@@ -296,7 +296,7 @@ Your abstraction should have an algorithm identifier in the protocol that names 
 
 ### 6.10 Silent fallback
 
-If a peer does not support PQ, a silent drop to classical-only is the worst behaviour because it masks the regression. Either fall back with a loud audit event, or fail closed. QuickZTNA defaults to the former; strict compliance policies can switch to the latter.
+If a peer does not support PQ, a silent drop to classical-only is the worst behaviour because it masks the regression. Either fall back with a loud audit event, or fail closed — and ask any vendor claiming hybrid which of the two it does, because a silent downgrade is indistinguishable from working. QuickZTNA implements no PQ layer at all, so every one of its tunnels is classical by construction.
 
 ## 7. How this lands in TLS 1.3
 
@@ -321,20 +321,20 @@ openssl s_client -curves X25519MLKEM768 -connect example.com:443 < /dev/null
 
 If you see the hybrid group in the server temp key line, the endpoint supports hybrid. If not, it falls back to classical.
 
-## 8. How this lands in WireGuard and QuickZTNA
+## 8. How a design like this would land in WireGuard
 
-WireGuard does not have a TLS-style codepoint or negotiation. The protocol is fixed. What it does have is an optional pre-shared key (PSK) field on every peer, mixed into the handshake for additional forward secrecy.
+**QuickZTNA does not run this exchange.** Our tunnels are classical WireGuard, and post-quantum key exchange is neither implemented nor planned. This section is a design sketch for anyone building it — not a description of our product.
 
-QuickZTNA does not run this exchange; its tunnels are classical WireGuard. A design of this shape would run as a separate protocol at a higher layer, relayed through a coordination server. The resulting 32-byte derived key is installed as the WireGuard PSK for that peer. WireGuard's own Noise handshake then runs as normal, but with the PSK field populated from a post-quantum exchange rather than left empty or statically configured.
+WireGuard does not have a TLS-style codepoint or negotiation. The protocol is fixed. What it does have is an optional pre-shared key (PSK) field on every peer, mixed into the handshake for additional forward secrecy. That field is the seam: a design of this shape runs the hybrid exchange as a separate protocol at a higher layer, then installs the resulting 32-byte derived key as the WireGuard PSK for that peer. WireGuard's own Noise handshake then proceeds as normal, with the PSK populated from a post-quantum exchange rather than left empty or statically configured.
 
-A few consequences worth highlighting:
+A few consequences worth planning for if you build it:
 
-- **Classical-capable WireGuard kernel modules continue to work.** If one side does not support QuickZTNA's PQ layer, the tunnel establishes classical-only. This is visible in the dashboard.
-- **The PSK rotates on every WireGuard rekey.** WireGuard rekeys every 120 seconds by default. QuickZTNA re-runs the hybrid derivation on that cadence.
-- **Handshake cost is amortised.** On the first establishment, you pay for ephemeral key generation on both sides plus the relay round-trip. On subsequent rekeys, only the ML-KEM encap/decap operations are re-run; classical Curve25519 is already in a fast path.
-- **Audit log carries the mode.** Every established and renewed session records `kex=hybrid-x25519-mlkem768` or `kex=classical-only` along with the peer identity and timestamp.
+- **Classical-capable WireGuard kernel modules keep working.** If one side lacks the PQ layer, the tunnel either establishes classical-only or fails, depending on the policy you choose in §6.10 — so you need a way to surface which mode a given session actually used.
+- **The PSK should rotate on every WireGuard rekey.** WireGuard rekeys roughly every 120 seconds by default, so the derivation runs on that cadence.
+- **Handshake cost is amortised.** First establishment pays for ephemeral key generation on both sides plus a relay round-trip. Rerun the FULL hybrid derivation on each rekey — both legs, not just ML-KEM — or the X25519 half stops contributing fresh entropy and forward secrecy degrades. Curve25519 is cheap enough that this is not the bottleneck.
+- **Log the mode.** Record something like `kex=hybrid-x25519-mlkem768` or `kex=classical-only` per session alongside peer identity and timestamp, so you can later prove what protected which session.
 
-Our detailed walkthrough of the implementation is in the [ML-KEM-768 explained post](/blog/ml-kem-768-explained#8-how-ml-kem-768-is-wired-into-quickztna) and the [post-quantum section of the docs](/docs/security/#post-quantum).
+For the algorithm itself, see the [ML-KEM-768 explained post](/blog/ml-kem-768-explained); for what QuickZTNA actually ships, see the [security model](/docs/security/).
 
 ## 9. Testing and interoperability
 

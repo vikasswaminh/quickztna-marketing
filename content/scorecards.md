@@ -47,17 +47,17 @@ Scoring rubric at [WRITING-GUIDELINES.md](WRITING-GUIDELINES.md). Each post is s
 | [Kubernetes Zero Trust](../src/content/blog/kubernetes-zero-trust.md) | 4,040 | **9.5** | Four-layer framing, SPIFFE/SPIRE, reference multi-cluster architecture |
 | [17 ZTNA Metrics](../src/content/blog/ztna-metrics-for-cisos.md) | 4,060 | **9.5** | Metrics framework (not fabricated statistics), formulas, data sources, board template |
 | [PQ Migration Timeline](../src/content/blog/post-quantum-migration-timeline.md) | 4,020 | **9.3** | Consolidated per-jurisdiction deadlines, visual timeline, 6 concrete actions |
-| [PQ Free Tier Manifesto](../src/content/blog/post-quantum-free-tier-manifesto.md) | 4,000 | **9.5** | Public pricing commitment, cost-of-PQ breakdown, five questions for evaluating Free tiers |
+| Free Tier Manifesto | — | — | **NOT WRITTEN.** The original "Why We Ship Post-Quantum on the Free Tier" framing was withdrawn with PQC; no replacement drafted. Excluded from the totals below. |
 
-**Phase 3 average score: 9.5 / 10.** All 10 posts clear the 8/10 publish threshold. Total Phase 3 wordcount: 40,630 words.
+**Phase 3 average score: 9.5 / 10.** All **9 written** posts clear the 8/10 publish threshold. Total Phase 3 wordcount: **36,630 words** across 9 posts. The tenth row (Free Tier Manifesto) was never written and is excluded from both figures — it previously contributed a phantom 4,000 words and a 9.5 score to these totals.
 
-**Combined Phase 1 + 2 + 3: 28 posts, 116,180 words, average score 9.5 / 10.**
+**Combined Phase 1 + 2 + 3: 27 posts, 112,180 words, average score 9.5 / 10.**
 
 ## Phase 3 notes on factual discipline
 
 - Post #47 was reframed from "17 ZTNA Statistics" to "17 ZTNA Metrics" to avoid any risk of fabricating industry statistics. The metrics framework is more useful and more evergreen.
 - Post #48 (migration timeline) deliberately notes that timelines may slip and gives planning buffer guidance; avoids overclaiming specific future events.
-- Post #50 (manifesto) is company-authored editorial content. Commitment language is intentional — we state what we commit to publicly and what reversal procedure would apply if business reality forced a change.
+- Post #50 (manifesto) was **never written.** It was scoped as "Why We Ship Post-Quantum on the Free Tier" and withdrawn when PQC was withdrawn from the product. No replacement has been drafted, and it is excluded from the Phase 3 counts and wordcount above.
 
 ## Polish pass applied 2026-04-24
 
