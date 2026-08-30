@@ -284,6 +284,14 @@ const REMOVED = [
     also: /\bevery[^.\n]{0,25}(tunnel|tier|plan)\b|by default/i,
     msg: "anaphoric shipped claim — name what is shipped; PQC is not shipped",
   },
+  // A third anaphor: the PQC term sits in the PREVIOUS clause and this one refers
+  // back by category noun — "…the level chosen in QuickZTNA", where "the level"
+  // means ML-KEM-768. Requires our name, so vendor-neutral prose is unaffected.
+  {
+    re: /\bthe (level|parameter set|variant|algorithm|suite)\b/i,
+    also: /\b(chosen|selected|used|adopted|shipped|standard)\b[^.\n]{0,30}\bin quickztna\b|\bquickztna\b[^.\n]{0,30}\b(chose|selected|uses|adopted)\b/i,
+    msg: "anaphoric PQC selection claim — QuickZTNA implements no ML-KEM parameter set",
+  },
   // "We use this construction in every QuickZTNA tunnel" names no PQC term at all,
   // so the co-occurrence rule above cannot see it — the referent is anaphoric.
   // Deliberately narrow to "this construction": widening it to handshake/exchange

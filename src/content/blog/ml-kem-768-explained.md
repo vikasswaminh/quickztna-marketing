@@ -108,7 +108,7 @@ NIST defined five security categories for the post-quantum competition, anchored
 You rarely have to agonise over the choice.
 
 - **ML-KEM-512** is defensible where bandwidth is very scarce, such as some IoT links, and when the data being protected has a short lifetime.
-- **ML-KEM-768** is the sensible default for commercial use. It is the level specified in TLS 1.3 hybrid drafts, the level shipped by default in most browser-to-cloud deployments, and the level chosen in QuickZTNA.
+- **ML-KEM-768** is the sensible default for commercial use. It is the level specified in TLS 1.3 hybrid drafts and the level shipped by default in most browser-to-cloud deployments. QuickZTNA implements no ML-KEM parameter set at all.
 - **ML-KEM-1024** is what the NSA's CNSA 2.0 guidance picks for US national security systems. If you are specifically targeting NSS compliance, use it. For everyone else, the marginal security gain over 768 is not worth the bandwidth and CPU, given that 768 already exceeds AES-192 classical strength.
 
 Note: CNSA 2.0 specifies ML-KEM-1024 rather than 768. QuickZTNA ships neither — our tunnels are classical WireGuard — so a CNSA-aligned programme needs a vendor that implements ML-KEM-1024. We will not describe that release as "CNSA 2.0 compliant" until the full algorithm suite is in place and validated.
