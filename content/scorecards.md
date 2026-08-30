@@ -57,7 +57,7 @@ Scoring rubric at [WRITING-GUIDELINES.md](WRITING-GUIDELINES.md). Each post is s
 
 - Post #47 was reframed from "17 ZTNA Statistics" to "17 ZTNA Metrics" to avoid any risk of fabricating industry statistics. The metrics framework is more useful and more evergreen.
 - Post #48 (migration timeline) deliberately notes that timelines may slip and gives planning buffer guidance; avoids overclaiming specific future events.
-- Post #50 (manifesto) is company-authored editorial content. Commitment language is intentional — we state what we commit to publicly and what reversal procedure would apply if business reality forced a change.
+- Post #50 (manifesto) was **never written.** It was scoped as "Why We Ship Post-Quantum on the Free Tier" and withdrawn when PQC was withdrawn from the product. No replacement has been drafted, and it is excluded from the Phase 3 counts and wordcount above.
 
 ## Polish pass applied 2026-04-24
 

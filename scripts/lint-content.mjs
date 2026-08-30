@@ -45,6 +45,24 @@
 //     clause-local subject test can catch. Vendor-neutral education elsewhere
 //     in the same post stays publishable.
 //
+// ── Known limits (do not mistake a green run for proof) ─────────────────────
+// This is a regex backstop against regressions, not a proof of accuracy. Two
+// limits are inherent and known:
+//
+//   1. DENIAL BINDING IS PROXIMITY, NOT PARSING. A denial is associated with an
+//      assertion by a character window, so "QuickZTNA does not offer CASB today,
+//      but QuickZTNA will offer CASB next quarter" is not reliably caught — the
+//      second assertion sits inside the first denial's window. Splitting on ':'
+//      and ';' narrows this, but a contrastive "but" clause in one sentence can
+//      still hide a claim. Real coverage needs a parser, not a window.
+//   2. CO-OCCURRENCE IS NOT ATTACHMENT. `re` + `also` only need to appear in the
+//      same clause, so "QuickZTNA ships classical WireGuard while this article
+//      discusses post-quantum cryptography" can flag even though the verb belongs
+//      to WireGuard. Prefer rewording over widening the exemptions.
+//
+// Both were reported by review and are recorded here deliberately. When the guard
+// passes, that means no KNOWN pattern matched — a human still has to read the copy.
+//
 // Run: node scripts/lint-content.mjs   (wired into `prebuild`)
 
 import { readdirSync, readFileSync, statSync } from "node:fs";
@@ -137,15 +155,33 @@ const denied = (s, matchIndex = null) => {
 // ':' is safe now that attribution is scope-based rather than proximity-based —
 // a surface needs no subject, so "Every feature is included: mesh, ..., vault"
 // is still caught after the split.
+// The ':' branch deliberately excludes object-literal keys (`job: "…"`), which
+// would otherwise separate a savings-page entry from the `note:` explaining it.
+const CLAUSE_SPLIT =
+  /(?<=[.!?])\s+|(?<=[.!?])(?=<)|\s*;\s+|(?<=[a-z)])\s*:\s+(?!["'])|(?<=>)\s*(?=<)|<br\s*\/?>/i;
+
 const splitClauses = (text) =>
   text
-    .split(
-      // The ':' split deliberately excludes object-literal keys (`job: "…"`),
-      // which would otherwise separate a savings-page entry from the `note:`
-      // that explains it is a capability we do NOT replace.
-      /(?<=[.!?])\s+|(?<=[.!?])(?=<)|\s*;\s+|(?<=[a-z)])\s*:\s+(?!["'])|(?<=>)\s*(?=<)|<br\s*\/?>/i,
-    )
+    .split(CLAUSE_SPLIT)
     .filter(Boolean);
+
+// Same split, but reports whether each clause followed a COLON. A colon keeps the
+// subject in the prefix ("QuickZTNA includes: CASB, …"), so blog attribution has
+// to carry across that one boundary — but NOT across sentence boundaries, which
+// would attribute vendor-neutral sentences in any paragraph that names us.
+const splitClausesMeta = (text) => {
+  const parts = text.split(new RegExp(`(${CLAUSE_SPLIT.source})`, "i"));
+  const out = [];
+  let afterColon = false;
+  for (let k = 0; k < parts.length; k++) {
+    if (k % 2 === 0) {
+      if (parts[k]) out.push({ text: parts[k], afterColon });
+    } else {
+      afterColon = (parts[k] || "").includes(":");
+    }
+  }
+  return out;
+};
 
 // Group physical lines into SENTENCE units before splitting into clauses.
 // Prose wraps across lines, so a sentence's own qualifier and its terms can land
@@ -273,7 +309,10 @@ const REMOVED = [
     // Assertion forms, not just shipping verbs. Declarative promises evade a
     // verb-only list: "an ML-KEM-1024 opt-in", "hybrid PQ encryption default-on",
     // "uses ML-KEM on every tier", and bare table cells reading "Yes".
-    also: /\b(ships?|shipped|uses?|using|runs?|implements?|implemented|provides?|includes?|included|enabled|enables?|adds?|offers?|opt-in|scheduled|planned|commitment|default-on|by default|on every|in every|every tier|every plan|^\|?\s*yes\b)\b/i,
+    // The table-cell alternative lives OUTSIDE the \b(...)\b wrapper: "|" is not a
+    // word character, so a leading \b can never match at a cell boundary. That is
+    // why "| QuickZTNA | ML-KEM-768 | Yes (X25519) | Yes, all tiers |" passed.
+    also: /\b(ships?|shipped|uses?|using|runs?|implements?|implemented|provides?|includes?|included|enabled|enables?|adds?|offers?|opt-in|scheduled|planned|commitment|default-on|by default|on every|in every|every tier|every plan)\b|\|\s*yes\b/i,
     msg: "PQC-as-shipped claim — PQC was WITHDRAWN; tunnels are classical WireGuard",
   },
   // "QuickZTNA ships it on every tunnel" after an allowlisted definition: the
@@ -463,14 +502,27 @@ for (const file of ROOTS.flatMap((r) => walk(r))) {
       pqcContext = PQC_TERM.test(heading[1]);
     }
 
-    for (const rawClause of splitClauses(text)) {
+    // Blog attribution carries across a COLON only — see splitClausesMeta.
+    let prevAttributed = false;
+
+    for (const { text: rawClause, afterColon } of splitClausesMeta(text)) {
+      // PQC context is taken from the RAW clause, before redaction — otherwise an
+      // allowlisted definition ("ML-KEM-768 is the NIST-standardised …") has its
+      // PQC term removed and the anaphor in the next clause loses its antecedent.
+      const rawHasPqc = PQC_TERM.test(rawClause);
       const clause = redactAllowed(rawClause);
-      if (!clause.trim()) continue;
+      if (!clause.trim()) {
+        if (rawHasPqc) pqcContext = true;
+        continue;
+      }
       // Denial is evaluated per MATCH below, not once per clause.
 
       // Attribution: surfaces describe our product by definition; the blog needs
       // the product name in the clause or in the enclosing heading.
-      const attributed = isBlog ? SUBJ_RE.test(clause) || sectionOurs : true;
+      const attributed = isBlog
+        ? SUBJ_RE.test(clause) || sectionOurs || (afterColon && prevAttributed)
+        : true;
+      prevAttributed = attributed;
 
       const rules = [
         ...PRODUCT_RULES,
@@ -503,7 +555,7 @@ for (const file of ROOTS.flatMap((r) => walk(r))) {
       }
       // Carry PQC context forward to the NEXT clause, so an anaphor can resolve
       // against an antecedent in the sentence before it.
-      if (PQC_TERM.test(clause)) pqcContext = true;
+      if (rawHasPqc) pqcContext = true;
     }
   }
 }

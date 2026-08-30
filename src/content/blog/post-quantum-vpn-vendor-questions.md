@@ -182,7 +182,7 @@ This table reflects what is publicly documented as of April 2026. Always verify 
 
 | Vendor | PQ key exchange | Hybrid | On by default | Visible mode |
 |---|---|---|---|---|
-| QuickZTNA | ML-KEM-768 | Yes (X25519) | Yes, all tiers | Yes, per-tunnel |
+| QuickZTNA | None — not implemented | No | No | N/A (classical WireGuard) |
 | Cloudflare Access | TLS 1.3 hybrid with ML-KEM-768 on edge | Yes | Yes on edge | Partial (HTTP headers) |
 | AWS site-to-site VPN | Post-quantum IKE modes on several services | Check current docs | Check current docs | Check current docs |
 | Tailscale | Check current docs | Check current docs | Check current docs | Check current docs |

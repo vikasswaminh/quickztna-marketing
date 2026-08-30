@@ -296,7 +296,7 @@ Your abstraction should have an algorithm identifier in the protocol that names 
 
 ### 6.10 Silent fallback
 
-If a peer does not support PQ, a silent drop to classical-only is the worst behaviour because it masks the regression. Either fall back with a loud audit event, or fail closed. Ask any vendor claiming hybrid which it does; QuickZTNA implements no PQ layer at all, so every tunnel is classical policies can switch to the latter.
+If a peer does not support PQ, a silent drop to classical-only is the worst behaviour because it masks the regression. Either fall back with a loud audit event, or fail closed — and ask any vendor claiming hybrid which of the two it does, because a silent downgrade is indistinguishable from working. QuickZTNA implements no PQ layer at all, so every one of its tunnels is classical by construction.
 
 ## 7. How this lands in TLS 1.3
 
