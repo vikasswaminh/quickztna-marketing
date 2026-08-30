@@ -1,4 +1,4 @@
----
+﻿---
 title: "Security model"
 description: "QuickZTNA's cryptographic primitives, trust roots, posture engine, audit log, compliance posture, and coordinated-disclosure policy for technical evaluators."
 section: "security"
@@ -44,7 +44,7 @@ Every primitive in use, with rationale.
 
 Every tunnel handshake performs a Curve25519 (X25519) elliptic-curve Diffie-Hellman exchange (RFC 7748) as part of WireGuard's Noise-based handshake. The resulting shared secret is run through WireGuard's HKDF-based key derivation, bound to the session transcript to defeat downgrade and re-binding attacks.
 
-> **Post-quantum:** hybrid X25519 + ML-KEM key exchange is on our roadmap, not in the shipped client today. The current data plane is classical WireGuard. We'll document post-quantum here as a product feature when it ships.
+> **Post-quantum:** not implemented and not on the roadmap. Tunnels are classical WireGuard. If a post-quantum key exchange is a hard requirement, QuickZTNA does not meet it today. The current data plane is classical WireGuard. We'll document post-quantum here as a product feature when it ships.
 
 ### Data-plane symmetric cryptography — ChaCha20-Poly1305
 
