@@ -163,7 +163,10 @@ const denied = (s, matchIndex = null) => {
 // The ':' branch deliberately excludes object-literal keys (`job: "…"`), which
 // would otherwise separate a savings-page entry from the `note:` explaining it.
 const CLAUSE_SPLIT =
-  /(?<=[.!?])\s+|(?<=[.!?])(?=<)|\s*;\s+|(?<=[a-z)])\s*:\s+(?!["'])|(?<=>)\s*(?=<)|<br\s*\/?>/i;
+  // The lookbehind allows digits and closing emphasis too, so a colon after a
+  // numeric or formatted prefix still splits ("What will not move in 2026:",
+  // "**Not planned**:") — previously only a lowercase letter or ')' qualified.
+  /(?<=[.!?])\s+|(?<=[.!?])(?=<)|\s*;\s+|(?<=[a-z0-9)*_`\]])\s*:\s+(?!["'])|(?<=>)\s*(?=<)|<br\s*\/?>/i;
 
 const splitClauses = (text) =>
   text
@@ -283,8 +286,23 @@ const PRODUCT_RULES = [
     // "NIST's ML-KEM is on QuickZTNA's roadmap" must still fail.
     // The possessive is REQUIRED — "NIST ML-KEM is on the roadmap" must still fail,
     // because an unqualified roadmap on our own surface means ours.
-    unless:
-      /^(?!.*\b(?:our|quickztna['’]s|we)\s+roadmap\b)(?=.*(?:\b(?:EU|European Commission|NIST|NSA|BSI|ANSSI|NCSC|IBM|Tailscale|Cloudflare|industry|vendor|their)(?:['’]s)\s[^.\n]{0,40}roadmap\b|\bthe\s+EU['’]s\b|roadmap\]\(http))/i,
+    // The third-party roadmap must be the ONLY roadmap in the clause. Previously a
+    // trailing possessive laundered a claim about ours: "ML-KEM is on the roadmap,
+    // following NIST's post-quantum roadmap" passed because the NIST reference
+    // satisfied the exception even though the first roadmap is unqualified (= ours).
+    unless: (clause) => {
+      // Strip link targets and bare URLs first: the EU's roadmap link contains
+      // "roadmap" inside its slug, which is not a claim about anyone's roadmap.
+      const text = clause.replace(/\]\([^)]*\)/g, "]").replace(/https?:\/\/\S+/g, "");
+      const roadmaps = [...text.matchAll(/roadmap/gi)];
+      if (roadmaps.length === 0) return false;
+      return roadmaps.every((m) => {
+        const before = text.slice(Math.max(0, m.index - 60), m.index);
+        return /(?:EU|European Commission|NIST|NSA|BSI|ANSSI|NCSC|IBM|Tailscale|Cloudflare|industry|vendor|their)(?:['’]s)?\s[^.\n]{0,40}$/i.test(
+          before,
+        );
+      });
+    },
   },
   {
     // Any self-host claim about us, not just the Workforce-tier variant. The old
@@ -548,7 +566,9 @@ for (const file of ROOTS.flatMap((r) => walk(r))) {
 
       for (const { re, msg, noExempt, unless, also, needsPqcContext } of rules) {
         if (needsPqcContext && !pqcContext) continue;
-        if (unless && unless.test(clause)) continue;
+        // `unless` may be a regex or a predicate — some exceptions need to inspect
+        // every occurrence, not just find one match somewhere in the clause.
+        if (unless && (typeof unless === "function" ? unless(clause) : unless.test(clause))) continue;
         if (also && !also.test(clause)) continue;
         // Iterate EVERY match: taking only the first meant a denied first
         // assertion skipped the rule entirely, so "QuickZTNA does not offer CASB
