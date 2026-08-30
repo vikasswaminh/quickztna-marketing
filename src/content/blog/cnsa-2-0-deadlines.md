@@ -226,7 +226,7 @@ Ten specific questions to put to any ZTNA, VPN, or remote-access vendor selling 
 - ML-DSA-87 signature support on internal control-plane paths.
 - FIPS 140-3 CMVP submission of the crypto module.
 
-We will not describe QuickZTNA as "CNSA 2.0 compliant," or as shipping post-quantum, until it's actually in the client and tested. The honest framing today: classical WireGuard now, hybrid post-quantum (ML-KEM) on the roadmap.
+We will not describe QuickZTNA as "CNSA 2.0 compliant," or as shipping post-quantum, until it's actually in the client and tested. The honest framing today: classical WireGuard, and no post-quantum key exchange in the product.
 
 ## 10. Further reading
 

@@ -13,7 +13,7 @@ faq:
   - q: "A device is stuck quarantined even though it looks healthy — why?"
     a: "Access decisions read the latest posture report. If the most recent report is non-compliant (or stale and failing) and the org is in enforce mode, the device stays denied until a fresh compliant report arrives. Have the device re-report posture; if it's genuinely healthy, the next report flips it back to online automatically."
   - q: "Can posture trigger automatic remediation?"
-    a: "Yes, if the AI Operator is enabled with remediation rules. When a device is auto-quarantined for a missing firewall or disk encryption, the operator can prepare a pending enable_firewall or enable_disk_encryption command for that machine (expiring in an hour). It is prepared, not silently run — see the AI Operator page for the confirm/apply model."
+    a: "Yes, if auto-remediation rules are enabled in your org settings. When a device is auto-quarantined for a missing firewall or disk encryption, a pending enable_firewall or enable_disk_encryption command is prepared for that machine and expires in an hour. These are deterministic rule checks, not an AI decision, and the command is prepared rather than silently run — the device picks it up on its next heartbeat."
 ---
 
 Device posture is the "healthy device" half of Zero Trust: an approved user on a **non-compliant** device should not reach sensitive resources. QuickZTNA evaluates a device's security baseline from what the agent reports and, in enforce mode, removes failing devices from the mesh automatically.
@@ -37,7 +37,7 @@ The agent reports a small, well-defined set of signals; your org's posture polic
          │
          ├─ writes posture_reports (one row per machine, latest wins)
          ├─ updates the device risk score
-         └─ enforce + AI Operator on → prepare remediation command(s)
+         └─ enforce + auto-remediation rules on → prepare remediation command(s)
 ```
 
 Separately, the [access-control evaluator](/guide/admin/access-control/) reads the **latest** posture report on every connection: a non-compliant device is denied **only** when the org is in enforce mode. That design is deliberate — it means a stale failing report can't permanently isolate a node in monitor/disabled mode.

@@ -48,7 +48,7 @@ For people scanning to confirm the technical particulars before reading further:
 
 **Compliance.** GDPR-aligned with documented data flows and a DPA; HIPAA BAA on Business. SOC 2 Type II and ISO 27001 in progress (target 2026).
 
-**Audit.** Every administrative action, every policy decision, and every authentication is logged. Free plan: 90-day retention with dashboard query. Business: one year, queryable via API, exportable to SIEM, with real-time event streaming.
+**Audit.** Every administrative action, every policy decision, and every authentication is logged, with 90-day retention on both plans — queryable from the dashboard and via the API, exportable to your SIEM, with real-time event streaming.
 
 **Hosting.** Fully managed cloud service; self-hosting is not offered today. Contact sales@quickztna.com if it's a requirement.
 

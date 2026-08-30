@@ -34,7 +34,7 @@ faq:
 
 Cloudflare Access is an edge-native identity-aware proxy. It is strong for user-to-web-app access with global-edge latency benefits, but it is not the right product for every remote-access pattern. Teams looking for a Cloudflare Access alternative typically want one of four things: a real device agent with mesh connectivity, an audit-able open-protocol data plane (usually WireGuard), a self-hostable coordination plane, or post-quantum key exchange on the tunnel itself rather than only on the Cloudflare edge. The serious alternatives in 2026: Tailscale, NetBird, QuickZTNA, Twingate, Zscaler Private Access, and AWS Verified Access. This post compares each against the typical motivations for leaving Cloudflare Access.
 
-> **Adding up your tool bill?** An access proxy like Cloudflare Access is usually just one line item — most teams also pay separately for a device-agent mesh, remote support, DLP and a monitoring tool. QuickZTNA bundles all of them into one agent and one bill. [See what you'd save →](/savings/) — up to 90% lower.
+> **Adding up your tool bill?** An access proxy like Cloudflare Access is usually just one line item — most teams also pay separately for a device-agent mesh, DNS filtering and a monitoring tool. QuickZTNA folds those into one agent and one bill. [See what you'd save →](/savings/)
 
 ## Who this is for
 
@@ -161,7 +161,7 @@ Snapshot as of April 2026. Always verify against each vendor's current documenta
 | Architecture | Edge proxy | Mesh | Mesh | Mesh + ZTNA | ZTNA proxy | ZTNA proxy | Web-app proxy |
 | Data plane | CF proprietary | WireGuard | WireGuard | WireGuard | Proprietary | Proprietary | AWS-managed |
 | Self-host | No | No (Headscale exists) | Yes | No | Partial | No | No |
-| Free tier | Yes (verify current) | Yes | Yes | Yes (5 users, 5 devices each) | Yes (limited) | No | Check AWS pricing |
+| Free tier | Yes (verify current) | Yes | Yes | Yes (5 users, 100 devices) | Yes (limited) | No | Check AWS pricing |
 | Tunnel-level PQ | Edge TLS 1.3 hybrid | Verify | Verify | Roadmap | Verify | Verify | Verify |
 | Mesh P2P | No | Yes | Yes | Yes | No | No | No |
 | Clientless browser | Yes | No | No | Partial (admin UI) | No | Yes | Yes |

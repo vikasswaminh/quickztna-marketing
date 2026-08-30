@@ -103,7 +103,7 @@ Useful for homelabs and small permanent fleets. Not appropriate for a business b
 
 ### 4.2 QuickZTNA
 
-QuickZTNA is a full ZTNA built on WireGuard with a workforce-security layer. The data plane is classical WireGuard today; hybrid X25519 + [ML-KEM-768](/blog/ml-kem-768-explained) key exchange is on the roadmap. EU + US regions.
+QuickZTNA is a full ZTNA built on WireGuard, with access governance (JIT approvals, access reviews, policy rollback, signed compliance evidence) layered on the mesh. The data plane is classical WireGuard; post-quantum key exchange is not implemented. Managed cloud only — no self-host option.
 
 **Strengths.** Full ZTNA with an access-governance layer (JIT access, access reviews, versioned ACLs, compliance evidence bundles), DNS threat filtering, device posture and ABAC. Free remote SSH on every tier, and identical features on both plans.
 

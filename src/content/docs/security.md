@@ -24,7 +24,7 @@ QuickZTNA's threat model assumes:
 
 - **A network attacker** who can observe and modify traffic between any pair of devices on any network the devices traverse. This includes ISPs, cellular carriers, public Wi-Fi, transit providers, and on-path nation-state actors. The product's encryption and authentication are designed to be secure under this assumption.
 
-- **A future quantum-capable attacker.** Traffic captured today could be retrievable by a quantum adversary years from now ("harvest now, decrypt later"). The shipped client uses classical WireGuard today; hybrid post-quantum key exchange is on our roadmap — see our [blog](/blog/) for the standards background.
+- **A future quantum-capable attacker.** Traffic captured today could be retrievable by a quantum adversary years from now ("harvest now, decrypt later"). The shipped client uses classical WireGuard, and post-quantum key exchange is not implemented — see our [blog](/blog/) for the standards background and the questions to ask any vendor that claims it.
 
 - **Compromised endpoints.** A device that's been compromised at the OS level can act as that device until detected. The product cannot prevent this — no software can — but the posture engine, the audit log, and the fast revocation path are designed to bound the blast radius and the time-to-detection.
 
@@ -34,7 +34,7 @@ The model explicitly does not assume:
 
 - **Trust in our infrastructure.** Our coordination plane is a key-and-policy broker; it does not see data-plane traffic. A breach of our infrastructure does not give an attacker the ability to decrypt past or current traffic; it gives them the ability to refuse to broker future connections.
 
-- **Trust in third-party identity providers.** We rely on the IdP for authentication, but a compromised IdP is bounded to "can sign in as a user." Strong MFA at the IdP layer is the standard defence; enable the strongest factor your provider offers. We recommend hardware-backed factors (FIDO2, WebAuthn) and forbid configuration paths that would weaken your IdP's posture.
+- **Trust in third-party identity providers.** We rely on the IdP for authentication, but a compromised IdP is bounded to "can sign in as a user." Strong MFA at the IdP layer is the standard defence; enable the strongest factor your provider offers — hardware-backed factors such as FIDO2 or WebAuthn if it supports them. That is advice about your IdP: QuickZTNA's own MFA is TOTP, and we do not implement WebAuthn.
 
 ## Cryptographic primitives
 
@@ -110,13 +110,7 @@ Every action in QuickZTNA is logged. The audit log includes:
 
 Each event has a stable event type, a timestamp, an actor (user or system), a subject (the resource being acted on), and event-specific fields. The schema is documented in the OpenAPI spec.
 
-Retention is plan-dependent:
-
-- **Free**: 90 days, queryable from the dashboard.
-- **Business**: 1 year, queryable via API, exportable to SIEM (JSON Lines format).
-- **Workforce**: configurable retention from 1 year to permanent, real-time streaming via SSE or webhook.
-
-Audit data is retained per the schedule above and is queryable from the dashboard and (on paid plans) the API for review and export to your SIEM.
+Retention is **90 days on both plans** — it is not a paid upgrade. Audit data is queryable from the dashboard, and via the API for export to your SIEM (JSON Lines format). If you need a longer archive, export it on a schedule before the window closes.
 
 ## Compliance posture
 

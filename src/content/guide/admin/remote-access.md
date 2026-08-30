@@ -7,10 +7,10 @@ updatedAt: 2026-06-16
 primaryKeyword: "remote shell ZTNA"
 faq:
   - q: "Is remote shell a paid feature?"
-    a: "No — remote SSH/shell is available across all plans, including Free. It is gated by the remote_shell feature, which is enabled on every plan. Remote desktop (graphical RDP-style sessions) is the paid capability, gated by remote_desktop."
+    a: "No — remote SSH/shell is available across all plans, including Free. It is gated by the remote_shell feature, which is enabled on every plan."
   - q: "How is a remote shell session secured?"
     a: "Several ways: the target device must be online and have opted into SSH; the dashboard mints a one-time token that expires in 300 seconds; the connection runs over the encrypted mesh to the device (port 2222), not the public internet; and every session is audited (remote.session_created). The device side governs consent — it must have SSH enabled."
-  - q: "Is there a remote desktop?"
+  - q: "Can I get graphical screen control, not just a shell?"
     a: "No. Remote desktop and session recording were removed in the 2026 lean pivot. QuickZTNA provides an interactive shell for diagnostics; if you need screen control, keep a dedicated tool such as TeamViewer or AnyDesk."
   - q: "Can I run scripts across the fleet?"
     a: "Yes. Remote shell includes a script library (per-OS scripts) with execute_script and an execution_history. Use it for repeatable diagnostics or remediation, with the same audit trail as interactive sessions."

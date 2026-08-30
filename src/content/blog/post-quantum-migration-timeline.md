@@ -144,7 +144,7 @@ Specific industry deployments, verified against public announcements on publish 
 
 ### VPN and ZTNA vendors
 
-- **QuickZTNA**: Hybrid X25519 + ML-KEM-768 key exchange is on the roadmap, not shipped.
+- **QuickZTNA**: classical WireGuard only. Post-quantum key exchange is not implemented and not planned.
 - **Tailscale**, **NetBird**, **Twingate**, **Zscaler**, others: check current vendor documentation for per-product status.
 
 ### Messaging
@@ -156,7 +156,7 @@ Specific industry deployments, verified against public announcements on publish 
 
 Our specific commitments through 2027.
 
-- **Planned (2026-Q2)**: Hybrid X25519 + ML-KEM-768 key exchange (on the roadmap, not yet shipped).
+- **Not planned**: hybrid X25519 + ML-KEM-768 key exchange. QuickZTNA has no post-quantum work scheduled.
 - **Planned (2026-Q2)**: Per-session kex mode logging, dashboard visibility.
 - **2026-Q3**: ML-KEM-1024 opt-in per organisation, for CNSA 2.0 alignment.
 - **2026-Q3**: LMS signing on Windows MSI and Linux installers.

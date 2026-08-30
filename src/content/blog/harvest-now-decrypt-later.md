@@ -25,14 +25,14 @@ faq:
   - q: "If I use TLS 1.3 today, am I safe?"
     a: "Not against harvest-now-decrypt-later. TLS 1.3 without hybrid post-quantum key exchange uses classical elliptic-curve Diffie-Hellman, which is vulnerable to Shor's algorithm. Major browser and cloud vendors have shipped hybrid post-quantum modes for TLS 1.3 starting in 2023 and 2024, but server support is still partial. The fix is hybrid post-quantum key exchange on both ends."
   - q: "Does WireGuard without post-quantum fix anything?"
-    a: "WireGuard's handshake is classical Curve25519. It inherits the same vulnerability to a future quantum adversary. The WireGuard protocol includes an optional pre-shared key field that can be populated from a post-quantum key exchange at a higher layer. That is the approach used in QuickZTNA and similar modern ZTNA products."
+    a: "WireGuard's handshake is classical Curve25519. It inherits the same vulnerability to a future quantum adversary. The WireGuard protocol includes an optional pre-shared key field that can be populated from a post-quantum key exchange at a higher layer. That is the approach used by the ZTNA products that do implement post-quantum key exchange; QuickZTNA is not one of them."
   - q: "What is the earliest defensible estimate for a cryptographically relevant quantum computer?"
     a: "Public expert consensus ranges from the early 2030s to the late 2040s. The National Academies of Sciences, Engineering and Medicine 2019 report, the Global Risk Institute annual Quantum Threat Timeline, and individual vendor roadmaps converge on a planning horizon of roughly 10 to 20 years. Responsible engineering plans for the earlier end of that window, not the later."
 ---
 
 ## TL;DR
 
-"Harvest now, decrypt later" is a real threat model in which an adversary records encrypted traffic today with the intention of decrypting it once a sufficiently capable quantum computer is available. The practical implication is blunt: any session secured with classical elliptic-curve or RSA key exchange, with a confidentiality requirement extending into the 2030s or beyond, is already losing. Post-quantum key exchange at the transport layer closes the window. In QuickZTNA we do this by layering a hybrid X25519 + [ML-KEM-768](/blog/ml-kem-768-explained) handshake into every WireGuard tunnel. This post explains who is capturing, what they are capturing, how decryption might work in practice, and what to measure in your own environment before your audit next year.
+"Harvest now, decrypt later" is a real threat model in which an adversary records encrypted traffic today with the intention of decrypting it once a sufficiently capable quantum computer is available. The practical implication is blunt: any session secured with classical elliptic-curve or RSA key exchange, with a confidentiality requirement extending into the 2030s or beyond, is already losing. Post-quantum key exchange at the transport layer closes the window, typically by layering a hybrid X25519 + [ML-KEM-768](/blog/ml-kem-768-explained) handshake into the tunnel. QuickZTNA has **not** implemented this — our data plane is classical WireGuard — so treat this post as a buyer's guide, not a product claim. This post explains who is capturing, what they are capturing, how decryption might work in practice, and what to measure in your own environment before your audit next year.
 
 ## Who this is for
 
@@ -157,7 +157,7 @@ Every major CDN and load balancer vendor supports a hybrid post-quantum TLS 1.3 
 
 ### 8.2 Add post-quantum to WireGuard-based tunnels
 
-Vanilla WireGuard does not include a post-quantum key exchange but reserves a pre-shared key slot that can be populated from one. Third-party ZTNA and mesh products, including QuickZTNA, run a hybrid X25519 + ML-KEM-768 exchange and push the derived secret into the PSK slot. For a detailed walkthrough of the construction, see our [hybrid key exchange post](/blog/hybrid-key-exchange-x25519-mlkem).
+Vanilla WireGuard does not include a post-quantum key exchange but reserves a pre-shared key slot that can be populated from one. Some third-party ZTNA and mesh products run a hybrid X25519 + ML-KEM-768 exchange and push the derived secret into that PSK slot; QuickZTNA does not — our tunnels are classical WireGuard. For a detailed walkthrough of the construction, see our [hybrid key exchange post](/blog/hybrid-key-exchange-x25519-mlkem).
 
 ### 8.3 Rotate symmetric keys aggressively
 
@@ -200,13 +200,13 @@ Primary sources first, as always. All links verified on the publish date.
 
 ## Related reading on this blog
 
-- [ML-KEM-768 Explained: The Quantum-Safe Key Exchange on Our Roadmap](/blog/ml-kem-768-explained)
+- [ML-KEM-768 Explained: How the Standard Works (and why we have not shipped it)](/blog/ml-kem-768-explained)
 - [Hybrid Key Exchange: X25519 + ML-KEM-768 in 800 Words](/blog/hybrid-key-exchange-x25519-mlkem)
 - [NSA CNSA 2.0: Every Deadline Every DoD Contractor Needs to Know](/blog/cnsa-2-0-deadlines)
 
 ## Try QuickZTNA
 
-Harvest-now-decrypt-later is a real planning concern, and hybrid post-quantum key exchange is on the QuickZTNA roadmap (the data plane today is classical WireGuard). If you're mapping your own PQ transition, [start a free account](https://login.quickztna.com/auth) and read [ML-KEM-768 Explained](/blog/ml-kem-768-explained) for the construction we're targeting.
+Harvest-now-decrypt-later is a real planning concern, and we are not going to pretend we solve it: QuickZTNA's data plane is classical WireGuard, and post-quantum key exchange is not implemented. If PQ confidentiality is a hard requirement for your traffic today, evaluate vendors against [these six questions](/blog/post-quantum-vpn-vendor-questions) rather than a badge. Read [ML-KEM-768 Explained](/blog/ml-kem-768-explained) for how the construction actually works.
 
 <!--
 scorecard:

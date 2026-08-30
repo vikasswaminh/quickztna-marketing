@@ -11,7 +11,7 @@ faq:
   - q: "What encryption does QuickZTNA use?"
     a: "The data plane is WireGuard: Curve25519 (X25519) key exchange, ChaCha20-Poly1305 authenticated encryption, and BLAKE2s hashing, using WireGuard's Noise-based handshake. Device identity uses an on-device Ed25519 keypair held in the OS credential store. The coordination plane never holds data-plane keys and cannot decrypt your traffic."
   - q: "Does QuickZTNA support post-quantum cryptography?"
-    a: "Not in the shipped client today — the data plane is classical WireGuard (Curve25519 + ChaCha20-Poly1305). Post-quantum (hybrid X25519 + ML-KEM) key exchange is on our roadmap; our blog covers the background and the standards timeline. We'll document it as a product feature here only when it ships."
+    a: "No. The data plane is classical WireGuard (Curve25519 + ChaCha20-Poly1305), and post-quantum key exchange is not implemented — it is not on the roadmap either, so please do not plan around it. Our blog covers the background and the standards timeline as vendor-neutral education. We would document it as a product feature here only if it ever shipped."
 ---
 
 This page is the conceptual briefing for QuickZTNA. It assumes you're familiar with networking and security at the level of "I know what TLS does" but doesn't assume you've thought hard about Zero Trust specifically. By the end, you'll know what QuickZTNA does, what mental model it operates under, and why the technical choices are the choices.

@@ -29,7 +29,7 @@ QuickZTNA's endpoint agent performs **file-hash malware detection**. It computes
 | --- | --- |
 | SHA-256 file hash | File contents — never uploaded |
 | File name and path | Document text, clipboard, or keystrokes |
-| Detection verdict and timestamp | Screen captures or session recordings |
+| Detection verdict and timestamp | Screen captures or session recordings — never captured |
 
 Retention follows the standard audit retention of 90 days. See the [privacy policy](/privacy#workforce-monitoring) for the full data-collection disclosure.
 

@@ -96,7 +96,7 @@ The procedure is the same in all three cases. On the admin dashboard, find the d
 - The device is dropped from the network. Active sessions terminate within seconds.
 - The device's public key is revoked centrally. Even if the binary still has the private key on disk, it cannot reconnect.
 - The on-device client detects the revocation on its next coordination check-in (under a minute) and clears its local state, including cached policy and peer lists.
-- The device's audit history is preserved according to your plan's log retention policy (90 days on Free, one year on Business).
+- The device's audit history is preserved for the standard 90-day audit retention window, on both plans.
 
 For employee offboarding specifically, the better pattern is to remove the **user** rather than each of their devices individually. Removing a user in Settings → Members revokes every device they own in one operation and prevents them from authenticating any new device. If you've correctly tied users to your SSO source, deprovisioning the user in your identity provider triggers the QuickZTNA user removal automatically (SCIM, available on every plan).
 

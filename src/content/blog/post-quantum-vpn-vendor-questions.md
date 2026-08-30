@@ -232,7 +232,7 @@ Primary sources verified on the publish date.
 
 ## Try QuickZTNA
 
-You can answer all six questions for QuickZTNA yourself in five minutes: sign up for Free, connect two devices, run `ztna status -v`, and you will see `kex=hybrid-x25519-mlkem768` on every established tunnel. No premium tier required. [Start free](https://login.quickztna.com/auth).
+Apply the same six questions to us and you get a short answer: QuickZTNA does not implement post-quantum key exchange. The data plane is classical WireGuard (X25519 + ChaCha20-Poly1305), and you can confirm it yourself in five minutes — sign up for Free, connect two devices, and run `ztna status -v` to see the key exchange actually in use. We would rather you check than take a badge on trust. [Start free](https://login.quickztna.com/auth).
 
 <!--
 scorecard:

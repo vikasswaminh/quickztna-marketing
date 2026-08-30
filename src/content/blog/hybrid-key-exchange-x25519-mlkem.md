@@ -374,7 +374,7 @@ All verified on publication date.
 
 ## Related reading on this blog
 
-- [ML-KEM-768 Explained: The Quantum-Safe Key Exchange on Our Roadmap](/blog/ml-kem-768-explained)
+- [ML-KEM-768 Explained: How the Standard Works (and why we have not shipped it)](/blog/ml-kem-768-explained)
 - [Harvest Now, Decrypt Later: Why Your VPN Traffic Is Already Compromised](/blog/harvest-now-decrypt-later)
 - [Post-Quantum VPN: 6 Questions to Ask Your Current Vendor](/blog/post-quantum-vpn-vendor-questions)
 

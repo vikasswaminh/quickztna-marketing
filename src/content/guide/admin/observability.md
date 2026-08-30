@@ -1,22 +1,22 @@
 ---
 title: "Observability: audit, compliance, metrics"
-description: "Audit logs and SIEM export, compliance reports and policy-drift findings, threat-intelligence lookups, client metrics in Prometheus format, and the secrets vault."
+description: "Audit logs and SIEM export, compliance reports and policy-drift findings, threat-intelligence lookups, and client metrics in Prometheus format."
 section: "admin"
 order: 11
 updatedAt: 2026-06-16
 primaryKeyword: "QuickZTNA audit compliance metrics"
 faq:
   - q: "How long are audit logs retained, and where do they live?"
-    a: "Audit events are stored in a log backend (Loki) and queried through /api/audit. Retention is plan-dependent — roughly 90 days on Free (dashboard-queryable), longer on paid plans (API-queryable and exportable to SIEM). Events cover admin actions, authentication, policy decisions, and posture results, each with a stable type, timestamp, actor, and subject."
+    a: "Audit events are stored in a log backend (Loki) and queried through /api/audit. Retention is 90 days on both plans — it is not a paid upgrade. Events cover admin actions, authentication, policy decisions, and posture results, each with a stable type, timestamp, actor, and subject. Export on a schedule if you need a longer archive."
   - q: "What's the difference between compliance 'evaluate' and a compliance 'report'?"
     a: "Evaluate runs policy-drift analysis right now — it compares your live configuration against baselines (NIST/CIS/OWASP-aligned checks) and returns concrete findings such as overly broad ACL rules or missing posture enforcement. A report (generate_report / verify_report) produces a point-in-time compliance artifact you can store and later verify. Both are gated by the compliance_reports feature."
   - q: "Can I scrape QuickZTNA client metrics into Prometheus?"
     a: "Yes. 'ztna metrics print' emits Prometheus-format metrics to stdout, and 'ztna metrics write <path>' writes them for the node_exporter textfile collector. The daemon also exposes diagnostics via 'ztna debug metrics'. Scrape them to dashboard peer counts, relay-vs-direct ratios, and connectivity."
   - q: "How do I get events into my SIEM?"
-    a: "Two paths: webhooks (DLP and other violation events are pushed to your configured HTTPS endpoint via the forwarding pipeline), and the data export endpoint (/api/export) for bulk pulls. On paid plans the audit log itself is API-queryable for scheduled SIEM ingestion."
+    a: "Two paths: webhooks (security events such as malware-hash detections and auto-quarantines are pushed to your configured HTTPS endpoint via the forwarding pipeline), and the data export endpoint (/api/export) for bulk pulls. On paid plans the audit log itself is API-queryable for scheduled SIEM ingestion."
 ---
 
-Once QuickZTNA is enforcing access and running workforce features, the questions become observability ones: *what happened, did it meet a control, and how is the fleet doing?* This page covers the audit log, compliance evaluation and signed reports, threat intelligence, client metrics, and the secrets vault.
+Once QuickZTNA is enforcing access, the questions become observability ones: *what happened, did it meet a control, and how is the fleet doing?* This page covers the audit log, compliance evaluation and signed reports, threat intelligence, and client metrics.
 
 ## 1. Audit log
 
@@ -58,7 +58,7 @@ Both are gated by `compliance_reports`. Our [compliance blog posts](/blog/nis2-r
 
 ## 3. Threat intelligence
 
-Check an indicator against threat intelligence (`/api/threat-check`); matches are recorded in `threat_checks` and feed both the [ACL evaluator](/guide/admin/access-control/) (a recent `blocked` verdict denies) and the [user-risk score](/guide/admin/workforce-analytics/).
+Check an indicator against threat intelligence (`/api/threat-check`); matches are recorded in `threat_checks` and feed the [ACL evaluator](/guide/admin/access-control/), where a recent `blocked` verdict denies access. They also contribute to a machine's device-risk score, which drives [auto-quarantine](/guide/admin/device-posture/).
 
 ```bash
 ztna threat check 203.0.113.10
@@ -77,50 +77,36 @@ ztna debug metrics                                    # daemon-internal diagnost
 
 Scrape these into your Prometheus/Grafana stack to chart connectivity, peer counts, and relay-vs-direct path ratios.
 
-## 5. Secrets vault
+## 5. SIEM export & data export
 
-An encrypted, org-scoped vault for storing and rotating credentials (`/api/secrets`, gated by `secrets_vault`). Full lifecycle: `list_secrets`, `get_secret`, `create_secret`, `update_secret`, `delete_secret`, `rotate_secret`, version history (`list_versions`, `get_version`), and scheduled rotation (`configure_rotation`); built-in generators produce `uuid`, `hex`, `alphanumeric`, or `random` values.
-
-```bash
-ztna secrets list
-ztna secrets set <name>
-ztna secrets get <name>        # prints to stdout
-ztna secrets rotate <name>
-ztna secrets delete <name>
-```
-
-## 6. SIEM export & data export
-
-- **Webhooks** — violation events (e.g. `dlp.violation`) are pushed to your configured HTTPS endpoint by the forwarding pipeline.
+- **Webhooks** — security events (e.g. a malware-hash detection or an auto-quarantine) are pushed to your configured HTTPS endpoint by the forwarding pipeline.
 - **Bulk export** — `/api/export` pulls org data for archival or SIEM ingestion.
 - **Audit query** — on paid plans, `/api/audit` is API-queryable for scheduled ingestion.
 
-## 7. Audit event taxonomy (selected)
+## 6. Audit event taxonomy (selected)
 
 | Domain | Example events |
 | --- | --- |
-| CASB | `casb.policy_set`, `casb.request_reviewed`, `casb.app_added` |
 | Posture | `machine.auto_quarantine`, `machine.auto_unquarantine` |
 | Devices | `machine.exit_node_approved`, approve / quarantine / lock / wipe |
 | Identity | `provisioning.commands_generated`, SCIM member changes |
-| AI | `ai.acl_generated`, `ai.chat`, `ai.hard_blocked`, `ai.auto_remediation_prepared` |
-| Workforce | `workforce.settings_updated`, `monitoring.consent_acknowledged` |
+| Access governance | JIT request / approval, access-review campaign events |
 | Auth | `auth.login`, `auth.login_failed` |
 
-## 8. Limits & honest scope
+## 7. Limits & honest scope
 
 - **Retention is plan-dependent**; Free is the shortest window.
 - **Audit reads need membership; writes need admin.**
 - **Compliance evaluation reflects current config** — re-run after changes; reports are point-in-time.
 - **Client metrics are per-node** — aggregate them in your own monitoring stack.
 
-## 9. Verification
+## 8. Verification
 
-- **Audit:** make a change (e.g. set a CASB policy) and confirm the matching event appears in `mode=recent`.
+- **Audit:** make a change (e.g. edit an ACL rule) and confirm the matching event appears in `mode=recent`.
 - **Compliance:** run `evaluate` and confirm findings reflect a deliberately-broad rule.
 - **Metrics:** `ztna metrics print` should emit non-empty Prometheus lines on a connected node.
 
-## 10. Next
+## 9. Next
 
 - [Plans & billing](/guide/admin/billing/) — what's gated where, and how billing works.
 - [Security model](/docs/security/) — the cryptographic and trust details behind the audit surface.

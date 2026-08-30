@@ -27,14 +27,14 @@ faq:
   - q: "Can I self-host Twingate?"
     a: "Twingate provides the Connector as a component you run on your own infrastructure, near each protected resource. The coordination plane — the service that authenticates users, manages identity, and brokers tunnels — is a Twingate managed service. Fully self-hosting Twingate is not supported at the time of writing; confirm on Twingate's documentation site."
   - q: "Which alternative is best for compliance?"
-    a: "It depends on the compliance target. For HIPAA, multiple alternatives have Business Associate Agreements available; SOC 2 and ISO 27001 attestations exist on several. For post-quantum-aligned compliance (CNSA 2.0, BSI TR-02102, ANSSI), QuickZTNA is the most straightforward fit because hybrid post-quantum is on by default. For DORA, any alternative with strong audit logging and an appropriate DPA can work."
+    a: "It depends on the compliance target. For HIPAA, multiple alternatives have Business Associate Agreements available; SOC 2 and ISO 27001 attestations exist on several. For post-quantum-aligned compliance (CNSA 2.0, BSI TR-02102, ANSSI), none of the options here is a straightforward fit — QuickZTNA does not implement post-quantum key exchange, so verify each vendor's current documented status rather than relying on a comparison table. For DORA, any alternative with strong audit logging and an appropriate DPA can work."
 ---
 
 ## TL;DR
 
 Twingate is an agent-based Zero Trust Network Access product with a Client-Connector architecture and a proprietary tunnelling protocol. It is a capable product for teams whose access pattern is user-to-internal-resource. Reasons teams evaluate alternatives: preference for open protocols (WireGuard), pricing fit, self-host requirements, and specific features like post-quantum key exchange or session recording. Five serious alternatives in 2026: Tailscale, NetBird, QuickZTNA, Cloudflare Access, and OpenZiti. Each has real strengths and real trade-offs. This post walks through each one's fit against typical Twingate-exit motivations and includes a side-by-side table.
 
-> **Adding up your tool bill?** A ZTNA product like Twingate is usually just one line item — most teams also pay separately for a mesh VPN, remote support, DLP and a monitoring tool. QuickZTNA bundles all of them into one agent and one bill. [See what you'd save →](/savings/) — up to 90% lower.
+> **Adding up your tool bill?** A ZTNA product like Twingate is usually just one line item — most teams also pay separately for a mesh VPN, DNS filtering and a monitoring tool. QuickZTNA folds those into one agent and one bill. [See what you'd save →](/savings/)
 
 ## Who this is for
 
@@ -173,7 +173,7 @@ Snapshot as of April 2026. Always verify against each vendor's current documenta
 | Architecture | Client-Connector ZTNA | Mesh VPN | Mesh VPN | Mesh + ZTNA | Edge identity proxy | ZT overlay + app SDK |
 | Data-plane protocol | Proprietary | WireGuard | WireGuard | WireGuard | Cloudflare edge | Ziti overlay |
 | Licence | Proprietary | Proprietary | BSD-3-Clause | Proprietary | Proprietary | Apache 2.0 |
-| Free tier | Yes (limited) | Yes | Yes | Yes (5 users, 5 devices each) | Yes (verify current) | Open source |
+| Free tier | Yes (limited) | Yes | Yes | Yes (5 users, 100 devices) | Yes (verify current) | Open source |
 | Self-host | Partial (Connector) | No (Headscale exists) | Yes | No (managed cloud only) | No | Yes |
 | Post-quantum tunnel KEX | Verify current | Verify current | Verify current | No (classical today) | TLS 1.3 hybrid edge | Verify current |
 | Session recording | Verify current | Enterprise tier | Verify current | No | Via other CF products | Via integrations |
@@ -211,7 +211,7 @@ The migration does not have to be a big-bang event. Most teams stagger by depart
 
 ## Try QuickZTNA
 
-If your Twingate exit motivation is a fuller ZTNA feature set with a built-in workforce-security layer, QuickZTNA is a straightforward evaluation. [Start on Free](https://login.quickztna.com/auth) — 5 devices per user, 5 users, free remote SSH, and a WireGuard mesh on every tier.
+If your Twingate exit motivation is a fuller ZTNA feature set with deeper access governance, QuickZTNA is a straightforward evaluation. [Start on Free](https://login.quickztna.com/auth) — 5 users, up to 100 devices, free remote SSH, and a WireGuard mesh on every tier.
 
 <!--
 scorecard:
