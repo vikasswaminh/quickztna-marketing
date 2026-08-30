@@ -1,4 +1,4 @@
----
+﻿---
 title: "Twingate Alternative: 5 Options That Don't Lock You In"
 description: "Twingate is an agent-based ZTNA. Looking for an alternative — for licensing, protocol, pricing, or post-quantum reasons? Five serious options in 2026."
 publishedAt: 2026-04-29
@@ -107,8 +107,8 @@ The Client-Connector model specifically is Twingate's differentiator. Alternativ
 **Model.** Full ZTNA with a WireGuard data plane and a built-in workforce-security layer. Managed coordination plane (managed cloud only — no self-host today). Hybrid post-quantum key exchange (X25519 + ML-KEM-768) ships in the client today, negotiated per tunnel with graceful fallback to classical WireGuard when a peer doesn't support it.
 
 **Strengths vs Twingate.**
-- **Workforce-security layer built in.** File-scan DLP, CASB app-approval, device posture, and an AI Operator that previews and applies policy changes — beyond Twingate's access-only scope. See [our ML-KEM-768 post](/blog/ml-kem-768-explained) for how the hybrid post-quantum handshake works.
-- **Full ZTNA feature set.** ACLs, device posture, workforce analytics (opt-in), audit logs, SIEM export.
+- **Access governance built in.** JIT access with approvals, access-review campaigns, versioned ACLs with one-click rollback, and exportable compliance evidence — beyond Twingate's access-only scope.
+- **Full ZTNA feature set.** ACLs, device posture, DNS threat filtering, edge firewall, audit logs, SIEM export.
 - **Open-protocol data plane** (WireGuard).
 - **Honest tier boundaries.** Free tier is not gated from core security features.
 - **EU + US infrastructure** for data-residency-sensitive deployments.
@@ -159,7 +159,7 @@ Four questions to narrow the shortlist.
 
 1. **Do you want ZTNA (resource-brokered) or mesh (peer-to-peer)?** ZTNA: Twingate, Cloudflare Access, QuickZTNA, OpenZiti. Mesh: Tailscale, NetBird, QuickZTNA.
 2. **Do you need self-host for the coordination plane?** Yes: Headscale, NetBird, QuickZTNA (Workforce), OpenZiti. No: any.
-3. **Is post-quantum a hard requirement?** Yes-today: QuickZTNA. Partial (TLS 1.3 on edges): Cloudflare Access. Verify current: others.
+3. **Is post-quantum a hard requirement?** None of these ship it in the tunnel; QuickZTNA does not either. Partial (TLS 1.3 on edges): Cloudflare Access. Verify current: others.
 4. **What is the primary access pattern?** User-to-web-app: Cloudflare Access, Twingate. Device-to-device: Tailscale, NetBird, QuickZTNA. Application-embedded: OpenZiti.
 
 If three of your four answers line up cleanly on one alternative, that is your leading candidate.
@@ -173,9 +173,9 @@ Snapshot as of April 2026. Always verify against each vendor's current documenta
 | Architecture | Client-Connector ZTNA | Mesh VPN | Mesh VPN | Mesh + ZTNA | Edge identity proxy | ZT overlay + app SDK |
 | Data-plane protocol | Proprietary | WireGuard | WireGuard | WireGuard | Cloudflare edge | Ziti overlay |
 | Licence | Proprietary | Proprietary | BSD-3-Clause | Proprietary | Proprietary | Apache 2.0 |
-| Free tier | Yes (limited) | Yes | Yes | Yes (100 dev, 5 users) | Yes (verify current) | Open source |
+| Free tier | Yes (limited) | Yes | Yes | Yes (5 users, 5 devices each) | Yes (verify current) | Open source |
 | Self-host | Partial (Connector) | No (Headscale exists) | Yes | No (managed cloud only) | No | Yes |
-| Post-quantum default | Verify current | Verify current | Verify current | Roadmap (classical today) | TLS 1.3 hybrid edge | Verify current |
+| Post-quantum default | Verify current | Verify current | Verify current | No (classical today) | TLS 1.3 hybrid edge | Verify current |
 | Session recording | Verify current | Enterprise tier | Verify current | No | Via other CF products | Via integrations |
 | Device posture | Yes | Yes | Yes | Yes | Yes | Policy-based |
 | Typical fit | User-to-resource ZTNA | Developer mesh | Open-source mesh | Full ZTNA + workforce security | CF-integrated edge | App-embedded ZT |

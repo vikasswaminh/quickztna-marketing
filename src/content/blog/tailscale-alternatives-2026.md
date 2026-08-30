@@ -99,9 +99,9 @@ We cover Headscale in more depth in [Self-Hosting Headscale vs a Managed Coordin
 **What it is.** QuickZTNA is a full ZTNA product built on WireGuard. Beyond the mesh VPN, it adds ABAC ACLs, device posture, file-scan DLP, a CASB approval workflow, workforce analytics (opt-in), software inventory, user-risk scoring, an AI Operator for policy changes, SSO with FIDO2, and SCIM provisioning. The data plane is classical WireGuard today; hybrid post-quantum key exchange is on the roadmap (see [ML-KEM-768 Explained](/blog/ml-kem-768-explained)).
 
 **Strengths.**
-- **Deepest workforce-security layer.** ACLs, device posture, DLP, CASB, audit logs, compliance reports — beyond a basic mesh.
+- **Access governance depth.** ACLs, device posture, JIT access with approvals, access-review campaigns, audit logs and exportable compliance evidence — beyond a basic mesh.
 - **Free SSH on every tier.** Remote shell over the mesh is on the Free plan.
-- **Honest tier boundaries.** Free includes ACLs, SSO, FIDO2, device posture, and remote SSH; Business adds DLP, CASB, continuous posture, remote desktop, and workforce analytics.
+- **Honest tier boundaries.** Free includes ACLs, SSO, TOTP MFA, device posture, and remote SSH; Business adds DLP, CASB, continuous posture, remote desktop, and workforce analytics.
 - **EU + US infrastructure options.** For teams with data-residency requirements.
 
 **Trade-offs.**
@@ -109,7 +109,7 @@ We cover Headscale in more depth in [Self-Hosting Headscale vs a Managed Coordin
 - **Pricing model is per-user on Business, not per-device.** This may or may not match your usage shape.
 - **Managed cloud only.** No self-host or air-gapped option today.
 
-**Who it fits.** Teams that need a full ZTNA + workforce-security feature set (ACLs, device posture, DLP, CASB, audit logs) beyond a basic mesh. Teams that find Tailscale's per-user pricing either too high or too limiting for their specific workload.
+**Who it fits.** Teams that need governance around the mesh (ACLs, device posture, JIT approvals, access reviews, audit depth) rather than the mesh alone. Teams that find Tailscale's per-user pricing either too high or too limiting for their specific workload.
 
 ## 6. Cloudflare Zero Trust — edge-native identity proxy
 

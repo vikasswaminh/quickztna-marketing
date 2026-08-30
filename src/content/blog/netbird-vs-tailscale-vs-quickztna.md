@@ -140,9 +140,9 @@ NetBird has been growing its compliance story; verify current attestations with 
 
 ### QuickZTNA
 
-QuickZTNA's paid tiers add workforce-security features — file-scan DLP, a CASB approval workflow, workforce analytics (opt-in, with a consent dialog on monitored devices), software inventory, and user-risk scoring. Audit logs are exportable to SIEM formats. See [our compliance posts](/blog/nis2-remote-access-requirements) for how this maps to NIS2 and DORA requirements.
+QuickZTNA has identical features on both plans — DNS threat filtering, a per-org edge firewall, file-hash malware detection, JIT access with approvals, access-review campaigns, and versioned ACLs with rollback. Audit logs are exportable to SIEM formats. Free and Business differ only in seats and devices per seat.
 
-For regulated-entity deployments where workforce-security controls (DLP, device posture, audit, CASB) are a compliance expectation, QuickZTNA's feature set is more complete. For simple developer-mesh use cases, the compliance surface is less material.
+For regulated-entity deployments where access governance (JIT approvals, access reviews, device posture, exportable audit evidence) is a compliance expectation, QuickZTNA's feature set is more complete. For simple developer-mesh use cases, the compliance surface is less material.
 
 ## 8. Developer experience
 
@@ -178,12 +178,12 @@ A flowchart in prose.
 - (QuickZTNA is managed cloud only — not a fit when self-host is required.)
 
 **If the deepest ZTNA + workforce-security feature set is the priority:**
-- ABAC + device posture, file-scan DLP, CASB, AI Operator, and free SSH: **QuickZTNA**
+- ABAC + device posture, DNS threat filtering, JIT access governance, and free SSH: **QuickZTNA**
 
 **If maximum developer ergonomics and multi-year community maturity is the priority:**
 - **Tailscale**
 
-**If compliance features (DLP, device posture, workforce analytics, audit-log depth) are part of the evaluation:**
+**If compliance features (device posture, JIT approvals, access reviews, audit-log depth) are part of the evaluation:**
 - **QuickZTNA Business or Workforce**
 
 **If open source under a permissive licence is the non-negotiable:**

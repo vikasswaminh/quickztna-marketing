@@ -102,7 +102,7 @@ Cloudflare has shipped post-quantum TLS 1.3 hybrid on its edge. For a team that 
 
 ## 6. Alternative 3 — QuickZTNA
 
-**Model.** Full ZTNA with a WireGuard data plane and a managed coordination plane, plus a workforce-security layer (DLP, device posture, CASB, AI Operator).
+**Model.** Full ZTNA with a WireGuard data plane and a managed coordination plane, plus DNS threat filtering, device posture, and an access-governance layer (JIT, access reviews, evidence bundles).
 
 **Fit against Cloudflare Access motivations.**
 - **Device-to-device mesh:** yes.
@@ -161,7 +161,7 @@ Snapshot as of April 2026. Always verify against each vendor's current documenta
 | Architecture | Edge proxy | Mesh | Mesh | Mesh + ZTNA | ZTNA proxy | ZTNA proxy | Web-app proxy |
 | Data plane | CF proprietary | WireGuard | WireGuard | WireGuard | Proprietary | Proprietary | AWS-managed |
 | Self-host | No | No (Headscale exists) | Yes | No | Partial | No | No |
-| Free tier | Yes (verify current) | Yes | Yes | Yes (100 dev, 5 users) | Yes (limited) | No | Check AWS pricing |
+| Free tier | Yes (verify current) | Yes | Yes | Yes (5 users, 5 devices each) | Yes (limited) | No | Check AWS pricing |
 | Tunnel-level PQ | Edge TLS 1.3 hybrid | Verify | Verify | Roadmap | Verify | Verify | Verify |
 | Mesh P2P | No | Yes | Yes | Yes | No | No | No |
 | Clientless browser | Yes | No | No | Partial (admin UI) | No | Yes | Yes |

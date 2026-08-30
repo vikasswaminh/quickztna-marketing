@@ -1,4 +1,4 @@
----
+﻿---
 title: "Open-Source vs Managed ZTNA: A Decision Framework"
 description: "Open-source ZTNA (OpenZiti, Headscale, NetBird) vs managed products. A decision framework that puts the trade-offs in engineering hours, not ideology."
 publishedAt: 2026-05-04
@@ -105,7 +105,7 @@ Useful for homelabs and small permanent fleets. Not appropriate for a business b
 
 QuickZTNA is a full ZTNA built on WireGuard with a workforce-security layer. The data plane is classical WireGuard today; hybrid X25519 + [ML-KEM-768](/blog/ml-kem-768-explained) key exchange is on the roadmap. EU + US regions.
 
-**Strengths.** Full ZTNA + workforce-security set (file-scan DLP, CASB, workforce analytics opt-in, device posture, ABAC, AI Operator). Free remote SSH on every tier.
+**Strengths.** Full ZTNA with an access-governance layer (JIT access, access reviews, versioned ACLs, compliance evidence bundles), DNS threat filtering, device posture and ABAC. Free remote SSH on every tier, and identical features on both plans.
 
 **Trade-offs.** Newer than Tailscale; smaller community.
 
