@@ -7,7 +7,7 @@ updatedAt: 2026-06-16
 primaryKeyword: "QuickZTNA SSO SCIM auth keys"
 faq:
   - q: "Which identity providers does QuickZTNA support?"
-    a: "Any OIDC provider — Google Workspace, Microsoft Entra (Azure AD), Okta, Authentik, and generic OIDC — plus GitHub and Google sign-in. SAML login is disabled product-wide: an IdP that also speaks OIDC should be connected over OIDC, and a SAML-only provider is not supported today. Users authenticate against your IdP; QuickZTNA never stores passwords. SCIM 2.0 provisioning is available on paid plans."
+    a: "Any OIDC provider — Google Workspace, Microsoft Entra (Azure AD), Okta, Authentik, and generic OIDC — plus GitHub and Google sign-in. SAML login is disabled product-wide: an IdP that also speaks OIDC should be connected over OIDC, and a SAML-only provider is not supported today. Users authenticate against your IdP; QuickZTNA never stores passwords. SCIM 2.0 provisioning is available on both plans."
   - q: "How does SCIM authenticate, and what does it sync?"
     a: "SCIM uses an API key that carries the 'scim' scope as its Bearer token — not an ordinary auth key. With it, your IdP can list, create, update, and deactivate org members against /api/scim/Users (PATCH is supported; bulk and filter are not). Provision a user upstream and they can onboard; deprovision them and QuickZTNA removes them."
   - q: "What's the difference between an auth key and an API key?"
@@ -24,7 +24,7 @@ Identity is the foundation of a Zero Trust deployment: every **user** authentica
 
 - **User identity** comes from your IdP via OIDC (SAML login is disabled); QuickZTNA issues a short-lived signed session (ES256 JWT, `iss: quickztna`, `aud: quickztna-api`) after a successful sign-in.
 - **Device identity** is a per-device node key minted at registration; the device proves itself with it on every server call (posture, heartbeat, ACL probe).
-- **SCIM 2.0** keeps users/groups in lockstep with your IdP automatically (paid plans).
+- **SCIM 2.0** keeps users/groups in lockstep with your IdP automatically — included on both plans.
 - **Auth keys** onboard servers, containers, and fleets without a browser.
 
 ## 2. How it works
@@ -51,7 +51,7 @@ Multiple IdPs can be active (e.g. employees vs contractors from different source
 
 ## 4. SCIM provisioning
 
-On paid plans, SCIM 2.0 automates user lifecycle. It authenticates with an **API key that has the `scim` scope** as its Bearer token (an ordinary auth key won't work). Point your IdP's SCIM connector at:
+SCIM 2.0 automates user lifecycle on both plans. It authenticates with an **API key that has the `scim` scope** as its Bearer token (an ordinary auth key won't work). Point your IdP's SCIM connector at:
 
 - **Base URL:** `https://login.quickztna.com/api/scim`
 - **ServiceProviderConfig:** `GET /api/scim/ServiceProviderConfig` (no auth) — advertises PATCH supported; bulk and filter not supported.
