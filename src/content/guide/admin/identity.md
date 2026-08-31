@@ -117,7 +117,7 @@ For offboarding, remove the **user** (revokes all their devices at once), or dep
 
 - **Managed cloud only** — QuickZTNA is a hosted service; self-hosting is not offered.
 - **No mobile client** — onboarding is Linux, macOS, and Windows.
-- **SCIM is paid-plan** and needs an API key with the `scim` scope; bulk and filter SCIM operations are not supported.
+- **SCIM needs an API key with the `scim` scope** (included on both plans); bulk and filter SCIM operations are not supported.
 - **Auth-key generation requires a verified admin email.**
 
 ## 10. Audit events & troubleshooting
@@ -127,7 +127,7 @@ Audit: `provisioning.commands_generated` (auth-key issued), SCIM member changes,
 - **SCIM 401** → token isn't an API key with the `scim` scope.
 - **Auth-key gen blocked** → admin email not verified; verify and retry.
 - **Device stuck pending** → approve it in Devices; it can't self-promote.
-- **`403 FEATURE_GATED` on SCIM** → SCIM isn't in your plan; see [Plans & billing](/guide/admin/billing/).
+- **`403 FEATURE_GATED` on SCIM** → the org's feature entitlements are stale (cached up to 600 s after a plan change) — retry shortly, then contact support if it persists; SCIM is included on both plans.
 
 ## Next
 
