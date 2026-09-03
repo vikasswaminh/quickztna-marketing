@@ -13,7 +13,7 @@ faq:
   - q: "Does enabling 'Log queries' have privacy implications?"
     a: "Yes — turning on query logging records the domains your devices resolve (domain, action, reason, timestamp) into dns_query_log. That log is what gives you visibility into what was blocked and why. Leave it off if you don't want resolution history retained."
   - q: "How fresh are the feeds?"
-    a: "Synced feed entries are cached for 7 days and refreshed when an admin runs sync_feeds (capped at 50,000 domains and 10,000 IP ranges per feed). Run a sync after enabling new feeds; schedule periodic syncs to stay current."
+    a: "Synced feed entries are cached for 7 days and refreshed when an admin runs sync_feeds (capped at 150,000 domains and 10,000 IP ranges per feed). Run a sync after enabling new feeds; schedule periodic syncs to stay current."
 ---
 
 DNS filtering is QuickZTNA's first line of network defence: it blocks known-bad domains — malware, phishing, command-and-control — and optional content categories **before a connection is ever made**, at the moment a managed device resolves a name.
@@ -130,7 +130,7 @@ curl -s https://login.quickztna.com/api/dns-filter -H "Authorization: Bearer $AD
 
 - **DNS-layer blocking.** Bypassable by a client hardcoding an IP or using a non-managed resolver — pair with [ACLs](/guide/admin/access-control/) and egress firewalling for hard enforcement.
 - **Feed freshness is 7 days** per cache entry; you must run `sync_feeds` to refresh.
-- **Per-org caps:** 10,000 custom filter entries; 50,000 cached domains and 10,000 IP ranges per feed.
+- **Per-org caps:** 10,000 custom filter entries; 150,000 cached domains and 10,000 IP ranges per feed.
 - Feeds are third-party and public — false positives happen; that's what the allowlist is for.
 
 ## 9. Audit & data surface
