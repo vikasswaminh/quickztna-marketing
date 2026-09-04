@@ -93,7 +93,7 @@ const DENIAL = [
   // Active voice: "The 2026 lean pivot removed DLP content scanning, CASB, ..."
   // Only counts when a withdrawn-capability noun follows close behind, so a bare
   // "removed" in unrelated prose does not become a blanket exemption.
-  /\b(?:removed|withdrew|deleted|retired|dropped)\b(?=[^.\n]{0,60}\b(?:dlp|casb|workforce|session|remote|software|inventory|scoring|analytics|vault|operator|assistant|recording|desktop|post-quantum|ml-?kem|fido2|webauthn)\b)/i,
+  /\b(?:removed|withdrew|deleted|retired|dropped)\b(?=[^.\n]{0,60}\b(?:dlp|casb|workforce|session|remote|software|inventory|scoring|analytics|vault|operator|assistant|recording|desktop|post-quantum|ml-?kem|fido2|webauthn|dns|filtering|feeds?|categor(?:y|ies))\b)/i,
   /\b(?:doesn't|don't|didn't|isn't|aren't|wasn't|weren't|won't|can't|cannot|hasn't|haven't)\b/i,
   /\bnever\b|\bno longer\b|\bneither\b/i,
   // Adjectival absence: "QuickZTNA CASB is unsupported / unavailable / unimplemented".

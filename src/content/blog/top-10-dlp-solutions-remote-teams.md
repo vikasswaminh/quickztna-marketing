@@ -35,7 +35,7 @@ faq:
 
 Remote teams create new DLP challenges. Data flows through home networks, personal cloud storage, SaaS apps, and AI tools. Traditional perimeter-based DLP is dead — either you move to endpoint-native DLP, network-layer inspection via a cloud proxy, or a ZTNA product with DLP built in. This list covers the nine serious options in 2026, with an honest breakdown of where each excels and where it falls short. Start with one tool and expand; no single product catches everything.
 
-> **Adding up your tool bill?** Standalone DLP is usually one line item among several — most remote teams also pay separately for a mesh VPN, a ZTNA gateway and DNS filtering. QuickZTNA folds those into one agent and one bill, and adds file-hash malware detection; it does **not** replace content-inspection DLP. [See what you'd save →](/savings/)
+> **Adding up your tool bill?** Standalone DLP is usually one line item among several — most remote teams also pay separately for a mesh VPN and a ZTNA gateway. QuickZTNA folds those into one agent and one bill, and adds file-hash malware detection; it does **not** replace content-inspection DLP. [See what you'd save →](/savings/)
 
 ## What makes DLP for remote teams different
 

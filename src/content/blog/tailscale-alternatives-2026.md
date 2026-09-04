@@ -34,7 +34,7 @@ faq:
 
 Tailscale is a strong WireGuard-based mesh VPN with broad platform support and a generous free tier. It is not, however, the only option — and for specific use cases, an alternative is a better fit. This post compares the realistic 2026 alternatives — Headscale, NetBird, QuickZTNA, Cloudflare Zero Trust, Twingate, and NetFoundry — across architecture, licensing, self-host capability, pricing model, compliance posture, and post-quantum support. Each product has a real strength and a real trade-off. The goal is not to pick a winner; the goal is to help you match your constraints to the product that fits them. For factual verification of pricing or specific features, we link to each vendor's current documentation — pricing and features can change quickly and a blog post is never the authoritative source.
 
-> **Adding up your tool bill?** A mesh VPN like Tailscale is usually just one line item — most remote teams also pay separately for a ZTNA gateway, DNS filtering and a monitoring tool. QuickZTNA folds those into one agent and one bill. [See what you'd save →](/savings/)
+> **Adding up your tool bill?** A mesh VPN like Tailscale is usually just one line item — most remote teams also pay separately for a ZTNA gateway and a monitoring tool. QuickZTNA folds those into one agent and one bill. [See what you'd save →](/savings/)
 
 ## Who this is for
 

@@ -146,7 +146,7 @@ From the CLI, an admin can inspect rules with `ztna acl list` and test a path wi
 - **JIT expiry is evaluated lazily** at decision time; an expired rule is skipped, not auto-deleted.
 - **ABAC time/day are UTC.** Convert local windows accordingly.
 - **`source_country` needs geo-CIDR data** and a known public IP, or the condition simply doesn't match.
-- ACLs gate the mesh, not the public internet — pair with [DNS filtering](/guide/admin/dns-filtering/) for egress.
+- ACLs gate the mesh, not the public internet.
 
 ## 9. Audit events
 

@@ -35,7 +35,7 @@ faq:
 
 MSPs face a zero trust challenge that no enterprise playbook covers: managing zero trust simultaneously across dozens of client environments, while keeping those environments strictly isolated from each other and from the MSP's own infrastructure. This list covers the ten most important strategies and tools for MSPs building a scalable zero trust programme in 2026 — from multi-tenant ZTNA platforms to per-client JIT access automation.
 
-> **Adding up your per-client tool bill?** MSPs stack a mesh VPN, a ZTNA gateway, DNS filtering and monitoring across every client. QuickZTNA folds those into one agent and one bill per seat; keep your RMM for remote support. [See what you'd save →](/savings/)
+> **Adding up your per-client tool bill?** MSPs stack a mesh VPN, a ZTNA gateway and monitoring across every client. QuickZTNA folds those into one agent and one bill per seat; keep your RMM for remote support. [See what you'd save →](/savings/)
 
 ## The unique MSP threat model
 

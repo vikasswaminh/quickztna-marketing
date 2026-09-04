@@ -48,7 +48,8 @@
 
 # Guide pages for capabilities removed in the 2026 lean pivot (claims re-sync).
 # 301 so indexed URLs and bookmarks land on the nearest live page.
-/guide/admin/casb/                 /guide/admin/dns-filtering/  301
+/guide/admin/casb/                 /guide/admin/  301
+/guide/admin/dns-filtering/        /guide/admin/  301
 /guide/admin/ai-operator/          /guide/admin/                301
 /guide/admin/workforce-analytics/  /guide/admin/                301
 

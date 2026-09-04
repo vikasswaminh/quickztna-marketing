@@ -53,7 +53,7 @@ const included = [
   },
   {
     title: "Security & data",
-    items: ["DNS threat filtering", "Cloud firewall", "Threat-IP blocking", "Malware detection (file-hash)", "Database + Kubernetes access brokers"],
+    items: ["Cloud firewall", "Malware detection (file-hash)", "Database + Kubernetes access brokers"],
   },
   {
     title: "Remote support & ops",
@@ -77,7 +77,7 @@ const faqs = [
   },
   {
     q: "Is encryption or security different on Free?",
-    a: "No. Every tunnel on both plans uses the same WireGuard cipher suite (X25519 + ChaCha20-Poly1305 + Poly1305), and every security feature — DNS threat filtering, edge firewall, posture, SSO, JIT access, audit logs — is available on Free too. Security is never the upsell.",
+    a: "No. Every tunnel on both plans uses the same WireGuard cipher suite (X25519 + ChaCha20-Poly1305 + Poly1305), and every security feature — edge firewall, posture, SSO, JIT access, audit logs — is available on Free too. Security is never the upsell.",
   },
   {
     q: "Is there a trial?",
@@ -102,7 +102,7 @@ const productSchema = {
   "@type": "Product",
   name: "QuickZTNA",
   description:
-    "QuickZTNA pricing. WireGuard ZTNA mesh + ABAC + DNS threat filtering + access governance. Free forever for up to 5 users — every feature included.",
+    "QuickZTNA pricing. WireGuard ZTNA mesh + ABAC + access governance. Free forever for up to 5 users — every feature included.",
   brand: { "@type": "Brand", name: "QuickZTNA" },
   category: "Zero Trust Network Access",
   url: "https://www.quickztna.com/pricing/",
@@ -220,7 +220,7 @@ const pricingBreadcrumbSchema = {
 
           <p class="flex items-start gap-2.5 text-sm text-muted-foreground">
             <Check class="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={2.5} />
-            <span>Every feature below — DNS threat filtering, SSO/SCIM, JIT access, remote shell, compliance reports, the lot.</span>
+            <span>Every feature below — SSO/SCIM, JIT access, remote shell, compliance reports, the lot.</span>
           </p>
 
           <Button

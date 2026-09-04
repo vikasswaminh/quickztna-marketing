@@ -34,7 +34,7 @@ faq:
 
 Twingate is an agent-based Zero Trust Network Access product with a Client-Connector architecture and a proprietary tunnelling protocol. It is a capable product for teams whose access pattern is user-to-internal-resource. Reasons teams evaluate alternatives: preference for open protocols (WireGuard), pricing fit, self-host requirements, and specific features like post-quantum key exchange or session recording. Five serious alternatives in 2026: Tailscale, NetBird, QuickZTNA, Cloudflare Access, and OpenZiti. Each has real strengths and real trade-offs. This post walks through each one's fit against typical Twingate-exit motivations and includes a side-by-side table.
 
-> **Adding up your tool bill?** A ZTNA product like Twingate is usually just one line item — most teams also pay separately for a mesh VPN, DNS filtering and a monitoring tool. QuickZTNA folds those into one agent and one bill. [See what you'd save →](/savings/)
+> **Adding up your tool bill?** A ZTNA product like Twingate is usually just one line item — most teams also pay separately for a mesh VPN and a monitoring tool. QuickZTNA folds those into one agent and one bill. [See what you'd save →](/savings/)
 
 ## Who this is for
 

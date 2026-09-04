@@ -34,7 +34,7 @@ faq:
 
 NetBird, Tailscale, and QuickZTNA all build on WireGuard as the data-plane protocol and all deliver a mesh-VPN experience with centralised coordination. They differ in three important axes: licensing (BSD-3-Clause for NetBird, proprietary for Tailscale and QuickZTNA), self-host capability (NetBird fully, Tailscale not directly but Headscale exists, QuickZTNA managed cloud only), and the feature layer on top. Tailscale has the most mature developer ergonomics after multiple years of product iteration, NetBird has the strongest open-source story, and QuickZTNA goes deepest on access governance: ABAC with device posture, JIT access requests with approvals, access-review campaigns, policy version rollback, DNS threat filtering, a per-org edge firewall, and signed compliance evidence — with remote shell included on the free tier. This post is a developer-focused comparison, meaning we prioritise the practical engineering evaluation over marketing claims.
 
-> **Adding up your tool bill?** A mesh VPN is usually just one line item — most teams also pay separately for a ZTNA gateway, DNS filtering and a monitoring tool. QuickZTNA folds those into one agent and one bill. [See what you'd save →](/savings/)
+> **Adding up your tool bill?** A mesh VPN is usually just one line item — most teams also pay separately for a ZTNA gateway and a monitoring tool. QuickZTNA folds those into one agent and one bill. [See what you'd save →](/savings/)
 
 ## Who this is for
 

@@ -35,7 +35,7 @@ faq:
 
 Every ransomware incident report from 2020 through 2025 lists RDP over the internet in the top three initial access vectors. Secure remote desktop is not optional — raw RDP exposure on the public internet is a near-certain path to compromise. This list compares the nine most important options in 2026, from the VPN-less ZTNA approach to browser-based WebRTC alternatives. Spoiler: any solution that leaves port 3389 open to the internet is not on this list.
 
-> **Adding up your tool bill?** A remote-desktop tool is usually one line item among several — most teams also pay separately for a mesh VPN, a ZTNA gateway and DNS filtering. QuickZTNA folds the network-access side into one agent and one bill; keep your remote-desktop tool for the graphical session. [See what you'd save →](/savings/)
+> **Adding up your tool bill?** A remote-desktop tool is usually one line item among several — most teams also pay separately for a mesh VPN and a ZTNA gateway. QuickZTNA folds the network-access side into one agent and one bill; keep your remote-desktop tool for the graphical session. [See what you'd save →](/savings/)
 
 ## Why legacy remote desktop fails
 

@@ -12,7 +12,6 @@ const SALES_URL = "mailto:sales@quickztna.com?subject=Consolidation%20%26%20pric
 const tools = [
   { on: true,  name: "Tailscale / Twingate",        cat: "Mesh VPN",                  price: 6 },
   { on: true,  name: "Zscaler / Cloudflare Access", cat: "ZTNA / SSE",                price: 15 },
-  { on: true,  name: "Cisco Umbrella",              cat: "DNS / web filtering",       price: 5 },
   { on: false, name: "Bastion / jump-host tooling", cat: "Remote shell access",       price: 6 },
   { on: false, name: "Intune / Kandji (posture)",   cat: "Device posture checks",     price: 8 },
   { on: false, name: "PAM / JIT access tooling",    cat: "Just-in-time access",       price: 9 },
@@ -24,7 +23,6 @@ const tools = [
 const replaces = [
   { job: "Connect remote devices privately",     vendor: "Tailscale, Twingate",   qz: "WireGuard mesh + MagicDNS" },
   { job: "Right user + right device → right app", vendor: "Zscaler, CF Access",    qz: "ABAC access, posture-gated" },
-  { job: "Block malicious domains",              vendor: "Cisco Umbrella",        qz: "DNS threat filtering + edge firewall" },
   { job: "Shell into a machine to troubleshoot", vendor: "Bastion / jump hosts",  qz: "Remote shell (free tier)" },
   { job: "Gate access on device compliance",     vendor: "Intune, Kandji",        qz: "Posture checks + auto-quarantine" },
   { job: "Time-bound elevated access",           vendor: "PAM / JIT tooling",     qz: "JIT grants + access reviews" },
@@ -51,8 +49,8 @@ const breadcrumbSchema = {
 };
 ---
 <SiteLayout
-  title="Savings calculator — consolidate your ZTNA, mesh VPN and DNS filtering"
-  description="See what you'd save by folding your mesh VPN, ZTNA gateway, DNS filtering and jump-host tooling into one QuickZTNA agent. Tick your stack, get yournumber — up to 90% lower."
+  title="Savings calculator — consolidate your ZTNA, mesh VPN and jump-host tooling"
+  description="See what you'd save by folding your mesh VPN, ZTNA gateway and jump-host tooling into one QuickZTNA agent. Tick your stack, get yournumber — up to 90% lower."
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} is:inline />
@@ -67,8 +65,8 @@ const breadcrumbSchema = {
         Fold the access stack into <span class="text-gradient">one bill</span>.
       </h1>
       <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-        One agent connects every device, enforces access policy and device posture, filters DNS
-        threats, and gives IT a shell when something breaks. Tick the tools you pay for today and see your number — edit any price to
+        One agent connects every device, enforces access policy and device posture,
+        and gives IT a shell when something breaks. Tick the tools you pay for today and see your number — edit any price to
         match your real invoice.
       </p>
     </div>
@@ -169,7 +167,7 @@ const breadcrumbSchema = {
     <p class="mt-8 max-w-3xl text-xs leading-relaxed text-muted-foreground">
       Prices are typical published list rates per user / month and vary by plan and negotiation —
       edit any field to match your actual spend. QuickZTNA covers the ZTNA, mesh-VPN,
-      DNS-filtering, device-posture, jump-host and just-in-time-access functions teams use every
+      device-posture, jump-host and just-in-time-access functions teams use every
       day. It does not replace your identity provider, a remote-desktop tool, a full MDM (no OS
       patch-push), a full SIEM, or a secrets manager — see the list below. Your number, your math.
     </p>
@@ -333,7 +331,7 @@ const breadcrumbSchema = {
           "QuickZTNA covers those jobs in one bill for about " + s.fmt(s.qzMo) + "/mo — saving roughly " +
           s.fmt(s.saveYr) + " a year (" + s.pct + "% lower) for our " + s.seats + " seats.\n\n" +
           "Tools we could cancel:\n" + list + "\n\n" +
-          "It connects every device, enforces identity-based access policy, filters DNS threats, " +
+          "It connects every device, enforces identity-based access policy, " +
           "checks device posture, keeps an audit trail, and gives IT a remote shell — all from one dashboard.\n\n" +
           "Worth a look: https://www.quickztna.com";
         const url =

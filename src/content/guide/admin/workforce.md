@@ -1,13 +1,13 @@
 ---
 title: "Security overview"
-description: "The endpoint-security layer: file-hash malware detection, DNS threat filtering, remote shell, and device posture — where each one is documented and what it does."
+description: "The endpoint-security layer: file-hash malware detection, remote shell, and device posture — where each one is documented and what it does."
 section: "admin"
 order: 8
 updatedAt: 2026-08-30
 primaryKeyword: "QuickZTNA endpoint security"
 faq:
   - q: "What does the endpoint-security layer include?"
-    a: "DNS threat filtering with multi-feed blocklists, a per-organization edge firewall with threat-IP blocking, file-hash malware detection, device posture with auto-quarantine, and remote shell for diagnostics. Every one of them is included on both plans — none is gated behind an upgrade."
+    a: "A per-organization edge firewall, file-hash malware detection, device posture with auto-quarantine, and remote shell for diagnostics. Every one of them is included on both plans — none is gated behind an upgrade."
   - q: "What was removed in 2026?"
     a: "The 2026 lean pivot removed DLP content scanning, CASB and shadow-IT discovery, workforce and productivity analytics, session recording, remote desktop, software inventory, and user-risk scoring. File-hash malware detection is the retained half of DLP. If you are reading an older comparison of QuickZTNA, those capabilities no longer exist."
 ---
@@ -16,7 +16,6 @@ On top of the WireGuard mesh and [access control](/guide/admin/access-control/),
 
 ## The capabilities
 
-- **[DNS filtering & threat feeds](/guide/admin/dns-filtering/)** — multi-feed phishing, malware and C2 blocklists refreshed every 6 hours, enforced per organization against exactly the feeds you enabled.
 - **[Malware detection (file-hash)](/guide/admin/dlp/)** — agents report SHA-256 file hashes; confirmed-malicious hits are recorded and, in enforce mode, quarantine the device.
 - **[Remote shell access](/guide/admin/remote-access/)** — interactive shell over the mesh, consent-aware, free on every plan.
 - **[Device posture](/guide/admin/device-posture/)** — the health-of-device gate that underpins much of the above, with auto-quarantine.

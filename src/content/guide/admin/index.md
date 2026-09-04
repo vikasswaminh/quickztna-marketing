@@ -1,13 +1,13 @@
 ﻿---
 title: "QuickZTNA Admin Guide"
-description: "Run a QuickZTNA organization: SSO and SCIM, auth keys, device approval, ACL and posture policies, DNS threat filtering, access governance, audit, and billing."
+description: "Run a QuickZTNA organization: SSO and SCIM, auth keys, device approval, ACL and posture policies, access governance, audit, and billing."
 section: "admin"
 order: 1
 updatedAt: 2026-06-16
 primaryKeyword: "QuickZTNA admin guide"
 faq:
   - q: "What's the difference between the user guide and the admin guide?"
-    a: "The user guide covers operating a device — install, connect, troubleshoot. The admin guide covers running the organization — connecting your identity provider, issuing auth keys, approving devices, writing access and posture policies, and configuring DNS threat filtering, access governance and the audit surface. Each feature has its own deep-dive page here with architecture, configuration, worked REST API/CLI examples, enforcement, limits, and audit events."
+    a: "The user guide covers operating a device — install, connect, troubleshoot. The admin guide covers running the organization — connecting your identity provider, issuing auth keys, approving devices, writing access and posture policies, and configuring access governance and the audit surface. Each feature has its own deep-dive page here with architecture, configuration, worked REST API/CLI examples, enforcement, limits, and audit events."
   - q: "Do admin tasks require the CLI?"
     a: "No. Everything is in the admin dashboard. The CLI (ztna acl, ztna machines, ztna auth-keys, ztna posture, etc.) gives read/inspection access and a few actions for scripting; the REST API is the full programmatic surface the dashboard itself uses, and every feature page shows the exact calls."
   - q: "How do I know what's actually shipped versus roadmap?"
@@ -26,7 +26,6 @@ QuickZTNA is a managed cloud service. You administer your organization through t
 
 ## Network security
 
-- **[DNS filtering & threat feeds](/guide/admin/dns-filtering/)** — block malware/phishing/C2 and content categories with free feeds plus custom allow/blocklists.
 
 
 ## Endpoint security
@@ -44,7 +43,7 @@ QuickZTNA is a managed cloud service. You administer your organization through t
 
 ## Plans at a glance
 
-QuickZTNA's Free plan covers **5 users and up to 100 devices, forever**, with **every feature included** — the WireGuard mesh, MagicDNS, ABAC policies, device posture, DNS threat filtering, the edge firewall, JIT access, access reviews, remote SSH, SCIM, and compliance reports. Business ($10 per user / month) adds only scale: unlimited users (billed per seat) and a 10,000-device ceiling — the same features. Full breakdown on [Plans & billing](/guide/admin/billing/) and the [pricing page](/pricing/).
+QuickZTNA's Free plan covers **5 users and up to 100 devices, forever**, with **every feature included** — the WireGuard mesh, MagicDNS, ABAC policies, device posture, the edge firewall, JIT access, access reviews, remote SSH, SCIM, and compliance reports. Business ($10 per user / month) adds only scale: unlimited users (billed per seat) and a 10,000-device ceiling — the same features. Full breakdown on [Plans & billing](/guide/admin/billing/) and the [pricing page](/pricing/).
 
 ## A note on what's shipped
 

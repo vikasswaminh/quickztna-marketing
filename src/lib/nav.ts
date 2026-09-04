@@ -62,7 +62,6 @@ export const guideNav: NavGroup[] = [
       { label: "Identity & onboarding", href: "/guide/admin/identity/" },
       { label: "Access control: ACLs & ABAC", href: "/guide/admin/access-control/" },
       { label: "Device posture & compliance", href: "/guide/admin/device-posture/" },
-      { label: "DNS filtering & threat feeds", href: "/guide/admin/dns-filtering/" },
       { label: "Security overview", href: "/guide/admin/workforce/" },
       { label: "Malware detection (file-hash)", href: "/guide/admin/dlp/" },
       { label: "Remote shell access", href: "/guide/admin/remote-access/" },
