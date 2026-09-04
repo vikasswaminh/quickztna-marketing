@@ -32,7 +32,7 @@ faq:
 
 ## TL;DR
 
-NetBird, Tailscale, and QuickZTNA all build on WireGuard as the data-plane protocol and all deliver a mesh-VPN experience with centralised coordination. They differ in three important axes: licensing (BSD-3-Clause for NetBird, proprietary for Tailscale and QuickZTNA), self-host capability (NetBird fully, Tailscale not directly but Headscale exists, QuickZTNA managed cloud only), and the feature layer on top. Tailscale has the most mature developer ergonomics after multiple years of product iteration, NetBird has the strongest open-source story, and QuickZTNA goes deepest on access governance: ABAC with device posture, JIT access requests with approvals, access-review campaigns, policy version rollback, DNS threat filtering, a per-org edge firewall, and signed compliance evidence — with remote shell included on the free tier. This post is a developer-focused comparison, meaning we prioritise the practical engineering evaluation over marketing claims.
+NetBird, Tailscale, and QuickZTNA all build on WireGuard as the data-plane protocol and all deliver a mesh-VPN experience with centralised coordination. They differ in three important axes: licensing (BSD-3-Clause for NetBird, proprietary for Tailscale and QuickZTNA), self-host capability (NetBird fully, Tailscale not directly but Headscale exists, QuickZTNA managed cloud only), and the feature layer on top. Tailscale has the most mature developer ergonomics after multiple years of product iteration, NetBird has the strongest open-source story, and QuickZTNA goes deepest on access governance: ABAC with device posture, JIT access requests with approvals, access-review campaigns, policy version rollback, a per-org edge firewall, and signed compliance evidence — with remote shell included on the free tier. This post is a developer-focused comparison, meaning we prioritise the practical engineering evaluation over marketing claims.
 
 > **Adding up your tool bill?** A mesh VPN is usually just one line item — most teams also pay separately for a ZTNA gateway and a monitoring tool. QuickZTNA folds those into one agent and one bill. [See what you'd save →](/savings/)
 
@@ -140,7 +140,7 @@ NetBird has been growing its compliance story; verify current attestations with 
 
 ### QuickZTNA
 
-QuickZTNA has identical features on both plans — DNS threat filtering, a per-org edge firewall, file-hash malware detection, JIT access with approvals, access-review campaigns, and versioned ACLs with rollback. Audit logs are exportable to SIEM formats. Free and Business differ only in seats and devices per seat.
+QuickZTNA has identical features on both plans — a per-org edge firewall, file-hash malware detection, JIT access with approvals, access-review campaigns, and versioned ACLs with rollback. Audit logs are exportable to SIEM formats. Free and Business differ only in seats and devices per seat.
 
 For regulated-entity deployments where access governance (JIT approvals, access reviews, device posture, exportable audit evidence) is a compliance expectation, QuickZTNA's feature set is more complete. For simple developer-mesh use cases, the compliance surface is less material.
 
@@ -178,7 +178,7 @@ A flowchart in prose.
 - (QuickZTNA is managed cloud only — not a fit when self-host is required.)
 
 **If the deepest ZTNA + workforce-security feature set is the priority:**
-- ABAC + device posture, DNS threat filtering, JIT access governance, and free SSH: **QuickZTNA**
+- ABAC + device posture, JIT access governance, and free SSH: **QuickZTNA**
 
 **If maximum developer ergonomics and multi-year community maturity is the priority:**
 - **Tailscale**

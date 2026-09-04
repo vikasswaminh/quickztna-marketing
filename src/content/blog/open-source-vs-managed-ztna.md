@@ -105,7 +105,7 @@ Useful for homelabs and small permanent fleets. Not appropriate for a business b
 
 QuickZTNA is a full ZTNA built on WireGuard, with access governance (JIT approvals, access reviews, policy rollback, signed compliance evidence) layered on the mesh. The data plane is classical WireGuard; post-quantum key exchange is not implemented. Managed cloud only — no self-host option.
 
-**Strengths.** Full ZTNA with an access-governance layer (JIT access, access reviews, versioned ACLs, compliance evidence bundles), DNS threat filtering, device posture and ABAC. Free remote SSH on every tier, and identical features on both plans.
+**Strengths.** Full ZTNA with an access-governance layer (JIT access, access reviews, versioned ACLs, compliance evidence bundles), device posture and ABAC. Free remote SSH on every tier, and identical features on both plans.
 
 **Trade-offs.** Newer than Tailscale; smaller community.
 

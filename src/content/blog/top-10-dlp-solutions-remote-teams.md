@@ -291,7 +291,7 @@ Full SASE with a cloud proxy (Zscaler or Netskope) covers layer 2 at the network
 
 ## Try QuickZTNA
 
-QuickZTNA is the access layer, not the DLP layer: identity-based ABAC policies, continuous device posture, DNS threat filtering and just-in-time access — free for up to 5 users. Pair it with a DLP tool from this list. [Start free](https://login.quickztna.com/auth).
+QuickZTNA is the access layer, not the DLP layer: identity-based ABAC policies, continuous device posture and just-in-time access — free for up to 5 users. Pair it with a DLP tool from this list. [Start free](https://login.quickztna.com/auth).
 
 <!--
 scorecard:

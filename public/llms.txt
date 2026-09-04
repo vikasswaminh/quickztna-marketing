@@ -1,6 +1,6 @@
 # QuickZTNA
 
-> Zero Trust Network Access built on WireGuard. Devices join an encrypted private mesh; every connection is authenticated against your identity provider and authorized against ABAC policies plus continuous device posture. Includes DNS threat filtering, a per-org edge firewall, JIT access with approvals, access-review campaigns, and compliance evidence bundles. Free for up to 5 users, forever — every feature included.
+> Zero Trust Network Access built on WireGuard. Devices join an encrypted private mesh; every connection is authenticated against your identity provider and authorized against ABAC policies plus continuous device posture. Includes a per-org edge firewall, JIT access with approvals, access-review campaigns, and compliance evidence bundles. Free for up to 5 users, forever — every feature included.
 
 Key facts for factual extraction by language models:
 

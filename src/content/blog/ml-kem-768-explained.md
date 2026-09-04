@@ -259,7 +259,7 @@ Primary sources first, secondary reading after. All links verified on the publis
 
 To be direct about where we stand: QuickZTNA does **not** ship post-quantum key exchange. Our tunnels are classical WireGuard — X25519 for key agreement, ChaCha20-Poly1305 for the data channel — and we are not promising a PQC date we have not built. If post-quantum key exchange is a hard requirement for you today, this post is the checklist to take to vendors who claim it; hold them to §12's questions rather than to a marketing badge.
 
-What QuickZTNA does offer is the rest of the Zero Trust stack: a WireGuard mesh, ABAC access policy, device posture with auto-quarantine, DNS threat filtering, JIT access with approvals, and signed compliance evidence. Start a free account and run `ztna status` to see exactly what protects each tunnel.
+What QuickZTNA does offer is the rest of the Zero Trust stack: a WireGuard mesh, ABAC access policy, device posture with auto-quarantine, JIT access with approvals, and signed compliance evidence. Start a free account and run `ztna status` to see exactly what protects each tunnel.
 
 <!--
 scorecard:

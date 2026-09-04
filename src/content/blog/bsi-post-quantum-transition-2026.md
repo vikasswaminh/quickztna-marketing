@@ -228,7 +228,7 @@ Primary sources. All links verified on the publish date.
 
 ## Try QuickZTNA
 
-QuickZTNA does not implement post-quantum key exchange and does not have it planned; tunnels are classical WireGuard. That means we do **not** meet TR-02102-1's hybrid-preference guidance, and a German federal or KRITIS deployment with a hard PQ requirement should evaluate a vendor that does. What we do offer is the rest of the Zero Trust stack — mesh, ABAC policy, device posture, DNS threat filtering, JIT access and signed audit evidence. [Start free](https://login.quickztna.com/auth) to evaluate that on its own merits.
+QuickZTNA does not implement post-quantum key exchange and does not have it planned; tunnels are classical WireGuard. That means we do **not** meet TR-02102-1's hybrid-preference guidance, and a German federal or KRITIS deployment with a hard PQ requirement should evaluate a vendor that does. What we do offer is the rest of the Zero Trust stack — mesh, ABAC policy, device posture, JIT access and signed audit evidence. [Start free](https://login.quickztna.com/auth) to evaluate that on its own merits.
 
 <!--
 scorecard:

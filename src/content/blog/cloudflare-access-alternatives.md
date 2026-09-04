@@ -102,7 +102,7 @@ Cloudflare has shipped post-quantum TLS 1.3 hybrid on its edge. For a team that 
 
 ## 6. Alternative 3 — QuickZTNA
 
-**Model.** Full ZTNA with a WireGuard data plane and a managed coordination plane, plus DNS threat filtering, device posture, and an access-governance layer (JIT, access reviews, evidence bundles).
+**Model.** Full ZTNA with a WireGuard data plane and a managed coordination plane, plus device posture and an access-governance layer (JIT, access reviews, evidence bundles).
 
 **Fit against Cloudflare Access motivations.**
 - **Device-to-device mesh:** yes.

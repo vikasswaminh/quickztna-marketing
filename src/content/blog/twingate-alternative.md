@@ -108,7 +108,7 @@ The Client-Connector model specifically is Twingate's differentiator. Alternativ
 
 **Strengths vs Twingate.**
 - **Access governance built in.** JIT access with approvals, access-review campaigns, versioned ACLs with one-click rollback, and exportable compliance evidence — beyond Twingate's access-only scope.
-- **Full ZTNA feature set.** ACLs, device posture, DNS threat filtering, edge firewall, audit logs, SIEM export.
+- **Full ZTNA feature set.** ACLs, device posture, edge firewall, audit logs, SIEM export.
 - **Open-protocol data plane** (WireGuard).
 - **Honest tier boundaries.** Free tier is not gated from core security features.
 - **EU + US infrastructure** for data-residency-sensitive deployments.

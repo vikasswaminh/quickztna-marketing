@@ -320,6 +320,13 @@ const PRODUCT_RULES = [
 // Capabilities removed in the 2026 lean pivot. Attribution per the header:
 // no subject needed on product surfaces; product name or heading on the blog.
 const REMOVED = [
+  // DNS filtering / threat feeds / threat-IP blocking / content categories were retired
+  // 2026-09-04 (owner decision after PhishTank turned google.com into a fleet-wide block).
+  // QuickZTNA has MagicDNS, org nameservers and split DNS only.
+  {
+    re: /\bdns[- ](?:filtering|security|threat[- ]?(?:blocking|filtering))\b|\bthreat[- ]feeds?\b|\bthreat[- ]ip blocking\b|\bcontent categor(?:y|ies)\b|\bfilters dns\b/i,
+    msg: "DNS filtering, threat feeds, threat-IP blocking and content categories were retired 2026-09-04 — QuickZTNA has MagicDNS, org nameservers and split DNS only",
+  },
   { re: /\bai[- ](operator|assistant)\b/i, msg: "the AI Operator/assistant was removed in the 2026 lean pivot" },
   { re: /\bcasb\b/i, msg: "CASB was removed in the 2026 lean pivot" },
   { re: /workforce analytics/i, msg: "workforce analytics was removed in the 2026 lean pivot" },
