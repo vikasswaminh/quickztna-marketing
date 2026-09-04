@@ -10,8 +10,8 @@ interface Props {
   ogImage?: string;
 }
 const {
-  title = "QuickZTNA — Zero Trust Network Access on WireGuard · mesh + ABAC + DNS filtering",
-  description = "Zero Trust Network Access on WireGuard. Encrypted mesh + ABAC policies + continuous device posture + DNS threat filtering. One install command. Free forever for up to 5 users.",
+  title = "QuickZTNA — Zero Trust Network Access on WireGuard · mesh + ABAC + device posture",
+  description = "Zero Trust Network Access on WireGuard. Encrypted mesh + ABAC policies + continuous device posture. One install command. Free forever for up to 5 users.",
   canonical,
   ogImage,
 } = Astro.props;
@@ -41,7 +41,7 @@ const organizationSchema = {
     width: 512,
     height: 512,
   },
-  description: "Zero Trust Network Access on WireGuard. Encrypted mesh + ABAC policies + device posture + DNS threat filtering.",
+  description: "Zero Trust Network Access on WireGuard. Encrypted mesh + ABAC policies + device posture.",
   foundingDate: "2024",
   founder: { "@type": "Person", name: "Vikas Kumar" },
   sameAs: [
