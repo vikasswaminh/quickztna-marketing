@@ -7,7 +7,7 @@ updatedAt: 2026-08-30
 primaryKeyword: "QuickZTNA endpoint security"
 faq:
   - q: "What does the endpoint-security layer include?"
-    a: "A per-organization edge firewall, file-hash malware detection, device posture with auto-quarantine, and remote shell for diagnostics. Every one of them is included on both plans — none is gated behind an upgrade."
+    a: "File-hash malware detection, device posture with auto-quarantine, and remote shell for diagnostics. Every one of them is included on both plans — none is gated behind an upgrade."
   - q: "What was removed in 2026?"
     a: "The 2026 lean pivot removed DLP content scanning, CASB and shadow-IT discovery, workforce and productivity analytics, session recording, remote desktop, software inventory, and user-risk scoring. File-hash malware detection is the retained half of DLP. If you are reading an older comparison of QuickZTNA, those capabilities no longer exist."
 ---

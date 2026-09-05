@@ -7,7 +7,7 @@ updatedAt: 2026-06-26
 primaryKeyword: "QuickZTNA plans billing"
 faq:
   - q: "Is the Free plan really free forever?"
-    a: "Yes — up to 5 users and up to 100 devices, no trial timer, no credit card. Every feature is on Free: WireGuard mesh, MagicDNS, ABAC policies, device posture, edge firewall, JIT access, access reviews, remote SSH, SCIM, and compliance reports — the lot. You upgrade to Business only for more seats, never to unlock features."
+    a: "Yes — up to 5 users and up to 100 devices, no trial timer, no credit card. Every feature is on Free: WireGuard mesh, MagicDNS, ABAC policies, device posture, JIT access, access reviews, remote SSH, SCIM, and compliance reports — the lot. You upgrade to Business only for more seats, never to unlock features."
   - q: "What's the difference between Free and Business?"
     a: "Scale, not features. Both plans include the entire platform (full parity). Free is capped at 5 users and 100 devices; Business is $10 per user / month with unlimited seats and a 10,000-device ceiling. Billing is per user — devices are never metered."
   - q: "How quickly does a plan change take effect?"
@@ -22,7 +22,7 @@ This page covers the two plan tiers, how plan limits are enforced, and how billi
 
 QuickZTNA has **two plans with identical features** — you pay to scale, not to unlock.
 
-- **Free** — up to **5 users** and up to **100 devices**, forever. Every feature is included: WireGuard mesh, MagicDNS, ABAC policies, device posture, edge firewall, JIT access, access reviews, remote SSH, SCIM, and compliance reports — the entire platform.
+- **Free** — up to **5 users** and up to **100 devices**, forever. Every feature is included: WireGuard mesh, MagicDNS, ABAC policies, device posture, JIT access, access reviews, remote SSH, SCIM, and compliance reports — the entire platform.
 - **Business** — **$10 per user / month**, billed per seat. Unlimited users and up to **10,000 devices**. Same features as Free, plus priority email support. No trial and no card to start — you begin on Free and upgrade when you outgrow the seat limit.
 
 Exact prices and limits can change — the [pricing page](/pricing/) is canonical.

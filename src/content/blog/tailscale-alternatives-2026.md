@@ -96,7 +96,7 @@ We cover Headscale in more depth in [Self-Hosting Headscale vs a Managed Coordin
 
 ## 5. QuickZTNA — full ZTNA + access governance
 
-**What it is.** QuickZTNA is a full ZTNA product built on WireGuard. Beyond the mesh VPN, it adds ABAC ACLs, device posture with auto-quarantine, a per-org edge firewall, JIT access requests with approvals, access-review campaigns, policy version rollback, signed compliance evidence, SSO (OIDC/Google/GitHub) with TOTP MFA, and SCIM provisioning. The data plane is classical WireGuard — post-quantum key exchange is not implemented.
+**What it is.** QuickZTNA is a full ZTNA product built on WireGuard. Beyond the mesh VPN, it adds ABAC ACLs, device posture with auto-quarantine, JIT access requests with approvals, access-review campaigns, policy version rollback, signed compliance evidence, SSO (OIDC/Google/GitHub) with TOTP MFA, and SCIM provisioning. The data plane is classical WireGuard — post-quantum key exchange is not implemented.
 
 **Strengths.**
 - **Access governance depth.** ACLs, device posture, JIT access with approvals, access-review campaigns, audit logs and exportable compliance evidence — beyond a basic mesh.

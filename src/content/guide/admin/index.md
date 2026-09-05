@@ -43,7 +43,7 @@ QuickZTNA is a managed cloud service. You administer your organization through t
 
 ## Plans at a glance
 
-QuickZTNA's Free plan covers **5 users and up to 100 devices, forever**, with **every feature included** — the WireGuard mesh, MagicDNS, ABAC policies, device posture, the edge firewall, JIT access, access reviews, remote SSH, SCIM, and compliance reports. Business ($10 per user / month) adds only scale: unlimited users (billed per seat) and a 10,000-device ceiling — the same features. Full breakdown on [Plans & billing](/guide/admin/billing/) and the [pricing page](/pricing/).
+QuickZTNA's Free plan covers **5 users and up to 100 devices, forever**, with **every feature included** — the WireGuard mesh, MagicDNS, ABAC policies, device posture, JIT access, access reviews, remote SSH, SCIM, and compliance reports. Business ($10 per user / month) adds only scale: unlimited users (billed per seat) and a 10,000-device ceiling — the same features. Full breakdown on [Plans & billing](/guide/admin/billing/) and the [pricing page](/pricing/).
 
 ## A note on what's shipped
 

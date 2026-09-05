@@ -327,6 +327,14 @@ const REMOVED = [
     re: /\bdns[- ](?:filtering|security|threat[- ]?(?:blocking|filtering))\b|\bthreat[- ]feeds?\b|\bthreat[- ]ip blocking\b|\bcontent categor(?:y|ies)\b|\bfilters dns\b/i,
     msg: "DNS filtering, threat feeds, threat-IP blocking and content categories were retired 2026-09-04 — QuickZTNA has MagicDNS, org nameservers and split DNS only",
   },
+  // The edge firewall (Firewall-as-a-Service / cloud firewall / geo-blocking) was retired
+  // 2026-09-05 (owner decision after the policy-lifecycle investigation). Posture's
+  // "firewall enabled" OS check is a different thing and stays allowed — the regex
+  // matches the retired product phrases, never the bare word.
+  {
+    re: /\bfirewall[- ]as[- ]a[- ]service\b|\bfaas\b|\b(?:edge|cloud|per[- ]org(?:anization)?) firewall\b|\bgeo[- ]?blocking\b|\bfirewall rules? (?:that follow|pushed to|at the edge)\b|\bstateful firewall rules\b/i,
+    msg: "the edge firewall (FaaS, geo-blocking) was retired 2026-09-05 — QuickZTNA has ACL policies + device posture (incl. the OS firewall posture check), not a managed firewall",
+  },
   { re: /\bai[- ](operator|assistant)\b/i, msg: "the AI Operator/assistant was removed in the 2026 lean pivot" },
   { re: /\bcasb\b/i, msg: "CASB was removed in the 2026 lean pivot" },
   { re: /workforce analytics/i, msg: "workforce analytics was removed in the 2026 lean pivot" },

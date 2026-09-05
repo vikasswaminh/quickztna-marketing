@@ -66,7 +66,6 @@ const sections: Section[] = [
     blurb: "Defense in depth. Shipped as a single agent, not five separate tools to deploy.",
     icon: ShieldCheck,
     features: [
-      { name: "Cloud firewall (FaaS)", desc: "Stateful firewall rules at the edge. Per-app, per-user, per-tag.", plans: ["free", "business"] },
       { name: "Malware detection (file-hash)", desc: "Agents report SHA-256 file hashes; confirmed-malicious hits are recorded and, in enforce mode, quarantine the device.", plans: ["free", "business"] },
     ],
   },
@@ -144,7 +143,7 @@ const featuresFaq = [
   },
   {
     q: "What is the difference between the Free and Business plans?",
-    a: "Features are identical — both plans include the entire platform (WireGuard ZTNA mesh, ABAC + device posture, edge firewall, JIT access, access reviews, compliance reports, remote shell, SSO, SCIM, and more). The only difference is scale: Free covers 5 users and up to 100 devices; Business ($10 per user per month) is unlimited users billed per seat, with up to 10,000 devices. Billing is per user, never per device — you pay to grow, not to unlock features.",
+    a: "Features are identical — both plans include the entire platform (WireGuard ZTNA mesh, ABAC + device posture, JIT access, access reviews, compliance reports, remote shell, SSO, SCIM, and more). The only difference is scale: Free covers 5 users and up to 100 devices; Business ($10 per user per month) is unlimited users billed per seat, with up to 10,000 devices. Billing is per user, never per device — you pay to grow, not to unlock features.",
   },
   {
     q: "Does QuickZTNA support OIDC SSO?",
