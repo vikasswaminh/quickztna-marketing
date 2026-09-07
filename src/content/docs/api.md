@@ -1,275 +1,185 @@
 ---
 title: "REST API overview"
-description: "QuickZTNA's REST API: authentication, versioning, rate limits, error format, and the endpoint catalogue for devices, users, policies, keys, and audit logs."
+description: "QuickZTNA's REST API as it ships: API keys and scopes, the endpoints for keys, machines, policies and audit, unattended client install, and the OpenAPI spec."
 section: "api"
 order: 4
-updatedAt: 2026-05-16
+updatedAt: 2026-09-07
 primaryKeyword: "QuickZTNA REST API"
 faq:
   - q: "Is there an OpenAPI specification?"
-    a: "Yes — the canonical OpenAPI 3.1 specification is available at https://login.quickztna.com/api/openapi.json. It is the source of truth for the API surface. If the spec and this human-readable page diverge, the spec is correct; please file a docs ticket so we fix the page."
-  - q: "How do I get an API token?"
-    a: "Sign in to your admin dashboard, go to Settings → API tokens, and create a new token. Tokens are scoped to the organization, can be limited to read-only or specific endpoint groups, and have configurable expiry. Tokens are shown exactly once on creation and stored only as a hash thereafter."
+    a: "Yes — the OpenAPI 3.1 specification is served at https://login.quickztna.com/api/docs/openapi.yaml (https://login.quickztna.com/api/openapi.json returns metadata that points to it). It documents the customer-facing surface only; if the spec and this page diverge, the spec is correct — please tell us so we fix the page."
+  - q: "How do I get an API key?"
+    a: "Sign in to the admin dashboard as an org admin, open Admin settings → API Keys, choose a role preset or specific scopes, and generate the key. Keys are bound to your organization, expire in 1–90 days, and are shown exactly once; only a hash is stored."
   - q: "What's the rate limit?"
-    a: "Default rate limits are 600 requests per minute per organization for read endpoints, 60 per minute for write endpoints. Limits are returned in the X-RateLimit-* response headers on every request. If you have a documented use case that requires higher limits — bulk migrations, fleet onboarding, exhaustive audit-log export — contact support; we can raise limits with appropriate justification."
+    a: "Each API key is capped at 100 requests per minute (you choose 30, 60 or 100 when you create it). Hitting the cap returns 429 with a Retry-After header. If you need more for a bulk job, split it across keys or contact support."
 ---
 
-The QuickZTNA REST API is the programmatic surface for managing devices, users, policies, pre-authentication keys, and audit logs. The admin dashboard is built on top of the same API; anything you can do in the dashboard, you can do via the API.
+The QuickZTNA API is the programmatic surface for managing API and enrolment keys, machines, access policies, users and the audit log. The admin dashboard is built on the same endpoints. This page describes the API **as it ships today** — every path below exists on `login.quickztna.com`.
 
-This page is the human-readable overview. The canonical specification is at:
-
-```
-https://login.quickztna.com/api/openapi.json
-```
-
-If you're generating client code, point your OpenAPI generator at that URL. We update it on every release.
-
-## Base URL and versioning
-
-All API requests go to:
+The machine-readable specification is at:
 
 ```
-https://login.quickztna.com/api/v1
+https://login.quickztna.com/api/docs/openapi.yaml
 ```
 
-The major version is in the URL path. We commit to no breaking changes within a major version — endpoint shapes, field names, and required parameters are stable. Backwards-compatible additions (new optional fields, new endpoints) ship continuously.
+Point an OpenAPI generator at that URL for a typed client. It documents the customer-facing surface only: the agent's own device protocol and platform-internal endpoints are deliberately not part of it.
 
-When we introduce a major version (next one would be `/api/v2`), the previous version continues to function for at least 12 months in parallel, with formal deprecation notices via the status page and admin email at least 90 days before sunset.
+## Base URL
+
+All requests go to:
+
+```
+https://login.quickztna.com/api
+```
+
+There is no version segment in the path. Backwards-compatible additions (new optional fields, new actions) ship continuously; we do not rename existing endpoints, fields or action names.
 
 ## Authentication
 
-Every request must include a bearer token in the `Authorization` header:
+Programmatic clients authenticate with an **organization API key**, sent either as its own header or as a bearer token — both are accepted:
 
 ```
-Authorization: Bearer <token>
+X-Api-Key: qztna_…
 ```
 
-Tokens are created in the admin dashboard at **Settings → API tokens**. When you create a token you choose:
+```
+Authorization: Bearer qztna_…
+```
 
-- **Scope** — read-only, read-write, or specific endpoint groups (devices, policies, audit, etc.).
-- **Expiry** — anywhere from 1 hour to 12 months. Production tokens should expire on a documented rotation schedule.
-- **Description** — human-readable label for the token. Shown in the audit log of every request the token makes.
+(Signed-in dashboard sessions use a short-lived JWT in the same `Authorization` header; you will not normally use that from automation.)
 
-Tokens are returned exactly once at creation. We store only a hash thereafter; if you lose a token, generate a new one.
+API keys are created by an org **admin** in the dashboard at **Admin settings → API Keys**, or via the key-management endpoint below. When you create a key you choose:
 
-Failed authentication returns `401 Unauthorized` with an `WWW-Authenticate` header indicating the scheme. Successful authentication that lacks the necessary scope for the requested endpoint returns `403 Forbidden`.
+- **Scopes** — what the key may do (next section). A key must carry at least one scope; full access is only granted by the explicit `*` scope, never by leaving scopes empty.
+- **Expiry** — 1 to 90 days (default 30). Expiry is mandatory: there are no permanent keys. Rotate on a documented schedule.
+- **Rate limit** — 30, 60 or 100 requests per minute.
+- **Name** — a label shown in the key list and the audit log.
+
+Keys are returned exactly once, at creation. Only a hash is stored; if you lose a key, rotate it. A key is bound to the organization it was created in and stops working if its creator loses admin standing in that organization.
+
+Missing or invalid credentials return `401`. A valid key that lacks the scope for the operation returns `403` with the error code `INSUFFICIENT_SCOPE`, and a key used against another organization returns `403 FORBIDDEN`.
+
+### Scopes
+
+Scopes follow a `resource:action` vocabulary:
+
+| Scope | Grants |
+|---|---|
+| `*` | Full access (admin) — everything, including key management and policy writes |
+| `<resource>:read` | Read the resource |
+| `<resource>:write` | Read and write the resource |
+| `read` | Read every ordinary resource |
+| `write` | Read and write every ordinary resource (data only — see below) |
+
+Resources: `machines`, `acls`, `dns`, `users`, `apps`, `settings`, `secrets`, `certificates`, `audit`. SCIM and Terraform integrations use their own `scim` and `terraform` scopes.
+
+Two rules keep a broad automation key contained:
+
+- **Policy writes need admin-grade.** Authoring ACL rules, DNS configuration, organization settings, and creating, rotating or revoking keys require `*` (or `admin`); a coarse `write` scope is not enough.
+- **Secrets and certificates are never implied.** `read`/`write` do not reach them; use `secrets:*` / `certificates:*` explicitly.
+
+The dashboard offers three role presets that expand to scope sets: **Auditor** (every `:read`), **Operator** (`machines:read`, `machines:write`, `acls:read`, `apps:read`, `dns:read`) and **Admin** (`*`).
 
 ## Request and response format
 
-Requests and responses are JSON unless explicitly noted. Request bodies use UTF-8 encoding; response bodies do the same.
-
-Common request headers:
-
-- `Authorization: Bearer <token>` — required.
-- `Content-Type: application/json` — required for `POST`, `PUT`, `PATCH` with a body.
-- `Accept: application/json` — optional; assumed.
-- `X-Request-ID: <uuid>` — optional; if present, echoed in the response. Useful for correlating client logs to server logs in support tickets.
-
-Common response headers:
-
-- `Content-Type: application/json` — always.
-- `X-Request-ID: <uuid>` — server-generated if you didn't supply one.
-- `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` — rate-limit accounting.
-
-## Pagination
-
-List endpoints (`GET /devices`, `GET /audit-log`, etc.) return paginated results. Pagination is cursor-based:
-
-Request:
-
-```
-GET /api/v1/devices?limit=100
-```
-
-Response:
+Requests and responses are JSON. Most endpoints are **action-based**: you `POST` a JSON body with an `action` field plus the organization id, and the endpoint dispatches on it. Every response uses one envelope:
 
 ```json
-{
-  "items": [ ... ],
-  "next_cursor": "eyJ0c..."
-}
+{ "success": true,  "data": { … },  "error": null }
+{ "success": false, "data": null,   "error": { "code": "INSUFFICIENT_SCOPE", "message": "…" } }
 ```
 
-To get the next page, pass `next_cursor` as the `cursor` query parameter:
-
-```
-GET /api/v1/devices?limit=100&cursor=eyJ0c...
-```
-
-When there are no more pages, `next_cursor` is `null`. The default `limit` is 50; the maximum is 200. Cursors are stateless tokens — they survive across server-side restarts and do not expire on any documented schedule.
-
-## Filtering and search
-
-List endpoints support filtering via query parameters. The exact filter syntax depends on the endpoint; common examples:
-
-- `GET /devices?filter=tag:production` — devices with the `production` tag.
-- `GET /devices?filter=tag:production+os:linux` — AND (both filters).
-- `GET /devices?filter=tag:production,tag:staging` — OR (either).
-- `GET /audit-log?since=2026-01-01T00:00:00Z` — events since the given timestamp.
-
-Sort order is most-recent-first by default for time-series endpoints (audit log, events) and unspecified for collection endpoints. To force a sort: `?sort=created_at:desc`.
-
-## Errors
-
-The API uses the RFC 7807 (Problem Details) format for errors:
-
-```json
-{
-  "type": "https://quickztna.com/docs/api/#errors-invalid_argument",
-  "title": "Invalid argument",
-  "status": 400,
-  "detail": "Field 'hostname' must match pattern [a-z0-9-]+",
-  "instance": "/api/v1/devices",
-  "request_id": "01HXY..."
-}
-```
-
-The `type` is a stable URL identifying the error class. The `title` is a human-readable summary. `detail` provides specifics for the particular request. `instance` is the request path. `request_id` is the correlation ID we'll ask for in support tickets.
-
-HTTP status codes follow standard semantics:
-
-- `200 OK` — successful read.
-- `201 Created` — successful resource creation.
-- `204 No Content` — successful operation with no response body (e.g. successful DELETE).
-- `400 Bad Request` — malformed request, invalid field values.
-- `401 Unauthorized` — missing or invalid authentication.
-- `403 Forbidden` — authenticated but lacking the necessary scope.
-- `404 Not Found` — resource does not exist.
-- `409 Conflict` — operation conflicts with current resource state.
-- `422 Unprocessable Entity` — request was syntactically valid but semantically rejected.
-- `429 Too Many Requests` — rate limit hit. Honour `Retry-After`.
-- `500 Internal Server Error` — server-side bug. We treat any 5xx as a high-priority alert; please file a ticket with the `request_id`.
-- `503 Service Unavailable` — transient unavailability. Retry with exponential backoff.
-
-The API is fully idempotent for safe HTTP methods (`GET`, `HEAD`). Mutating methods (`POST`, `PUT`, `PATCH`, `DELETE`) on individual resources are idempotent against the same resource ID; bulk operations indicate their idempotency semantics in their per-endpoint docs.
+Common error codes: `UNAUTHORIZED` (401), `FORBIDDEN` and `INSUFFICIENT_SCOPE` (403), `NOT_FOUND` (404), `INVALID_INPUT` / `INVALID_SCOPES` / `MISSING_FIELDS` (400), `RATE_LIMITED` (429).
 
 ## Rate limits
 
-Default per-organization limits:
-
-- **Read endpoints** (`GET`): 600 requests per minute.
-- **Write endpoints** (`POST`, `PUT`, `PATCH`, `DELETE`): 60 requests per minute.
-- **Burst capacity:** up to 30 seconds at 2x sustained rate.
-
-These limits are documented to be sufficient for routine bulk operations (e.g. fetching every device on a 10,000-device fleet, applying a fresh policy across hundreds of rules). If your use case requires more — bulk migrations, large-scale audit-log exports, very high-frequency event processing — contact [support@quickztna.com](mailto:support@quickztna.com) and we can raise limits for your token with appropriate justification.
-
-Every response includes:
-
-```
-X-RateLimit-Limit: 600
-X-RateLimit-Remaining: 587
-X-RateLimit-Reset: 1715852400
-```
-
-When a limit is hit, the response is `429 Too Many Requests` with a `Retry-After: <seconds>` header. Honour it; aggressive ignoring of `Retry-After` can result in temporary token suspension.
+Limits are per API key, at the rate chosen when the key was created (30, 60 or 100 requests per minute; 100 is the maximum). When a limit is hit the response is `429` with a `Retry-After: <seconds>` header — honour it. For large jobs (fleet onboarding, full audit export), page through results and spread the work across keys.
 
 ## Endpoint catalogue
 
-A high-level tour of the surface. Full request/response schemas are in the OpenAPI spec.
+### Keys — `POST /api/key-management`
 
-### Devices
+Requires an admin-grade key (`*`). Body: `{ "action": "…", "org_id": "…", … }`.
 
-- `GET /devices` — list devices in the organization. Supports filtering by tag, OS, owner, last-seen.
-- `GET /devices/{id}` — single device, with full detail (tags, peers, posture state, audit history).
-- `PATCH /devices/{id}` — update mutable fields (hostname, tags, owner reassignment with admin role).
-- `DELETE /devices/{id}` — remove device from the organization. Drops it from the network and revokes its key centrally.
-- `POST /devices/{id}/tags` — add tags.
-- `DELETE /devices/{id}/tags/{tag}` — remove a tag.
-- `POST /devices/{id}/expire-key` — force-expire the device's current authentication. Device's owner will be prompted for fresh SSO on next connect.
+- `create_auth_key` — create an **enrolment (pre-auth) key** for installing the client on machines without an interactive login. Fields: `name` (required), `expiry_days` (1–365, default 90), `reusable` (multi-use), `ephemeral`, `allowed_tags` (tags the machine receives), `allowed_cidrs`. The key is returned once.
+- `revoke_auth_key`, `rotate_auth_key` — by `key_id`.
+- `create_api_key` — mint an API key: `name`, `scopes` (required, non-empty), `expiry_days` (1–90), `rate_limit_rpm`. Returns `key` (once) and `key_prefix`.
+- `revoke_api_key`, `rotate_api_key` — by `key_id`. Rotation revokes the old key and returns a new one with the same scopes.
 
-### Users
+Listing keys is a table read: `GET /api/db/auth_keys?org_id=…` and `GET /api/db/api_keys?org_id=…` (hashes and prefixes only — keys are never retrievable after creation).
 
-- `GET /users` — list users in the organization.
-- `GET /users/{id}` — single user, with their devices and group memberships.
-- `POST /users` — invite a user. Sends invitation email or creates an SSO-domain rule depending on parameters.
-- `DELETE /users/{id}` — remove a user. All of their devices are removed in the same operation.
-- `GET /users/{id}/devices` — devices owned by this user.
+### Machines — `GET /api/db/machines` and `POST /api/machine-admin`
 
-### Groups
+Read the fleet through the table API:
 
-- `GET /groups` — list groups synced from your identity provider.
-- `GET /groups/{id}/members` — users in the group.
+- `GET /api/db/machines?org_id=…` — list machines. Filter with `field=op.value` query parameters: `?status=eq.online`, `?status=neq.offline`, `?id=eq.<uuid>`. Rows are under `data.data`.
 
-Groups are read-only via the QuickZTNA API; the source of truth is your identity provider. Modify membership upstream (Google Workspace, Microsoft Entra, Okta, etc.) and the change syncs to QuickZTNA within seconds via SCIM or on the next OIDC sign-in.
+Change machines through the admin endpoint (`machines:write`; body `{ "action": "…", "org_id": "…", "machine_id": "…", … }`):
 
-### Policies
+- `approve` — approve a machine that enrolled while approval was required.
+- `enable` / `disable` / `quarantine` — control whether the machine may connect.
+- `rename` — field `name`.
+- `update_tags` — replace the machine's tags (tags drive access policy).
+- `update_flags` — per-machine flags.
+- `update_routes`, `approve_routes`, `reject_routes` — advertised subnet routes.
+- `approve_exit_node`, `reject_exit_node` — exit-node offers.
+- `set_key_expiry` — control node-key expiry.
+- `delete` — remove the machine; it is dropped from the network and its key revoked.
 
-- `GET /policy` — current policy as YAML or JSON (negotiated via `Accept` header).
-- `PUT /policy` — replace the policy in its entirety. Supports `dry_run=true` query parameter.
-- `POST /policy/diff` — submit a candidate policy; returns the diff against the current live policy without applying.
-- `POST /policy/lint` — validate a candidate policy without applying.
-- `GET /policy/history` — list previous policy versions.
-- `GET /policy/history/{version}` — fetch a specific historical version.
+Remote-control actions that can lock, wipe or execute on a device exist for the dashboard's admin flows and are intentionally **not** part of the public API surface.
 
-### Pre-auth keys
+### Access policies — `/api/db/acl_rules` and `POST /api/acl-evaluate`
 
-- `GET /keys` — list active pre-auth keys (hashes only; keys themselves are not retrievable post-creation).
-- `POST /keys` — create a pre-auth key. Response includes the key, exactly once.
-- `DELETE /keys/{id}` — revoke a key.
+- `GET /api/db/acl_rules?org_id=…` — list rules. `POST` / `PATCH` / `DELETE` on the same path author them (admin-grade key). `PATCH` takes its `WHERE` in a `_filters` object in the body, and `DELETE` needs `Content-Type: application/json` with a `{}` body.
+- `POST /api/acl-evaluate` — dry-run a decision: `org_id`, `source_machine_id`, `destination_machine_id` → allow/deny and the matching rule.
 
-### Audit log
+### Users — `/api/db/org_members` and `/api/db/profiles`
 
-- `GET /audit-log` — paginated event stream. Supports `since`, `until`, `event_type`, `actor`, `subject` filters.
-- `GET /audit-log/{event_id}` — single event with full detail.
+`users:read` / `users:write`. Members with their role (`owner`, `admin`, `member`) and profiles. Provisioning at scale is better done through the SCIM endpoint with a `scim`-scoped key.
 
-Audit log retention is 90 days on both plans. The events endpoint below can stream events in real time.
+### Audit log — `GET /api/audit` and `/api/db/audit_logs`
 
-### Real-time events
+`audit:read`. `GET /api/audit?org_id=…` returns events newest first with `limit`/`offset` paging; `GET /api/db/audit_logs?org_id=…` is the raw table with `field=op.value` filters. Retention is 90 days on both plans. `POST /api/export` produces a full organization export for offline analysis.
 
-- `GET /events?stream=true` — Server-Sent Events stream of audit and system events.
+### Health and spec
 
-The same data as the audit log, but pushed as it happens. Useful for SIEM ingestion or real-time alerting.
+- `GET /api/health` — service health, unauthenticated.
+- `GET /api/docs/openapi.yaml` — the OpenAPI 3.1 specification, unauthenticated.
 
-### Posture
+## Real-time updates and webhooks
 
-- `GET /posture/config` — current posture configuration (which signals are required, what action on failure).
-- `PUT /posture/config` — update posture configuration. Supports `dry_run=true`.
-- `GET /devices/{id}/posture` — current posture state of a specific device.
+The dashboard's live updates use a WebSocket at `/api/realtime` authenticated with a dashboard session; it is not part of the API-key surface. For event delivery to your own systems use **webhooks**: configure destinations in the dashboard (Admin settings → Webhooks); each delivery is a signed POST (HMAC-SHA256 over the body with the per-webhook secret) with retries. Delivery history is readable at `GET /api/db/webhook_delivery_logs?org_id=…`.
 
-### Health and meta
+## Remote client install and management
 
-- `GET /health` — service health. Unauthenticated.
-- `GET /version` — service version. Unauthenticated.
-- `GET /openapi.json` — the OpenAPI 3.1 specification. Unauthenticated.
+There is no MDM or MSI package; the client installs from a script on every platform, and an **enrolment key** makes that install fully unattended. From your API key:
 
-## Webhooks
+1. `POST /api/key-management` with `action: create_auth_key`, `reusable: true`, a short `expiry_days`, and the `allowed_tags` you want the machines to carry.
+2. Deliver the key to the machine through your provisioning tool (cloud-init, Ansible, Intune/GPO script, image build) and run the installer with it:
 
-The API supports outbound webhooks for all organizations. Configure webhook destinations in the admin dashboard under Settings → Webhooks.
+```bash
+# Linux and macOS
+curl -fsSL https://login.quickztna.com/install.sh | ZTNA_AUTH_KEY=<key> sh
+```
 
-Each webhook receives a signed POST request when an interesting event happens (device added, device removed, policy applied, posture violation, sign-in failure, etc.). The signature is HMAC-SHA256 over the request body with the per-webhook secret; verify it on your side before trusting the payload.
+```powershell
+# Windows (silent; installs and starts the service)
+$env:ZTNA_AUTH_KEY = "<key>"; irm https://login.quickztna.com/install.ps1 | iex
+```
 
-Webhook delivery is at-least-once with exponential backoff; we retry for up to 24 hours on 5xx responses or timeouts. Always treat webhook handlers as idempotent.
+3. The machine enrols and appears in `GET /api/db/machines` within seconds. If your organization requires approval, `machine-admin` → `approve` it (or pre-tag it so policy applies immediately).
+4. Manage it from then on with the machine-admin actions above; revoke the enrolment key when the rollout is done.
 
-## SDKs and client libraries
-
-We do not currently ship official client libraries because the OpenAPI specification is the single source of truth and generators like `openapi-generator` produce idiomatic clients for every major language. Pick your generator of choice; we keep the spec quality high enough that generated clients work cleanly.
-
-A small number of community-maintained libraries exist for Go, Python, and TypeScript. They are listed on the [integrations page](/docs/integrations/) under "community-maintained tools." We don't formally endorse them, but they're known to work and are written by people we trust.
+Client updates are managed centrally by staged rollout; a machine's client version is visible on its row in `GET /api/db/machines`.
 
 ## Common patterns
 
-A few quick reference patterns for common automation.
+**Cleaning up stale machines from CI** — `GET /api/db/machines?org_id=…`, filter on `last_seen`, then `machine-admin` → `delete` for each stale row. `ztna machines list` is the CLI's read-only view of the same data.
 
-**Onboarding a fleet of servers via Terraform / Pulumi / CDK:**
+**Read-only monitoring** — use the **Auditor** preset. It can read machines, policies, users and audit events and cannot change anything.
 
-1. Create a multi-use pre-auth key with the desired tags and a short expiry.
-2. Pass the key to each server's user-data via your IaC tool.
-3. The server's first-boot script runs `ztna up --auth-key=<key>` (or sets `ZTNA_AUTH_KEY` and runs the installer).
-4. After fleet rollout, revoke the key.
-
-**Bulk audit-log export to your SIEM:**
-
-```bash
-# Ad-hoc, from the CLI:
-ztna audit list
-```
-
-For automation, query the audit-log API endpoint with the cursor-pagination pattern and stream the JSON to your SIEM. The audit log is API-queryable and exportable on both plans — it is not a paid upgrade.
-
-**Cleaning up stale devices in CI:**
-
-Use the machine-management API endpoints (the same surface the dashboard uses): list machines, filter by `last_seen`, and remove the stale ones. `ztna machines list` is the CLI's read-only view of the same data. Run on a weekly schedule.
+**Least-privilege automation** — give each job its own key with only the scopes it needs and a short expiry; keep `*` keys for humans and break-glass.
 
 ## What's next
 
-For the security and trust model that this API operates against, the [security model page](/docs/security/) is the next read. For SSO setup, see [integrations](/docs/integrations/). For the operator-facing view of the same surface, [managing devices](/guide/managing-devices/) and [access policies](/guide/access-policies/) cover the dashboard equivalents.
+For the security and trust model this API operates against, read the [security model page](/docs/security/). For SSO and SCIM setup see [integrations](/docs/integrations/). For the operator view of the same surface, [managing devices](/guide/managing-devices/) and [access policies](/guide/access-policies/) cover the dashboard equivalents.
