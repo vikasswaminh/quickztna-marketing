@@ -172,7 +172,7 @@ Snapshot as of April 2026. Always verify against each vendor's current documenta
 1. **Mesh or proxy?** Mesh: Tailscale, NetBird, QuickZTNA. Proxy: Cloudflare Access, Twingate, Zscaler, AWS Verified Access.
 2. **Self-host required?** Yes: NetBird, Headscale (with Tailscale clients). No (managed): Cloudflare, QuickZTNA, Twingate, Zscaler, AWS.
 3. **Post-quantum on the tunnel?** Cloudflare has edge TLS 1.3 hybrid; QuickZTNA does not offer it (classical WireGuard today); verify others.
-4. **Data sovereignty?** Self-host: as above. Regional managed: QuickZTNA (EU — Frankfurt), Zscaler (multiple regions), AWS Verified Access (regions).
+4. **Data sovereignty?** Self-host: as above. Regional managed: QuickZTNA (EU — Frankfurt, with an encrypted DR replica in India; not EU-only today), Zscaler (multiple regions), AWS Verified Access (regions).
 
 ## Further reading
 
