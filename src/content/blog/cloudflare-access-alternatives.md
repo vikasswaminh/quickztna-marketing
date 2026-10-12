@@ -109,7 +109,7 @@ Cloudflare has shipped post-quantum TLS 1.3 hybrid on its edge. For a team that 
 - **Open data-plane protocol:** yes — WireGuard.
 - **Self-host coordination:** no — managed cloud service today.
 - **Tunnel-level post-quantum:** not offered. Tunnels are classical WireGuard and post-quantum key exchange is not planned. See [our ML-KEM-768 post](/blog/ml-kem-768-explained) for background on the algorithm itself.
-- **Data sovereignty:** EU and US infrastructure regions.
+- **Data sovereignty:** EU-resident control plane and database (Frankfurt, Germany); a single region today, with an encrypted disaster-recovery replica in India.
 
 **Where it fits.** Teams whose Cloudflare-Access exit is driven by wanting a full ZTNA feature set on a mesh backbone, or by data-sovereignty constraints that Cloudflare's edge cannot meet.
 
@@ -172,7 +172,7 @@ Snapshot as of April 2026. Always verify against each vendor's current documenta
 1. **Mesh or proxy?** Mesh: Tailscale, NetBird, QuickZTNA. Proxy: Cloudflare Access, Twingate, Zscaler, AWS Verified Access.
 2. **Self-host required?** Yes: NetBird, Headscale (with Tailscale clients). No (managed): Cloudflare, QuickZTNA, Twingate, Zscaler, AWS.
 3. **Post-quantum on the tunnel?** Cloudflare has edge TLS 1.3 hybrid; QuickZTNA does not offer it (classical WireGuard today); verify others.
-4. **Data sovereignty?** Self-host: as above. Regional managed: QuickZTNA (EU/US), Zscaler (multiple regions), AWS Verified Access (regions).
+4. **Data sovereignty?** Self-host: as above. Regional managed: QuickZTNA (EU — Frankfurt), Zscaler (multiple regions), AWS Verified Access (regions).
 
 ## Further reading
 
