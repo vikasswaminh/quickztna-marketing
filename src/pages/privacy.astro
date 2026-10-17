@@ -1,7 +1,7 @@
 ﻿---
 import SiteLayout from "@/layouts/SiteLayout.astro";
 
-const EFFECTIVE_DATE = "October 12, 2026";
+const EFFECTIVE_DATE = "October 17, 2026";
 
 const sections = [
   { id: "fiduciary", label: "1. Data Fiduciary" },
@@ -256,11 +256,12 @@ const sections = [
         <section id="cross-border">
           <h2 class="text-lg font-bold text-foreground mb-3">9. Cross-Border Data Transfer</h2>
           <p>
-            Your data is processed and stored on servers located in <strong class="text-foreground">Frankfurt, Germany (European Union)</strong> — the control plane, the API and the primary database all run there. For disaster recovery we maintain a continuously replicated, encrypted standby copy of the database in <strong class="text-foreground">Bengaluru, India</strong>, under the same access controls.
+            Your data is processed and stored on servers located in <strong class="text-foreground">Frankfurt, Germany (European Union)</strong> — the control plane, the API and the primary database all run there. For disaster recovery we maintain a continuously replicated, encrypted standby copy of the database in <strong class="text-foreground">Bengaluru, India</strong>, under the same access controls. Daily database backups and uploaded files are stored in Cloudflare R2 object storage pinned to the European Union jurisdiction; backups are encrypted before upload, and the encryption key is held separately from Cloudflare and never uploaded to R2. The North-America copies kept during the October 2026 migration are frozen (no reads or writes) and will be deleted by 16 November 2026.
+          </p>
+          <p class="mt-2">
             Certain sub-processors (Cloudflare, a third-party LLM API) may process data outside the EU and India. Where this occurs:
           </p>
           <ul class="list-disc pl-5 space-y-1.5 mt-2">
-            <li>Daily database backups and uploaded files are stored in Cloudflare R2 object storage (North America location, Cloudflare default jurisdiction); backups are encrypted before upload; the encryption key is held separately from Cloudflare and is never uploaded to R2</li>
             <li>AI inference via a third-party LLM API (US-based) is opt-in only and receives no personally identifiable information</li>
             <li>DERP relay servers (Frankfurt, Germany and Bengaluru, India) relay encrypted WireGuard traffic only — no plaintext data</li>
             <li>Cloudflare’s global edge terminates HTTPS for the dashboard and API; it sees HTTP requests in transit, not stored data</li>
