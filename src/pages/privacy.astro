@@ -260,7 +260,7 @@ const sections = [
             Certain sub-processors (Cloudflare, a third-party LLM API) may process data outside the EU and India. Where this occurs:
           </p>
           <ul class="list-disc pl-5 space-y-1.5 mt-2">
-            <li>Daily database backups and uploaded files are stored in Cloudflare R2 object storage (North America location, Cloudflare default jurisdiction); backups are encrypted before upload; the encryption key is held separately from Cloudflare and is never uploaded to R2</li>
+            <li>Daily database backups and uploaded files are stored in Cloudflare R2 object storage in the European Union jurisdiction (data at rest stays in the EU); backups are encrypted before upload; the encryption key is held separately from Cloudflare and is never uploaded to R2</li>
             <li>AI inference via a third-party LLM API (US-based) is opt-in only and receives no personally identifiable information</li>
             <li>DERP relay servers (Frankfurt, Germany and Bengaluru, India) relay encrypted WireGuard traffic only — no plaintext data</li>
             <li>Cloudflare’s global edge terminates HTTPS for the dashboard and API; it sees HTTP requests in transit, not stored data</li>
