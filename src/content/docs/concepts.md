@@ -50,7 +50,7 @@ Most traditional VPN products are hub-and-spoke: every client connects to a cent
 
 Mesh networks invert the topology. Every device negotiates direct connections to every device it talks to. There's no central traffic chokepoint; packets flow over the shortest path the network can negotiate.
 
-QuickZTNA is a mesh. The coordination plane — the service that authenticates devices, distributes public keys, holds policy state, and brokers NAT traversal — does not see data-plane traffic. Two devices on the same LAN reach each other over the LAN; two devices on opposite sides of the planet reach each other directly when their networks permit, and over an encrypted relay (DERP) when they don't. The relay, when used, is a literal blind pipe: it forwards encrypted bytes, has no decryption keys, and cannot inspect content. QuickZTNA runs DERP relays in two regions today (Bangalore and Frankfurt).
+QuickZTNA is a mesh. The coordination plane — the service that authenticates devices, distributes public keys, holds policy state, and brokers NAT traversal — does not see data-plane traffic. Two devices on the same LAN reach each other over the LAN; two devices on opposite sides of the planet reach each other directly when their networks permit, and over an encrypted relay (DERP) when they don't. The relay, when used, is a literal blind pipe: it forwards encrypted bytes, has no decryption keys, and cannot inspect content. QuickZTNA runs DERP relays in two regions today (Frankfurt and Paris).
 
 This matters for both performance (no detour) and for the trust model (no central traffic processor with privileged decryption ability). The coordination plane is a brokerage; it does not see your packets.
 

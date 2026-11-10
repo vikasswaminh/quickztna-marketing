@@ -107,7 +107,7 @@ On Windows, uninstall from **Apps & features** (or run `ztna uninstall`).
 
 ## Restricted networks
 
-QuickZTNA needs only outbound HTTPS to `login.quickztna.com`. Peer-to-peer connections use UDP NAT traversal where possible; when UDP is blocked, traffic falls back to an encrypted relay (DERP) in one of our two regions (Bangalore and Frankfurt) — no operator action and no inbound ports required. For an explicit HTTP proxy, set the standard `HTTPS_PROXY` environment variable.
+QuickZTNA needs only outbound HTTPS to `login.quickztna.com`. Peer-to-peer connections use UDP NAT traversal where possible; when UDP is blocked, traffic falls back to an encrypted relay (DERP) in one of our two regions (Frankfurt and Paris) — no operator action and no inbound ports required. For an explicit HTTP proxy, set the standard `HTTPS_PROXY` environment variable.
 
 ## What's next
 
