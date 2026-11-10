@@ -43,7 +43,7 @@ const steps = [
 const proofPoints = [
   "ABAC + device posture",
   "GDPR · DPA available",
-  "2 global DERP regions (BLR + FRA)",
+  "2 DERP regions (FRA + PAR)",
   "Dodo Payments · custom invoicing",
   "Open-source Go client",
   "Free SSH on every tier",
@@ -72,7 +72,7 @@ const homepageFaq = [
   },
   {
     q: "Does QuickZTNA work behind NAT, CGNAT, and corporate firewalls?",
-    a: "Yes. The client only requires outbound HTTPS (TCP/443) to *.quickztna.com — no inbound ports, no firewall changes, no port forwarding. Peer-to-peer connections use UDP NAT traversal where possible; when UDP is blocked by symmetric NAT or strict firewalls, traffic transparently falls back to an encrypted TCP-over-HTTPS relay (DERP) in our two global regions (Bangalore + Frankfurt).",
+    a: "Yes. The client only requires outbound HTTPS (TCP/443) to *.quickztna.com — no inbound ports, no firewall changes, no port forwarding. Peer-to-peer connections use UDP NAT traversal where possible; when UDP is blocked by symmetric NAT or strict firewalls, traffic transparently falls back to an encrypted TCP-over-HTTPS relay (DERP) in our two European regions (Frankfurt + Paris).",
   },
   {
     q: "What identity providers does QuickZTNA integrate with?",
@@ -132,7 +132,7 @@ const softwareApplicationSchema = {
   ],
   publisher: { "@id": "https://www.quickztna.com/#organization" },
   featureList: [
-    "WireGuard mesh data plane with global DERP relay fleet (Bangalore + Frankfurt today)",
+    "WireGuard mesh data plane with DERP relay fallback (Frankfurt + Paris today)",
     "Identity-based ACL policies (ABAC) with continuous device posture and auto-quarantine",
     "SSO via OIDC, Google, GitHub, Microsoft Entra, Okta; SCIM 2.0 provisioning; TOTP MFA",
     "JIT access requests with approval and auto-revoke; periodic access-review campaigns",
@@ -294,7 +294,7 @@ const softwareApplicationSchema = {
         </span>
         <h3 class="mt-3 text-lg font-semibold">WireGuard P2P with DERP fallback</h3>
         <p class="mt-1.5 text-sm text-muted-foreground">
-          Direct peer-to-peer tunnels wherever NAT allows. Two global DERP relays (Bangalore + Frankfurt) cover CGNAT and symmetric-NAT peers automatically.
+          Direct peer-to-peer tunnels wherever NAT allows. Two DERP relays (Frankfurt + Paris) cover CGNAT and symmetric-NAT peers automatically.
         </p>
       </div>
 

@@ -36,9 +36,9 @@ const sections: Section[] = [
     blurb: "The ZTNA primitives. Ship with every plan, no gate, no trial. This is the foundation.",
     icon: Network,
     features: [
-      { name: "WireGuard mesh data plane", desc: "Modern, audited X25519 + ChaCha20-Poly1305 + Poly1305 stack. Direct peer-to-peer where NAT allows; DERP relay fallback (Bangalore + Frankfurt) for CGNAT and symmetric NAT.", plans: ["free", "business"] },
+      { name: "WireGuard mesh data plane", desc: "Modern, audited X25519 + ChaCha20-Poly1305 + Poly1305 stack. Direct peer-to-peer where NAT allows; DERP relay fallback (Frankfurt + Paris) for CGNAT and symmetric NAT.", plans: ["free", "business"] },
       { name: "MagicDNS", desc: "Every device reachable at <hostname>.<org>.zt.net. Zero DNS config.", plans: ["free", "business"] },
-      { name: "DERP relays", desc: "2 regions (Bangalore + Frankfurt) relay when P2P is blocked by symmetric NAT or CGNAT.", plans: ["free", "business"] },
+      { name: "DERP relays", desc: "2 regions (Frankfurt + Paris) relay when P2P is blocked by symmetric NAT or CGNAT.", plans: ["free", "business"] },
       { name: "STUN NAT discovery", desc: "Automatic public endpoint discovery. Peers find each other without central coordination.", plans: ["free", "business"] },
       { name: "ABAC ACLs", desc: "Rules on user, tag, posture, time of day, country, protocol, port. Evaluated per connection.", plans: ["free", "business"] },
       { name: "Subnet routes", desc: "Advertise + accept CIDR routes. Bridge home labs, cloud VPCs, legacy networks.", plans: ["free", "business"] },

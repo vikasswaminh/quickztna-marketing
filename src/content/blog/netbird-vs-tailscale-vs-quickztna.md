@@ -65,7 +65,7 @@ Where they diverge starts in the coordination plane and moves outward from there
 
 ### QuickZTNA
 
-QuickZTNA runs a proprietary coordination server with managed regional deployments. The data plane is classical WireGuard (Curve25519 + ChaCha20-Poly1305); post-quantum key exchange is not implemented and not planned (see [our ML-KEM-768 post](/blog/ml-kem-768-explained) for the background). DERP-style relays in two regions (Bangalore and Frankfurt) provide relay fallback.
+QuickZTNA runs a proprietary coordination server with managed regional deployments. The data plane is classical WireGuard (Curve25519 + ChaCha20-Poly1305); post-quantum key exchange is not implemented and not planned (see [our ML-KEM-768 post](/blog/ml-kem-768-explained) for the background). DERP-style relays in two regions (Frankfurt and Paris) provide relay fallback.
 
 **Key takeaway.** All three are architecturally similar at a high level. The visible differences are in what sits on top of the WireGuard data plane — the workforce-security layer in QuickZTNA, the open-source coordination in NetBird, the multi-year-refined developer ergonomics in Tailscale.
 
