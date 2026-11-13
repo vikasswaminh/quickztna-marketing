@@ -91,7 +91,7 @@ Depending on onboarding policy, a newly-registered device may sit **pending** un
 
 - **Approve / reject** pending devices.
 - **Quarantine** a suspicious device — listed but cut off (`action: quarantine`).
-- **Lock / wipe** a lost device (`lock_device`, `wipe_device`).
+- **Disable** a lost or compromised device — cut off the network at once, and reversible (`action: disable`). There is no remote lock or wipe.
 - **Remove** a device — dropped within seconds, key revoked centrally; even with the key on disk it cannot reconnect.
 
 For offboarding, remove the **user** (revokes all their devices at once), or deprovision in your IdP via SCIM and QuickZTNA does it automatically.
@@ -122,7 +122,7 @@ For offboarding, remove the **user** (revokes all their devices at once), or dep
 
 ## 10. Audit events & troubleshooting
 
-Audit: `provisioning.commands_generated` (auth-key issued), SCIM member changes, and device `machine.approved` / `quarantine` / lock / wipe events — all on [Observability](/guide/admin/observability/).
+Audit: `provisioning.commands_generated` (auth-key issued), SCIM member changes, and device `machine.approved` / `quarantine` / disable / delete events — all on [Observability](/guide/admin/observability/).
 
 - **SCIM 401** → token isn't an API key with the `scim` scope.
 - **Auth-key gen blocked** → admin email not verified; verify and retry.
