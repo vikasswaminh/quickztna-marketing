@@ -88,7 +88,7 @@ Scrape these into your Prometheus/Grafana stack to chart connectivity, peer coun
 | Domain | Example events |
 | --- | --- |
 | Posture | `machine.auto_quarantine`, `machine.auto_unquarantine` |
-| Devices | `machine.exit_node_approved`, approve / quarantine / lock / wipe |
+| Devices | `machine.exit_node_approved`, approve / quarantine / disable / delete |
 | Identity | `provisioning.commands_generated`, SCIM member changes |
 | Access governance | JIT request / approval, access-review campaign events |
 | Auth | `auth.login`, `auth.login_failed` |

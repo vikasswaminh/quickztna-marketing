@@ -126,7 +126,7 @@ Change machines through the admin endpoint (`machines:write`; body `{ "action": 
 - `set_key_expiry` — control node-key expiry.
 - `delete` — remove the machine; it is dropped from the network and its key revoked.
 
-Remote-control actions that can lock, wipe or execute on a device exist for the dashboard's admin flows and are intentionally **not** part of the public API surface.
+Remote lock, wipe and config push are retired: `lock_device`, `wipe_device` and `push_config` answer `410 ACTION_RETIRED` and nothing is sent to the device. To cut a device off, use `disable` (reversible) or `delete`. Actions that execute on a device, such as the remote shell, are intentionally **not** part of the public API surface.
 
 ### Access policies — `/api/db/acl_rules` and `POST /api/acl-evaluate`
 

@@ -150,7 +150,7 @@ From the CLI, an admin can inspect rules with `ztna acl list` and test a path wi
 
 ## 9. Audit events
 
-Route and device actions are audited: `machine.exit_node_approved`, `machine.exit_node_rejected`, plus approve/quarantine/lock/wipe events. Rule changes go through the gated CRUD API. Review them on [Observability](/guide/admin/observability/).
+Route and device actions are audited: `machine.exit_node_approved`, `machine.exit_node_rejected`, plus approve/quarantine/disable/delete events. Rule changes go through the gated CRUD API. Review them on [Observability](/guide/admin/observability/).
 
 ## 10. Troubleshooting
 
