@@ -11,7 +11,7 @@ faq:
   - q: "Can I install headless, with no browser?"
     a: "Yes. Generate a pre-auth key in the dashboard and pass it as the ZTNA_AUTH_KEY environment variable to the installer. The client registers itself and (after admin approval, if required) connects automatically. This is the path for servers, containers, and fleet rollouts."
   - q: "Which architectures are supported?"
-    a: "amd64 (x86_64) and arm64 (aarch64) on Linux, macOS, and Windows, plus armv7 on Linux. The installer detects your OS and architecture and downloads the matching build."
+    a: "amd64 (x86_64) and arm64 (aarch64) on Linux, macOS, and Windows. The installer detects your OS and architecture and downloads the matching build."
   - q: "Is the download verified?"
     a: "Yes. The installer resolves the latest version, downloads the matching archive, and verifies its SHA-256 against the published .sha256 before installing. A checksum mismatch aborts the install."
 ---

@@ -40,7 +40,7 @@ const sections: Section[] = [
       { name: "MagicDNS", desc: "Every device reachable at <hostname>.<org>.zt.net. Zero DNS config.", plans: ["free", "business"] },
       { name: "DERP relays", desc: "2 regions (Frankfurt + Paris) relay when P2P is blocked by symmetric NAT or CGNAT.", plans: ["free", "business"] },
       { name: "STUN NAT discovery", desc: "Automatic public endpoint discovery. Peers find each other without central coordination.", plans: ["free", "business"] },
-      { name: "ABAC ACLs", desc: "Rules on user, tag, posture, time of day, country, protocol, port. Evaluated per connection.", plans: ["free", "business"] },
+      { name: "ABAC ACLs", desc: "Rules on user, group and tag decide which devices can reach each other; a device only learns the peers its rules allow. Rules can carry an expiry. Port, protocol, time-of-day and country conditions can be saved but are not enforced on the data plane yet.", plans: ["free", "business"] },
       { name: "Subnet routes", desc: "Advertise + accept CIDR routes. Bridge home labs, cloud VPCs, legacy networks.", plans: ["free", "business"] },
       { name: "Exit nodes", desc: "Route outbound traffic through a chosen peer. Geofence compliance, egress control.", plans: ["free", "business"] },
       { name: "Device posture", desc: "OS version, disk encryption, firewall, antivirus checks. Block non-compliant devices.", plans: ["free", "business"] },
@@ -75,7 +75,7 @@ const sections: Section[] = [
     blurb: "Audit-ready by default. SOC 2 / ISO 27001 / HIPAA artifacts generated, not assembled.",
     icon: Gavel,
     features: [
-      { name: "Compliance reports", desc: "One-click SOC 2 / ISO 27001 / HIPAA evidence bundles. Signed, timestamped.", plans: ["free", "business"] },
+      { name: "Compliance reports", desc: "One-click SOC 2 / ISO 27001 / HIPAA evidence snapshots, Ed25519-signed so they can be verified later.", plans: ["free", "business"] },
       { name: "Continuous compliance", desc: "Background rules run daily. Drift flagged before audit time.", plans: ["free", "business"] },
       { name: "JIT access workflow", desc: "Request → approve → time-bounded grant → auto-revoke. Full audit trail.", plans: ["free", "business"] },
       { name: "Access review campaigns", desc: "Periodic campaigns. Approvers confirm / revoke. Everything logged.", plans: ["free", "business"] },
@@ -103,7 +103,7 @@ const sections: Section[] = [
     icon: Monitor,
     features: [
       { name: "Remote shell", desc: "Browser-based shell for diagnostics, opened with a single-use ticket. Included on every plan, not gated behind an enterprise tier.", plans: ["free", "business"] },
-      { name: "OTA agent updates", desc: "Self-update via signed releases. Controlled by client_versions table.", plans: ["free", "business"] },
+      { name: "OTA agent updates", desc: "Staged self-update with checksum verification and automatic rollback if the new version does not come up healthy. Windows binaries are code-signed.", plans: ["free", "business"] },
     ],
   },
   {
@@ -112,11 +112,11 @@ const sections: Section[] = [
     blurb: "Protect internal apps, databases, Kubernetes, cloud VPCs — through the same tailnet.",
     icon: Database,
     features: [
-      { name: "Database access broker", desc: "Register PG/MySQL/Mongo/Redis. JIT credentials, scoped queries, audit.", plans: ["free", "business"] },
-      { name: "Kubernetes access", desc: "Identity-scoped kubeconfig. RBAC inherited from your org roles.", plans: ["free", "business"] },
+      { name: "Database access broker", desc: "Just-in-time database access: request, approve and audit time-bounded grants. Credentials are created by an agent you run next to the database; QuickZTNA does not proxy queries.", plans: ["free", "business"] },
+      { name: "Kubernetes access", desc: "Just-in-time cluster access: request, approve and audit time-bounded grants. An agent you run in the cluster creates and removes the RoleBinding.", plans: ["free", "business"] },
       { name: "App connector", desc: "Protect internal web apps (Jira, Jenkins, Grafana) with reverse proxy + ZTNA auth.", plans: ["free", "business"] },
-      { name: "Webhook forwarder", desc: "Inbound webhooks delivered through the mesh to private targets.", plans: ["free", "business"] },
-      { name: "Terraform provider", desc: "Full IaC for machines, ACLs, DNS, users, settings. GitOps-friendly.", plans: ["free", "business"] },
+      { name: "Event webhooks", desc: "Security and audit events delivered to Slack, Discord, PagerDuty, Splunk, Datadog, ServiceNow, Vanta or a custom endpoint.", plans: ["free", "business"] },
+      { name: "Terraform provider", desc: "Manage machines and ACL rules as code, and read machines, rules and org settings. Built from source today.", plans: ["free", "business"] },
     ],
   },
 ];
@@ -153,7 +153,7 @@ const featuresFaq = [
   },
   {
     q: "Which platforms does QuickZTNA support?",
-    a: "Linux, macOS, and Windows. Native binaries for x86_64 (amd64) and arm64, plus armv7 on Linux. Headless installs with pre-authentication keys are supported for servers and containers. There are no mobile (iOS/Android) clients today.",
+    a: "Linux, macOS, and Windows. Native binaries for x86_64 (amd64) and arm64. Headless installs with pre-authentication keys are supported for servers and containers. There are no mobile (iOS/Android) clients today.",
   },
   {
     q: "What compliance certifications does QuickZTNA support?",
