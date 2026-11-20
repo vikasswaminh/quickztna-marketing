@@ -11,7 +11,7 @@ faq:
   - q: "Do admin tasks require the CLI?"
     a: "No. Everything is in the admin dashboard. The CLI (ztna acl, ztna machines, ztna auth-keys, ztna posture, etc.) gives read/inspection access and a few actions for scripting; the REST API is the full programmatic surface the dashboard itself uses, and every feature page shows the exact calls."
   - q: "How do I know what's actually shipped versus roadmap?"
-    a: "Each page is explicit about scope and limits. Where a capability is narrower than common shorthand implies — 'DLP' is file-hash malware detection only with no content inspection, posture signals are self-reported, and PQC, CASB, workforce analytics and self-hosting do not exist at all — the page says so plainly. If you find a gap between a page and the product, that's a docs bug; tell us at support@quickztna.com."
+    a: "Each page is explicit about scope and limits. Where a capability is narrower than common shorthand implies — 'DLP' is file-hash malware detection only with no content inspection, posture signals are self-reported, and PQC, CASB and workforce analytics do not exist at all — the page says so plainly. If you find a gap between a page and the product, that's a docs bug; tell us at support@quickztna.com."
 ---
 
 This is the operator's manual for **running a QuickZTNA organization** — the work that happens in the admin dashboard, not on an individual device. If you're setting up a device, start with the [user guide](/guide/); if you're scripting, the [CLI reference](/docs/cli/) and [REST API](/docs/api/) are the contract.
@@ -47,4 +47,4 @@ QuickZTNA's Free plan covers **5 users and up to 100 devices, forever**, with **
 
 ## A note on what's shipped
 
-This guide describes what the product does **today**. Where a capability does not exist, it is said plainly rather than deferred to a roadmap: the data plane is classical WireGuard with no post-quantum key exchange, and QuickZTNA is managed cloud only with no self-hosting.
+This guide describes what the product does **today**. Where a capability does not exist, it is said plainly rather than deferred to a roadmap: the data plane is classical WireGuard with no post-quantum key exchange, and QuickZTNA is a cloud (SaaS) service, with hosted deployment options available for customers who need them.

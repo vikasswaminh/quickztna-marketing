@@ -40,7 +40,7 @@ const sections: Section[] = [
       { name: "MagicDNS", desc: "Every device reachable at <hostname>.<org>.zt.net. Zero DNS config.", plans: ["free", "business"] },
       { name: "DERP relays", desc: "2 regions (Frankfurt + Paris) relay when P2P is blocked by symmetric NAT or CGNAT.", plans: ["free", "business"] },
       { name: "STUN NAT discovery", desc: "Automatic public endpoint discovery. Peers find each other without central coordination.", plans: ["free", "business"] },
-      { name: "ABAC ACLs", desc: "Rules on user, group and tag decide which devices can reach each other; a device only learns the peers its rules allow. Rules can carry an expiry. Port, protocol, time-of-day and country conditions can be saved but are not enforced on the data plane yet.", plans: ["free", "business"] },
+      { name: "ABAC ACLs", desc: "Rules on user, group and tag decide which devices can reach each other; a device only learns the peers its rules allow. Rules can carry an expiry. Port and protocol are enforced on the data plane, per port and direction, once an organization turns on port enforcement (Linux and macOS clients 3.3.69 or later). Time-of-day and country conditions can be saved but are not enforced on the data plane.", plans: ["free", "business"] },
       { name: "Subnet routes", desc: "Advertise + accept CIDR routes. Bridge home labs, cloud VPCs, legacy networks.", plans: ["free", "business"] },
       { name: "Exit nodes", desc: "Route outbound traffic through a chosen peer. Geofence compliance, egress control.", plans: ["free", "business"] },
       { name: "Device posture", desc: "OS version, disk encryption, firewall, antivirus checks. Block non-compliant devices.", plans: ["free", "business"] },
@@ -160,8 +160,8 @@ const featuresFaq = [
     a: "We offer a GDPR-aligned DPA and sign HIPAA Business Associate Agreements on the Business plan. SOC 2 Type II and ISO 27001 certifications are in progress with target completion in 2026.",
   },
   {
-    q: "Is there a self-hosted or air-gapped deployment option?",
-    a: "Not today — QuickZTNA is a fully managed cloud service. If self-hosted or air-gapped deployment is a requirement for your organization, contact sales@quickztna.com to discuss your needs and our roadmap.",
+    q: "Are there hosted deployment options?",
+    a: "QuickZTNA is a cloud (SaaS) service. Hosted deployment options are available for customers who need them — contact sales@quickztna.com to discuss your requirements.",
   },
   {
     q: "Does any tenant data go to a third-party AI provider?",

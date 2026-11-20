@@ -117,7 +117,9 @@ From the CLI, an admin can inspect rules with `ztna acl list` and test a path wi
 
 **Selectors** (source & destination): `*` (any) · `<machine_id>` · `<tailnet_ip>` · `tag:<name>` · `user:<owner_id>` · `group:<segmentation_group>` · `<cidr>` (e.g. `10.0.0.0/24`).
 
-**Ports:** `*`/`any`, a single port, a comma list (`22,443`), or a range (`8000-8100`). **Protocol:** `*`/`any`, `tcp`, `udp`.
+**Ports:** `*`/`any`, a single port, a comma list (`22,443`), or a range (`8000-8100`). **Protocol:** `*`/`any`, `tcp`, `udp`, `icmp`.
+
+**Port enforcement.** The port and protocol of a rule are applied to tunnel traffic only when the organization has **Settings → Network Features → Enforce Port & Protocol Rules** switched on (off by default). With it on, machines running client 3.3.69 or later (Linux and macOS) check every packet against the rules in priority order, first match wins, and drop what no rule allows; the rule is judged for the direction that opens the connection, and replies pass. Machines on older clients are not filtered and are not offered peers that only a port-scoped rule allows. Traffic through subnet routes and exit nodes is not filtered. With the switch off, a rule that names a port or protocol is saved but does not affect traffic.
 
 **ABAC condition attributes** (and operators):
 
