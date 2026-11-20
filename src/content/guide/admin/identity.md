@@ -115,7 +115,7 @@ For offboarding, remove the **user** (revokes all their devices at once), or dep
 
 ## 9. Limits & honest scope
 
-- **Managed cloud only** — QuickZTNA is a hosted service; self-hosting is not offered.
+- **Cloud service** — QuickZTNA is a cloud (SaaS) service. Hosted deployment options are available for customers who need them; contact sales.
 - **No mobile client** — onboarding is Linux, macOS, and Windows.
 - **SCIM needs an API key with the `scim` scope** (included on both plans); bulk and filter SCIM operations are not supported.
 - **Auth-key generation requires a verified admin email.**

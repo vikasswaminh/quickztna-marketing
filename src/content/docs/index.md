@@ -50,7 +50,7 @@ For people scanning to confirm the technical particulars before reading further:
 
 **Audit.** Every administrative action, every policy decision, and every authentication is logged, with 90-day retention on both plans — queryable from the dashboard and via the API, exportable to your SIEM, with real-time event streaming.
 
-**Hosting.** Fully managed cloud service; self-hosting is not offered today. Contact sales@quickztna.com if it's a requirement.
+**Hosting.** Cloud (SaaS) service. Hosted deployment options are available for customers who need them; contact sales@quickztna.com to discuss your requirements.
 
 ## A note on stability
 
