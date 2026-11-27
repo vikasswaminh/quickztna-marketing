@@ -203,7 +203,7 @@ The zero trust requirements for MSPs follow directly from this threat model:
 
 ## Related reading
 
-- [What Is Zero Trust? A 2026 Implementation Guide](/blog/what-is-zero-trust)
+- [What Is ZTNA? A Plain-English Guide to Zero Trust Network Access](/blog/what-is-ztna)
 - [ZTNA vs VPN: 8 Real Differences](/blog/ztna-vs-vpn)
 - [JIT Access Frameworks for Zero Trust Teams](/blog/top-10-jit-access-frameworks)
 

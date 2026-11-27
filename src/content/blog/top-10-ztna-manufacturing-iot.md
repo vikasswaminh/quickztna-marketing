@@ -269,8 +269,8 @@ ZTNA does not guarantee security, but it structurally limits blast radius: acces
 ## Related reading
 
 - [ZTNA vs VPN: 8 Real Differences](/blog/ztna-vs-vpn)
-- [Post-Quantum Cryptography for Networks in 2026](/blog/post-quantum-cryptography-networks)
-- [Zero Trust for Remote Access: 2026 Guide](/blog/what-is-zero-trust)
+- [The 2026 Post-Quantum Migration Timeline](/blog/post-quantum-migration-timeline)
+- [What Is ZTNA? A Plain-English Guide to Zero Trust Network Access](/blog/what-is-ztna)
 
 ## QuickZTNA for Manufacturing
 

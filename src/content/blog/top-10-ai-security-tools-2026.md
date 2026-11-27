@@ -196,7 +196,7 @@ The tools below are categorised accordingly.
 ## Related reading
 
 - [ZTNA vs VPN: 8 Real Differences](/blog/ztna-vs-vpn)
-- [What Is Zero Trust? A 2026 Implementation Guide](/blog/what-is-zero-trust)
+- [What Is ZTNA? A Plain-English Guide to Zero Trust Network Access](/blog/what-is-ztna)
 - [Device Posture Checks That Actually Work](/blog/device-posture-checks)
 
 ## Where QuickZTNA fits

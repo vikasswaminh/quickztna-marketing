@@ -275,7 +275,6 @@ controls what they can read once there. Those are complementary jobs, not compet
 
 - [Device Posture Checks That Actually Work](/blog/device-posture-checks)
 - [ZTNA vs VPN: 8 Real Differences](/blog/ztna-vs-vpn)
-- [Zero Trust on a Budget: Free Tier Options](/blog/zero-trust-budget-options)
 
 ## Try QuickZTNA for the access layer
 

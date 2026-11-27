@@ -74,10 +74,10 @@ Key flags:
 - `--dns` (default `true`) / `--dns-domain <domain>` — MagicDNS and search domain.
 - `--gateway` — run as a headless subnet gateway (IP forwarding + masquerade; Linux).
 - `--operator <user>` — allow a non-root user to manage the connection.
-- `--daemon` — run the VPN in the background (logs to `~/.config/ztna/ztna.log`). This is how the system service runs it.
+- `--daemon` — run as the service process, in the foreground (logs to `~/.config/ztna/ztna.log`). This is how the system service runs it; plain `ztna up` is what returns to your shell and keeps the VPN running in the background.
 - `--force-reauth`, `--reset`.
 
-> `--userspace` exists for niche no-TUN/no-root cases but is **not** the supported path — QuickZTNA runs on kernel TUN on all platforms.
+> QuickZTNA runs on kernel TUN on all platforms; there is no userspace mode.
 
 ### `ztna down` (alias: `disconnect`)
 
@@ -244,7 +244,7 @@ ztna metrics write /var/lib/node_exporter/ztna.prom   # node_exporter textfile c
 
 ### `ztna route list`
 
-List advertised and approved subnet routes in the tailnet. (Advertise routes with `ztna up --advertise-routes` / `ztna set --advertise-routes`; approval is an admin action — see the [admin guide](/guide/admin/routes/).)
+List advertised and approved subnet routes in the tailnet. (Advertise routes with `ztna up --advertise-routes` / `ztna set --advertise-routes`; approval is an admin action — see [Exit nodes and routes](/guide/exit-nodes-and-routes/).)
 
 ### `ztna exit-node`
 
@@ -347,7 +347,7 @@ List all machines in the organization (name, OS, owner, tailnet IP, status).
 
 ### `ztna auth-keys list`
 
-List the organization's auth keys. (Create/revoke keys from the dashboard, or via the admin API — see the [admin guide](/guide/admin/auth-keys/).)
+List the organization's auth keys. (Create/revoke keys from the dashboard, or via the admin API — see the [identity guide, section 5](/guide/admin/identity/).)
 
 ---
 
