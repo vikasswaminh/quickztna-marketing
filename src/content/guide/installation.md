@@ -13,7 +13,7 @@ faq:
   - q: "Which architectures are supported?"
     a: "amd64 (x86_64) and arm64 (aarch64) on Linux, macOS, and Windows. The installer detects your OS and architecture and downloads the matching build."
   - q: "Is the download verified?"
-    a: "Yes. The installer resolves the latest version, downloads the matching archive, and verifies its SHA-256 against the published .sha256 before installing. A checksum mismatch aborts the install."
+    a: "Yes. The installer resolves the latest version, downloads the matching archive, and verifies its SHA-256 against the release's published SHA256SUMS manifest before installing. A checksum mismatch aborts the install."
 ---
 
 QuickZTNA's client is a single binary, **`ztna`**, on Linux, macOS, and Windows. The installer downloads the right build for your OS/architecture, verifies its checksum, installs it to `/usr/local/bin` (or the Windows program directory), and sets up a system service. Kernel TUN is used on every platform (Linux `/dev/net/tun`, Windows Wintun, macOS `utun`).
@@ -65,7 +65,7 @@ https://login.quickztna.com/api/releases/v<version>/ztna-<version>-<os>-<arch>.t
 https://login.quickztna.com/api/releases/v<version>/ztna-<version>-windows-<arch>.zip     # windows
 ```
 
-A matching `.sha256` is published next to each archive — verify it before installing. Then place the binary on your `PATH` and register the service:
+Each release publishes a `SHA256SUMS` manifest (`https://login.quickztna.com/api/releases/v<version>/SHA256SUMS`, one `<sha256>  <file>` line per artifact) — verify your archive against it before installing (`sha256sum -c --ignore-missing SHA256SUMS`). Then place the binary on your `PATH` and register the service:
 
 ```bash
 sudo install -m0755 ztna /usr/local/bin/ztna

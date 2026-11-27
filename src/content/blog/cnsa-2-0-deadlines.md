@@ -115,7 +115,7 @@ Three adjacent compliance regimes that every DoD vendor encounters.
 
 ### 5.1 CMMC 2.0
 
-The Cybersecurity Maturity Model Certification, version 2.0, is the DoD's supply-chain cybersecurity framework. It has three levels: Foundational, Advanced, and Expert, based on NIST SP 800-171 and SP 800-172. CMMC itself does not set cryptographic algorithm requirements — it inherits from NIST SP 800-171. SP 800-171 currently points to FIPS-validated cryptography without specifying post-quantum. That will change as NIST updates SP 800-171 to reflect the PQ standards; meanwhile the CNSA 2.0 timelines apply directly to systems that are also NSS. For a primer on CMMC 2.0 Level 2 remote access, see [our CMMC 2.0 post](/blog/cmmc-2-0-remote-access-requirements) (publishing Phase 2).
+The Cybersecurity Maturity Model Certification, version 2.0, is the DoD's supply-chain cybersecurity framework. It has three levels: Foundational, Advanced, and Expert, based on NIST SP 800-171 and SP 800-172. CMMC itself does not set cryptographic algorithm requirements — it inherits from NIST SP 800-171. SP 800-171 currently points to FIPS-validated cryptography without specifying post-quantum. That will change as NIST updates SP 800-171 to reflect the PQ standards; meanwhile the CNSA 2.0 timelines apply directly to systems that are also NSS. For a primer on CMMC 2.0 Level 2 remote access, see our CMMC 2.0 coverage (publishing Phase 2).
 
 ### 5.2 FedRAMP
 

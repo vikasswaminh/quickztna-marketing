@@ -178,7 +178,7 @@ Real production numbers with specifics — not "sub-5ms", but "median 2.3ms at t
 
 ## 9. Vendor snapshot table
 
-This table reflects what is publicly documented as of April 2026. Always verify with the vendor's current release notes before acting on it — all of these vendors are shipping fast. Our promise on factual integrity, from the [writing guidelines](/content/WRITING-GUIDELINES.md), applies: where we are unsure we say "check vendor docs", not invent an answer.
+This table reflects what is publicly documented as of April 2026. Always verify with the vendor's current release notes before acting on it — all of these vendors are shipping fast. Our promise on factual integrity, from our writing guidelines, applies: where we are unsure we say "check vendor docs", not invent an answer.
 
 | Vendor | PQ key exchange | Hybrid | On by default | Visible mode |
 |---|---|---|---|---|

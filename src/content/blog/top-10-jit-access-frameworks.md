@@ -272,7 +272,7 @@ The result is a dense mesh of persistent high-privilege accounts, any one of whi
 
 - [Session Recording for Compliance: 10 Tools Compared](/blog/top-10-session-recording-compliance)
 - [SOC 2 Remote Access Controls: 11 You'll Get Audited On](/blog/soc-2-remote-access-controls)
-- [What Is Zero Trust? Implementation Guide for 2026](/blog/what-is-zero-trust)
+- [What Is ZTNA? A Plain-English Guide to Zero Trust Network Access](/blog/what-is-ztna)
 
 ## Try QuickZTNA JIT Access
 

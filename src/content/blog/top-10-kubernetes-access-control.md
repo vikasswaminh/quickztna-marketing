@@ -226,7 +226,7 @@ No single tool covers all Kubernetes access control concerns. The recommended la
 
 - [Database Access Control for Zero Trust](/blog/top-10-database-access-control)
 - [JIT Access Frameworks for Zero Trust in 2026](/blog/top-10-jit-access-frameworks)
-- [What Is Zero Trust? A 2026 Implementation Guide](/blog/what-is-zero-trust)
+- [What Is ZTNA? A Plain-English Guide to Zero Trust Network Access](/blog/what-is-ztna)
 
 ## Try QuickZTNA for Kubernetes
 
